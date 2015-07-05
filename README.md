@@ -18,8 +18,9 @@ Dependencies
 - Pandoc
 - a LaTeX engine, e.g. pdflatex
 - LibreOffice
-- unoconv
+- Unoconv
 - Calibre
+- Hunspell
 
 
 Setup

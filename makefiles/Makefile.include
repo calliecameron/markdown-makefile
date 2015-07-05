@@ -38,6 +38,7 @@ save: all
 	cp -a $(OUT_DIR) $(SAVED_DIR)
 
 spell:
+	@markdown-spellcheck $(BASE).dic $(ADDITIONAL_DICTIONARIES) < $(BASE).md
 
 gitignore: .gitignore
 

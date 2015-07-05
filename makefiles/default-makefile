@@ -1,0 +1,25 @@
+# To use, set BASE to the name of the source markdown file, without
+# the extension.
+BASE := @@@@@
+
+
+ifndef MARKDOWN_MAKEFILE
+$(error Cannot find the main makefile; is markdown-makefile installed?)
+else
+include $(MARKDOWN_MAKEFILE)
+endif
+
+
+# These targets are here so tools which don't follow includes
+# (e.g. helm-make in Emacs) can still offer sensible options to the
+# user. They have no effect on actual functionality.
+
+main:
+all:
+tex:
+pdf:
+odt:
+save:
+spell:
+gitignore:
+clean:

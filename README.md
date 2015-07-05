@@ -7,7 +7,7 @@ A wrapper for Pandoc and other tools so you can convert markdown files to other 
     hello.md  Makefile
     $ make pdf
     $ ls
-    hellp.md  Makefile  output/
+    hello.md  Makefile  output/
     $ ls output
     hello.pdf
 

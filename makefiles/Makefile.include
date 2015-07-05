@@ -1,0 +1,49 @@
+# -*- makefile-gmake -*-
+
+ifndef BASE
+$(error BASE must be set to the document name)
+endif
+
+OUT_DIR := output
+SAVED_DIR := saved
+OUT_BASE := $(OUT_DIR)/$(BASE)
+DEPS := *.md $(OUT_DIR)
+
+.PHONY: main all tex pdf odt save spell gitignore clean
+
+main: pdf
+
+all: tex pdf odt
+
+tex: $(OUT_BASE).tex
+
+pdf: $(OUT_BASE).pdf
+
+odt: $(OUT_BASE).odt
+
+$(OUT_DIR):
+	mkdir -p $(OUT_DIR)
+
+$(OUT_DIR)/%.tex: %.md $(DEPS)
+	pandoc --standalone --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) -o $@ $<
+
+$(OUT_DIR)/%.pdf: %.md $(DEPS)
+	pandoc --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) -o $@ $<
+
+$(OUT_DIR)/%.odt: %.md $(DEPS)
+	pandoc -o $@ $<
+
+save: all
+	rm -rf $(SAVED_DIR)
+	cp -a $(OUT_DIR) $(SAVED_DIR)
+
+spell:
+
+gitignore: .gitignore
+
+.gitignore:
+	echo '*~' > .gitignore
+	echo '/output' > .gitignore
+
+clean:
+	rm -rf $(OUT_DIR) *~

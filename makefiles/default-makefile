@@ -1,5 +1,6 @@
 # To use, set BASE to the name of the source markdown file, without
-# the extension.
+# the extension. See $(MARKDOWN_MAKEFILE) for various optional
+# variables you can set.
 BASE := @@@@@
 
 

@@ -1,7 +1,32 @@
 # -*- makefile-gmake -*-
+#
+# This is the main markdown makefile. Should be included by user
+# makefiles (run 'markdown-makefile <document-name>' to get one).
+#
+# Required variables:
+#    BASE - the name of your document, without file extension
+#
+# Optional variables:
+#    STARTS_WITH_TEXT - set this (to anything) if the document begins
+#        with text rather than a section header; it will fix a LaTeX
+#        formatting problem.
+#    ADDITIONAL_DICTIONARIES - by default, spell-checking uses the
+#        Hunspell default personal dictionary ~/.hunspell_en_GB, plus
+#        $(BASE).dic. Use this variable to specify additional
+#        dictionaries.
+#
 
 ifndef BASE
 $(error BASE must be set to the document name)
+endif
+
+STARTS_WITH_TEXT ?=
+ADDITIONAL_DICTIONARIES ?=
+
+ifdef STARTS_WITH_TEXT
+LATEX_VARS := --variable=starts-with-text
+else
+LATEX_VARS :=
 endif
 
 OUT_DIR := output
@@ -9,11 +34,11 @@ SAVED_DIR := saved
 OUT_BASE := $(OUT_DIR)/$(BASE)
 DEPS := *.md $(OUT_DIR)
 
-.PHONY: main all tex pdf odt save spell gitignore clean
+.PHONY: main all tex pdf odt doc docx epub mobi save spell gitignore clean
 
 main: pdf
 
-all: tex pdf odt
+all: tex pdf odt doc docx epub mobi
 
 tex: $(OUT_BASE).tex
 
@@ -21,17 +46,37 @@ pdf: $(OUT_BASE).pdf
 
 odt: $(OUT_BASE).odt
 
+doc: $(OUT_BASE).doc
+
+docx: $(OUT_BASE).docx
+
+epub: $(OUT_BASE).epub
+
+mobi: $(OUT_BASE).mobi
+
 $(OUT_DIR):
 	@mkdir -p $(OUT_DIR)
 
 $(OUT_DIR)/%.tex: %.md $(DEPS)
-	@pandoc --standalone --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) -o $@ $<
+	@pandoc --smart --standalone --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) $(LATEX_VARS) -o $@ $<
 
 $(OUT_DIR)/%.pdf: %.md $(DEPS)
-	@pandoc --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) -o $@ $<
+	@pandoc --smart --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) $(LATEX_VARS) -o $@ $<
 
 $(OUT_DIR)/%.odt: %.md $(DEPS)
-	@pandoc -o $@ $<
+	@pandoc --smart -o $@ $<
+
+$(OUT_DIR)/%.doc: $(OUT_DIR)/%.docx
+	@unoconv -f doc -o $@ $<
+
+$(OUT_DIR)/%.docx: %.md $(DEPS)
+	@pandoc --smart -o $@ $<
+
+$(OUT_DIR)/%.epub: %.md $(DEPS)
+	@pandoc --smart -o $@ $<
+
+$(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub
+	@ebook-convert $< $@
 
 save: all
 	@rm -rf $(SAVED_DIR)

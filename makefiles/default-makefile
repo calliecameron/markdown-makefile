@@ -1,8 +1,24 @@
 # To use, set BASE to the name of the source markdown file, without
-# the extension. See $(MARKDOWN_MAKEFILE) for various optional
-# variables you can set.
+# the extension.
 BASE := @@@@@
 
+# Optional variables you can set:
+#
+#    STARTS_WITH_TEXT - set this (to anything) if the document begins
+#        with text rather than a section header; it will fix a LaTeX
+#        formatting problem.
+#    ADDITIONAL_DICTIONARIES - by default, spell-checking uses the
+#        Hunspell default personal dictionary ~/.hunspell_en_GB, plus
+#        $(BASE).dic. Use this variable to specify additional
+#        dictionaries.
+#
+
+STARTS_WITH_TEXT :=
+ADDITIONAL_DICTIONARIES :=
+
+
+######################################################################
+# DO NOT MODIFY THIS SECTION
 
 ifndef MARKDOWN_MAKEFILE
 $(error Cannot find the main makefile; is markdown-makefile installed?)

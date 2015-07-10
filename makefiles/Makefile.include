@@ -89,7 +89,7 @@ gitignore: .gitignore
 
 .gitignore:
 	@echo '*~' > .gitignore
-	@echo '/output' > .gitignore
+	@echo '/output' >> .gitignore
 
 clean:
 	@rm -rf $(OUT_DIR) *~

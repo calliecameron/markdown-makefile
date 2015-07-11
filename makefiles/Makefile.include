@@ -34,11 +34,11 @@ SAVED_DIR := saved
 OUT_BASE := $(OUT_DIR)/$(BASE)
 DEPS := *.md $(OUT_DIR)
 
-.PHONY: main all tex pdf odt doc docx epub mobi save spell gitignore clean
+.PHONY: main all tex pdf odt doc docx rtf epub mobi save spell gitignore clean
 
 main: pdf
 
-all: tex pdf odt doc docx epub mobi
+all: tex pdf odt doc docx rtf epub mobi
 
 tex: $(OUT_BASE).tex
 
@@ -49,6 +49,8 @@ odt: $(OUT_BASE).odt
 doc: $(OUT_BASE).doc
 
 docx: $(OUT_BASE).docx
+
+rtf: $(OUT_BASE).rtf
 
 epub: $(OUT_BASE).epub
 
@@ -70,6 +72,9 @@ $(OUT_DIR)/%.doc: $(OUT_DIR)/%.docx
 	@unoconv -f doc -o $@ $<
 
 $(OUT_DIR)/%.docx: %.md $(DEPS)
+	@pandoc --smart -o $@ $<
+
+$(OUT_DIR)/%.rtf: %.md $(DEPS)
 	@pandoc --smart -o $@ $<
 
 $(OUT_DIR)/%.epub: %.md $(DEPS)

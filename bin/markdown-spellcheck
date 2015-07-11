@@ -29,7 +29,7 @@ mkfifo "${DICT_PIPE}"
 ) > "${DICT_PIPE}" &
 
 # Hunspell doesn't like en-dashes, em-dashes, or single quotation marks
-sed 's/---//g' | sed 's/--//g' | perl -pe 's/'"'"'(\W)/$1/g;s/(\W)'"'"'/$1/g;s/^'"'"'//;s/'"'"'$//;' | hunspell -d en_GB -p "${DICT_PIPE}" -l | sort | uniq
+sed 's/---//g' | sed 's/--//g' | sed 's/&nbsp;//g' | perl -pe 's/'"'"'(\W)/$1/g;s/(\W)'"'"'/$1/g;s/^'"'"'//;s/'"'"'$//;' | hunspell -d en_GB -p "${DICT_PIPE}" -l | sort | uniq
 
 wait
 

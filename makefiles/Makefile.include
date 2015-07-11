@@ -78,7 +78,7 @@ $(OUT_DIR)/%.rtf: %.md $(DEPS)
 	@pandoc --smart -o $@ $<
 
 $(OUT_DIR)/%.epub: %.md $(DEPS)
-	@pandoc --smart -o $@ $<
+	@pandoc --smart --epub-stylesheet=$(MARKDOWN_MAKEFILE_EPUB_CSS) -o $@ $<
 
 $(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub
 	@ebook-convert $< $@

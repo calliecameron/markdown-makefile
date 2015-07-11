@@ -6,4 +6,5 @@ else
     export PATH="${PATH}:${MARKDOWN_MAKEFILE_ROOT}/bin"
     export MARKDOWN_MAKEFILE="${MARKDOWN_MAKEFILE_ROOT}/makefiles/Makefile.include"
     export MARKDOWN_MAKEFILE_TEMPLATE_LATEX="${MARKDOWN_MAKEFILE_ROOT}/templates/template.tex"
+    export MARKDOWN_MAKEFILE_EPUB_CSS="${MARKDOWN_MAKEFILE_ROOT}/templates/epub.css"
 fi

@@ -26,6 +26,6 @@ Dependencies
 Setup
 -----
 
-Set `MARKDOWN_MAKEFILE_ROOT` to point to this directory, then source `env.sh`.
+Set `ANTIGEN_THIS_PLUGIN_DIR` to point to this directory, then source `markdown-makefile.env.sh`. Or, install using the antigen-env-2 branch in [my patched version of antigen](https://github.com/callumcameron/antigen).
 
 Run `markdown-makefile` to copy a new makefile into the current directory.

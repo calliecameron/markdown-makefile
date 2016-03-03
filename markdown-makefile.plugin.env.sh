@@ -3,7 +3,7 @@
 if [ -z "${ANTIGEN_THIS_PLUGIN_DIR}" ]; then
     echo 'ANTIGEN_THIS_PLUGIN_DIR not set'
 else
-    export PATH="${PATH}:${ANTIGEN_THIS_PLUGIN_DIR}/bin"
+    export PATH="${ANTIGEN_THIS_PLUGIN_DIR}/bin:${PATH}"
     export MARKDOWN_MAKEFILE="${ANTIGEN_THIS_PLUGIN_DIR}/makefiles/Makefile.include"
     export MARKDOWN_MAKEFILE_TEMPLATE_LATEX="${ANTIGEN_THIS_PLUGIN_DIR}/templates/template.tex"
     export MARKDOWN_MAKEFILE_EPUB_CSS="${ANTIGEN_THIS_PLUGIN_DIR}/templates/epub.css"

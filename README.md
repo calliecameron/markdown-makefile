@@ -16,7 +16,7 @@ Dependencies
 ------------
 
 - Pandoc
-- a LaTeX engine, e.g. pdflatex
+- a LaTeX engine, e.g. xelatex
 - LibreOffice
 - Unoconv
 - Calibre

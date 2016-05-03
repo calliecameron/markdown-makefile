@@ -23,10 +23,9 @@ endif
 STARTS_WITH_TEXT ?=
 ADDITIONAL_DICTIONARIES ?=
 
+LATEX_VARS := --latex-engine=xelatex
 ifdef STARTS_WITH_TEXT
-LATEX_VARS := --variable=starts-with-text
-else
-LATEX_VARS :=
+LATEX_VARS += --variable=starts-with-text
 endif
 
 OUT_DIR := output

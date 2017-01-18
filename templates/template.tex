@@ -128,6 +128,18 @@ $endif$
 \author{$for(author)$$author$$sep$ \and $endfor$}
 \date{$date$}
 
+% This makes horizontal rules for section breaks appear as three
+% stars, rather than a solid line. Unfortunately rule is used in other
+% places, such as footnotes - hence the conditional
+% gymnastics. Hopefully it doesn't break anything else.
+\newif\iffootnote
+\let\Footnote\footnote
+\renewcommand\footnote[1]{\begingroup\footnotetrue\Footnote{#1}\endgroup}
+
+\let\OldRule\rule
+\renewcommand{\rule}[2]{\iffootnote\OldRule{#1}{#2}\else* * *\fi}
+
+
 \begin{document}
 $if(title)$
 \maketitle

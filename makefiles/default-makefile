@@ -11,10 +11,12 @@ BASE := @@@@@
 #        Hunspell default personal dictionary ~/.hunspell_en_GB, plus
 #        $(BASE).dic. Use this variable to specify additional
 #        dictionaries.
+#    EXTRA_PANDOC_FLAGS - additional flags to pass to pandoc.
 #
 
 STARTS_WITH_TEXT :=
 ADDITIONAL_DICTIONARIES :=
+EXTRA_PANDOC_FLAGS :=
 
 
 ######################################################################

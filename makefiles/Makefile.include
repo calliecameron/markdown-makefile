@@ -21,11 +21,16 @@ ifndef BASE
 $(error BASE must be set to the document name)
 endif
 
+PANDOC_VERSION=$(shell pandoc --version | grep '^pandoc')
+ifneq ($(PANDOC_VERSION),pandoc 1.19.2.4)
+$(warning "Unsupported pandoc version; expected 1.19.2.4, got $(PANDOC_VERSION)")
+endif
+
 STARTS_WITH_TEXT ?=
 ADDITIONAL_DICTIONARIES ?=
 EXTRA_PANDOC_FLAGS ?=
 
-LATEX_VARS := --latex-engine=xelatex
+LATEX_VARS := --latex-engine=xelatex --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black --variable=fontfamily:newtxtext,newtxmath --variable=indent
 ifdef STARTS_WITH_TEXT
 LATEX_VARS += --variable=starts-with-text
 endif

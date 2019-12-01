@@ -14,7 +14,10 @@
 #        Hunspell default personal dictionary ~/.hunspell_en_GB, plus
 #        $(BASE).dic. Use this variable to specify additional
 #        dictionaries.
-#    EXTRA_PANDOC_FLAGS - additional flags to pass to pandoc.
+#    EXTRA_PREPROCESSING_FLAGS - additional flags to pass to pandoc at
+#        the preprocessing stage (input md -> generated md).
+#    EXTRA_PANDOC_FLAGS - additional flags to pass to pandoc at the
+#        main stage (generated md -> other formats).
 #    EXTRA_DEPS - additional dependencies to consider when deciding
 #        whether to rebuild the output.
 #    EXTRA_CLEAN_DEPS - additional files to remove with 'make clean'.
@@ -31,6 +34,7 @@ endif
 
 STARTS_WITH_TEXT ?=
 ADDITIONAL_DICTIONARIES ?=
+EXTRA_PREPROCESSING_FLAGS ?=
 EXTRA_PANDOC_FLAGS ?=
 EXTRA_DEPS ?=
 EXTRA_CLEAN_DEPS ?=
@@ -45,11 +49,13 @@ SAVED_DIR := saved
 OUT_BASE := $(OUT_DIR)/$(BASE)
 DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS)
 
-.PHONY: main all tex pdf odt doc docx rtf epub mobi save spell gitignore clean
+.PHONY: main all md tex pdf odt doc docx rtf epub mobi save spell gitignore clean
 
 main: pdf
 
 all: tex pdf odt doc docx rtf epub mobi
+
+md: $(OUT_BASE).md
 
 tex: $(OUT_BASE).tex
 
@@ -70,25 +76,32 @@ mobi: $(OUT_BASE).mobi
 $(OUT_DIR):
 	@mkdir -p $(OUT_DIR)
 
-$(OUT_DIR)/%.tex: %.md $(DEPS)
+# We do a separate 'preprocessing' step from md to md first, so that pandoc
+# can run any filters *without* --smart enabled. Having filters and smart
+# enabled at the same time can make ligatures get escaped later, whereas this
+# ensures they're passed through correctly.
+$(OUT_DIR)/%.md: %.md $(DEPS)
+	@pandoc --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $<
+
+$(OUT_DIR)/%.tex: $(OUT_DIR)/%.md
 	@pandoc --smart --standalone --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
-$(OUT_DIR)/%.pdf: %.md $(DEPS)
+$(OUT_DIR)/%.pdf: $(OUT_DIR)/%.md
 	@pandoc --smart --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
-$(OUT_DIR)/%.odt: %.md $(DEPS)
+$(OUT_DIR)/%.odt: $(OUT_DIR)/%.md
 	@pandoc --smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.doc: $(OUT_DIR)/%.docx
 	@unoconv -f doc -o $@ $<
 
-$(OUT_DIR)/%.docx: %.md $(DEPS)
+$(OUT_DIR)/%.docx: $(OUT_DIR)/%.md
 	@pandoc --smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
-$(OUT_DIR)/%.rtf: %.md $(DEPS)
+$(OUT_DIR)/%.rtf: $(OUT_DIR)/%.md
 	@pandoc --smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
-$(OUT_DIR)/%.epub: %.md $(DEPS)
+$(OUT_DIR)/%.epub: $(OUT_DIR)/%.md
 	@pandoc --smart --epub-stylesheet=$(MARKDOWN_MAKEFILE_EPUB_CSS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub

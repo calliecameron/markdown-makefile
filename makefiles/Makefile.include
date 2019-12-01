@@ -15,6 +15,9 @@
 #        $(BASE).dic. Use this variable to specify additional
 #        dictionaries.
 #    EXTRA_PANDOC_FLAGS - additional flags to pass to pandoc.
+#    EXTRA_DEPS - additional dependencies to consider when deciding
+#        whether to rebuild the output.
+#    EXTRA_CLEAN_DEPS - additional files to remove with 'make clean'.
 #
 
 ifndef BASE
@@ -29,6 +32,8 @@ endif
 STARTS_WITH_TEXT ?=
 ADDITIONAL_DICTIONARIES ?=
 EXTRA_PANDOC_FLAGS ?=
+EXTRA_DEPS ?=
+EXTRA_CLEAN_DEPS ?=
 
 LATEX_VARS := --latex-engine=xelatex --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black --variable=fontfamily:newtxtext,newtxmath --variable=indent
 ifdef STARTS_WITH_TEXT
@@ -38,7 +43,7 @@ endif
 OUT_DIR := output
 SAVED_DIR := saved
 OUT_BASE := $(OUT_DIR)/$(BASE)
-DEPS := *.md $(OUT_DIR)
+DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS)
 
 .PHONY: main all tex pdf odt doc docx rtf epub mobi save spell gitignore clean
 
@@ -103,4 +108,4 @@ gitignore: .gitignore
 	@echo '/output' >> .gitignore
 
 clean:
-	@rm -rf $(OUT_DIR) *~
+	@rm -rf $(OUT_DIR) *~ $(EXTRA_CLEAN_DEPS)

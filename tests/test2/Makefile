@@ -1,6 +1,12 @@
 # To use, set BASE to the name of the source markdown file, without
 # the extension.
-BASE := @@@@@
+BASE := test2
+
+# Normally these come from environment variables but for testing
+# purposes we set them explicitly
+MARKDOWN_MAKEFILE=../../makefiles/Makefile.include
+MARKDOWN_MAKEFILE_TEMPLATE_LATEX=../../templates/template.tex
+MARKDOWN_MAKEFILE_EPUB_CSS=../../templates/epub.css
 
 # Optional variables you can set:
 #
@@ -12,16 +18,11 @@ BASE := @@@@@
 #        $(BASE).dic. Use this variable to specify additional
 #        dictionaries.
 #    EXTRA_PANDOC_FLAGS - additional flags to pass to pandoc.
-#    EXTRA_DEPS - additional dependencies to consider when deciding
-#        whether to rebuild the output.
-#    EXTRA_CLEAN_DEPS - additional files to remove with 'make clean'.
 #
 
-STARTS_WITH_TEXT :=
+STARTS_WITH_TEXT := t
 ADDITIONAL_DICTIONARIES :=
-EXTRA_PANDOC_FLAGS :=
-EXTRA_DEPS :=
-EXTRA_CLEAN_DEPS :=
+EXTRA_PANDOC_FLAGS := --variable=section-page-break
 
 
 ######################################################################

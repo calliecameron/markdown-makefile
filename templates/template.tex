@@ -66,6 +66,12 @@ $endif$
 $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
+% CUSTOM
+% Has to be loaded before hyperref
+$if(section-page-break)$
+\usepackage{titlesec}
+$endif$
+% END CUSTOM
 \usepackage[unicode=true]{hyperref}
 $if(colorlinks)$
 \PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
@@ -280,6 +286,9 @@ $endif$
 % CUSTOM
 $if(starts-with-text)$
 \noindent
+$endif$
+$if(section-page-break)$
+\newcommand{\sectionbreak}{\clearpage}
 $endif$
 % END CUSTOM
 $body$

@@ -94,6 +94,11 @@ $if(colorlinks)$
 $else$
             pdfborder={0 0 0},
 $endif$
+% CUSTOM
+$if(docversion)$
+            pdfsubject={Version: $docversion$},
+$endif$
+% END CUSTOM
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 $if(verbatim-in-note)$

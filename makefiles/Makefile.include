@@ -47,9 +47,12 @@ endif
 OUT_DIR := output
 SAVED_DIR := saved
 OUT_BASE := $(OUT_DIR)/$(BASE)
-DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS)
+METADATA := $(OUT_DIR)/metadata.yaml
+DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS) $(METADATA)
 
-.PHONY: main all md tex pdf odt doc docx rtf epub mobi save spell gitignore clean
+.FORCE:
+
+.PHONY: main all md tex pdf odt doc docx rtf epub mobi save spell gitignore clean .FORCE
 
 main: pdf
 
@@ -76,12 +79,15 @@ mobi: $(OUT_BASE).mobi
 $(OUT_DIR):
 	@mkdir -p $(OUT_DIR)
 
+$(METADATA): $(OUT_DIR) .FORCE
+	@$(MARKDOWN_MAKEFILE_METADATA_GENERATOR) $@
+
 # We do a separate 'preprocessing' step from md to md first, so that pandoc
 # can run any filters *without* --smart enabled. Having filters and smart
 # enabled at the same time can make ligatures get escaped later, whereas this
 # ensures they're passed through correctly.
 $(OUT_DIR)/%.md: %.md $(DEPS)
-	@pandoc --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $<
+	@pandoc --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $< $(METADATA)
 
 $(OUT_DIR)/%.tex: $(OUT_DIR)/%.md
 	@pandoc --smart --standalone --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<

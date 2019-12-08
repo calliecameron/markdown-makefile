@@ -7,6 +7,7 @@ BASE := test1
 MARKDOWN_MAKEFILE=../../makefiles/Makefile.include
 MARKDOWN_MAKEFILE_TEMPLATE_LATEX=../../templates/template.tex
 MARKDOWN_MAKEFILE_EPUB_CSS=../../templates/epub.css
+MARKDOWN_MAKEFILE_METADATA_GENERATOR=../../templates/generate-metadata.sh
 
 # Optional variables you can set:
 #

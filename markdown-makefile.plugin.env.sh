@@ -7,4 +7,5 @@ else
     export MARKDOWN_MAKEFILE="${ANTIGEN_THIS_PLUGIN_DIR}/makefiles/Makefile.include"
     export MARKDOWN_MAKEFILE_TEMPLATE_LATEX="${ANTIGEN_THIS_PLUGIN_DIR}/templates/template.tex"
     export MARKDOWN_MAKEFILE_EPUB_CSS="${ANTIGEN_THIS_PLUGIN_DIR}/templates/epub.css"
+    export MARKDOWN_MAKEFILE_METADATA_GENERATOR="${ANTIGEN_THIS_PLUGIN_DIR}/templates/generate-metadata.sh"
 fi

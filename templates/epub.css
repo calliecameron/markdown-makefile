@@ -1,14 +1,25 @@
+/* This defines styles and classes used in the book */
 body { margin: 5%; text-align: justify; font-size: medium; }
 code { font-family: monospace; }
+/* CUSTOM */
 h1 { text-align: center; }
+/* END CUSTOM */
 h2 { text-align: left; }
 h3 { text-align: left; }
 h4 { text-align: left; }
 h5 { text-align: left; }
 h6 { text-align: left; }
-p { text-indent: 30px; margin: 0px; }
-h1.title { text-align: center; }
-h2.author { text-align: center; }
-p.date { text-align: center; text-indent: 0px; }
+/* CUSTOM */
+p { margin: 0px; }
+p + p { text-indent: 30px; }
+/* END CUSTOM */
+h1.title { }
+/* CUSTOM */
+p.author { text-align: center; text-indent: 0px; margin-top: 20px; }
+p.date { text-align: center; text-indent: 0px; margin-top: 20px; }
+/* END CUSTOM */
 ol.toc { padding: 0; margin-left: 1em; }
 ol.toc li { list-style-type: none; margin: 0; padding: 0; }
+a.footnoteRef { vertical-align: super; }
+em, em em em, em em em em em { font-style: italic;}
+em em, em em em em { font-style: normal; }

@@ -23,3 +23,6 @@ ol.toc li { list-style-type: none; margin: 0; padding: 0; }
 a.footnoteRef { vertical-align: super; }
 em, em em em, em em em em em { font-style: italic;}
 em em, em em em em { font-style: normal; }
+/* CUSTOM */
+hr { margin-top: 30px; margin-bottom: 30px; }
+/* END CUSTOM */

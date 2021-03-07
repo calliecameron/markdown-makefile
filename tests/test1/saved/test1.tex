@@ -1,0 +1,144 @@
+% Based on the template from Pandoc 1.19.2.4. Custom sections are marked
+% 'CUSTOM'.
+\documentclass[12pt,a4paper,]{article}
+\usepackage[]{newtxtext,newtxmath}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  % CUSTOM
+  % This seems to break newtxtext on Ubuntu 18.04
+  % \ifxetex
+  %   \usepackage{mathspec}
+  % \else
+  %   \usepackage{fontspec}
+  % \fi
+  % \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  % END CUSTOM
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage{fancyvrb}
+% CUSTOM
+% Has to be loaded before hyperref
+% END CUSTOM
+\usepackage[unicode=true]{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{
+            pdftitle={The Title},
+            pdfauthor={Author},
+            colorlinks=true,
+            linkcolor=black,
+            citecolor=Blue,
+            urlcolor=Blue,
+% CUSTOM
+            pdfsubject={Version: 59a6112, Sat Oct 3 16:30:35 2020 +0200},
+% END CUSTOM
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\VerbatimFootnotes % allows verbatim text in footnotes
+\usepackage[a4paper]{geometry}
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% CUSTOM
+\usepackage{bold-extra}
+\usepackage[perpage,symbol*]{footmisc}
+% END CUSTOM
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{The Title}
+\author{Author}
+\date{23 February 2019}
+
+% CUSTOM
+% This makes horizontal rules for section breaks appear as three stars, rather
+% than a solid line. Unfortunately 'rule' is used in other places, such as
+% footnotes - hence the conditional gymnastics. Hopefully it doesn't break
+% anything else.
+\newif\iffootnote
+\let\Footnote\footnote
+\renewcommand\footnote[1]{\begingroup\footnotetrue\Footnote{#1}\endgroup}
+
+\let\OldRule\rule
+\renewcommand{\rule}[2]{\iffootnote\OldRule{#1}{#2}\else* * *\fi}
+% END CUSTOM
+
+\begin{document}
+\maketitle
+
+% CUSTOM
+\frenchspacing
+% END CUSTOM
+
+% CUSTOM
+\noindent
+% END CUSTOM
+This is some text before a section. It shouldn't be indented.
+
+\section{This is a section}\label{this-is-a-section}
+
+This is some test text. This is formatted in \emph{italics} and
+\textbf{bold}, with - various -- dashes---, and trailing dots\ldots{}
+
+`These quotes should be curly,' and ``so should these.'' There should be
+a blank line before the next paragraph:
+
+~
+
+And then there should be some text \textsuperscript{in~superscript} and
+\textsubscript{in~subscript}, and a footnote\footnote{This is a
+  footnote. It should appear at the bottom of the page.} with a star, a
+footnote\footnote{Another footnote.} with a dagger, and this should be
+\texttt{monospace}.
+
+\subsection{Subsection}\label{subsection}
+
+Test text test text test text.
+
+\begin{quote}
+This is a quote block. It should be indented slightly and shouldn't
+contain a line break.
+\end{quote}
+
+\begin{quote}
+This is a quoted line block. It should be indented slightly\\
+and have a \emph{line break} after `slightly', and \textbf{formatting}.
+\end{quote}
+
+After this line there should be stars.
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+This is a new paragraph after the stars. This text is \textsc{Small
+Caps}.
+
+\end{document}

@@ -107,20 +107,17 @@ $endif$
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-% CUSTOM
-% This seems to break newtxtext on Ubuntu 18.04
-% $if(mathspec)$
-%   \ifxetex
-%     \usepackage{mathspec}
-%   \else
-%     \usepackage{unicode-math}
-%   \fi
-% $else$
-%   \usepackage{unicode-math}
-% $endif$
-%   \defaultfontfeatures{Scale=MatchLowercase}
-%   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-% END CUSTOM
+$if(mathspec)$
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{unicode-math}
+  \fi
+$else$
+  \usepackage{unicode-math}
+$endif$
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 $if(mainfont)$
   \setmainfont[$for(mainfontoptions)$$mainfontoptions$$sep$,$endfor$]{$mainfont$}
 $endif$

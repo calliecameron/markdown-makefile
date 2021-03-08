@@ -57,7 +57,7 @@ DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS) $(METADATA) $(LATEX_HEADER_PROCESSED) $(LA
 
 LATEX_FLAGS := --pdf-engine=xelatex --template=$(LATEX_TEMPLATE) --include-in-header=$(LATEX_HEADER_PROCESSED) --include-before-body=$(LATEX_BEFORE_PROCESSED)
 
-LATEX_VARS := --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black --variable=fontfamily:newtxtext,newtxmath --variable=indent
+LATEX_VARS := --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black '--variable=mainfont:Times New Roman' --variable=indent
 ifdef STARTS_WITH_TEXT
 LATEX_VARS += --variable=starts-with-text
 endif

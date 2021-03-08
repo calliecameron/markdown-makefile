@@ -39,6 +39,7 @@ cat > "${TMPFILE}" <<EOF
 ---
 docversion: "${VERSION}"
 subject: "Version: ${VERSION}"
+lang: "en-GB"
 ---
 EOF
 

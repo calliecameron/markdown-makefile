@@ -13,16 +13,31 @@ h6 { text-align: left; }
 p { margin: 0px; }
 p + p { text-indent: 30px; }
 /* END CUSTOM */
+/* For title, author, and date on the cover page */
 h1.title { }
 /* CUSTOM */
 p.author { text-align: center; text-indent: 0px; margin-top: 20px; }
 p.date { text-align: center; text-indent: 0px; margin-top: 20px; }
 /* END CUSTOM */
-ol.toc { padding: 0; margin-left: 1em; }
-ol.toc li { list-style-type: none; margin: 0; padding: 0; }
-a.footnoteRef { vertical-align: super; }
+nav#toc ol,
+nav#landmarks ol { padding: 0; margin-left: 1em; }
+nav#toc ol li,
+nav#landmarks ol li { list-style-type: none; margin: 0; padding: 0; }
+a.footnote-ref { vertical-align: super; }
 em, em em em, em em em em em { font-style: italic;}
 em em, em em em em { font-style: normal; }
+code{ white-space: pre-wrap; }
+span.smallcaps{ font-variant: small-caps; }
+span.underline{ text-decoration: underline; }
+q { quotes: "“" "”" "‘" "’"; }
+div.column{ display: inline-block; vertical-align: top; width: 50%; }
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+@media screen { /* Workaround for iBooks issue; see #6242 */
+  .sourceCode {
+    overflow: visible !important;
+    white-space: pre-wrap !important;
+  }
+}
 /* CUSTOM */
 hr { margin-top: 30px; margin-bottom: 30px; }
 /* END CUSTOM */

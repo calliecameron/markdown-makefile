@@ -28,10 +28,11 @@ $(error BASE must be set to the document name)
 endif
 
 PANDOC_VERSION=$(shell pandoc --version | grep '^pandoc')
-ifneq ($(PANDOC_VERSION),pandoc 1.19.2.4)
-$(warning "Unsupported pandoc version; expected 1.19.2.4, got $(PANDOC_VERSION)")
+ifneq ($(PANDOC_VERSION),pandoc 2.11.4)
+$(warning "Unsupported pandoc version; expected 2.11.4, got $(PANDOC_VERSION)")
 endif
 
+# User-modifiable variables
 STARTS_WITH_TEXT ?=
 ADDITIONAL_DICTIONARIES ?=
 EXTRA_PREPROCESSING_FLAGS ?=
@@ -39,24 +40,35 @@ EXTRA_PANDOC_FLAGS ?=
 EXTRA_DEPS ?=
 EXTRA_CLEAN_DEPS ?=
 
-LATEX_VARS := --latex-engine=xelatex --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black --variable=fontfamily:newtxtext,newtxmath --variable=indent
-ifdef STARTS_WITH_TEXT
-LATEX_VARS += --variable=starts-with-text
-endif
+# Other variables
+METADATA_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-metadata.sh
+LATEX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/template.tex
+LATEX_HEADER := $(MARKDOWN_MAKEFILE_DIR)/templates/header.tex
+LATEX_BEFORE := $(MARKDOWN_MAKEFILE_DIR)/templates/before.tex
+EPUB_CSS := $(MARKDOWN_MAKEFILE_DIR)/templates/epub.css
 
 OUT_DIR := output
 SAVED_DIR := saved
 OUT_BASE := $(OUT_DIR)/$(BASE)
-METADATA := $(OUT_DIR)/metadata.yaml
-DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS) $(METADATA)
+METADATA := $(OUT_DIR)/_metadata.yaml
+LATEX_HEADER_PROCESSED := $(OUT_DIR)/_header.tex
+LATEX_BEFORE_PROCESSED := $(OUT_DIR)/_before.tex
+DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS) $(METADATA) $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED)
+
+LATEX_FLAGS := --pdf-engine=xelatex --template=$(LATEX_TEMPLATE) --include-in-header=$(LATEX_HEADER_PROCESSED) --include-before-body=$(LATEX_BEFORE_PROCESSED)
+
+LATEX_VARS := --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black --variable=fontfamily:newtxtext,newtxmath --variable=indent
+ifdef STARTS_WITH_TEXT
+LATEX_VARS += --variable=starts-with-text
+endif
 
 .FORCE:
 
-.PHONY: main all md tex pdf odt doc docx rtf epub mobi save spell gitignore clean .FORCE
+.PHONY: main all md tex pdf odt doc docx epub mobi save spell gitignore clean .FORCE
 
 main: pdf
 
-all: tex pdf odt doc docx rtf epub mobi
+all: tex pdf odt doc docx epub mobi
 
 md: $(OUT_BASE).md
 
@@ -70,8 +82,6 @@ doc: $(OUT_BASE).doc
 
 docx: $(OUT_BASE).docx
 
-rtf: $(OUT_BASE).rtf
-
 epub: $(OUT_BASE).epub
 
 mobi: $(OUT_BASE).mobi
@@ -80,7 +90,13 @@ $(OUT_DIR):
 	@mkdir -p $(OUT_DIR)
 
 $(METADATA): $(OUT_DIR) .FORCE
-	@$(MARKDOWN_MAKEFILE_METADATA_GENERATOR) $@
+	@$(METADATA_GENERATOR) $@
+
+$(LATEX_HEADER_PROCESSED): $(OUT_DIR) .FORCE
+	@echo | pandoc --template=$(LATEX_HEADER) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_HEADER_PROCESSED)
+
+$(LATEX_BEFORE_PROCESSED): $(OUT_DIR) .FORCE
+	@echo | pandoc --template=$(LATEX_BEFORE) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_BEFORE_PROCESSED)
 
 # We do a separate 'preprocessing' step from md to md first, so that pandoc
 # can run any filters *without* --smart enabled. Having filters and smart
@@ -90,26 +106,24 @@ $(OUT_DIR)/%.md: %.md $(DEPS)
 	@pandoc --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $< $(METADATA)
 
 $(OUT_DIR)/%.tex: $(OUT_DIR)/%.md
-	@pandoc --smart --standalone --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@pandoc --from=markdown+smart --standalone $(LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.pdf: $(OUT_DIR)/%.md
-	@pandoc --smart --template=$(MARKDOWN_MAKEFILE_TEMPLATE_LATEX) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@pandoc --from=markdown+smart $(LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.odt: $(OUT_DIR)/%.md
-	@pandoc --smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@pandoc --from=markdown+smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.doc: $(OUT_DIR)/%.docx
 	@unoconv -f doc -o $@ $<
 
 $(OUT_DIR)/%.docx: $(OUT_DIR)/%.md
-	@pandoc --smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
-
-$(OUT_DIR)/%.rtf: $(OUT_DIR)/%.md
-	@pandoc --smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@pandoc --from=markdown+smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.epub: $(OUT_DIR)/%.md
-	@pandoc --smart --epub-stylesheet=$(MARKDOWN_MAKEFILE_EPUB_CSS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@pandoc --from=markdown+smart --css=$(EPUB_CSS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
+# Uses ebook-convert from Calibre
 $(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub
 	@ebook-convert $< $@
 

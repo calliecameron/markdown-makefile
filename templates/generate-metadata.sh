@@ -35,9 +35,12 @@ else
 fi
 
 TMPFILE="$(mktemp)"
-echo '---' > "${TMPFILE}"
-echo "docversion: \"${VERSION}\"" >> "${TMPFILE}"
-echo '---' >> "${TMPFILE}"
+cat > "${TMPFILE}" <<EOF
+---
+docversion: "${VERSION}"
+subject: "Version: ${VERSION}"
+---
+EOF
 
 # Since make uses timestamps, not contents, to determine whether to rebuild, we
 # only update the output file if it would differ.

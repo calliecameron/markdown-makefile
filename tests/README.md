@@ -1,4 +1,4 @@
 Tests
 =====
 
-Run `make` in each subdirectory, and check that the formatting in the output is correct.
+Run `make all` in each subdirectory, and check that the formatting in the files in `output` matches those in `saved`.

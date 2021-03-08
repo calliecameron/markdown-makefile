@@ -4,10 +4,8 @@ BASE := test1
 
 # Normally these come from environment variables but for testing
 # purposes we set them explicitly
+MARKDOWN_MAKEFILE_DIR=../..
 MARKDOWN_MAKEFILE=../../makefiles/Makefile.include
-MARKDOWN_MAKEFILE_TEMPLATE_LATEX=../../templates/template.tex
-MARKDOWN_MAKEFILE_EPUB_CSS=../../templates/epub.css
-MARKDOWN_MAKEFILE_METADATA_GENERATOR=../../templates/generate-metadata.sh
 
 # Optional variables you can set:
 #

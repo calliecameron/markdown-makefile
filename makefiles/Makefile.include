@@ -18,6 +18,8 @@
 #        the preprocessing stage (input md -> generated md).
 #    EXTRA_PANDOC_FLAGS - additional flags to pass to pandoc at the
 #        main stage (generated md -> other formats).
+#    EXTRA_LATEX_FLAGS - additional flags to pass to pandoc at the
+#         main stage, for latex-based output (generated md -> tex/pdf).
 #    EXTRA_DEPS - additional dependencies to consider when deciding
 #        whether to rebuild the output.
 #    EXTRA_CLEAN_DEPS - additional files to remove with 'make clean'.
@@ -37,6 +39,7 @@ STARTS_WITH_TEXT ?=
 ADDITIONAL_DICTIONARIES ?=
 EXTRA_PREPROCESSING_FLAGS ?=
 EXTRA_PANDOC_FLAGS ?=
+EXTRA_LATEX_FLAGS ?=
 EXTRA_DEPS ?=
 EXTRA_CLEAN_DEPS ?=
 
@@ -93,10 +96,10 @@ $(METADATA): $(OUT_DIR) .FORCE
 	@$(METADATA_GENERATOR) $@
 
 $(LATEX_HEADER_PROCESSED): $(OUT_DIR) .FORCE
-	@echo | pandoc --template=$(LATEX_HEADER) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_HEADER_PROCESSED)
+	@echo | pandoc --template=$(LATEX_HEADER) $(LATEX_VARS) $(EXTRA_LATEX_FLAGS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_HEADER_PROCESSED)
 
 $(LATEX_BEFORE_PROCESSED): $(OUT_DIR) .FORCE
-	@echo | pandoc --template=$(LATEX_BEFORE) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_BEFORE_PROCESSED)
+	@echo | pandoc --template=$(LATEX_BEFORE) $(LATEX_VARS) $(EXTRA_LATEX_FLAGS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_BEFORE_PROCESSED)
 
 # We do a separate 'preprocessing' step from md to md first, so that pandoc
 # can run any filters *without* --smart enabled. Having filters and smart
@@ -106,10 +109,10 @@ $(OUT_DIR)/%.md: %.md $(DEPS)
 	@pandoc --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $< $(METADATA)
 
 $(OUT_DIR)/%.tex: $(OUT_DIR)/%.md
-	@pandoc --from=markdown+smart --standalone $(LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@pandoc --from=markdown+smart --standalone $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.pdf: $(OUT_DIR)/%.md
-	@pandoc --from=markdown+smart $(LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@pandoc --from=markdown+smart $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.odt: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart $(EXTRA_PANDOC_FLAGS) -o $@ $<

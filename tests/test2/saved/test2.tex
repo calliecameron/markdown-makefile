@@ -1,86 +1,67 @@
-% Based on the template from Pandoc 1.19.2.4. Custom sections are marked
-% 'CUSTOM'.
-\documentclass[12pt,a4paper,]{article}
-\usepackage[]{newtxtext,newtxmath}
-\usepackage{amssymb,amsmath}
+% Based on the template from Pandoc 2.11.4. Custom sections are marked
+% 'CUSTOM'. Customisations go in included files where possible, but
+% this isn't always possible.
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[
+  12pt,
+  british,
+  a4paper,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
 \usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
-\else % if luatex or xelatex
-  % CUSTOM
-  % This seems to break newtxtext on Ubuntu 18.04
-  % \ifxetex
-  %   \usepackage{mathspec}
-  % \else
-  %   \usepackage{fontspec}
-  % \fi
-  % \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
-  % END CUSTOM
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \setmainfont[]{Times New Roman}
 \fi
-% use upquote if available, for straight quotes in verbatim environments
+% Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% use microtype if available
-\IfFileExists{microtype.sty}{%
-\usepackage[]{microtype}
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
 \usepackage{fancyvrb}
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 % CUSTOM
 % Has to be loaded before hyperref
 \usepackage{titlesec}
 % END CUSTOM
-\usepackage[unicode=true]{hyperref}
-\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-            pdftitle={The Title},
-            pdfauthor={Author},
-            colorlinks=true,
-            linkcolor=black,
-            citecolor=Blue,
-            urlcolor=Blue,
-% CUSTOM
-            pdfsubject={Version: 59a6112, Sat Oct 3 16:30:35 2020 +0200},
-% END CUSTOM
-            breaklinks=true}
-\urlstyle{same}  % don't use monospace font for urls
-\VerbatimFootnotes % allows verbatim text in footnotes
+  pdftitle={The Title},
+  pdfauthor={Author},
+  pdflang={en-GB},
+  pdfsubject={Version: f39295d-dirty, Mon Mar 8 18:05:12 2021 +0100},
+  colorlinks=true,
+  linkcolor=black,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=Blue,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\VerbatimFootnotes % allow verbatim text in footnotes
 \usepackage[a4paper]{geometry}
 \usepackage[normalem]{ulem}
-% avoid problems with \sout in headers with hyperref:
+% Avoid problems with \sout in headers with hyperref
 \pdfstringdefDisableCommands{\renewcommand{\sout}{}}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{0}
-% Redefines (sub)paragraphs to behave more like sections
-\ifx\paragraph\undefined\else
-\let\oldparagraph\paragraph
-\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-\fi
-\ifx\subparagraph\undefined\else
-\let\oldsubparagraph\subparagraph
-\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
-
-% CUSTOM
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{bold-extra}
 \usepackage[perpage,symbol*]{footmisc}
-% END CUSTOM
 
-% set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-
-
-\title{The Title}
-\author{Author}
-\date{23 February 2019}
-
-% CUSTOM
 % This makes horizontal rules for section breaks appear as three stars, rather
 % than a solid line. Unfortunately 'rule' is used in other places, such as
 % footnotes - hence the conditional gymnastics. Hopefully it doesn't break
@@ -91,23 +72,38 @@
 
 \let\OldRule\rule
 \renewcommand{\rule}[2]{\iffootnote\OldRule{#1}{#2}\else* * *\fi}
-% END CUSTOM
+\ifxetex
+  % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
+  \usepackage{polyglossia}
+  \setmainlanguage[variant=british]{english}
+\else
+  \usepackage[main=british]{babel}
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\fi
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{The Title}
+\author{Author}
+\date{23 February 2019}
 
 \begin{document}
 \maketitle
 
-% CUSTOM
 \frenchspacing
-% END CUSTOM
+
+\newcommand{\sectionbreak}{\clearpage}
+
 
 % CUSTOM
-\noindent
-\newcommand{\sectionbreak}{\clearpage}
-% END CUSTOM
-This is some text before a section. It shouldn't be indented. Each
-section should start on a new page (but subsections shouldn't).
+\noindent{}This is some text before a section. It shouldn't be indented.
+Each section should start on a new page (but subsections shouldn't).
 
-\section{This is a section}\label{this-is-a-section}
+\hypertarget{this-is-a-section}{%
+\section{This is a section}\label{this-is-a-section}}
 
 This is some test text. This is formatted in \emph{italics} and
 \textbf{bold}, with - various -- dashes---, and trailing dots\ldots{}
@@ -123,7 +119,8 @@ And then there should be some text \textsuperscript{in~superscript} and
 footnote\footnote{Another footnote.} with a dagger, and this should be
 \texttt{monospace}.
 
-\subsection{Subsection}\label{subsection}
+\hypertarget{subsection}{%
+\subsection{Subsection}\label{subsection}}
 
 Test text test text test text.
 
@@ -139,13 +136,16 @@ and have a \emph{line break} after `slightly', and \textbf{formatting}.
 
 After this line there should be stars.
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 This is a new paragraph after the stars. This text is \textsc{Small
-Caps}.
+Caps}. Here is a pound sign (£), a euro sign (€), and three letters with
+accents: ëóû.
 
-\section{This is a second section}\label{this-is-a-second-section}
+\hypertarget{this-is-a-second-section}{%
+\section{This is a second section}\label{this-is-a-second-section}}
 
 And this is \emph{even more italic text}.
+% END CUSTOM
 
 \end{document}

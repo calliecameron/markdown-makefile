@@ -1,6 +1,11 @@
 # To use, set BASE to the name of the source markdown file, without
 # the extension.
-BASE := @@@@@
+BASE := test3
+
+# Normally these come from environment variables but for testing
+# purposes we set them explicitly
+MARKDOWN_MAKEFILE_DIR=../..
+MARKDOWN_MAKEFILE=../../makefiles/Makefile.include
 
 # Optional variables you can set:
 #
@@ -24,10 +29,10 @@ BASE := @@@@@
 
 STARTS_WITH_TEXT :=
 ADDITIONAL_DICTIONARIES :=
-EXTRA_PREPROCESSING_FLAGS :=
-EXTRA_PANDOC_FLAGS :=
-EXTRA_LATEX_FLAGS :=
-EXTRA_DEPS :=
+EXTRA_PREPROCESSING_FLAGS := --filter=pandoc-include
+EXTRA_PANDOC_FLAGS := --table-of-contents --toc-depth=1
+EXTRA_LATEX_FLAGS := --include-in-header=custom-toc.tex
+EXTRA_DEPS := custom-toc.tex include1.md include2.md
 EXTRA_CLEAN_DEPS :=
 
 

@@ -16,12 +16,24 @@ MARKDOWN_MAKEFILE=../../makefiles/Makefile.include
 #        Hunspell default personal dictionary ~/.hunspell_en_GB, plus
 #        $(BASE).dic. Use this variable to specify additional
 #        dictionaries.
-#    EXTRA_PANDOC_FLAGS - additional flags to pass to pandoc.
+#    EXTRA_PREPROCESSING_FLAGS - additional flags to pass to pandoc at
+#        the preprocessing stage (input md -> generated md).
+#    EXTRA_PANDOC_FLAGS - additional flags to pass to pandoc at the
+#        main stage (generated md -> other formats).
+#    EXTRA_LATEX_FLAGS - additional flags to pass to pandoc at the
+#         main stage, for latex-based output (generated md -> tex/pdf).
+#    EXTRA_DEPS - additional dependencies to consider when deciding
+#        whether to rebuild the output.
+#    EXTRA_CLEAN_DEPS - additional files to remove with 'make clean'.
 #
 
 STARTS_WITH_TEXT := t
 ADDITIONAL_DICTIONARIES :=
+EXTRA_PREPROCESSING_FLAGS :=
 EXTRA_PANDOC_FLAGS :=
+EXTRA_LATEX_FLAGS :=
+EXTRA_DEPS :=
+EXTRA_CLEAN_DEPS :=
 
 
 ######################################################################
@@ -45,7 +57,6 @@ pdf:
 odt:
 doc:
 docx:
-rtf:
 epub:
 mobi:
 save:

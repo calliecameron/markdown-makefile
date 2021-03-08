@@ -8,9 +8,6 @@ subject: "Version: f39295d-dirty, Mon Mar 8 18:05:12 2021 +0100"
 title: The Title
 ---
 
-This is some text before a section. It shouldn't be indented. Each
-section should start on a new page (but subsections shouldn't).
-
 # This is a section
 
 This is some test text. This is formatted in *italics* and **bold**,
@@ -21,13 +18,11 @@ blank line before the next paragraph:
 
  
 
-And then there should be some text ^in superscript^ and ~in subscript~,
-and a footnote[^1] with a star, a footnote[^2] with a dagger, and this
-should be `monospace`.
+And then we do a simple include:
 
-## Subsection
+Text before a section in simple include.
 
-Test text test text test text.
+# Section in simple include
 
 > This is a quote block. It should be indented slightly and shouldn't
 > contain a line break.
@@ -35,13 +30,38 @@ Test text test text test text.
 > | This is a quoted line block. It should be indented slightly
 > | and have a *line break* after 'slightly', and **formatting**.
 
-After this line there should be stars.
+Text before recursive include, with *italic*, **bold**, "curly quotes,"
+and--- an em dash.
+
+Text before section in recursive include.
+
+# Section in recursive include
+
+Text in recursive include, with *italic*, **bold**, "curly quotes,"
+and--- an em dash.
+
+## Subsection in recursive include
+
+Test text test text test text. After this line there should be stars.
 
 ------------------------------------------------------------------------
 
-This is a new paragraph after the stars. This text is [Small
-Caps]{.smallcaps}. Here is a pound sign (£), a euro sign (€), and three
-letters with accents: ëóû.
+And then there should be some text ^in superscript^ and ~in subscript~,
+and a footnote[^1] with a star, a footnote[^2] with a dagger, and this
+should be `monospace`.
+
+Text after recursive include. Here is a pound sign (£), a euro sign (€),
+and three letters with accents: ëóû.
+
+# Second section in simple include
+
+Test text.
+
+Text after simple include.
+
+## Subsection
+
+This is a new paragraph. This text is [Small Caps]{.smallcaps}.
 
 # This is a second section
 

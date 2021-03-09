@@ -203,12 +203,6 @@ $if(verbatim-in-note)$
 $endif$
 \usepackage{xcolor}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-% CUSTOM
-% Has to be loaded before hyperref
-$if(section-page-break)$
-\usepackage{titlesec}
-$endif$
-% END CUSTOM
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
 $if(title-meta)$

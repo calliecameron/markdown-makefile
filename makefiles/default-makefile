@@ -47,6 +47,7 @@ endif
 
 main:
 all:
+txt:
 tex:
 pdf:
 odt:

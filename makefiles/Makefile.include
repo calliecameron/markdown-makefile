@@ -67,13 +67,15 @@ endif
 
 .FORCE:
 
-.PHONY: main all md tex pdf odt doc docx epub mobi save spell gitignore clean .FORCE
+.PHONY: main all md txt tex pdf odt doc docx epub mobi save spell gitignore clean .FORCE
 
 main: pdf
 
-all: tex pdf odt doc docx epub mobi
+all: txt tex pdf odt doc docx epub mobi
 
 md: $(OUT_BASE).md
+
+txt: $(OUT_BASE).txt
 
 tex: $(OUT_BASE).tex
 
@@ -107,6 +109,9 @@ $(LATEX_BEFORE_PROCESSED): $(OUT_DIR) .FORCE
 # ensures they're passed through correctly.
 $(OUT_DIR)/%.md: %.md $(DEPS)
 	@pandoc --from=markdown-smart --to=markdown-smart --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $< $(METADATA)
+
+$(OUT_DIR)/%.txt: $(OUT_DIR)/%.md
+	@pandoc --from=markdown+smart --to=plain --standalone $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.tex: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart --standalone $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<

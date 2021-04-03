@@ -1,5 +1,5 @@
 % The Title
-% Author
+% The Author
 % 23 February 2019
 
 # This is a section

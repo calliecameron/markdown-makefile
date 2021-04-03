@@ -47,6 +47,7 @@ endif
 
 main:
 all:
+md:
 txt:
 tex:
 pdf:
@@ -55,6 +56,8 @@ doc:
 docx:
 epub:
 mobi:
+md_ms:
+docx_ms:
 save:
 spell:
 gitignore:

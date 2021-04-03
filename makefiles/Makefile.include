@@ -45,6 +45,7 @@ EXTRA_CLEAN_DEPS ?=
 
 # Other variables
 METADATA_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-metadata.sh
+METADATA_MS_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-ms-metadata.sh
 LATEX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/template.tex
 LATEX_HEADER := $(MARKDOWN_MAKEFILE_DIR)/templates/header.tex
 LATEX_BEFORE := $(MARKDOWN_MAKEFILE_DIR)/templates/before.tex
@@ -57,6 +58,7 @@ METADATA := $(OUT_DIR)/_metadata.yaml
 LATEX_HEADER_PROCESSED := $(OUT_DIR)/_header.tex
 LATEX_BEFORE_PROCESSED := $(OUT_DIR)/_before.tex
 DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS) $(METADATA) $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED)
+METADATA_MS := $(OUT_DIR)/_metadata_ms.yaml
 
 LATEX_FLAGS := --pdf-engine=xelatex --template=$(LATEX_TEMPLATE) --include-in-header=$(LATEX_HEADER_PROCESSED) --include-before-body=$(LATEX_BEFORE_PROCESSED)
 
@@ -67,11 +69,11 @@ endif
 
 .FORCE:
 
-.PHONY: main all md txt tex pdf odt doc docx epub mobi save spell gitignore clean .FORCE
+.PHONY: main all md txt tex pdf odt doc docx epub mobi md_ms docx_ms save spell gitignore clean .FORCE
 
 main: pdf
 
-all: txt tex pdf odt doc docx epub mobi
+all: md txt tex pdf odt doc docx epub mobi md_ms docx_ms
 
 md: $(OUT_BASE).md
 
@@ -90,6 +92,10 @@ docx: $(OUT_BASE).docx
 epub: $(OUT_BASE).epub
 
 mobi: $(OUT_BASE).mobi
+
+md_ms: $(OUT_BASE)_ms.md
+
+docx_ms: $(OUT_BASE)_ms.docx
 
 $(OUT_DIR):
 	@mkdir -p $(OUT_DIR)
@@ -134,6 +140,16 @@ $(OUT_DIR)/%.epub: $(OUT_DIR)/%.md
 # Uses ebook-convert from Calibre
 $(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub
 	@ebook-convert $< $@
+
+$(METADATA_MS): $(OUT_BASE).md
+	@$(METADATA_MS_GENERATOR) $@ $<
+
+$(OUT_DIR)/%_ms.md: $(OUT_DIR)/%.md $(METADATA_MS)
+	@pandoc --from=markdown-smart --to=markdown-smart --standalone -o $@ $< $(METADATA_MS)
+
+# Uses md2short.sh from https://github.com/prosegrinder/pandoc-templates
+$(OUT_DIR)/%_ms.docx: $(OUT_DIR)/%_ms.md
+	@md2short.sh --overwrite --modern -o $@ $<
 
 save: all
 	@rm -rf $(SAVED_DIR)

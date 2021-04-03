@@ -1,15 +1,21 @@
 ---
 author:
 - The Author
+author_lastname: Author
+contact_address: "`\\n`{=tex}"
+contact_city_state_zip: "`\\n`{=tex}"
+contact_email: "`\\n`{=tex}"
+contact_name: The Author
+contact_phone: "`\\n`{=tex}"
 date: 23 February 2019
 docversion: "1a8dd36-dirty, Sat Apr 3 15:54:52 2021 +0200"
 lang: en-GB
+short_title: The Title
 subject: "Version: 1a8dd36-dirty, Sat Apr 3 15:54:52 2021 +0200"
 title: The Title
 ---
 
-This is some text before a section. It shouldn't be indented. Each
-section should start on a new page (but subsections shouldn't).
+This is some text before a section. It shouldn't be indented.
 
 # This is a section
 
@@ -50,10 +56,6 @@ After this line there should be stars.
 This is a new paragraph after the stars. This text is [Small
 Caps]{.smallcaps}. Here is a pound sign (£), a euro sign (€), and three
 letters with accents: ëóû.
-
-# This is a second section
-
-And this is *even more italic text*.
 
 [^1]: This is a footnote. It should appear at the bottom of the page.
 

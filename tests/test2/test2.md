@@ -1,5 +1,5 @@
 % The Title
-% Author
+% The Author
 % 23 February 2019
 
 This is some text before a section. It shouldn't be indented. Each section should start on a new page (but subsections shouldn't).

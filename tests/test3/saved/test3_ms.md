@@ -1,9 +1,16 @@
 ---
 author:
 - The Author
+author_lastname: Author
+contact_address: "`\\n`{=tex}"
+contact_city_state_zip: "`\\n`{=tex}"
+contact_email: "`\\n`{=tex}"
+contact_name: The Author
+contact_phone: "`\\n`{=tex}"
 date: 23 February 2019
 docversion: "1a8dd36-dirty, Sat Apr 3 15:54:52 2021 +0200"
 lang: en-GB
+short_title: The Title
 subject: "Version: 1a8dd36-dirty, Sat Apr 3 15:54:52 2021 +0200"
 title: The Title
 ---

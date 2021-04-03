@@ -2,9 +2,9 @@
 author:
 - Author
 date: 23 February 2019
-docversion: "cc3e617-dirty, Mon Mar 8 19:04:15 2021 +0100"
+docversion: "314fdbb-dirty, Tue Mar 9 08:08:52 2021 +0100"
 lang: en-GB
-subject: "Version: cc3e617-dirty, Mon Mar 8 19:04:15 2021 +0100"
+subject: "Version: 314fdbb-dirty, Tue Mar 9 08:08:52 2021 +0100"
 title: The Title
 ---
 
@@ -24,23 +24,31 @@ Text before a section in simple include.
 
 # Section in simple include
 
-> This is a quote block. It should be indented slightly and shouldn't
+> This is a quote block. It should be indented slightly and shouldn’t
 > contain a line break.
 
 > | This is a quoted line block. It should be indented slightly
-> | and have a *line break* after 'slightly', and **formatting**.
+> | and have a *line break* after ‘slightly’, and **formatting**.
 
-Text before recursive include, with *italic*, **bold**, "curly quotes,"
-and--- an em dash.
+Text before recursive include, with *italic*, **bold**, “curly quotes,”
+and— an em dash.
 
 Text before section in recursive include.
 
 # Section in recursive include
 
-Text in recursive include, with *italic*, **bold**, "curly quotes,"
-and--- an em dash.
+Text in recursive include, with *italic*, **bold**, “curly quotes,” and—
+an em dash.
 
 ## Subsection in recursive include
+
+> | “These literal double curly quotes, used where smart
+> | quotes gets it wrong, curl the right way even though
+> | they’re on different lines.”
+
+> | ‘These literal single curly quotes, used where smart
+> | quotes gets it wrong, curl the right way even though
+> | they’re on different lines.’
 
 Test text test text test text. After this line there should be stars.
 

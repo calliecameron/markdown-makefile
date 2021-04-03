@@ -2,9 +2,9 @@
 author:
 - Author
 date: 23 February 2019
-docversion: "cc3e617-dirty, Mon Mar 8 19:04:15 2021 +0100"
+docversion: "314fdbb-dirty, Tue Mar 9 08:08:52 2021 +0100"
 lang: en-GB
-subject: "Version: cc3e617-dirty, Mon Mar 8 19:04:15 2021 +0100"
+subject: "Version: 314fdbb-dirty, Tue Mar 9 08:08:52 2021 +0100"
 title: The Title
 ---
 
@@ -34,6 +34,14 @@ Test text test text test text.
 
 > | This is a quoted line block. It should be indented slightly
 > | and have a *line break* after 'slightly', and **formatting**.
+
+> | “These literal double curly quotes, used where smart
+> | quotes gets it wrong, curl the right way even though
+> | they're on different lines.”
+
+> | ‘These literal single curly quotes, used where smart
+> | quotes gets it wrong, curl the right way even though
+> | they're on different lines.’
 
 After this line there should be stars.
 

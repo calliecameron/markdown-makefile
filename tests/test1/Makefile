@@ -7,33 +7,10 @@ BASE := test1
 MARKDOWN_MAKEFILE_DIR=../..
 MARKDOWN_MAKEFILE=../../makefiles/Makefile.include
 
-# Optional variables you can set:
-#
-#    STARTS_WITH_TEXT - set this (to anything) if the document begins
-#        with text rather than a section header; it will fix a LaTeX
-#        formatting problem.
-#    ADDITIONAL_DICTIONARIES - by default, spell-checking uses the
-#        Hunspell default personal dictionary ~/.hunspell_en_GB, plus
-#        $(BASE).dic. Use this variable to specify additional
-#        dictionaries.
-#    EXTRA_PREPROCESSING_FLAGS - additional flags to pass to pandoc at
-#        the preprocessing stage (input md -> generated md).
-#    EXTRA_PANDOC_FLAGS - additional flags to pass to pandoc at the
-#        main stage (generated md -> other formats).
-#    EXTRA_LATEX_FLAGS - additional flags to pass to pandoc at the
-#         main stage, for latex-based output (generated md -> tex/pdf).
-#    EXTRA_DEPS - additional dependencies to consider when deciding
-#        whether to rebuild the output.
-#    EXTRA_CLEAN_DEPS - additional files to remove with 'make clean'.
-#
+# There are several variables you can set here to customise behaviour.
+# See the included makefile for details.
 
 STARTS_WITH_TEXT := t
-ADDITIONAL_DICTIONARIES :=
-EXTRA_PREPROCESSING_FLAGS :=
-EXTRA_PANDOC_FLAGS :=
-EXTRA_LATEX_FLAGS :=
-EXTRA_DEPS :=
-EXTRA_CLEAN_DEPS :=
 
 
 ######################################################################
@@ -44,22 +21,3 @@ $(error Cannot find the main makefile; is markdown-makefile installed?)
 else
 include $(MARKDOWN_MAKEFILE)
 endif
-
-
-# These targets are here so tools which don't follow includes
-# (e.g. helm-make in Emacs) can still offer sensible options to the
-# user. They have no effect on actual functionality.
-
-main:
-all:
-tex:
-pdf:
-odt:
-doc:
-docx:
-epub:
-mobi:
-save:
-spell:
-gitignore:
-clean:

@@ -1,17 +1,7 @@
 ---
 author:
 - The Author
-author_lastname: Author
-contact_address: "`\\n`{=tex}"
-contact_city_state_zip: "`\\n`{=tex}"
-contact_email: "`\\n`{=tex}"
-contact_name: The Author
-contact_phone: "`\\n`{=tex}"
 date: 23 February 2019
-docversion: "877f00c-dirty, Sat Apr 10 14:40:28 2021 +0200"
-lang: en-GB
-short_title: The Title
-subject: "Version: 877f00c-dirty, Sat Apr 10 14:40:28 2021 +0200"
 title: The Title
 ---
 

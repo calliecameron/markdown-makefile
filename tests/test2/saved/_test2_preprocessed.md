@@ -2,14 +2,11 @@
 author:
 - The Author
 date: 23 February 2019
-docversion: "877f00c-dirty, Sat Apr 10 14:40:28 2021 +0200"
-lang: en-GB
-starts-with-text: t
-subject: "Version: 877f00c-dirty, Sat Apr 10 14:40:28 2021 +0200"
 title: The Title
 ---
 
-This is some text before a section. It shouldn't be indented.
+This is some text before a section. It shouldn't be indented. Each
+section should start on a new page (but subsections shouldn't).
 
 # This is a section
 
@@ -50,6 +47,10 @@ After this line there should be stars.
 This is a new paragraph after the stars. This text is [Small
 Caps]{.smallcaps}. Here is a pound sign (£), a euro sign (€), and three
 letters with accents: ëóû.
+
+# This is a second section
+
+And this is *even more italic text*.
 
 [^1]: This is a footnote. It should appear at the bottom of the page.
 

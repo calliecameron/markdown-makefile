@@ -60,6 +60,9 @@ LATEX_VARS := --variable=fontsize:12pt --variable=papersize:a4 --variable=docume
 
 EPUB_CSS := $(MARKDOWN_MAKEFILE_DIR)/templates/epub.css
 
+DOCX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/reference.docx
+DOCX_FILTER := $(MARKDOWN_MAKEFILE_DIR)/templates/docx-filter.lua
+
 METADATA_MS := $(OUT_DIR)/_%_metadata_ms.yaml
 METADATA_MS_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-ms-metadata.sh
 
@@ -134,7 +137,7 @@ $(OUT_DIR)/%.doc: $(OUT_DIR)/%.docx
 	@unoconv -f doc -o $@ $<
 
 $(OUT_DIR)/%.docx: $(OUT_DIR)/%.md
-	@pandoc --from=markdown+smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@pandoc --from=markdown+smart --reference-doc=$(DOCX_TEMPLATE) --lua-filter=$(DOCX_FILTER) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.epub: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart --css=$(EPUB_CSS) $(EXTRA_PANDOC_FLAGS) -o $@ $<

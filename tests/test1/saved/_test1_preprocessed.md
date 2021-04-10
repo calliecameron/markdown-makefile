@@ -2,10 +2,6 @@
 author:
 - The Author
 date: 23 February 2019
-docversion: "877f00c-dirty, Sat Apr 10 14:40:28 2021 +0200"
-lang: en-GB
-starts-with-text: t
-subject: "Version: 877f00c-dirty, Sat Apr 10 14:40:28 2021 +0200"
 title: The Title
 ---
 

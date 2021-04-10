@@ -38,7 +38,7 @@
   pdftitle={The Title},
   pdfauthor={The Author},
   pdflang={en-GB},
-  pdfsubject={Version: b032676-dirty, Sat Apr 3 17:48:04 2021 +0200},
+  pdfsubject={Version: 877f00c-dirty, Sat Apr 10 14:40:28 2021 +0200},
   colorlinks=true,
   linkcolor={black},
   filecolor={Maroon},
@@ -97,8 +97,16 @@
 
 
 % CUSTOM
-\noindent{}This is some text before a section. It shouldn't be indented.
-Each section should start on a new page (but subsections shouldn't).
+% Text at the start of body before any headings should behave as if it comes
+% after a heading, so it's indented consistently with text after headings.
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
+% END CUSTOM
+
+This is some text before a section. It shouldn't be indented. Each
+section should start on a new page (but subsections shouldn't).
 
 \hypertarget{this-is-a-section}{%
 \section{This is a section}\label{this-is-a-section}}
@@ -156,6 +164,5 @@ accents: ëóû.
 \section{This is a second section}\label{this-is-a-second-section}}
 
 And this is \emph{even more italic text}.
-% END CUSTOM
 
 \end{document}

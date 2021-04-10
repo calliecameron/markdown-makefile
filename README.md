@@ -11,7 +11,7 @@ A wrapper for Pandoc and other tools so you can convert markdown files to other 
     $ ls output
     hello.pdf
 
-Currently supports Pandoc 2.11.4.
+Currently supports Pandoc 2.13.
 
 Dependencies
 ------------

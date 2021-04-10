@@ -30,8 +30,8 @@ $(error BASE must be set to the document name)
 endif
 
 PANDOC_VERSION=$(shell pandoc --version | grep '^pandoc')
-ifneq ($(PANDOC_VERSION),pandoc 2.11.4)
-$(warning "Unsupported pandoc version; expected 2.11.4, got $(PANDOC_VERSION)")
+ifneq ($(PANDOC_VERSION),pandoc 2.13)
+$(warning "Unsupported pandoc version; expected 2.13, got $(PANDOC_VERSION)")
 endif
 
 # User-modifiable variables

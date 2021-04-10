@@ -1,4 +1,4 @@
-% Based on the template from Pandoc 2.11.4. Custom sections are marked
+% Based on the template from Pandoc 2.13. Custom sections are marked
 % 'CUSTOM'. Customisations go in included files where possible, but
 % this isn't always possible.
 % Options for packages loaded elsewhere
@@ -13,8 +13,8 @@
 ]{article}
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
-\usepackage{ifxetex,ifluatex}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+\usepackage{iftex}
+\ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
@@ -38,12 +38,12 @@
   pdftitle={The Title},
   pdfauthor={The Author},
   pdflang={en-GB},
-  pdfsubject={Version: 1a8dd36-dirty, Sat Apr 3 15:54:52 2021 +0200},
+  pdfsubject={Version: b032676-dirty, Sat Apr 3 17:48:04 2021 +0200},
   colorlinks=true,
-  linkcolor=black,
-  filecolor=Maroon,
-  citecolor=Blue,
-  urlcolor=Blue,
+  linkcolor={black},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
 \VerbatimFootnotes % allow verbatim text in footnotes
@@ -71,7 +71,7 @@
 \renewcommand{\rule}[2]{\iffootnote\OldRule{#1}{#2}\else* * *\fi}
 \usepackage{titletoc}
 \titlecontents{section}[2.4em]{}{}{\hspace*{-2.4em}}{ \titlerule\contentspage}
-\ifxetex
+\ifXeTeX
   % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
   \usepackage{polyglossia}
   \setmainlanguage[variant=british]{english}
@@ -81,7 +81,7 @@
 \let\LanguageShortHands\languageshorthands
 \def\languageshorthands#1{}
 \fi
-\ifluatex
+\ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 

@@ -1,7 +1,9 @@
 #!/bin/bash
 
+THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 function usage() {
-    echo "Usage: $(basename "${0}") out_file"
+    echo "Usage: $(basename "${0}") out_file in_file"
     exit 1
 }
 
@@ -21,6 +23,8 @@ function commit-timestamp() {
 
 test -z "${1}" && usage
 OUTFILE="${1}"
+test -z "${2}" && usage
+INFILE="${2}"
 
 
 if type git &>/dev/null && git rev-parse --git-dir &>/dev/null && get-commit &>/dev/null; then
@@ -34,12 +38,15 @@ else
     VERSION="unversioned, $(date)"
 fi
 
+STARTS_WITH_TEXT="$(pandoc -t json "${INFILE}" | "${THIS_DIR}/starts-with-text.py")"
+
 TMPFILE="$(mktemp)"
 cat > "${TMPFILE}" <<EOF
 ---
 docversion: "${VERSION}"
 subject: "Version: ${VERSION}"
 lang: "en-GB"
+starts-with-text: "${STARTS_WITH_TEXT}"
 ---
 EOF
 

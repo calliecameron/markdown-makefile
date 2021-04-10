@@ -10,7 +10,6 @@ MARKDOWN_MAKEFILE=../../makefiles/Makefile.include
 # There are several variables you can set here to customise behaviour.
 # See the included makefile for details.
 
-STARTS_WITH_TEXT := t
 EXTRA_LATEX_FLAGS := --variable=section-page-break
 
 

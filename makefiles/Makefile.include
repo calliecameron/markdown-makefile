@@ -7,9 +7,6 @@
 #    BASE - the name of your document, without file extension
 #
 # Optional variables:
-#    STARTS_WITH_TEXT - set this (to anything) if the document begins
-#        with text rather than a section header; it will fix a LaTeX
-#        formatting problem.
 #    ADDITIONAL_DICTIONARIES - by default, spell-checking uses the
 #        Hunspell default personal dictionary ~/.hunspell_en_GB, plus
 #        $(BASE).dic. Use this variable to specify additional
@@ -35,7 +32,6 @@ $(warning "Unsupported pandoc version; expected 2.13, got $(PANDOC_VERSION)")
 endif
 
 # User-modifiable variables
-STARTS_WITH_TEXT ?=
 ADDITIONAL_DICTIONARIES ?=
 EXTRA_PREPROCESSING_FLAGS ?=
 EXTRA_PANDOC_FLAGS ?=
@@ -44,30 +40,33 @@ EXTRA_DEPS ?=
 EXTRA_CLEAN_DEPS ?=
 
 # Other variables
+OUT_DIR := output
+OUT_BASE := $(OUT_DIR)/$(BASE)
+DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS)
+OUT_PREPROCESSED := $(OUT_DIR)/_%_preprocessed.md
+METADATA := $(OUT_DIR)/_%_metadata.yaml
 METADATA_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-metadata.sh
-METADATA_MS_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-ms-metadata.sh
+
+SAVED_DIR := saved
+
 LATEX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/template.tex
 LATEX_HEADER := $(MARKDOWN_MAKEFILE_DIR)/templates/header.tex
 LATEX_BEFORE := $(MARKDOWN_MAKEFILE_DIR)/templates/before.tex
-EPUB_CSS := $(MARKDOWN_MAKEFILE_DIR)/templates/epub.css
-
-OUT_DIR := output
-SAVED_DIR := saved
-OUT_BASE := $(OUT_DIR)/$(BASE)
-METADATA := $(OUT_DIR)/_metadata.yaml
 LATEX_HEADER_PROCESSED := $(OUT_DIR)/_header.tex
 LATEX_BEFORE_PROCESSED := $(OUT_DIR)/_before.tex
-DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS) $(METADATA) $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED)
-METADATA_MS := $(OUT_DIR)/_metadata_ms.yaml
-
+LATEX_DEPS := $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED)
 LATEX_FLAGS := --pdf-engine=xelatex --template=$(LATEX_TEMPLATE) --include-in-header=$(LATEX_HEADER_PROCESSED) --include-before-body=$(LATEX_BEFORE_PROCESSED)
-
 LATEX_VARS := --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black '--variable=mainfont:Times New Roman' --variable=indent
-ifdef STARTS_WITH_TEXT
-LATEX_VARS += --variable=starts-with-text
-endif
+
+EPUB_CSS := $(MARKDOWN_MAKEFILE_DIR)/templates/epub.css
+
+METADATA_MS := $(OUT_DIR)/_%_metadata_ms.yaml
+METADATA_MS_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-ms-metadata.sh
+
 
 .FORCE:
+
+.PRECIOUS: $(METADATA) $(METADATA_MS)
 
 .PHONY: main all md txt tex pdf odt doc docx epub mobi md_ms docx_ms save spell gitignore clean .FORCE
 
@@ -100,8 +99,21 @@ docx_ms: $(OUT_BASE)_ms.docx
 $(OUT_DIR):
 	@mkdir -p $(OUT_DIR)
 
-$(METADATA): $(OUT_DIR) .FORCE
-	@$(METADATA_GENERATOR) $@
+# We do a separate 'preprocessing' step from md to md first, so that pandoc
+# can run any filters *without* --smart enabled. Having filters and smart
+# enabled at the same time can make ligatures get escaped later, whereas this
+# ensures they're passed through correctly.
+$(OUT_PREPROCESSED): %.md $(DEPS)
+	@pandoc --from=markdown-smart --to=markdown-smart --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $<
+
+$(METADATA): $(OUT_PREPROCESSED)
+	@$(METADATA_GENERATOR) $@ $<
+
+$(OUT_DIR)/%.md: $(OUT_PREPROCESSED) $(METADATA)
+	@pandoc --from=markdown-smart --to=markdown-smart --standalone -o $@ $^
+
+$(OUT_DIR)/%.txt: $(OUT_DIR)/%.md
+	@pandoc --from=markdown+smart --to=plain --standalone $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(LATEX_HEADER_PROCESSED): $(OUT_DIR) .FORCE
 	@echo | pandoc --template=$(LATEX_HEADER) $(LATEX_VARS) $(EXTRA_LATEX_FLAGS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_HEADER_PROCESSED)
@@ -109,20 +121,10 @@ $(LATEX_HEADER_PROCESSED): $(OUT_DIR) .FORCE
 $(LATEX_BEFORE_PROCESSED): $(OUT_DIR) .FORCE
 	@echo | pandoc --template=$(LATEX_BEFORE) $(LATEX_VARS) $(EXTRA_LATEX_FLAGS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_BEFORE_PROCESSED)
 
-# We do a separate 'preprocessing' step from md to md first, so that pandoc
-# can run any filters *without* --smart enabled. Having filters and smart
-# enabled at the same time can make ligatures get escaped later, whereas this
-# ensures they're passed through correctly.
-$(OUT_DIR)/%.md: %.md $(DEPS)
-	@pandoc --from=markdown-smart --to=markdown-smart --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $< $(METADATA)
-
-$(OUT_DIR)/%.txt: $(OUT_DIR)/%.md
-	@pandoc --from=markdown+smart --to=plain --standalone $(EXTRA_PANDOC_FLAGS) -o $@ $<
-
-$(OUT_DIR)/%.tex: $(OUT_DIR)/%.md
+$(OUT_DIR)/%.tex: $(OUT_DIR)/%.md $(LATEX_DEPS)
 	@pandoc --from=markdown+smart --standalone $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
-$(OUT_DIR)/%.pdf: $(OUT_DIR)/%.md
+$(OUT_DIR)/%.pdf: $(OUT_DIR)/%.md $(LATEX_DEPS)
 	@pandoc --from=markdown+smart $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.odt: $(OUT_DIR)/%.md
@@ -141,11 +143,11 @@ $(OUT_DIR)/%.epub: $(OUT_DIR)/%.md
 $(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub
 	@ebook-convert $< $@
 
-$(METADATA_MS): $(OUT_BASE).md
+$(METADATA_MS): $(OUT_DIR)/%.md
 	@$(METADATA_MS_GENERATOR) $@ $<
 
 $(OUT_DIR)/%_ms.md: $(OUT_DIR)/%.md $(METADATA_MS)
-	@pandoc --from=markdown-smart --to=markdown-smart --standalone -o $@ $< $(METADATA_MS)
+	@pandoc --from=markdown-smart --to=markdown-smart --standalone -o $@ $^
 
 # Uses md2short.sh from https://github.com/prosegrinder/pandoc-templates
 $(OUT_DIR)/%_ms.docx: $(OUT_DIR)/%_ms.md

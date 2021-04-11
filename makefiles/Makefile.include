@@ -7,10 +7,8 @@
 #    BASE - the name of your document, without file extension
 #
 # Optional variables:
-#    ADDITIONAL_DICTIONARIES - by default, spell-checking uses the
-#        Hunspell default personal dictionary ~/.hunspell_en_GB, plus
-#        $(BASE).dic. Use this variable to specify additional
-#        dictionaries.
+#    EXTRA_DICTIONARIES - by default, spell-checking uses $(BASE).dic.
+#        Use this variable to specify additional dictionaries.
 #    EXTRA_PREPROCESSING_FLAGS - additional flags to pass to pandoc at
 #        the preprocessing stage (input md -> generated md).
 #    EXTRA_PANDOC_FLAGS - additional flags to pass to pandoc at the
@@ -33,7 +31,7 @@ endif
 
 
 # User-modifiable variables
-ADDITIONAL_DICTIONARIES ?=
+EXTRA_DICTIONARIES ?=
 EXTRA_PREPROCESSING_FLAGS ?=
 EXTRA_PANDOC_FLAGS ?=
 EXTRA_LATEX_FLAGS ?=
@@ -50,6 +48,8 @@ SAVED_DIR := saved
 # Top-level targets. These rely on the 'BASE' variable set in the user's
 # makefile.
 .FORCE:
+
+.SECONDEXPANSION:
 
 .PHONY: main all md txt tex pdf odt doc docx epub mobi md_ms docx_ms save spell gitignore clean .FORCE
 
@@ -95,9 +95,6 @@ gitignore: .gitignore
 clean:
 	@rm -rf $(OUT_DIR) *~ $(EXTRA_CLEAN_DEPS)
 
-spell:
-	@markdown-spellcheck $(BASE).dic $(ADDITIONAL_DICTIONARIES) < $(BASE).md
-
 
 # Markdown output. All other formats should only depend on $(OUT_DIR)/%.md,
 # since it's only created if preprocessing, validation etc. all succeed.
@@ -109,6 +106,10 @@ COMPLETE := $(OUT_DIR)/_%_complete.md
 VALIDATION_INPUT := $(OUT_DIR)/_%_validation_input.md
 VALIDATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/validate.sh
 VALIDATED := $(OUT_DIR)/_%_validated
+DICTIONARY_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-dictionary.sh
+DICTIONARY := $(OUT_DIR)/_%_dictionary.dic
+SPELLCHECKER := $(MARKDOWN_MAKEFILE_DIR)/templates/spellcheck.sh
+SPELLCHECKED := $(OUT_DIR)/_%_spellchecked
 
 # We do a separate 'preprocessing' step from md to md first, so that pandoc
 # can run any filters *without* --smart enabled. Having filters and smart
@@ -130,7 +131,14 @@ $(VALIDATED): $(VALIDATION_INPUT)
 	@$(VALIDATOR) $<
 	@touch $@
 
-$(OUT_DIR)/%.md: $(COMPLETE) $(VALIDATED)
+$(DICTIONARY): $(OUT_DIR) $$(wildcard $$%.dic) $(EXTRA_DICTIONARIES)
+	@$(DICTIONARY_GENERATOR) $@ $*.dic $(EXTRA_DICTIONARIES)
+
+$(SPELLCHECKED): $(VALIDATION_INPUT) $(DICTIONARY)
+	@$(SPELLCHECKER) $^
+	@touch $@
+
+$(OUT_DIR)/%.md: $(COMPLETE) $(VALIDATED) $(SPELLCHECKED)
 	@cp $< $@
 
 
@@ -200,4 +208,4 @@ $(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub
 	@ebook-convert $< $@
 
 
-.PRECIOUS: $(PREPROCESSED) $(METADATA) $(COMPLETE) $(VALIDATION_INPUT) $(VALIDATED) $(METADATA_MS)
+.PRECIOUS: $(PREPROCESSED) $(METADATA) $(COMPLETE) $(VALIDATION_INPUT) $(VALIDATED) $(DICTIONARY) $(SPELLCHECKED) $(METADATA_MS)

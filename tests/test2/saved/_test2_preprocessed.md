@@ -2,6 +2,10 @@
 author:
 - The Author
 date: 23 February 2019
+pandoc-options:
+- "--filter=pandoc-include"
+- "--from=markdown-smart"
+- "--strip-comments"
 title: The Title
 ---
 

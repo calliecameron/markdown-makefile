@@ -31,6 +31,7 @@ ifneq ($(PANDOC_VERSION),pandoc 2.13)
 $(warning "Unsupported pandoc version; expected 2.13, got $(PANDOC_VERSION)")
 endif
 
+
 # User-modifiable variables
 ADDITIONAL_DICTIONARIES ?=
 EXTRA_PREPROCESSING_FLAGS ?=
@@ -39,45 +40,25 @@ EXTRA_LATEX_FLAGS ?=
 EXTRA_DEPS ?=
 EXTRA_CLEAN_DEPS ?=
 
-# Other variables
+
+# Base variables
 OUT_DIR := output
 OUT_BASE := $(OUT_DIR)/$(BASE)
-DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS)
-OUT_PREPROCESSED := $(OUT_DIR)/_%_preprocessed.md
-PANDOC_INCLUDE_METADATA := $(MARKDOWN_MAKEFILE_DIR)/templates/pandoc-include.yaml
-METADATA := $(OUT_DIR)/_%_metadata.yaml
-METADATA_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-metadata.sh
-VALIDATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/validate.sh
-
 SAVED_DIR := saved
 
-LATEX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/template.tex
-LATEX_HEADER := $(MARKDOWN_MAKEFILE_DIR)/templates/header.tex
-LATEX_BEFORE := $(MARKDOWN_MAKEFILE_DIR)/templates/before.tex
-LATEX_HEADER_PROCESSED := $(OUT_DIR)/_header.tex
-LATEX_BEFORE_PROCESSED := $(OUT_DIR)/_before.tex
-LATEX_DEPS := $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED)
-LATEX_FLAGS := --pdf-engine=xelatex --template=$(LATEX_TEMPLATE) --include-in-header=$(LATEX_HEADER_PROCESSED) --include-before-body=$(LATEX_BEFORE_PROCESSED)
-LATEX_VARS := --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black '--variable=mainfont:Times New Roman' --variable=indent
 
-EPUB_CSS := $(MARKDOWN_MAKEFILE_DIR)/templates/epub.css
-
-DOCX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/reference.docx
-DOCX_FILTER := $(MARKDOWN_MAKEFILE_DIR)/templates/docx-filter.lua
-
-METADATA_MS := $(OUT_DIR)/_%_metadata_ms.yaml
-METADATA_MS_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-ms-metadata.sh
-
-
+# Top-level targets. These rely on the 'BASE' variable set in the user's
+# makefile.
 .FORCE:
-
-.PRECIOUS: $(METADATA) $(METADATA_MS)
 
 .PHONY: main all md txt tex pdf odt doc docx epub mobi md_ms docx_ms save spell gitignore clean .FORCE
 
 main: pdf
 
 all: md txt tex pdf odt doc docx epub mobi md_ms docx_ms
+
+$(OUT_DIR):
+	@mkdir -p $(OUT_DIR)
 
 md: $(OUT_BASE).md
 
@@ -101,25 +82,73 @@ md_ms: $(OUT_BASE)_ms.md
 
 docx_ms: $(OUT_BASE)_ms.docx
 
-$(OUT_DIR):
-	@mkdir -p $(OUT_DIR)
+save: all
+	@rm -rf $(SAVED_DIR)
+	@cp -a $(OUT_DIR) $(SAVED_DIR)
+
+gitignore: .gitignore
+
+.gitignore:
+	@echo '*~' > .gitignore
+	@echo '/output' >> .gitignore
+
+clean:
+	@rm -rf $(OUT_DIR) *~ $(EXTRA_CLEAN_DEPS)
+
+spell:
+	@markdown-spellcheck $(BASE).dic $(ADDITIONAL_DICTIONARIES) < $(BASE).md
+
+
+# Markdown output. All other formats should only depend on $(OUT_DIR)/%.md,
+# since it's only created if preprocessing, validation etc. all succeed.
+PREPROCESSED := $(OUT_DIR)/_%_preprocessed.md
+PANDOC_INCLUDE_METADATA := $(MARKDOWN_MAKEFILE_DIR)/templates/pandoc-include.yaml
+METADATA_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-metadata.sh
+METADATA := $(OUT_DIR)/_%_metadata.yaml
+COMPLETE := $(OUT_DIR)/_%_complete.md
+VALIDATION_INPUT := $(OUT_DIR)/_%_validation_input.md
+VALIDATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/validate.sh
+VALIDATED := $(OUT_DIR)/_%_validated
 
 # We do a separate 'preprocessing' step from md to md first, so that pandoc
 # can run any filters *without* --smart enabled. Having filters and smart
 # enabled at the same time can make ligatures get escaped later, whereas this
 # ensures they're passed through correctly.
-$(OUT_PREPROCESSED): %.md $(DEPS)
-	@pandoc --filter=pandoc-include --metadata-file=$(PANDOC_INCLUDE_METADATA) --from=markdown-smart --to=markdown-smart --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $<
+$(PREPROCESSED): %.md *.md $(OUT_DIR) $(EXTRA_DEPS)
+	@pandoc --filter=pandoc-include --metadata-file=$(PANDOC_INCLUDE_METADATA) --from=markdown-smart --to=markdown-smart --strip-comments --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $<
 
-$(METADATA): $(OUT_PREPROCESSED)
+$(METADATA): $(PREPROCESSED)
 	@$(METADATA_GENERATOR) $@ $<
 
-$(OUT_DIR)/%.md: $(OUT_PREPROCESSED) $(METADATA)
+$(COMPLETE): $(PREPROCESSED) $(METADATA)
 	@pandoc --from=markdown-smart --to=markdown-smart --standalone -o $@ $^
-	@pandoc --from=markdown+smart --to=markdown-smart $@ | $(VALIDATOR)
 
+$(VALIDATION_INPUT): $(COMPLETE)
+	@pandoc --from=markdown+smart --to=markdown-smart -o $@ $<
+
+$(VALIDATED): $(VALIDATION_INPUT)
+	@$(VALIDATOR) $<
+	@touch $@
+
+$(OUT_DIR)/%.md: $(COMPLETE) $(VALIDATED)
+	@cp $< $@
+
+
+# Text output. This is included only because when copying into another program,
+# it's sometimes easier to copy without markdown syntax.
 $(OUT_DIR)/%.txt: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart --to=plain --standalone $(EXTRA_PANDOC_FLAGS) -o $@ $<
+
+
+# Latex-based outputs.
+LATEX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/template.tex
+LATEX_HEADER := $(MARKDOWN_MAKEFILE_DIR)/templates/header.tex
+LATEX_BEFORE := $(MARKDOWN_MAKEFILE_DIR)/templates/before.tex
+LATEX_HEADER_PROCESSED := $(OUT_DIR)/_header.tex
+LATEX_BEFORE_PROCESSED := $(OUT_DIR)/_before.tex
+LATEX_DEPS := $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED)
+LATEX_FLAGS := --pdf-engine=xelatex --template=$(LATEX_TEMPLATE) --include-in-header=$(LATEX_HEADER_PROCESSED) --include-before-body=$(LATEX_BEFORE_PROCESSED)
+LATEX_VARS := --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black '--variable=mainfont:Times New Roman' --variable=indent
 
 $(LATEX_HEADER_PROCESSED): $(OUT_DIR) .FORCE
 	@echo | pandoc --template=$(LATEX_HEADER) $(LATEX_VARS) $(EXTRA_LATEX_FLAGS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_HEADER_PROCESSED)
@@ -133,21 +162,21 @@ $(OUT_DIR)/%.tex: $(OUT_DIR)/%.md $(LATEX_DEPS)
 $(OUT_DIR)/%.pdf: $(OUT_DIR)/%.md $(LATEX_DEPS)
 	@pandoc --from=markdown+smart $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
+
+# Word-processor outputs.
+DOCX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/reference.docx
+DOCX_FILTER := $(MARKDOWN_MAKEFILE_DIR)/templates/docx-filter.lua
+METADATA_MS := $(OUT_DIR)/_%_metadata_ms.yaml
+METADATA_MS_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-ms-metadata.sh
+
 $(OUT_DIR)/%.odt: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
-
-$(OUT_DIR)/%.doc: $(OUT_DIR)/%.docx
-	@unoconv -f doc -o $@ $<
 
 $(OUT_DIR)/%.docx: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart --reference-doc=$(DOCX_TEMPLATE) --lua-filter=$(DOCX_FILTER) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
-$(OUT_DIR)/%.epub: $(OUT_DIR)/%.md
-	@pandoc --from=markdown+smart --css=$(EPUB_CSS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
-
-# Uses ebook-convert from Calibre
-$(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub
-	@ebook-convert $< $@
+$(OUT_DIR)/%.doc: $(OUT_DIR)/%.docx
+	@unoconv -f doc -o $@ $<
 
 $(METADATA_MS): $(OUT_DIR)/%.md
 	@$(METADATA_MS_GENERATOR) $@ $<
@@ -159,18 +188,16 @@ $(OUT_DIR)/%_ms.md: $(OUT_DIR)/%.md $(METADATA_MS)
 $(OUT_DIR)/%_ms.docx: $(OUT_DIR)/%_ms.md
 	@md2short.sh --overwrite --modern -o $@ $<
 
-save: all
-	@rm -rf $(SAVED_DIR)
-	@cp -a $(OUT_DIR) $(SAVED_DIR)
 
-spell:
-	@markdown-spellcheck $(BASE).dic $(ADDITIONAL_DICTIONARIES) < $(BASE).md
+# Ebook outputs.
+EPUB_CSS := $(MARKDOWN_MAKEFILE_DIR)/templates/epub.css
 
-gitignore: .gitignore
+$(OUT_DIR)/%.epub: $(OUT_DIR)/%.md
+	@pandoc --from=markdown+smart --css=$(EPUB_CSS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
-.gitignore:
-	@echo '*~' > .gitignore
-	@echo '/output' >> .gitignore
+# Uses ebook-convert from Calibre
+$(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub
+	@ebook-convert $< $@
 
-clean:
-	@rm -rf $(OUT_DIR) *~ $(EXTRA_CLEAN_DEPS)
+
+.PRECIOUS: $(PREPROCESSED) $(METADATA) $(COMPLETE) $(VALIDATION_INPUT) $(VALIDATED) $(METADATA_MS)

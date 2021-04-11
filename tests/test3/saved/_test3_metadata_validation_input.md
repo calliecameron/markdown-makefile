@@ -1,1 +1,1 @@
-The Title Is Baz
+The Title Is ‘Baz’

@@ -16,7 +16,7 @@ function get-var() {
     local TMPFILE
     TMPFILE="$(mktemp).md"
     echo "\$${VAR}\$" > "${TMPFILE}"
-    pandoc "--template=${TMPFILE}" --to=markdown "${FILE}"
+    pandoc "--template=${TMPFILE}" --to=markdown-smart "${FILE}"
     rm "${TMPFILE}"
 }
 

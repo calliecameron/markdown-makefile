@@ -47,6 +47,7 @@ docversion: "${VERSION}"
 subject: "Version: ${VERSION}"
 lang: "en-GB"
 starts-with-text: "${STARTS_WITH_TEXT}"
+pandoc-options:
 ---
 EOF
 

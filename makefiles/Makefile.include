@@ -44,6 +44,7 @@ OUT_DIR := output
 OUT_BASE := $(OUT_DIR)/$(BASE)
 DEPS := *.md $(OUT_DIR) $(EXTRA_DEPS)
 OUT_PREPROCESSED := $(OUT_DIR)/_%_preprocessed.md
+PANDOC_INCLUDE_METADATA := $(MARKDOWN_MAKEFILE_DIR)/templates/pandoc-include.yaml
 METADATA := $(OUT_DIR)/_%_metadata.yaml
 METADATA_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-metadata.sh
 
@@ -107,7 +108,7 @@ $(OUT_DIR):
 # enabled at the same time can make ligatures get escaped later, whereas this
 # ensures they're passed through correctly.
 $(OUT_PREPROCESSED): %.md $(DEPS)
-	@pandoc --from=markdown-smart --to=markdown-smart --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $<
+	@pandoc --filter=pandoc-include --metadata-file=$(PANDOC_INCLUDE_METADATA) --from=markdown-smart --to=markdown-smart --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $<
 
 $(METADATA): $(OUT_PREPROCESSED)
 	@$(METADATA_GENERATOR) $@ $<

@@ -10,7 +10,6 @@ MARKDOWN_MAKEFILE=../../makefiles/Makefile.include
 # There are several variables you can set here to customise behaviour.
 # See the included makefile for details.
 
-EXTRA_PREPROCESSING_FLAGS := --filter=pandoc-include
 EXTRA_PANDOC_FLAGS := --table-of-contents --toc-depth=1
 EXTRA_LATEX_FLAGS := --include-in-header=custom-toc.tex
 EXTRA_DEPS := custom-toc.tex include1.md include2.md

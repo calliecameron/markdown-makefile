@@ -1,2 +1,4 @@
 *~
 auto/
+.dir-locals.el
+.env

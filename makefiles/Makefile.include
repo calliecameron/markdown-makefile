@@ -47,6 +47,7 @@ OUT_PREPROCESSED := $(OUT_DIR)/_%_preprocessed.md
 PANDOC_INCLUDE_METADATA := $(MARKDOWN_MAKEFILE_DIR)/templates/pandoc-include.yaml
 METADATA := $(OUT_DIR)/_%_metadata.yaml
 METADATA_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-metadata.sh
+VALIDATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/validate.sh
 
 SAVED_DIR := saved
 
@@ -115,6 +116,7 @@ $(METADATA): $(OUT_PREPROCESSED)
 
 $(OUT_DIR)/%.md: $(OUT_PREPROCESSED) $(METADATA)
 	@pandoc --from=markdown-smart --to=markdown-smart --standalone -o $@ $^
+	@pandoc --from=markdown+smart --to=markdown-smart $@ | $(VALIDATOR)
 
 $(OUT_DIR)/%.txt: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart --to=plain --standalone $(EXTRA_PANDOC_FLAGS) -o $@ $<

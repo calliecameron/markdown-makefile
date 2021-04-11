@@ -2,10 +2,10 @@
 author:
 - The Author
 date: 23 February 2019
-docversion: "7db8fb8-dirty, Sun Apr 11 10:29:12 2021 +0200"
+docversion: "3662361-dirty, Sun Apr 11 16:01:37 2021 +0200"
 lang: en-GB
-subject: "Version: 7db8fb8-dirty, Sun Apr 11 10:29:12 2021 +0200"
-title: The Title
+subject: "Version: 3662361-dirty, Sun Apr 11 16:01:37 2021 +0200"
+title: The Title Is Baz
 ---
 
 # This is a section

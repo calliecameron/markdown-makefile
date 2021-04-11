@@ -6,7 +6,7 @@ pandoc-options:
 - "--filter=pandoc-include"
 - "--from=markdown-smart"
 - "--strip-comments"
-title: The Title
+title: The Title Is Baz
 ---
 
 # This is a section

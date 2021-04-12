@@ -20,6 +20,8 @@
 #    EXTRA_CLEAN_DEPS - additional files to remove with 'make clean'.
 #    DOC_VERSION - version to embed in output; if not set, use git
 #        commit info if in a git repo or date otherwise.
+#    SOURCE_DATE_EPOCH - Unix timestamp for reproducible builds.
+#        When unset, use current time.
 #
 
 ifndef BASE
@@ -40,6 +42,11 @@ EXTRA_LATEX_FLAGS ?=
 EXTRA_DEPS ?=
 EXTRA_CLEAN_DEPS ?=
 DOC_VERSION ?=
+SOURCE_DATE_EPOCH ?=
+
+ifdef SOURCE_DATE_EPOCH
+export SOURCE_DATE_EPOCH
+endif
 
 
 # Base variables
@@ -49,6 +56,7 @@ SAVED_DIR := saved
 GITIGNORE := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitignore
 GITATTRIBUTES := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitattributes
 GITCONFIG := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitconfig
+ZIP_CLEANER := $(MARKDOWN_MAKEFILE_DIR)/templates/zip-cleaner.sh
 
 
 # Top-level targets. These rely on the 'BASE' variable set in the user's
@@ -196,9 +204,11 @@ METADATA_MS_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-ms-metadata
 
 $(OUT_DIR)/%.odt: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@$(ZIP_CLEANER) $@
 
 $(OUT_DIR)/%.docx: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart --reference-doc=$(DOCX_TEMPLATE) --lua-filter=$(DOCX_FILTER) $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@$(ZIP_CLEANER) $@
 
 $(OUT_DIR)/%.doc: $(OUT_DIR)/%.docx
 	@unoconv -f doc -o $@ $<
@@ -212,6 +222,7 @@ $(OUT_DIR)/%_ms.md: $(OUT_DIR)/%.md $(METADATA_MS)
 # Uses md2short.sh from https://github.com/prosegrinder/pandoc-templates
 $(OUT_DIR)/%_ms.docx: $(OUT_DIR)/%_ms.md
 	@md2short.sh --overwrite --modern -o $@ $<
+	@$(ZIP_CLEANER) $@
 
 
 # Ebook outputs.
@@ -219,6 +230,7 @@ EPUB_CSS := $(MARKDOWN_MAKEFILE_DIR)/templates/epub.css
 
 $(OUT_DIR)/%.epub: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart --css=$(EPUB_CSS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@$(ZIP_CLEANER) $@
 
 # Uses ebook-convert from Calibre
 $(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub

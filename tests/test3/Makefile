@@ -8,7 +8,7 @@ MARKDOWN_MAKEFILE_DIR=../..
 MARKDOWN_MAKEFILE=../../makefiles/Makefile.include
 
 # Reproducible builds
-export SOURCE_DATE_EPOCH = 1618243321
+SOURCE_DATE_EPOCH := 1618243321
 DOC_VERSION := reproducible
 
 

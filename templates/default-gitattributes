@@ -1,6 +1,6 @@
-*.doc diff=catdoc
+*.doc diff=doc
 *.docx diff=zip
 *.epub diff=zip
-*.mobi diff=hexdump
+*.mobi diff=binary
 *.odt diff=zip
-*.pdf diff=pdfsummary
+*.pdf diff=pdf

@@ -43,6 +43,9 @@ EXTRA_CLEAN_DEPS ?=
 OUT_DIR := output
 OUT_BASE := $(OUT_DIR)/$(BASE)
 SAVED_DIR := saved
+GITIGNORE := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitignore
+GITATTRIBUTES := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitattributes
+GITCONFIG := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitconfig
 
 
 # Top-level targets. These rely on the 'BASE' variable set in the user's
@@ -86,11 +89,17 @@ save: all
 	@rm -rf $(SAVED_DIR)
 	@cp -a $(OUT_DIR) $(SAVED_DIR)
 
-gitignore: .gitignore
+gitsetup: .gitignore .gitattributes .gitconfig
 
 .gitignore:
-	@echo '*~' > .gitignore
-	@echo '/output' >> .gitignore
+	@cp $(GITIGNORE) .gitignore
+
+.gitattributes:
+	@cp $(GITATTRIBUTES) .gitattributes
+
+.gitconfig:
+	@cp $(GITCONFIG) .gitconfig
+	@git config --local include.path ../.gitconfig
 
 clean:
 	@rm -rf $(OUT_DIR) *~ $(EXTRA_CLEAN_DEPS)

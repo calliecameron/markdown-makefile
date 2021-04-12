@@ -1,0 +1,15 @@
+[diff "catdoc"]
+textconv = catdoc
+binary = true
+
+[diff "hexdump"]
+textconv = hexdump -v -C
+binary = true
+
+[diff "pdfsummary"]
+textconv = pdfsummary
+binary = true
+
+[diff "zip"]
+textconv = unzip -c -a
+binary = true

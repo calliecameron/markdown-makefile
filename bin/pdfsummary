@@ -1,0 +1,13 @@
+#!/bin/bash
+
+function usage() {
+    echo "Usage: $(basename "${0}") file"
+    exit 1
+}
+
+test -z "${1}" && usage
+
+pdfinfo "${1}"
+echo '----------'
+pdf2txt.py "${1}"
+echo

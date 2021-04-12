@@ -203,6 +203,15 @@ $if(verbatim-in-note)$
 $endif$
 \usepackage{xcolor}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+
+% CUSTOM
+% titlesec must be loaded before hyperref, otherwise links point to the wrong
+% place. Therefore it can't go in header-includes, which are after hyperref.
+$if(section-page-break)$
+\usepackage{titlesec}
+$endif$
+% END CUSTOM
+
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
 $if(title-meta)$

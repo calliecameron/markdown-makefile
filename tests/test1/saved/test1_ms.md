@@ -8,11 +8,14 @@ contact_email: "`\\n`{=tex}"
 contact_name: The Author
 contact_phone: "`\\n`{=tex}"
 date: 23 February 2019
-docversion: "7db8fb8-dirty, Sun Apr 11 10:29:12 2021 +0200"
+docversion: reproducible
+identifier:
+- scheme: DOI
+  text: "doi:10.234234.234/33"
 lang: en-GB
 short_title: The Title
 starts-with-text: t
-subject: "Version: 7db8fb8-dirty, Sun Apr 11 10:29:12 2021 +0200"
+subject: "Version: reproducible"
 title: The Title
 ---
 

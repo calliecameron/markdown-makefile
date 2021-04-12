@@ -2,6 +2,12 @@
 % The Author
 % 23 February 2019
 
+---
+identifier:
+- scheme: DOI
+  text: doi:10.234234.234/33
+---
+
 # This is a section
 
 This is some test text. This is formatted in *italics* and **bold**, with - various -- dashes---, and trailing dots...

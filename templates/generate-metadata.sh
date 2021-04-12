@@ -27,7 +27,10 @@ test -z "${2}" && usage
 INFILE="${2}"
 
 
-if type git &>/dev/null && git rev-parse --git-dir &>/dev/null && get-commit &>/dev/null; then
+if [ -n "${DOC_VERSION}" ]; then
+    # Use explicit version if set (for reproducible builds)
+    VERSION="${DOC_VERSION}"
+elif type git &>/dev/null && git rev-parse --git-dir &>/dev/null && get-commit &>/dev/null; then
     # Use git commit if we can
     COMMIT="$(get-commit)"
     DESCRIPTION="$(describe-commit)"

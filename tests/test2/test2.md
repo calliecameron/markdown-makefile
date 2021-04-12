@@ -2,6 +2,12 @@
 % The Author
 % 23 February 2019
 
+---
+identifier:
+- scheme: DOI
+  text: doi:10.234234.234/33
+---
+
 This is some text before a section. It shouldn't be indented. Each section should start on a new page (but subsections shouldn't).
 
 # This is a section

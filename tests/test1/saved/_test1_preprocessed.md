@@ -2,6 +2,9 @@
 author:
 - The Author
 date: 23 February 2019
+identifier:
+- scheme: DOI
+  text: "doi:10.234234.234/33"
 pandoc-options:
 - "--filter=pandoc-include"
 - "--from=markdown-smart"

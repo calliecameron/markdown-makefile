@@ -18,6 +18,8 @@
 #    EXTRA_DEPS - additional dependencies to consider when deciding
 #        whether to rebuild the output.
 #    EXTRA_CLEAN_DEPS - additional files to remove with 'make clean'.
+#    DOC_VERSION - version to embed in output; if not set, use git
+#        commit info if in a git repo or date otherwise.
 #
 
 ifndef BASE
@@ -37,6 +39,7 @@ EXTRA_PANDOC_FLAGS ?=
 EXTRA_LATEX_FLAGS ?=
 EXTRA_DEPS ?=
 EXTRA_CLEAN_DEPS ?=
+DOC_VERSION ?=
 
 
 # Base variables
@@ -130,7 +133,7 @@ $(PREPROCESSED): %.md *.md $(OUT_DIR) $(EXTRA_DEPS)
 	@pandoc --filter=pandoc-include --metadata-file=$(PANDOC_INCLUDE_METADATA) --from=markdown-smart --to=markdown-smart --strip-comments --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $<
 
 $(METADATA): $(PREPROCESSED)
-	@$(METADATA_GENERATOR) $@ $<
+	@DOC_VERSION=$(DOC_VERSION) $(METADATA_GENERATOR) $@ $<
 
 $(COMPLETE): $(PREPROCESSED) $(METADATA)
 	@pandoc --from=markdown-smart --to=markdown-smart --standalone -o $@ $^

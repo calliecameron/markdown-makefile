@@ -2,9 +2,12 @@
 author:
 - The Author
 date: 23 February 2019
-docversion: "d824205-dirty, Sun Apr 11 18:00:41 2021 +0200"
+docversion: reproducible
+identifier:
+- scheme: DOI
+  text: "doi:10.234234.234/33"
 lang: en-GB
-subject: "Version: d824205-dirty, Sun Apr 11 18:00:41 2021 +0200"
+subject: "Version: reproducible"
 title: "The Title Is 'Baz'"
 ---
 

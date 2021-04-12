@@ -1,6 +1,6 @@
 ---
-docversion: "7db8fb8-dirty, Sun Apr 11 10:29:12 2021 +0200"
-subject: "Version: 7db8fb8-dirty, Sun Apr 11 10:29:12 2021 +0200"
+docversion: "reproducible"
+subject: "Version: reproducible"
 lang: "en-GB"
 starts-with-text: "t"
 pandoc-options:

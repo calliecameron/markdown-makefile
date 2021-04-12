@@ -7,6 +7,11 @@ BASE := test1
 MARKDOWN_MAKEFILE_DIR=../..
 MARKDOWN_MAKEFILE=../../makefiles/Makefile.include
 
+# Reproducible builds
+export SOURCE_DATE_EPOCH = 1618243321
+DOC_VERSION := reproducible
+
+
 # There are several variables you can set here to customise behaviour.
 # See the included makefile for details.
 

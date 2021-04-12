@@ -7,7 +7,9 @@ function usage() {
 
 test -z "${1}" && usage
 
+printf 'File hash: %s\n' "$(md5sum < "${1}")"
 pdfinfo "${1}"
 echo '----------'
 pdf2txt.py "${1}"
-echo
+echo '----------'
+dumppdf.py "${1}"

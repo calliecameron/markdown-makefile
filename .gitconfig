@@ -11,5 +11,5 @@ textconv = bin/pdfsummary
 binary = true
 
 [diff "zip"]
-textconv = unzip -c -a
+textconv = unzip -q -c -a
 binary = true

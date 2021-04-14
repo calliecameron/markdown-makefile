@@ -30,7 +30,7 @@ Optional:
 
 ## Setup
 
-Set `ANTIGEN_THIS_PLUGIN_DIR` to point to this directory, then source `markdown-makefile.env.sh`. Or, install using the antigen-env-2 branch in [my patched version of antigen](https://github.com/callumcameron/antigen).
+Set `ANTIGEN_THIS_PLUGIN_DIR` to point to this directory, then source `markdown-makefile.env.sh`. Or, install using the antigen-env-2 branch in [my patched version of antigen](https://github.com/calliecameron/antigen).
 
 Run `pip install -r requirements.txt`.
 

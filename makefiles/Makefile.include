@@ -177,23 +177,23 @@ $(OUT_DIR)/%.txt: $(OUT_DIR)/%.md
 LATEX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/template.tex
 LATEX_HEADER := $(MARKDOWN_MAKEFILE_DIR)/templates/header.tex
 LATEX_BEFORE := $(MARKDOWN_MAKEFILE_DIR)/templates/before.tex
-LATEX_HEADER_PROCESSED := $(OUT_DIR)/_header.tex
-LATEX_BEFORE_PROCESSED := $(OUT_DIR)/_before.tex
+LATEX_HEADER_PROCESSED := $(OUT_DIR)/_%_header.tex
+LATEX_BEFORE_PROCESSED := $(OUT_DIR)/_%_before.tex
 LATEX_DEPS := $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED)
-LATEX_FLAGS := --pdf-engine=xelatex --template=$(LATEX_TEMPLATE) --include-in-header=$(LATEX_HEADER_PROCESSED) --include-before-body=$(LATEX_BEFORE_PROCESSED)
+LATEX_FLAGS := --pdf-engine=xelatex --template=$(LATEX_TEMPLATE)
 LATEX_VARS := --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black '--variable=mainfont:Times New Roman' --variable=indent
 
-$(LATEX_HEADER_PROCESSED): $(OUT_DIR) .FORCE
-	@echo | pandoc --template=$(LATEX_HEADER) $(LATEX_VARS) $(EXTRA_LATEX_FLAGS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_HEADER_PROCESSED)
+$(LATEX_HEADER_PROCESSED): $(OUT_DIR)/%.md
+	@pandoc --template=$(LATEX_HEADER) $(LATEX_VARS) $(EXTRA_LATEX_FLAGS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
-$(LATEX_BEFORE_PROCESSED): $(OUT_DIR) .FORCE
-	@echo | pandoc --template=$(LATEX_BEFORE) $(LATEX_VARS) $(EXTRA_LATEX_FLAGS) $(EXTRA_PANDOC_FLAGS) -o $(LATEX_BEFORE_PROCESSED)
+$(LATEX_BEFORE_PROCESSED): $(OUT_DIR)/%.md
+	@pandoc --template=$(LATEX_BEFORE) $(LATEX_VARS) $(EXTRA_LATEX_FLAGS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.tex: $(OUT_DIR)/%.md $(LATEX_DEPS)
-	@pandoc --from=markdown+smart --standalone $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@pandoc --from=markdown+smart --standalone --include-in-header=$(OUT_DIR)/_$*_header.tex --include-before-body=$(OUT_DIR)/_$*_before.tex $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 $(OUT_DIR)/%.pdf: $(OUT_DIR)/%.md $(LATEX_DEPS)
-	@pandoc --from=markdown+smart $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
+	@pandoc --from=markdown+smart --include-in-header=$(OUT_DIR)/_$*_header.tex --include-before-body=$(OUT_DIR)/_$*_before.tex $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 
 # Word-processor outputs.
@@ -238,4 +238,4 @@ $(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub
 	@ebook-convert $< $@
 
 
-.PRECIOUS: $(PREPROCESSED) $(METADATA) $(COMPLETE) $(VALIDATION_INPUT) $(METADATA_VALIDATION_INPUT) $(VALIDATED) $(DICTIONARY) $(SPELLCHECKED) $(METADATA_MS)
+.PRECIOUS: $(PREPROCESSED) $(METADATA) $(COMPLETE) $(VALIDATION_INPUT) $(METADATA_VALIDATION_INPUT) $(VALIDATED) $(DICTIONARY) $(SPELLCHECKED) $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED) $(METADATA_MS)

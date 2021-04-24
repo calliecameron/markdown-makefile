@@ -42,6 +42,7 @@ else
 fi
 
 STARTS_WITH_TEXT="$(pandoc -t json "${INFILE}" | "${THIS_DIR}/starts-with-text.py")"
+SOURCE_MD5="$(md5sum < "${INFILE}" | cut -d ' ' -f 1)"
 
 TMPFILE="$(mktemp)"
 cat > "${TMPFILE}" <<EOF
@@ -51,6 +52,7 @@ subject: "Version: ${VERSION}"
 lang: "en-GB"
 starts-with-text: "${STARTS_WITH_TEXT}"
 pandoc-options:
+source-md5: "${SOURCE_MD5}"
 ---
 EOF
 

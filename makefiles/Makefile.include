@@ -182,7 +182,7 @@ LATEX_HEADER_PROCESSED := $(OUT_DIR)/_%_header.tex
 LATEX_BEFORE_PROCESSED := $(OUT_DIR)/_%_before.tex
 LATEX_DEPS := $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED)
 LATEX_FLAGS := --pdf-engine=xelatex --template=$(LATEX_TEMPLATE)
-LATEX_VARS := --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black '--variable=mainfont:Times New Roman' --variable=indent
+LATEX_VARS := --variable=fontsize:12pt --variable=papersize:a4 --variable=documentclass:article --variable=geometry:a4paper --variable=strikeout --variable=verbatim-in-note --variable=linkcolor:black '--variable=mainfont:TeX Gyre Termes' --variable=indent
 
 $(LATEX_HEADER_PROCESSED): $(OUT_DIR)/%.md
 	@pandoc --template=$(LATEX_HEADER) $(LATEX_VARS) $(EXTRA_LATEX_FLAGS) $(EXTRA_PANDOC_FLAGS) -o $@ $<

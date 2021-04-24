@@ -1,15 +1,19 @@
 [diff "doc"]
 textconv = bin/_docdump
+cachetextconv = true
 binary = true
 
 [diff "binary"]
 textconv = hexdump -v -C
+cachetextconv = true
 binary = true
 
 [diff "pdf"]
 textconv = bin/_pdfdump
+cachetextconv = true
 binary = true
 
 [diff "zip"]
 textconv = bin/_zipdump
+cachetextconv = true
 binary = true

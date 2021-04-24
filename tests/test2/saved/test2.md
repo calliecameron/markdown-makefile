@@ -7,9 +7,11 @@ identifier:
 - scheme: DOI
   text: "doi:10.234234.234/33"
 lang: en-GB
+source-md5: de55853a803ed3cd4c989247ea782f90
 starts-with-text: t
 subject: "Version: reproducible"
 title: The Title
+wordcount: 240
 ---
 
 This is some text before a section. It shouldn't be indented. Each

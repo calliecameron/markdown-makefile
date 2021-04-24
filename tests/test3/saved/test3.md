@@ -7,8 +7,10 @@ identifier:
 - scheme: DOI
   text: "doi:10.234234.234/33"
 lang: en-GB
+source-md5: be42db5898a8e2eb0bd3f4e44dcab8db
 subject: "Version: reproducible"
 title: "The Title Is 'Baz'"
+wordcount: 288
 ---
 
 # This is a section

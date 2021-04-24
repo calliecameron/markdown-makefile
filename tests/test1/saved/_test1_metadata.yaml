@@ -4,4 +4,5 @@ subject: "Version: reproducible"
 lang: "en-GB"
 starts-with-text: "t"
 pandoc-options:
+source-md5: "f167cd23d83cea06094082828f8aa62b"
 ---

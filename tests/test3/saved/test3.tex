@@ -74,6 +74,11 @@
 
 \let\OldRule\rule
 \renewcommand{\rule}[2]{\iffootnote\OldRule{#1}{#2}\else* * *\fi}
+
+\special{pdf:trailerid [
+    <be42db5898a8e2eb0bd3f4e44dcab8db>
+    <be42db5898a8e2eb0bd3f4e44dcab8db>
+]}
 \usepackage{titletoc}
 \titlecontents{section}[2.4em]{}{}{\hspace*{-2.4em}}{ \titlerule\contentspage}
 \ifXeTeX

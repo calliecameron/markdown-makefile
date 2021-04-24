@@ -10,6 +10,7 @@ pandoc-options:
 - "--from=markdown-smart"
 - "--strip-comments"
 title: "The Title Is 'Baz'"
+wordcount: 288
 ---
 
 # This is a section

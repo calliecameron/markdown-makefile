@@ -75,6 +75,11 @@
 
 \let\OldRule\rule
 \renewcommand{\rule}[2]{\iffootnote\OldRule{#1}{#2}\else* * *\fi}
+
+\special{pdf:trailerid [
+    <de55853a803ed3cd4c989247ea782f90>
+    <de55853a803ed3cd4c989247ea782f90>
+]}
 \ifXeTeX
   % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
   \usepackage{polyglossia}

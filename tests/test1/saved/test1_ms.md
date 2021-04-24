@@ -14,9 +14,11 @@ identifier:
   text: "doi:10.234234.234/33"
 lang: en-GB
 short_title: The Title
+source-md5: f167cd23d83cea06094082828f8aa62b
 starts-with-text: t
 subject: "Version: reproducible"
 title: The Title
+wordcount: 217
 ---
 
 This is some text before a section. It shouldn't be indented.

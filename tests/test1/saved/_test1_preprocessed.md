@@ -10,6 +10,7 @@ pandoc-options:
 - "--from=markdown-smart"
 - "--strip-comments"
 title: The Title
+wordcount: 217
 ---
 
 This is some text before a section. It shouldn't be indented.

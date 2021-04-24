@@ -119,6 +119,7 @@ clean:
 # Markdown output. All other formats should only depend on $(OUT_DIR)/%.md,
 # since it's only created if preprocessing, validation etc. all succeed.
 PREPROCESSED := $(OUT_DIR)/_%_preprocessed.md
+WORDCOUNT := $(MARKDOWN_MAKEFILE_DIR)/templates/wordcount.lua
 PANDOC_INCLUDE_METADATA := $(MARKDOWN_MAKEFILE_DIR)/templates/pandoc-include.yaml
 METADATA_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-metadata.sh
 METADATA := $(OUT_DIR)/_%_metadata.yaml
@@ -138,7 +139,7 @@ SPELLCHECKED := $(OUT_DIR)/_%_spellchecked
 # enabled at the same time can make ligatures get escaped later, whereas this
 # ensures they're passed through correctly.
 $(PREPROCESSED): %.md *.md $(OUT_DIR) $(EXTRA_DEPS)
-	@pandoc --filter=pandoc-include --metadata-file=$(PANDOC_INCLUDE_METADATA) --from=markdown-smart --to=markdown-smart --strip-comments --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $<
+	@pandoc --filter=pandoc-include --lua-filter=$(WORDCOUNT) --metadata-file=$(PANDOC_INCLUDE_METADATA) --from=markdown-smart --to=markdown-smart --strip-comments --standalone $(EXTRA_PREPROCESSING_FLAGS) -o $@ $<
 
 $(METADATA): $(PREPROCESSED)
 	@DOC_VERSION=$(DOC_VERSION) $(METADATA_GENERATOR) $@ $<

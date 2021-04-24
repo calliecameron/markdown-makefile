@@ -201,6 +201,7 @@ DOCX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/reference.docx
 DOCX_FILTER := $(MARKDOWN_MAKEFILE_DIR)/templates/docx-filter.lua
 METADATA_MS := $(OUT_DIR)/_%_metadata_ms.yaml
 METADATA_MS_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-ms-metadata.sh
+MS_DOCX_FILTER := $(MARKDOWN_MAKEFILE_DIR)/templates/ms-docx-filter.lua
 
 $(OUT_DIR)/%.odt: $(OUT_DIR)/%.md
 	@pandoc --from=markdown+smart $(EXTRA_PANDOC_FLAGS) -o $@ $<
@@ -221,7 +222,7 @@ $(OUT_DIR)/%_ms.md: $(OUT_DIR)/%.md $(METADATA_MS)
 
 # Uses md2short.sh from https://github.com/prosegrinder/pandoc-templates
 $(OUT_DIR)/%_ms.docx: $(OUT_DIR)/%_ms.md
-	@md2short.sh --overwrite --modern -o $@ $<
+	@md2short.sh --overwrite --modern -o $@ --lua-filter=$(MS_DOCX_FILTER) $<
 	@$(ZIP_CLEANER) $@
 
 

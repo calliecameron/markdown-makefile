@@ -24,6 +24,10 @@
 #        When unset, use current time.
 #
 
+MAKEFLAGS += --no-builtin-rules --no-builtin-variables
+.SUFFIXES:
+.SECONDEXPANSION:
+
 ifndef BASE
 $(error BASE must be set to the document name)
 endif
@@ -63,9 +67,7 @@ ZIP_CLEANER := $(MARKDOWN_MAKEFILE_DIR)/templates/zip-cleaner.sh
 # makefile.
 .FORCE:
 
-.SECONDEXPANSION:
-
-.PHONY: main all md txt tex pdf odt doc docx epub mobi md_ms docx_ms save gitsetup clean .FORCE .SECONDEXPANSION .PRECIOUS
+.PHONY: main all md txt tex pdf odt doc docx epub mobi md_ms docx_ms save gitsetup clean .SUFFIXES .SECONDEXPANSION .FORCE .PRECIOUS
 
 main: pdf
 
@@ -157,7 +159,7 @@ $(VALIDATED): $(VALIDATION_INPUT) $(METADATA_VALIDATION_INPUT)
 	@$(VALIDATOR) $^
 	@touch $@
 
-$(DICTIONARY): $(OUT_DIR) $$(wildcard $$%.dic) $(EXTRA_DICTIONARIES)
+$(DICTIONARY): $(OUT_DIR) $$(wildcard $$*.dic) $(EXTRA_DICTIONARIES)
 	@$(DICTIONARY_GENERATOR) $@ $*.dic $(EXTRA_DICTIONARIES)
 
 $(SPELLCHECKED): $(DICTIONARY) $(VALIDATION_INPUT) $(METADATA_VALIDATION_INPUT)

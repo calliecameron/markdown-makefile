@@ -65,7 +65,7 @@ ZIP_CLEANER := $(MARKDOWN_MAKEFILE_DIR)/templates/zip-cleaner.sh
 
 .SECONDEXPANSION:
 
-.PHONY: main all md txt tex pdf odt doc docx epub mobi md_ms docx_ms save spell gitignore clean .FORCE
+.PHONY: main all md txt tex pdf odt doc docx epub mobi md_ms docx_ms save gitsetup clean .FORCE .SECONDEXPANSION .PRECIOUS
 
 main: pdf
 
@@ -102,13 +102,13 @@ save: all
 
 gitsetup: .gitignore .gitattributes .gitconfig
 
-.gitignore:
+.gitignore: .FORCE
 	@cp $(GITIGNORE) .gitignore
 
-.gitattributes:
+.gitattributes: .FORCE
 	@cp $(GITATTRIBUTES) .gitattributes
 
-.gitconfig:
+.gitconfig: .FORCE
 	@cp $(GITCONFIG) .gitconfig
 	@git config --local include.path ../.gitconfig
 

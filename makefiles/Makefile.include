@@ -67,11 +67,11 @@ ZIP_CLEANER := $(MARKDOWN_MAKEFILE_DIR)/templates/zip-cleaner.sh
 # makefile.
 .FORCE:
 
-.PHONY: main all md txt tex pdf odt doc docx epub mobi md_ms docx_ms save gitsetup clean .SUFFIXES .SECONDEXPANSION .FORCE .PRECIOUS
+.PHONY: main all md txt tex pdf odt docx doc epub mobi md_ms docx_ms doc_ms save gitsetup clean .SUFFIXES .SECONDEXPANSION .FORCE .PRECIOUS
 
 main: pdf
 
-all: md txt tex pdf odt doc docx epub mobi md_ms docx_ms
+all: md txt tex pdf odt docx doc epub mobi md_ms docx_ms doc_ms
 
 $(OUT_DIR):
 	@mkdir -p $(OUT_DIR)
@@ -86,9 +86,9 @@ pdf: $(OUT_BASE).pdf
 
 odt: $(OUT_BASE).odt
 
-doc: $(OUT_BASE).doc
-
 docx: $(OUT_BASE).docx
+
+doc: $(OUT_BASE).doc
 
 epub: $(OUT_BASE).epub
 
@@ -97,6 +97,8 @@ mobi: $(OUT_BASE).mobi
 md_ms: $(OUT_BASE)_ms.md
 
 docx_ms: $(OUT_BASE)_ms.docx
+
+doc_ms: $(OUT_BASE)_ms.doc
 
 save: all
 	@rm -rf $(SAVED_DIR)

@@ -10,6 +10,12 @@ md_library(
     src = "foo.md",
 )
 
+md_library(
+    name = "bar",
+    src = "bar.md",
+    deps = [":foo"],
+)
+
 py_library(
     name = "bazel_package",
     srcs = ["bazel_package.py"],
@@ -42,4 +48,15 @@ sh_test(
     srcs = ["raw_version_test.sh"],
     args = ["$(rootpath raw_version.py)"],
     data = ["raw_version.py"],
+)
+
+py_binary(
+    name = "base_metadata",
+    srcs = ["base_metadata.py"],
+)
+
+py_test(
+    name = "base_metadata_test",
+    srcs = ["base_metadata_test.py"],
+    deps = [":base_metadata"],
 )

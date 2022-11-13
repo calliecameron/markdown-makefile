@@ -1,12 +1,12 @@
-# MdLibraryInfo = provider(
-#     "Info from a markdown library.",
-#     fields = {
-#         "text": "Text of the library, in json format",
-#         # "metadata": "",
-#         # "dictionary": "",
-#         # "versions": "",
-#     },
-# )
+MdLibraryInfo = provider(
+    "Info for a markdown library.",
+    fields = {
+        # "text": "Text of the library, in json format",
+        # "metadata": "",
+        # "dictionary": "",
+        "version": "Version of the library",
+    },
+)
 
 def _md_library_impl(ctx):
     # if ctx.file.src:
@@ -30,15 +30,22 @@ def _md_library_impl(ctx):
         arguments = [ctx.info_file.path, raw_version.path, ctx.label.package],
     )
 
-    # out = ctx.actions.declare_file(ctx.label.name + ".md")
-    # ctx.actions.run(
-    #     outputs = [out],
-    #     inputs = [ctx.file.src],
-    #     executable = "pandoc",
-    #     arguments = ["-f", "markdown", "-t", "markdown", "-o", out.path, ctx.file.src.path],
-    # )
+    version = ctx.actions.declare_file(ctx.label.name + "_version.json")
+    dep_versions = ctx.actions.declare_file(ctx.label.name + "_dep_versions.json")
+    base_metadata = ctx.actions.declare_file(ctx.label.name + "_base_metadata.json")
+    dep_version_args = []
+    for dep in ctx.attr.deps:
+        dep_version_args += ["--dep_version_file", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].version.path]
+    ctx.actions.run(
+        outputs = [version, dep_versions, base_metadata],
+        inputs = [raw_version] + [dep[MdLibraryInfo].version for dep in ctx.attr.deps],
+        executable = ctx.attr._base_metadata[DefaultInfo].files_to_run,
+        arguments = dep_version_args + [raw_version.path, version.path, dep_versions.path, base_metadata.path],
+    )
+
     return [
-        DefaultInfo(files = depset([raw_version])),
+        DefaultInfo(files = depset([base_metadata])),
+        MdLibraryInfo(version = version),
     ]
 
 md_library = rule(
@@ -48,12 +55,15 @@ md_library = rule(
             allow_single_file = [".md"],
             default = None,
         ),
-        # "deps": attr.label_list(
-        #     allow_empty = True,
-        #     providers = [MdLibraryInfo],
-        # ),
+        "deps": attr.label_list(
+            allow_empty = True,
+            providers = [MdLibraryInfo],
+        ),
         "_raw_version": attr.label(
             default = "//lib:raw_version",
+        ),
+        "_base_metadata": attr.label(
+            default = "//lib:base_metadata",
         ),
     },
 )

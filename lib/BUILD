@@ -60,3 +60,14 @@ py_test(
     srcs = ["base_metadata_test.py"],
     deps = [":base_metadata"],
 )
+
+py_binary(
+    name = "preprocess",
+    srcs = ["preprocess.py"],
+)
+
+py_test(
+    name = "preprocess_test",
+    srcs = ["preprocess_test.py"],
+    deps = [":preprocess"],
+)

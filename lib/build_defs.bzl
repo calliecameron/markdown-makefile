@@ -1,26 +1,16 @@
 MdLibraryInfo = provider(
     "Info for a markdown library.",
     fields = {
-        # "text": "Text of the library, in json format",
-        # "metadata": "",
-        # "dictionary": "",
+        "output": "Compiled library, as json",
         "version": "Version of the library",
     },
 )
 
 def _md_library_impl(ctx):
-    # if ctx.file.src:
-    #     src = ctx.file.src
-    # else:
-    #     src = ctx.actions.declare_file(ctx.label.name + ".md")
-
-    # metadata = ctx.actions.declare_file(ctx.label.name + "_metadata.yml")
-    # ctx.actions.run(
-    #     outputs = [metadata],
-    #     inputs = [ctx.info_file],
-    #     executable = ctx.attr._gen_metadata[DefaultInfo].files_to_run,
-    #     arguments = [ctx.info_file.path, ctx.label.package, metadata.path],
-    # )
+    if ctx.file.src:
+        src = ctx.file.src
+    else:
+        src = ctx.actions.declare_file(ctx.label.name + ".md")
 
     raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
     ctx.actions.run(
@@ -43,9 +33,23 @@ def _md_library_impl(ctx):
         arguments = dep_version_args + [raw_version.path, version.path, dep_versions.path, base_metadata.path],
     )
 
+    preprocessed = ctx.actions.declare_file(ctx.label.name + "_preprocessed.md")
+    dep_args = []
+    for dep in ctx.attr.deps:
+        dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].output.path]
+    ctx.actions.run(
+        outputs = [preprocessed],
+        inputs = [src] + [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
+        executable = ctx.attr._preprocess[DefaultInfo].files_to_run,
+        arguments = dep_args + [src.path, preprocessed.path],
+    )
+
+    output = ctx.actions.declare_file(ctx.label.name + ".json")
+    ctx.actions.write(output, "foo")
+
     return [
-        DefaultInfo(files = depset([base_metadata])),
-        MdLibraryInfo(version = version),
+        DefaultInfo(files = depset([preprocessed, base_metadata])),
+        MdLibraryInfo(output = output, version = version),
     ]
 
 md_library = rule(
@@ -64,6 +68,9 @@ md_library = rule(
         ),
         "_base_metadata": attr.label(
             default = "//lib:base_metadata",
+        ),
+        "_preprocess": attr.label(
+            default = "//lib:preprocess",
         ),
     },
 )

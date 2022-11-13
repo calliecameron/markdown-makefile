@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -eux
 
 function usage() {
     echo "Usage: $(basename "${0}") workspace_status_script"

@@ -6,3 +6,4 @@ auto/
 /bazel-out
 /bazel-testlogs
 /bazel-markdown-makefile
+__pycache__/

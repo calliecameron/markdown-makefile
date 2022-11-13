@@ -9,17 +9,25 @@
 # )
 
 def _md_library_impl(ctx):
-    if ctx.file.src:
-        src = ctx.file.src
-    else:
-        src = ctx.actions.declare_file(ctx.label.name + ".md")
+    # if ctx.file.src:
+    #     src = ctx.file.src
+    # else:
+    #     src = ctx.actions.declare_file(ctx.label.name + ".md")
 
-    metadata = ctx.actions.declare_file(ctx.label.name + "_metadata.yml")
+    # metadata = ctx.actions.declare_file(ctx.label.name + "_metadata.yml")
+    # ctx.actions.run(
+    #     outputs = [metadata],
+    #     inputs = [ctx.info_file],
+    #     executable = ctx.attr._gen_metadata[DefaultInfo].files_to_run,
+    #     arguments = [ctx.info_file.path, ctx.label.package, metadata.path],
+    # )
+
+    raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
     ctx.actions.run(
-        outputs = [metadata],
+        outputs = [raw_version],
         inputs = [ctx.info_file],
-        executable = ctx.attr._gen_metadata[DefaultInfo].files_to_run,
-        arguments = [ctx.info_file.path, ctx.label.package, metadata.path],
+        executable = ctx.attr._raw_version[DefaultInfo].files_to_run,
+        arguments = [ctx.info_file.path, raw_version.path, ctx.label.package],
     )
 
     # out = ctx.actions.declare_file(ctx.label.name + ".md")
@@ -30,7 +38,7 @@ def _md_library_impl(ctx):
     #     arguments = ["-f", "markdown", "-t", "markdown", "-o", out.path, ctx.file.src.path],
     # )
     return [
-        DefaultInfo(files = depset([metadata])),
+        DefaultInfo(files = depset([raw_version])),
     ]
 
 md_library = rule(
@@ -44,8 +52,8 @@ md_library = rule(
         #     allow_empty = True,
         #     providers = [MdLibraryInfo],
         # ),
-        "_gen_metadata": attr.label(
-            default = "//lib:gen_metadata",
+        "_raw_version": attr.label(
+            default = "//lib:raw_version",
         ),
     },
 )

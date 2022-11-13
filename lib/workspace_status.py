@@ -7,9 +7,8 @@ import datetime
 import os
 import os.path
 import re
-import string
 import subprocess
-import unicodedata
+import bazel_package
 
 
 EXPECTED_PANDOC_VERSION = '2.13'
@@ -83,26 +82,6 @@ def find_packages(root: str) -> List[str]:
     return sorted(packages)
 
 
-def normalised_char_name(char: str) -> str:
-    if len(char) != 1:
-        raise ValueError(f"char must be a single character, got '{char}'")
-    valid = frozenset(string.ascii_uppercase + '_')
-    return ''.join([c for c in unicodedata.name(char) if c in valid])
-
-
-def package_key(path: str) -> str:
-    # Keys can only contain uppercase letters and underscores.
-    path = path.upper().replace('_', '__')
-    valid = frozenset(string.ascii_uppercase + '_')
-    parts = []
-    for c in path:
-        if c in valid:
-            parts.append(c)
-        else:
-            parts.append('_' + normalised_char_name(c) + '_')
-    return ''.join(parts)
-
-
 def get_package_data(root: str) -> List[Tuple[str, str]]:
     out = []
     for path in find_packages(root):
@@ -113,9 +92,9 @@ def get_package_data(root: str) -> List[Tuple[str, str]]:
         else:
             version = 'unversioned'
             repo = 'unversioned'
-        key = package_key(path)
-        out.append((f'STABLE_VERSION_{key}', version))
-        out.append((f'STABLE_REPO_{key}', repo))
+        key = bazel_package.package_key(path)
+        out.append((bazel_package.version_key(key), version))
+        out.append((bazel_package.repo_key(key), repo))
     return out
 
 
@@ -134,7 +113,7 @@ def get_pandoc_version() -> Tuple[str, str]:
             if version != EXPECTED_PANDOC_VERSION:
                 raise ValueError(
                     f'Got pandoc version {version}; expected {EXPECTED_PANDOC_VERSION}')
-            return 'STABLE_PANDOC_VERSION', version
+            return bazel_package.PANDOC_VERSION_KEY, version
 
     raise ValueError('Failed to get pandoc version')
 

@@ -71,3 +71,8 @@ py_test(
     srcs = ["preprocess_test.py"],
     deps = [":preprocess"],
 )
+
+filegroup(
+    name = "wordcount",
+    srcs = ["wordcount.lua"],
+)

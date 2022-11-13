@@ -1,3 +1,5 @@
+"""Markdown rules."""
+
 MdLibraryInfo = provider(
     "Info for a markdown library.",
     fields = {
@@ -22,7 +24,7 @@ def _md_library_impl(ctx):
 
     version = ctx.actions.declare_file(ctx.label.name + "_version.json")
     dep_versions = ctx.actions.declare_file(ctx.label.name + "_dep_versions.json")
-    base_metadata = ctx.actions.declare_file(ctx.label.name + "_base_metadata.json")
+    base_metadata = ctx.actions.declare_file(ctx.label.name + "_base_metadata.json")  # TODO yaml
     dep_version_args = []
     for dep in ctx.attr.deps:
         dep_version_args += ["--dep_version_file", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].version.path]
@@ -39,16 +41,46 @@ def _md_library_impl(ctx):
         dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].output.path]
     ctx.actions.run(
         outputs = [preprocessed],
-        inputs = [src] + [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
+        inputs = [src],
         executable = ctx.attr._preprocess[DefaultInfo].files_to_run,
         arguments = dep_args + [src.path, preprocessed.path],
     )
 
+    intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.json")
+    ctx.actions.run(
+        outputs = [intermediate],
+        inputs = [preprocessed, base_metadata] +
+                 ctx.attr._wordcount[DefaultInfo].files.to_list() +
+                 [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
+        executable = "pandoc",
+        arguments = [
+            # TODO validate
+            # TODO include
+            # TODO starts with text
+            "--lua-filter=" + ctx.attr._wordcount[DefaultInfo].files.to_list()[0].path,
+            # TODO cleanup
+            "--metadata-file=" + base_metadata.path,
+            "--from=markdown+smart",
+            "--to=json",
+            "--strip-comments",
+            "--fail-if-warnings",
+            "--output",
+            intermediate.path,
+            preprocessed.path,
+        ],
+    )
+
+    # TODO
     output = ctx.actions.declare_file(ctx.label.name + ".json")
-    ctx.actions.write(output, "foo")
+    ctx.actions.run(
+        outputs = [output],
+        inputs = [intermediate],
+        executable = "cp",
+        arguments = [intermediate.path, output.path],
+    )
 
     return [
-        DefaultInfo(files = depset([preprocessed, base_metadata])),
+        DefaultInfo(files = depset([output])),
         MdLibraryInfo(output = output, version = version),
     ]
 
@@ -71,6 +103,9 @@ md_library = rule(
         ),
         "_preprocess": attr.label(
             default = "//lib:preprocess",
+        ),
+        "_wordcount": attr.label(
+            default = "//lib:wordcount",
         ),
     },
 )

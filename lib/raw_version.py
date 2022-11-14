@@ -42,7 +42,7 @@ def main() -> None:
             'pandoc_version': pandoc_version,
             'version': version,
             'repo': repo,
-        }, f, sort_keys=True, indent=2)
+        }, f, sort_keys=True, indent=4)
 
 
 if __name__ == '__main__':

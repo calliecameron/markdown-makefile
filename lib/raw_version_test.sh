@@ -10,9 +10,9 @@ function usage() {
 test -z "${1:-}" && usage
 SCRIPT="${PWD}/${1}"
 
-INFILE="$(mktemp)"
-OUTFILE="$(mktemp)"
-EXPECTED="$(mktemp)"
+INFILE="${TEST_TMPDIR}/infile"
+OUTFILE="${TEST_TMPDIR}/outfile"
+EXPECTED="${TEST_TMPDIR}/expected"
 PACKAGE='a/b'
 
 # Everything as expected
@@ -28,9 +28,9 @@ EOF
 
 cat <<EOF | head -c -1 >"${EXPECTED}"
 {
-  "pandoc_version": "1.2.3",
-  "repo": "/foo/.git",
-  "version": "10"
+    "pandoc_version": "1.2.3",
+    "repo": "/foo/.git",
+    "version": "10"
 }
 EOF
 
@@ -66,4 +66,4 @@ EOF
 
 "${SCRIPT}" "${INFILE}" "${OUTFILE}" "${PACKAGE}" && exit 1
 
-rm "${INFILE}" "${OUTFILE}" "${EXPECTED}"
+true

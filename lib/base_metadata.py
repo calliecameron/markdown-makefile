@@ -81,13 +81,13 @@ def main() -> None:
     metadata = get_metadata(version.version)
 
     with open(args.version_out_file, mode='w', encoding='utf-8') as f:
-        json.dump(version.to_dict(), f, sort_keys=True, indent=2)
+        json.dump(version.to_dict(), f, sort_keys=True, indent=4)
 
     with open(args.dep_versions_out_file, mode='w', encoding='utf-8') as f:
-        json.dump({t: v.to_dict() for t, v in dep_versions.items()}, f, sort_keys=True, indent=2)
+        json.dump({t: v.to_dict() for t, v in dep_versions.items()}, f, sort_keys=True, indent=4)
 
     with open(args.metadata_out_file, mode='w', encoding='utf-8') as f:
-        json.dump(metadata, f, sort_keys=True, indent=2)
+        json.dump(metadata, f, sort_keys=True, indent=4)
 
 
 if __name__ == '__main__':

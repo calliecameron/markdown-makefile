@@ -1,10 +1,5 @@
 load(":build_defs.bzl", "md_library")
 
-# sh_binary(
-#     name = "gen_metadata",
-#     srcs = ["gen_metadata.sh"],
-# )
-
 md_library(
     name = "foo",
     src = "foo.md",
@@ -40,6 +35,7 @@ sh_test(
 py_binary(
     name = "raw_version",
     srcs = ["raw_version.py"],
+    visibility = ["//visibility:public"],
     deps = [":bazel_package"],
 )
 
@@ -53,6 +49,7 @@ sh_test(
 py_binary(
     name = "base_metadata",
     srcs = ["base_metadata.py"],
+    visibility = ["//visibility:public"],
 )
 
 py_test(
@@ -64,6 +61,7 @@ py_test(
 py_binary(
     name = "preprocess",
     srcs = ["preprocess.py"],
+    visibility = ["//visibility:public"],
 )
 
 py_test(
@@ -75,4 +73,5 @@ py_test(
 filegroup(
     name = "wordcount",
     srcs = ["wordcount.lua"],
+    visibility = ["//visibility:public"],
 )

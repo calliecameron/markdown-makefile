@@ -1,2 +1,1 @@
-pandoc-include >= 0.8.7
-pdfminer >= 20191125
+pyyaml == 6.0

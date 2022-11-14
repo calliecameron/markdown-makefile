@@ -3,6 +3,7 @@
 from typing import Dict
 import argparse
 import json
+import yaml
 
 
 class Version:
@@ -87,7 +88,7 @@ def main() -> None:
         json.dump({t: v.to_dict() for t, v in dep_versions.items()}, f, sort_keys=True, indent=4)
 
     with open(args.metadata_out_file, mode='w', encoding='utf-8') as f:
-        json.dump(metadata, f, sort_keys=True, indent=4)
+        yaml.dump(metadata, f)
 
 
 if __name__ == '__main__':

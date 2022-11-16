@@ -1,1 +1,2 @@
 build "--workspace_status_command=/bin/bash ./bin/markdown-makefile-workspace-status"
+common --experimental_enable_bzlmod

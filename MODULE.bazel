@@ -1,0 +1,22 @@
+module(
+    name = "markdown_makefile",
+    version = "0.0.0",
+)
+
+bazel_dep(name = "rules_python", version = "0.14.0")
+
+archive_override(
+    module_name = "rules_python",
+    urls = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.14.0.tar.gz",
+    integrity = "sha384-dH5FRf8lkbvCi0j94+kk5hPYb203lsiKJECufWIHkMJpAbN5iss34yWXA+G4bqP/",
+    strip_prefix = "rules_python-0.14.0",
+)
+
+pip = use_extension("@rules_python//python:extensions.bzl", "pip")
+
+pip.parse(
+    name = "pip",
+    requirements_lock = "//:requirements_lock.txt",
+)
+
+use_repo(pip, "pip")

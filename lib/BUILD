@@ -84,3 +84,9 @@ filegroup(
     srcs = ["wordcount.lua"],
     visibility = ["//visibility:public"],
 )
+
+filegroup(
+    name = "starts_with_text",
+    srcs = ["starts_with_text.lua"],
+    visibility = ["//visibility:public"],
+)

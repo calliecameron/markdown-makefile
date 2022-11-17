@@ -74,6 +74,12 @@ py_test(
 )
 
 filegroup(
+    name = "validate",
+    srcs = ["validate.lua"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
     name = "wordcount",
     srcs = ["wordcount.lua"],
     visibility = ["//visibility:public"],

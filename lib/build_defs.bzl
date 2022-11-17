@@ -50,11 +50,12 @@ def _md_library_impl(ctx):
     ctx.actions.run(
         outputs = [intermediate],
         inputs = [preprocessed, base_metadata] +
+                 ctx.attr._validate[DefaultInfo].files.to_list() +
                  ctx.attr._wordcount[DefaultInfo].files.to_list() +
                  [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
         executable = "pandoc",
         arguments = [
-            # TODO validate
+            "--lua-filter=" + ctx.attr._validate[DefaultInfo].files.to_list()[0].path,
             # TODO include
             # TODO starts with text
             "--lua-filter=" + ctx.attr._wordcount[DefaultInfo].files.to_list()[0].path,
@@ -106,6 +107,9 @@ md_library = rule(
         ),
         "_wordcount": attr.label(
             default = "//lib:wordcount",
+        ),
+        "_validate": attr.label(
+            default = "//lib:validate",
         ),
     },
 )

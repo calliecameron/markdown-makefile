@@ -43,9 +43,9 @@ py_binary(
     deps = [":bazel_package"],
 )
 
-sh_test(
+py_test(
     name = "raw_version_test",
-    srcs = ["raw_version_test.sh"],
+    srcs = ["raw_version_test.py"],
     args = ["$(rootpath raw_version.py)"],
     data = ["raw_version.py"],
 )

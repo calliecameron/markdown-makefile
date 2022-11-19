@@ -58,7 +58,7 @@ def _md_library_impl(ctx):
         executable = "pandoc",
         arguments = [
             "--filter=" + ctx.attr._validate[DefaultInfo].files.to_list()[0].path,
-            # "--lua-filter=" + ctx.attr._include[DefaultInfo].files.to_list()[0].path,
+            "--lua-filter=" + ctx.attr._include[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._starts_with_text[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._wordcount[DefaultInfo].files.to_list()[0].path,
             "--metadata-file=" + base_metadata.path,

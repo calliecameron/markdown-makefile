@@ -19,7 +19,7 @@ function include(elem)
         includedFile:close()
         local doc = pandoc.read(content, "json")
         if increment_included_headers then
-            return pandoc.walk_block(pandoc.Div(doc.blocks), {Header = increment})
+            return pandoc.walk_block(pandoc.Div(doc.blocks), {Header = increment}).content
         else
             return doc.blocks
         end
@@ -29,7 +29,9 @@ end
 function get_increment(meta)
     if meta["increment-included-headers"] then
         increment_included_headers = true
+        meta["increment-included-headers"] = nil
     end
+    return meta
 end
 
 return {{Meta = get_increment}, {Para = include}}

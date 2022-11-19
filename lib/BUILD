@@ -106,6 +106,14 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+py_test(
+    name = "include_test",
+    srcs = ["include_test.py"],
+    args = ["$(rootpath include.lua)"],
+    data = ["include.lua"],
+    deps = [":test_utils"],
+)
+
 filegroup(
     name = "wordcount",
     srcs = ["wordcount.lua"],

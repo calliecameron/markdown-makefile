@@ -8,6 +8,7 @@ import sys
 def validate_str(s: str) -> None:
     if "'" in s or '"' in s:
         sys.stderr.write(
+            "ERROR: markdown parsing failed\n\n"
             "Found quotes that weren't converted to smart quotes. Replace them with "
             "backslash-escaped literal curly quotes (“ ” ‘ ’).\n")
         sys.exit(1)

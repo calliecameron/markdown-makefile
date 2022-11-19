@@ -5,11 +5,13 @@ load(":build_defs.bzl", "md_library")
 md_library(
     name = "foo",
     src = "foo.md",
+    version_override = "blah",
 )
 
 md_library(
     name = "bar",
     src = "bar.md",
+    increment_included_headers = True,
     deps = [":foo"],
 )
 
@@ -58,6 +60,8 @@ py_binary(
 py_test(
     name = "base_metadata_test",
     srcs = ["base_metadata_test.py"],
+    args = ["$(rootpath base_metadata.py)"],
+    data = ["base_metadata.py"],
     deps = [":base_metadata"],
 )
 

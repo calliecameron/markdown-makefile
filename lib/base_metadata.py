@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from typing import Dict
 import argparse
 import json
@@ -23,7 +21,8 @@ class Version:
         return Version(d['version'], d['repo'])
 
 
-def get_version(raw_version: Version, dep_versions: Dict[str, Version]) -> Version:
+def get_version(
+        raw_version: Version, dep_versions: Dict[str, Version], version_override: str) -> Version:
     dirty_deps = []
     unversioned_deps = []
 
@@ -33,8 +32,9 @@ def get_version(raw_version: Version, dep_versions: Dict[str, Version]) -> Versi
         if 'unversioned' in version.version:
             unversioned_deps.append((target, version))
 
-    version = Version(raw_version.version + (', dirty deps' if dirty_deps else '') +
-                      (', unversioned deps' if unversioned_deps else ''), raw_version.repo)
+    version = Version(version_override if version_override else
+                      (raw_version.version + (', dirty deps' if dirty_deps else '') +
+                       (', unversioned deps' if unversioned_deps else '')), raw_version.repo)
 
     # Dirty or unversioned deps in the same repo are OK
     dirty_deps = [t for (t, v) in dirty_deps if v.repo != version.repo]
@@ -53,12 +53,15 @@ def get_version(raw_version: Version, dep_versions: Dict[str, Version]) -> Versi
     return version
 
 
-def get_metadata(version: str) -> Dict[str, str]:
-    return {
+def get_metadata(version: str, increment_included_headers: bool) -> Dict[str, str]:
+    out = {
         'docversion': version,
         'subject': f'Version: {version}',
         'lang': 'en-GB',
     }
+    if increment_included_headers:
+        out['increment-included-headers'] = 't'
+    return out
 
 
 def main() -> None:
@@ -68,6 +71,8 @@ def main() -> None:
     parser.add_argument('dep_versions_out_file')
     parser.add_argument('metadata_out_file')
     parser.add_argument('--dep_version_file', action='append', nargs=2, default=[])
+    parser.add_argument('--increment_included_headers', action='store_true')
+    parser.add_argument('--version_override', default='')
     args = parser.parse_args()
 
     with open(args.raw_version_file, encoding='utf-8') as f:
@@ -78,8 +83,8 @@ def main() -> None:
         with open(dep_version_file, encoding='utf-8') as f:
             dep_versions[target] = Version.from_dict(json.load(f))
 
-    version = get_version(raw_version, dep_versions)
-    metadata = get_metadata(version.version)
+    version = get_version(raw_version, dep_versions, args.version_override)
+    metadata = get_metadata(version.version, args.increment_included_headers)
 
     with open(args.version_out_file, mode='w', encoding='utf-8') as f:
         json.dump(version.to_dict(), f, sort_keys=True, indent=4)

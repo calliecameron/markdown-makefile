@@ -28,11 +28,16 @@ def _md_library_impl(ctx):
     dep_version_args = []
     for dep in ctx.attr.deps:
         dep_version_args += ["--dep_version_file", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].version.path]
+    extra_args = []
+    if ctx.attr.increment_included_headers:
+        extra_args.append("--increment_included_headers")
+    if ctx.attr.version_override:
+        extra_args += ["--version_override", ctx.attr.version_override]
     ctx.actions.run(
         outputs = [version, dep_versions, base_metadata],
         inputs = [raw_version] + [dep[MdLibraryInfo].version for dep in ctx.attr.deps],
         executable = ctx.attr._base_metadata[DefaultInfo].files_to_run,
-        arguments = dep_version_args + [raw_version.path, version.path, dep_versions.path, base_metadata.path],
+        arguments = dep_version_args + extra_args + [raw_version.path, version.path, dep_versions.path, base_metadata.path],
     )
 
     preprocessed = ctx.actions.declare_file(ctx.label.name + "_preprocessed.md")
@@ -58,7 +63,7 @@ def _md_library_impl(ctx):
         executable = "pandoc",
         arguments = [
             "--filter=" + ctx.attr._validate[DefaultInfo].files.to_list()[0].path,
-            "--lua-filter=" + ctx.attr._include[DefaultInfo].files.to_list()[0].path,
+            # "--lua-filter=" + ctx.attr._include[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._starts_with_text[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._wordcount[DefaultInfo].files.to_list()[0].path,
             "--metadata-file=" + base_metadata.path,
@@ -96,6 +101,12 @@ md_library = rule(
         "deps": attr.label_list(
             allow_empty = True,
             providers = [MdLibraryInfo],
+        ),
+        "increment_included_headers": attr.bool(
+            default = False,
+        ),
+        "version_override": attr.string(
+            default = "",
         ),
         "_raw_version": attr.label(
             default = "//lib:raw_version",

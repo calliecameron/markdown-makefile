@@ -73,10 +73,24 @@ py_test(
     deps = [":preprocess"],
 )
 
+py_library(
+    name = "test_utils",
+    testonly = True,
+    srcs = ["test_utils.py"],
+)
+
 filegroup(
     name = "validate",
-    srcs = ["validate.lua"],
+    srcs = ["validate.py"],
     visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "validate_test",
+    srcs = ["validate_test.py"],
+    args = ["$(rootpath validate.py)"],
+    data = ["validate.py"],
+    deps = [":test_utils"],
 )
 
 filegroup(
@@ -85,8 +99,24 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+py_test(
+    name = "wordcount_test",
+    srcs = ["wordcount_test.py"],
+    args = ["$(rootpath wordcount.lua)"],
+    data = ["wordcount.lua"],
+    deps = [":test_utils"],
+)
+
 filegroup(
     name = "starts_with_text",
     srcs = ["starts_with_text.lua"],
     visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "starts_with_text_test",
+    srcs = ["starts_with_text_test.py"],
+    args = ["$(rootpath starts_with_text.lua)"],
+    data = ["starts_with_text.lua"],
+    deps = [":test_utils"],
 )

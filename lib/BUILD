@@ -94,6 +94,12 @@ py_test(
 )
 
 filegroup(
+    name = "include",
+    srcs = ["include.lua"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
     name = "wordcount",
     srcs = ["wordcount.lua"],
     visibility = ["//visibility:public"],

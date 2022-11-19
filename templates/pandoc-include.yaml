@@ -1,4 +1,0 @@
-pandoc-options:
-  - --filter=pandoc-include
-  - --from=markdown-smart
-  - --strip-comments

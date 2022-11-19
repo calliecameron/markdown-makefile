@@ -51,16 +51,16 @@ def _md_library_impl(ctx):
         outputs = [intermediate],
         inputs = [preprocessed, base_metadata] +
                  ctx.attr._validate[DefaultInfo].files.to_list() +
+                 ctx.attr._include[DefaultInfo].files.to_list() +
                  ctx.attr._starts_with_text[DefaultInfo].files.to_list() +
                  ctx.attr._wordcount[DefaultInfo].files.to_list() +
                  [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
         executable = "pandoc",
         arguments = [
             "--filter=" + ctx.attr._validate[DefaultInfo].files.to_list()[0].path,
-            # TODO include
+            "--lua-filter=" + ctx.attr._include[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._starts_with_text[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._wordcount[DefaultInfo].files.to_list()[0].path,
-            # TODO cleanup
             "--metadata-file=" + base_metadata.path,
             "--from=markdown+smart",
             "--to=json",
@@ -106,14 +106,17 @@ md_library = rule(
         "_preprocess": attr.label(
             default = "//lib:preprocess",
         ),
-        "_wordcount": attr.label(
-            default = "//lib:wordcount",
-        ),
         "_validate": attr.label(
             default = "//lib:validate",
         ),
+        "_include": attr.label(
+            default = "//lib:include",
+        ),
         "_starts_with_text": attr.label(
             default = "//lib:starts_with_text",
+        ),
+        "_wordcount": attr.label(
+            default = "//lib:wordcount",
         ),
     },
 )

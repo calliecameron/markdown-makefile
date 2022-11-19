@@ -2,4 +2,4 @@
 
 Test text\”
 
-!include //lib:foo
+!include :foo

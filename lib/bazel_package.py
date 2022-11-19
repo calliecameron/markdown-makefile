@@ -1,3 +1,5 @@
+from typing import Tuple
+import re
 import string
 import unicodedata
 
@@ -31,3 +33,58 @@ def version_key(key: str) -> str:
 
 def repo_key(key: str) -> str:
     return 'STABLE_REPO_' + key
+
+
+def _validate_package(package: str) -> None:
+    valid = string.ascii_letters + string.digits + '/-.@_'
+    for c in package:
+        if c not in valid:
+            raise ValueError(f"Invalid character '{c}' in package: {package}")
+    if package.startswith('/'):
+        raise ValueError(f"Packages must not start with a '/': {package}")
+    if package.endswith('/'):
+        raise ValueError(f"Packages must not end with a '/': {package}")
+    if '//' in package:
+        raise ValueError(f"Packages must not contain '//': {package}")
+
+
+def _validate_target(target: str) -> None:
+    valid = string.ascii_letters + string.digits + '%-@^_"#$&\'()*-+,;<=>?[]{|}~/.'
+    for c in target:
+        if c not in valid:
+            raise ValueError(f"Invalid character '{c}' in target: {target}")
+    if target.startswith('/'):
+        raise ValueError(f"Targets must not start with a '/': {target}")
+    if target.endswith('/'):
+        raise ValueError(f"Targets must not end with a '/': {target}")
+    if '//' in target:
+        raise ValueError(f"Targets must not contain '//': {target}")
+    if '..' in target.split('/'):
+        raise ValueError(f"Targets must not contain up-level references '..': {target}")
+    if '.' in target.split('/'):
+        raise ValueError(f"Targets must not contain current-directory references '.': {target}")
+
+
+def canonicalise_label(label: str, current_package: str) -> Tuple[str, str]:
+    if not current_package:
+        raise ValueError('Current package must be specified')
+
+    match = re.fullmatch(r'((?P<absolute>//)(?P<package>[^:]*))?:?(?P<target>[^:]+)?', label)
+    if match is None:
+        raise ValueError(f"Invalid label '{label}'")
+
+    absolute = bool(match.groupdict()['absolute'])
+    package = match.groupdict()['package'] or ''
+    target = match.groupdict()['target'] or ''
+    _validate_package(current_package)
+    _validate_package(package)
+    _validate_target(target)
+
+    if not package and not target:
+        raise ValueError("Either package or target must be specified")
+    if package and not target:
+        target = package.split('/')[-1]
+    if target and not package and not absolute:
+        package = current_package
+
+    return package, target

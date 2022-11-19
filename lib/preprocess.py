@@ -1,51 +1,48 @@
-#!/usr/bin/env python3
-
 from typing import Dict, List, Optional, Tuple
 import argparse
-import re
 import sys
+import bazel_package
 
 # pylint: disable=consider-using-enumerate
 
+INCLUDE = '!include'
 CURLY_QUOTES = '“”‘’'
-INCLUDE_MSG = ("Incorrectly-formatted include. Must be '!include //<md_library target>', e.g. "
-               "'!include //foo:bar'. Got '%s'.")
+INCLUDE_MSG = ("Incorrectly-formatted include. Must be '!include <md_library label>', e.g. "
+               "'!include //foo:bar'. %s")
 CURLY_QUOTE_MSG = 'Literal curly quotes must be backslash-escaped.'
 EN_DASH_MSG = "Literal en-dashes must be replaced with '--'"
 EM_DASH_MSG = "Literal em-dashes must be replaced with '---'"
 ELLIPSIS_MSG = "Literal ellipses must be replaced with '...'"
 
 
-def process_include(line: str) -> Optional[str]:
-    match = re.fullmatch(r'!include //(?P<package>[^:]+)(:(?P<target>.+))?', line)
-    if match is None:
+def get_include(line: str, current_package: str) -> Optional[str]:
+    if not line.startswith(INCLUDE):
         return None
-    groups = match.groupdict()
-    if 'package' not in groups:
-        return None
-    package = groups['package']
-    if 'target' in groups and groups['target']:
-        target = groups['target']
-    else:
-        target = package.split('/')[-1]
+    label = line[len(INCLUDE):]
+    if not label.startswith(' '):
+        raise ValueError(f'Include statement must be followed by a space: {line}')
+    label = label.lstrip(' ')
+    package, target = bazel_package.canonicalise_label(label, current_package)
     return package + ':' + target
 
 
-def preprocess(data: List[str], deps: Dict[str, str]) -> List[Tuple[int, int, str]]:
+def preprocess(
+        data: List[str], deps: Dict[str, str], current_package: str) -> List[Tuple[int, int, str]]:
     problems = []
     used_deps = set()
     declared_deps = frozenset(deps)
 
     for row in range(len(data)):
         line = data[row]
-        if line.startswith('!include'):
-            target = process_include(line)
-            if not target:
-                problems.append((row, 0, INCLUDE_MSG % line))
+        try:
+            target = get_include(line, current_package)
+            if target:
+                used_deps.add(target)
+                if target in deps:
+                    data[row] = f'!include {deps[target]}'
                 continue
-            used_deps.add(target)
-            if target in deps:
-                data[row] = f'!include {deps[target]}'
+        except ValueError as e:
+            problems.append((row, 0, INCLUDE_MSG % (line, e)))
             continue
 
         for col in range(len(line)):
@@ -84,6 +81,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('in_file')
     parser.add_argument('out_file')
+    parser.add_argument('current_package')
     parser.add_argument('--dep', action='append', nargs=2, default=[])
     args = parser.parse_args()
 
@@ -94,7 +92,7 @@ def main() -> None:
     for dep, file in args.dep:
         deps[dep] = file
 
-    problems = preprocess(data, deps)
+    problems = preprocess(data, deps, args.current_package)
 
     if problems:
         msg = ['ERROR: markdown preprocessing failed']

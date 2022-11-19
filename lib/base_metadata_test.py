@@ -87,7 +87,8 @@ class TestBaseMetadata(unittest.TestCase):
         with open(filename, encoding='utf-8') as f:
             return f.read()
 
-    def run_script(self, raw_version: Dict[str, str], deps_versions: List[Dict[str, str]], args: List[str]) -> Tuple[str, str, str]:
+    def run_script(self, raw_version: Dict[str, str], deps_versions: List[Dict[str, str]],
+                   args: List[str]) -> Tuple[str, str, str]:
         test_tmpdir = os.getenv('TEST_TMPDIR')
 
         raw_version_file = os.path.join(test_tmpdir, 'raw_version.json')

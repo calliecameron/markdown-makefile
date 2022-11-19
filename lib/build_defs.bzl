@@ -9,11 +9,6 @@ MdLibraryInfo = provider(
 )
 
 def _md_library_impl(ctx):
-    if ctx.file.src:
-        src = ctx.file.src
-    else:
-        src = ctx.actions.declare_file(ctx.label.name + ".md")
-
     raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
     ctx.actions.run(
         outputs = [raw_version],
@@ -46,9 +41,9 @@ def _md_library_impl(ctx):
         dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].output.path]
     ctx.actions.run(
         outputs = [preprocessed],
-        inputs = [src],
+        inputs = [ctx.file.src],
         executable = ctx.attr._preprocess[DefaultInfo].files_to_run,
-        arguments = dep_args + [src.path, preprocessed.path],
+        arguments = dep_args + [ctx.file.src.path, preprocessed.path, ctx.label.package],
     )
 
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.json")
@@ -96,7 +91,6 @@ md_library = rule(
     attrs = {
         "src": attr.label(
             allow_single_file = [".md"],
-            default = None,
         ),
         "deps": attr.label_list(
             allow_empty = True,

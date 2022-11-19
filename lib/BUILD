@@ -69,11 +69,14 @@ py_binary(
     name = "preprocess",
     srcs = ["preprocess.py"],
     visibility = ["//visibility:public"],
+    deps = [":bazel_package"],
 )
 
 py_test(
     name = "preprocess_test",
     srcs = ["preprocess_test.py"],
+    args = ["$(rootpath preprocess.py)"],
+    data = ["preprocess.py"],
     deps = [":preprocess"],
 )
 

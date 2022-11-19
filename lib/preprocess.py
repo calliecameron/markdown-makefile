@@ -11,6 +11,9 @@ CURLY_QUOTES = '“”‘’'
 INCLUDE_MSG = ("Incorrectly-formatted include. Must be '!include //<md_library target>', e.g. "
                "'!include //foo:bar'. Got '%s'.")
 CURLY_QUOTE_MSG = 'Literal curly quotes must be backslash-escaped.'
+EN_DASH_MSG = "Literal en-dashes must be replaced with '--'"
+EM_DASH_MSG = "Literal em-dashes must be replaced with '---'"
+ELLIPSIS_MSG = "Literal ellipses must be replaced with '...'"
 
 
 def process_include(line: str) -> Optional[str]:
@@ -49,6 +52,18 @@ def preprocess(data: List[str], deps: Dict[str, str]) -> List[Tuple[int, int, st
             if line[col] in CURLY_QUOTES:
                 if col == 0 or line[col - 1] != '\\':
                     problems.append((row, col, CURLY_QUOTE_MSG))
+
+        col = line.find('–')
+        if col != -1:
+            problems.append((row, col, EN_DASH_MSG))
+
+        col = line.find('—')
+        if col != -1:
+            problems.append((row, col, EM_DASH_MSG))
+
+        col = line.find('…')
+        if col != -1:
+            problems.append((row, col, ELLIPSIS_MSG))
 
     if used_deps != declared_deps:
         used_only = used_deps - declared_deps

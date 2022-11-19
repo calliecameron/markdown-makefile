@@ -9,6 +9,8 @@ GOOD = """Foo bar.
 !include %s
 
 \\“Lots \\”of \\‘quotes\\’.
+
+Some -- dashes---
 """
 
 
@@ -36,6 +38,9 @@ class TestPreprocess(unittest.TestCase):
         self.assertNotEqual(preprocess.preprocess(['”'], {}), [])
         self.assertNotEqual(preprocess.preprocess(['‘'], {}), [])
         self.assertNotEqual(preprocess.preprocess(['’'], {}), [])
+        self.assertNotEqual(preprocess.preprocess(['–'], {}), [])
+        self.assertNotEqual(preprocess.preprocess(['—'], {}), [])
+        self.assertNotEqual(preprocess.preprocess(['…'], {}), [])
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
-load(":build_defs.bzl", "md_library", "md_md")
+load(":build_defs.bzl", "md_library", "md_md", "md_txt")
 
 md_library(
     name = "foo",
@@ -10,6 +10,11 @@ md_library(
 
 md_md(
     name = "foo_md",
+    lib = ":foo",
+)
+
+md_txt(
+    name = "foo_txt",
     lib = ":foo",
 )
 

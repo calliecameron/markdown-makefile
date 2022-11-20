@@ -3,6 +3,7 @@
 MdLibraryInfo = provider(
     "Info for a markdown library.",
     fields = {
+        "name": "The name of the document",
         "output": "Compiled document, as json",
         "metadata": "Document metadata, as json",
         "dictionary": "Dictionary used for spellchecking",
@@ -137,7 +138,7 @@ def _md_library_impl(ctx):
 
     return [
         DefaultInfo(files = depset([output, metadata, dictionary])),
-        MdLibraryInfo(output = output, metadata = metadata, dictionary = dictionary),
+        MdLibraryInfo(name = ctx.label.name, output = output, metadata = metadata, dictionary = dictionary),
     ]
 
 md_library = rule(
@@ -198,6 +199,54 @@ md_library = rule(
         ),
         "_spellcheck": attr.label(
             default = "//lib:spellcheck",
+        ),
+    },
+)
+
+def _md_md_impl(ctx):
+    output = ctx.actions.declare_file("output/" + ctx.attr.lib[MdLibraryInfo].name + ".md")
+    ctx.actions.run(
+        outputs = [output],
+        inputs = [ctx.attr.lib[MdLibraryInfo].output],
+        executable = "pandoc",
+        arguments = [
+            "--from=json",
+            "--to=markdown-smart",
+            "--standalone",
+            "--fail-if-warnings",
+            "--output=" + output.path,
+            ctx.attr.lib[MdLibraryInfo].output.path,
+        ],
+        progress_message = "%{label}: generating md output",
+    )
+    script = ctx.actions.declare_file(ctx.label.name + ".sh")
+    ctx.actions.run(
+        outputs = [script],
+        inputs = [output],
+        executable = ctx.attr._write_open_script[DefaultInfo].files_to_run,
+        arguments = [ctx.workspace_name, output.short_path, script.path],
+        progress_message = "%{label}: generating open script",
+    )
+
+    return [
+        DefaultInfo(
+            files = depset([script]),
+            runfiles = ctx.runfiles(files = [output]),
+            executable = script,
+        ),
+    ]
+
+md_md = rule(
+    implementation = _md_md_impl,
+    executable = True,
+    doc = "md_md generates md output from an md_library.",
+    attrs = {
+        "lib": attr.label(
+            providers = [MdLibraryInfo],
+            doc = "An md_library target.",
+        ),
+        "_write_open_script": attr.label(
+            default = "//lib:write_open_script",
         ),
     },
 )

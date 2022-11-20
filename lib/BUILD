@@ -1,5 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
-load(":build_defs.bzl", "md_library")
+load(":build_defs.bzl", "md_library", "md_md")
 
 md_library(
     name = "foo",
@@ -8,12 +8,22 @@ md_library(
     version_override = "blah",
 )
 
+md_md(
+    name = "foo_md",
+    lib = ":foo",
+)
+
 md_library(
     name = "bar",
     src = "bar.md",
     dictionaries = ["bar.dic"],
     increment_included_headers = True,
     deps = [":foo"],
+)
+
+md_md(
+    name = "bar_md",
+    lib = ":bar",
 )
 
 py_library(
@@ -184,4 +194,16 @@ py_test(
     srcs = ["spellcheck_test.py"],
     args = ["$(rootpath spellcheck.sh)"],
     data = ["spellcheck.sh"],
+)
+
+sh_binary(
+    name = "write_open_script",
+    srcs = ["write_open_script.sh"],
+)
+
+py_test(
+    name = "write_open_script_test",
+    srcs = ["write_open_script_test.py"],
+    args = ["$(rootpath write_open_script.sh)"],
+    data = ["write_open_script.sh"],
 )

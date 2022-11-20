@@ -5,6 +5,7 @@ MdLibraryInfo = provider(
     fields = {
         "output": "Compiled document, as json",
         "metadata": "Document metadata, as json",
+        "dictionary": "Dictionary used for spellchecking",
     },
 )
 
@@ -75,6 +76,27 @@ def _md_library_impl(ctx):
         ],
     )
 
+    dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
+    if ctx.attr.dictionaries:
+        dict_inputs = []
+        dict_args = []
+        for d in ctx.attr.dictionaries:
+            dict_inputs += d.files.to_list()
+            dict_args += [f.path for f in d.files.to_list()]
+        ctx.actions.run(
+            outputs = [dictionary],
+            inputs = dict_inputs + [dep[MdLibraryInfo].dictionary for dep in ctx.attr.deps],
+            executable = ctx.attr._write_dictionary[DefaultInfo].files_to_run,
+            arguments = [dictionary.path] +
+                        dict_args +
+                        [dep[MdLibraryInfo].dictionary.path for dep in ctx.attr.deps],
+        )
+    else:
+        ctx.actions.write(
+            output = dictionary,
+            content = "",
+        )
+
     # TODO
     output = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.run(
@@ -85,8 +107,8 @@ def _md_library_impl(ctx):
     )
 
     return [
-        DefaultInfo(files = depset([output, metadata])),
-        MdLibraryInfo(output = output, metadata = metadata),
+        DefaultInfo(files = depset([output, metadata, dictionary])),
+        MdLibraryInfo(output = output, metadata = metadata, dictionary = dictionary),
     ]
 
 md_library = rule(
@@ -98,6 +120,10 @@ md_library = rule(
         "deps": attr.label_list(
             allow_empty = True,
             providers = [MdLibraryInfo],
+        ),
+        "dictionaries": attr.label_list(
+            allow_empty = True,
+            allow_files = [".dic"],
         ),
         "increment_included_headers": attr.bool(
             default = False,
@@ -128,6 +154,9 @@ md_library = rule(
         ),
         "_write_metadata": attr.label(
             default = "//lib:write_metadata",
+        ),
+        "_write_dictionary": attr.label(
+            default = "//lib:write_dictionary",
         ),
     },
 )

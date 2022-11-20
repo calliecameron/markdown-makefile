@@ -4,12 +4,14 @@ load(":build_defs.bzl", "md_library")
 md_library(
     name = "foo",
     src = "foo.md",
+    dictionaries = ["foo.dic"],
     version_override = "blah",
 )
 
 md_library(
     name = "bar",
     src = "bar.md",
+    dictionaries = ["bar.dic"],
     increment_included_headers = True,
     deps = [":foo"],
 )
@@ -152,4 +154,16 @@ py_test(
     args = ["$(rootpath write_metadata.lua)"],
     data = ["write_metadata.lua"],
     deps = [":test_utils"],
+)
+
+sh_binary(
+    name = "write_dictionary",
+    srcs = ["write_dictionary.sh"],
+)
+
+py_test(
+    name = "write_dictionary_test",
+    srcs = ["write_dictionary_test.py"],
+    args = ["$(rootpath write_dictionary.sh)"],
+    data = ["write_dictionary.sh"],
 )

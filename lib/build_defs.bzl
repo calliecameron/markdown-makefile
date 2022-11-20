@@ -18,7 +18,7 @@ def _md_library_impl(ctx):
     )
 
     dep_versions = ctx.actions.declare_file(ctx.label.name + "_dep_versions.json")
-    base_metadata = ctx.actions.declare_file(ctx.label.name + "_base_metadata.yaml")
+    base_metadata = ctx.actions.declare_file(ctx.label.name + "_base_metadata.json")
     dep_version_args = []
     for dep in ctx.attr.deps:
         dep_version_args += ["--dep_version_file", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].metadata.path]

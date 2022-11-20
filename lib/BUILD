@@ -1,5 +1,4 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
-load("@pip//:requirements.bzl", "requirement")
 load(":build_defs.bzl", "md_library")
 
 md_library(
@@ -54,7 +53,6 @@ py_binary(
     name = "base_metadata",
     srcs = ["base_metadata.py"],
     visibility = ["//visibility:public"],
-    deps = [requirement("pyyaml")],
 )
 
 py_test(

@@ -103,7 +103,7 @@ class TestBaseMetadata(unittest.TestCase):
             dep_version_args.append(('--dep_version_file', f'dep{i+1}', filename))
 
         dep_versions_out_file = os.path.join(test_tmpdir, 'dep_versions_out.json')
-        metadata_out_file = os.path.join(test_tmpdir, 'metadata_out.yaml')
+        metadata_out_file = os.path.join(test_tmpdir, 'metadata_out.json')
 
         subprocess.run([
             sys.executable,
@@ -124,11 +124,12 @@ class TestBaseMetadata(unittest.TestCase):
 
         self.assertEqual(dep_versions_out, '{}')
 
-        self.assertEqual(metadata_out, """docversion: foo
-lang: en-GB
-repo: bar
-subject: 'Version: foo'
-""")
+        self.assertEqual(metadata_out, """{
+    "docversion": "foo",
+    "lang": "en-GB",
+    "repo": "bar",
+    "subject": "Version: foo"
+}""")
 
     def test_main_complex(self) -> None:
         dep_versions_out, metadata_out = self.run_script(
@@ -148,12 +149,13 @@ subject: 'Version: foo'
     }
 }""")
 
-        self.assertEqual(metadata_out, """docversion: foo, dirty deps
-increment-included-headers: t
-lang: en-GB
-repo: bar
-subject: 'Version: foo, dirty deps'
-""")
+        self.assertEqual(metadata_out, """{
+    "docversion": "foo, dirty deps",
+    "increment-included-headers": "t",
+    "lang": "en-GB",
+    "repo": "bar",
+    "subject": "Version: foo, dirty deps"
+}""")
 
     def test_main_override(self) -> None:
         deps_versions_out, metadata_out = self.run_script(
@@ -173,12 +175,13 @@ subject: 'Version: foo, dirty deps'
     }
 }""")
 
-        self.assertEqual(metadata_out, """docversion: override
-increment-included-headers: t
-lang: en-GB
-repo: bar
-subject: 'Version: override'
-""")
+        self.assertEqual(metadata_out, """{
+    "docversion": "override",
+    "increment-included-headers": "t",
+    "lang": "en-GB",
+    "repo": "bar",
+    "subject": "Version: override"
+}""")
 
     def test_main_fails(self) -> None:
         with self.assertRaises(subprocess.CalledProcessError):

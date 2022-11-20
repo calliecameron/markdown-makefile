@@ -20,3 +20,10 @@ pip.parse(
 )
 
 use_repo(pip, "pip")
+
+bazel_dep(name = "shunn", version = "0.0.0")
+
+local_path_override(
+    module_name = "shunn",
+    path = "../pandoc-templates",
+)

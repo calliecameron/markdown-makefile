@@ -129,3 +129,79 @@ md_doc = rule(
         "_write_open_script": write_open_script(),
     },
 )
+
+def _md_ms_docx_impl(ctx):
+    metadata = ctx.actions.declare_file(ctx.label.name + "_ms_metadata.json")
+    ctx.actions.run(
+        outputs = [metadata],
+        inputs = [ctx.attr.lib[MdLibraryInfo].metadata],
+        executable = ctx.attr._ms_metadata[DefaultInfo].files_to_run,
+        arguments = [
+            ctx.attr.lib[MdLibraryInfo].metadata.path,
+            metadata.path,
+        ],
+        progress_message = "%{label}: generating ms metadata",
+    )
+
+    intermediate_md = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.md")
+    pandoc(
+        ctx,
+        "",
+        "markdown-smart",
+        [ctx.attr.lib[MdLibraryInfo].output, metadata],
+        [
+            "--metadata-file=" + metadata.path,
+            "--standalone",
+        ],
+        ctx.attr.lib,
+        intermediate_md,
+        "generating ms intermediate markdown",
+    )
+
+    intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.docx")
+    ctx.actions.run(
+        outputs = [intermediate_docx],
+        inputs = [intermediate_md, ctx.attr._filter[DefaultInfo].files.to_list()[0]],
+        executable = ctx.attr._md2short[DefaultInfo].files_to_run,
+        arguments = [
+            "--overwrite",
+            "--modern",
+            "-o",
+            intermediate_docx.path,
+            "--lua-filter=" + ctx.attr._filter[DefaultInfo].files.to_list()[0].path,
+            intermediate_md.path,
+        ],
+        progress_message = "%{label}: generating ms.docx output",
+    )
+
+    output = output_for_ext(ctx, "ms.docx", ctx.attr.lib)
+    zip_cleaner(ctx, intermediate_docx, output, ctx.attr._zip_cleaner)
+
+    script = open_script(ctx, "ms.docx", output, ctx.attr._write_open_script)
+
+    return [
+        default_info_for_ext(ctx, output, script),
+    ]
+
+md_ms_docx = rule(
+    implementation = _md_ms_docx_impl,
+    executable = True,
+    doc = doc_for_ext("ms.docx"),
+    attrs = {
+        "lib": attr.label(
+            providers = [MdLibraryInfo],
+            doc = "An md_library target.",
+        ),
+        "_ms_metadata": attr.label(
+            default = "//formats:ms_metadata",
+        ),
+        "_md2short": attr.label(
+            default = "@shunn//:md2short",
+        ),
+        "_filter": attr.label(
+            default = "//formats:ms_docx_filter",
+        ),
+        "_zip_cleaner": zip_cleaner_script(),
+        "_write_open_script": write_open_script(),
+    },
+)

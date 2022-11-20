@@ -1,4 +1,4 @@
-load("@rules_python//python:defs.bzl", "py_test")
+load("@rules_python//python:defs.bzl", "py_binary", "py_test")
 
 sh_binary(
     name = "write_open_script",
@@ -46,6 +46,25 @@ filegroup(
 filegroup(
     name = "docx_filter",
     srcs = ["docx_filter.lua"],
+    visibility = ["//visibility:public"],
+)
+
+py_binary(
+    name = "ms_metadata",
+    srcs = ["ms_metadata.py"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "ms_metadata_test",
+    srcs = ["ms_metadata_test.py"],
+    args = ["$(rootpath ms_metadata.py)"],
+    data = ["ms_metadata.py"],
+)
+
+filegroup(
+    name = "ms_docx_filter",
+    srcs = ["ms_docx_filter.lua"],
     visibility = ["//visibility:public"],
 )
 

@@ -1,4 +1,5 @@
 % Title Foo
+% An Author
 
 # Foo
 

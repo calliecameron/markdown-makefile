@@ -219,16 +219,16 @@ MS_DOCX_FILTER := $(MARKDOWN_MAKEFILE_DIR)/templates/ms-docx-filter.lua
 # $(OUT_DIR)/%.doc: $(OUT_DIR)/%.docx
 # 	@unoconv -f doc -o $@ $<
 
-$(METADATA_MS): $(OUT_DIR)/%.md
-	@$(METADATA_MS_GENERATOR) $@ $<
+# $(METADATA_MS): $(OUT_DIR)/%.md
+# 	@$(METADATA_MS_GENERATOR) $@ $<
 
-$(OUT_DIR)/%_ms.md: $(OUT_DIR)/%.md $(METADATA_MS)
-	@pandoc --from=markdown-smart --to=markdown-smart --standalone -o $@ $^
+# $(OUT_DIR)/%_ms.md: $(OUT_DIR)/%.md $(METADATA_MS)
+# 	@pandoc --from=markdown-smart --to=markdown-smart --standalone -o $@ $^
 
-# Uses md2short.sh from https://github.com/prosegrinder/pandoc-templates
-$(OUT_DIR)/%_ms.docx: $(OUT_DIR)/%_ms.md
-	@md2short.sh --overwrite --modern -o $@ --lua-filter=$(MS_DOCX_FILTER) $<
-	@$(ZIP_CLEANER) $@
+# # Uses md2short.sh from https://github.com/prosegrinder/pandoc-templates
+# $(OUT_DIR)/%_ms.docx: $(OUT_DIR)/%_ms.md
+# 	@md2short.sh --overwrite --modern -o $@ --lua-filter=$(MS_DOCX_FILTER) $<
+# 	@$(ZIP_CLEANER) $@
 
 
 # # Ebook outputs.

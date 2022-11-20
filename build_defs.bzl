@@ -4,7 +4,7 @@ load("//core:build_defs.bzl", _md_library = "md_library")
 load("//formats:misc.bzl", _md_md = "md_md", _md_txt = "md_txt")
 load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
 load("//formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
-load("//formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_odt = "md_odt")
+load("//formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
 
 _FORMATS = [
     "md",
@@ -16,6 +16,7 @@ _FORMATS = [
     "odt",
     "docx",
     "doc",
+    "ms_docx",
 ]
 
 def md_library(
@@ -126,6 +127,10 @@ def md_document(
     _md_doc(
         name = name + "_doc",
         docx = name + "_docx",
+    )
+    _md_ms_docx(
+        name = name + "_ms_docx",
+        lib = lib,
     )
 
     native.filegroup(

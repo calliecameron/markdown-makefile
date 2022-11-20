@@ -30,3 +30,15 @@ filegroup(
     srcs = ["template.tex"],
     visibility = ["//visibility:public"],
 )
+
+filegroup(
+    name = "epub_css",
+    srcs = ["epub.css"],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "zip_cleaner",
+    srcs = ["zip_cleaner.sh"],
+    visibility = ["//visibility:public"],
+)

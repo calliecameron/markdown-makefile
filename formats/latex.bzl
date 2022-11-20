@@ -1,7 +1,7 @@
 """Rules for latex-based outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "simple_pandoc_output_impl")
+load(":helpers.bzl", "doc_for_ext", "pandoc", "simple_pandoc_output_impl", "write_open_script")
 
 _LATEX_VARS = [
     "--variable=fontsize:12pt",
@@ -25,20 +25,15 @@ MdTexIntermediateInfo = provider(
 
 def _md_tex_intermediate_impl(ctx):
     def gen_intermediate(output, template, name):
-        ctx.actions.run(
-            outputs = [output],
-            inputs = [ctx.attr.lib[MdLibraryInfo].output, template[DefaultInfo].files.to_list()[0]],
-            executable = "pandoc",
-            arguments = [
-                "--from=json",
-                "--to=latex",
-                "--template=" + template[DefaultInfo].files.to_list()[0].path,
-                "--fail-if-warnings",
-                "--output=" + output.path,
-            ] + _LATEX_VARS + [
-                ctx.attr.lib[MdLibraryInfo].output.path,
-            ],
-            progress_message = "%{label}: generating latex " + name,
+        pandoc(
+            ctx,
+            "",
+            "latex",
+            [template[DefaultInfo].files.to_list()[0]],
+            ["--template=" + template[DefaultInfo].files.to_list()[0].path] + _LATEX_VARS,
+            ctx.attr.lib,
+            output,
+            "generating latex " + name,
         )
 
     header = ctx.actions.declare_file(ctx.label.name + "_header.tex")
@@ -74,13 +69,13 @@ def _tex_output_impl(ctx, ext, to, extra_args):
     return simple_pandoc_output_impl(
         ctx,
         ext,
+        to,
         [
             ctx.attr.intermediate[MdTexIntermediateInfo].header,
             ctx.attr.intermediate[MdTexIntermediateInfo].before,
             ctx.attr._template[DefaultInfo].files.to_list()[0],
         ],
         [
-            "--to=" + to,
             "--include-in-header=" + ctx.attr.intermediate[MdTexIntermediateInfo].header.path,
             "--include-before-body=" + ctx.attr.intermediate[MdTexIntermediateInfo].before.path,
             "--template=" + ctx.attr._template[DefaultInfo].files.to_list()[0].path,
@@ -93,15 +88,13 @@ def _tex_output_rule(impl, ext):
     return rule(
         implementation = impl,
         executable = True,
-        doc = "md_" + ext + " generates " + ext + " output from an md_library.",
+        doc = doc_for_ext(ext),
         attrs = {
             "intermediate": attr.label(
                 providers = [MdLibraryInfo, MdTexIntermediateInfo],
                 doc = "An md_tex_intermediate target.",
             ),
-            "_write_open_script": attr.label(
-                default = "//formats:write_open_script",
-            ),
+            "_write_open_script": write_open_script(),
             "_template": attr.label(
                 default = "//formats:tex_template",
             ),

@@ -1,6 +1,7 @@
 load("//core:build_defs.bzl", "md_library")
 load("//formats:misc.bzl", "md_md", "md_txt")
 load("//formats:latex.bzl", "md_pdf", "md_tex", "md_tex_intermediate")
+load("//formats:ebook.bzl", "md_epub", "md_mobi")
 
 md_library(
     name = "foo",
@@ -32,6 +33,16 @@ md_tex(
 md_pdf(
     name = "foo_pdf",
     intermediate = ":foo_tex_intermediate",
+)
+
+md_epub(
+    name = "foo_epub",
+    lib = ":foo",
+)
+
+md_mobi(
+    name = "foo_mobi",
+    epub = ":foo_epub",
 )
 
 md_library(

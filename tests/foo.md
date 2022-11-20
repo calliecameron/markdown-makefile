@@ -1,3 +1,5 @@
+% Title Foo
+
 # Foo
 
 Hello\” *world!*

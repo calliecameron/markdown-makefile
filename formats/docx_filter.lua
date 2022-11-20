@@ -10,6 +10,7 @@ local hashrule = [[<w:p>
     <w:t>* * *</w:t>
   </w:r>
 </w:p>]]
+
 function HorizontalRule (elem)
     if FORMAT == 'docx' then
       return pandoc.RawBlock('openxml', hashrule)

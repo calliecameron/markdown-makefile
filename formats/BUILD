@@ -37,6 +37,18 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+filegroup(
+    name = "reference_docx",
+    srcs = ["reference.docx"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "docx_filter",
+    srcs = ["docx_filter.lua"],
+    visibility = ["//visibility:public"],
+)
+
 sh_binary(
     name = "zip_cleaner",
     srcs = ["zip_cleaner.sh"],

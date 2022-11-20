@@ -12,6 +12,10 @@
 \let\OldRule\rule
 \renewcommand{\rule}[2]{\iffootnote\OldRule{#1}{#2}\else* * *\fi}
 
+$if(section-page-break)$
+\usepackage{titlesec}
+$endif$
+
 $if(source-md5)$
 \special{pdf:trailerid [
     <$source-md5$>

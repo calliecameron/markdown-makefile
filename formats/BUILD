@@ -12,3 +12,21 @@ py_test(
     args = ["$(rootpath write_open_script.sh)"],
     data = ["write_open_script.sh"],
 )
+
+filegroup(
+    name = "tex_header_template",
+    srcs = ["header_template.tex"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "tex_before_template",
+    srcs = ["before_template.tex"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "tex_template",
+    srcs = ["template.tex"],
+    visibility = ["//visibility:public"],
+)

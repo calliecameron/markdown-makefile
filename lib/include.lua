@@ -10,7 +10,7 @@ function include(elem)
        elem.content[1].text == "!include" and elem.content[2].tag == "Space" and
        elem.content[3].tag == "Str" then
         local path = elem.content[3].text
-        local includedFile = io.open(path, 'r')
+        local includedFile = io.open(path, "r")
         if includedFile == nil then
             io.stderr:write("Failed to open included file: " .. path .. "\n")
             os.exit(1)

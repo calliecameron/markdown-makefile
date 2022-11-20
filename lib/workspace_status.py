@@ -11,7 +11,7 @@ import subprocess
 import bazel_package
 
 
-EXPECTED_PANDOC_VERSION = '2.13'
+EXPECTED_PANDOC_VERSION = '2.19.2'
 
 
 @contextlib.contextmanager

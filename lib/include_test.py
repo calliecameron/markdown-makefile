@@ -41,7 +41,7 @@ class TestInclude(unittest.TestCase):
                         't': 'Header'},
                        {'c': [{'c': 'Hello.', 't': 'Str'}], 't': 'Para'}],
             'meta': {},
-            'pandoc-api-version': [1, 22],
+            'pandoc-api-version': [1, 22, 2, 1],
         })
         doc1_file = os.path.join(test_tmpdir, 'doc1.json')
         with open(doc1_file, 'w', encoding='utf-8') as f:
@@ -56,7 +56,7 @@ class TestInclude(unittest.TestCase):
                        {'c': [{'c': 'Hello.', 't': 'Str'}], 't': 'Para'},
                        {'c': [{'c': 'Bar.', 't': 'Str'}], 't': 'Para'}],
             'meta': {},
-            'pandoc-api-version': [1, 22]
+            'pandoc-api-version': [1, 22, 2, 1]
         })
 
         doc2_inc = test_utils.pandoc_lua_filter(FILTER, DOC2_INC % doc1_file)
@@ -68,7 +68,7 @@ class TestInclude(unittest.TestCase):
                        {'c': [{'c': 'Hello.', 't': 'Str'}], 't': 'Para'},
                        {'c': [{'c': 'Bar.', 't': 'Str'}], 't': 'Para'}],
             'meta': {},
-            'pandoc-api-version': [1, 22]
+            'pandoc-api-version': [1, 22, 2, 1]
         })
 
     def test_include_fails(self) -> None:

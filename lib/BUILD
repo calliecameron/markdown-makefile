@@ -141,3 +141,17 @@ py_test(
     data = ["starts_with_text.lua"],
     deps = [":test_utils"],
 )
+
+filegroup(
+    name = "write_metadata",
+    srcs = ["write_metadata.lua"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "write_metadata_test",
+    srcs = ["write_metadata_test.py"],
+    args = ["$(rootpath write_metadata.lua)"],
+    data = ["write_metadata.lua"],
+    deps = [":test_utils"],
+)

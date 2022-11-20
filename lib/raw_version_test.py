@@ -37,9 +37,9 @@ STABLE_REPO_A_SOLIDUS_B /foo/.git
 STABLE_VERSION_B 11
 STABLE_REPO_B /bar/.git
 """, 'a/b'), """{
+    "docversion": "10",
     "pandoc_version": "1.2.3",
-    "repo": "/foo/.git",
-    "version": "10"
+    "repo": "/foo/.git"
 }""")
 
     def test_raw_version_fails(self) -> None:

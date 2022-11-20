@@ -12,13 +12,13 @@ class Version:
 
     def to_dict(self) -> Dict[str, str]:
         return {
-            'version': self.version,
+            'docversion': self.version,
             'repo': self.repo,
         }
 
     @staticmethod
     def from_dict(d: Dict[str, str]) -> 'Version':
-        return Version(d['version'], d['repo'])
+        return Version(d['docversion'], d['repo'])
 
 
 def get_version(
@@ -53,11 +53,12 @@ def get_version(
     return version
 
 
-def get_metadata(version: str, increment_included_headers: bool) -> Dict[str, str]:
+def get_metadata(version: str, repo: str, increment_included_headers: bool) -> Dict[str, str]:
     out = {
         'docversion': version,
         'subject': f'Version: {version}',
         'lang': 'en-GB',
+        'repo': repo,
     }
     if increment_included_headers:
         out['increment-included-headers'] = 't'
@@ -67,7 +68,6 @@ def get_metadata(version: str, increment_included_headers: bool) -> Dict[str, st
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('raw_version_file')
-    parser.add_argument('version_out_file')
     parser.add_argument('dep_versions_out_file')
     parser.add_argument('metadata_out_file')
     parser.add_argument('--dep_version_file', action='append', nargs=2, default=[])
@@ -84,10 +84,7 @@ def main() -> None:
             dep_versions[target] = Version.from_dict(json.load(f))
 
     version = get_version(raw_version, dep_versions, args.version_override)
-    metadata = get_metadata(version.version, args.increment_included_headers)
-
-    with open(args.version_out_file, mode='w', encoding='utf-8') as f:
-        json.dump(version.to_dict(), f, sort_keys=True, indent=4)
+    metadata = get_metadata(version.version, version.repo, args.increment_included_headers)
 
     with open(args.dep_versions_out_file, mode='w', encoding='utf-8') as f:
         json.dump({t: v.to_dict() for t, v in dep_versions.items()}, f, sort_keys=True, indent=4)

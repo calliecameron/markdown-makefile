@@ -38,7 +38,7 @@ def main() -> None:
     with open(args.outfile, mode='w', encoding='utf-8') as f:
         json.dump({
             'pandoc_version': pandoc_version,
-            'version': version,
+            'docversion': version,
             'repo': repo,
         }, f, sort_keys=True, indent=4)
 

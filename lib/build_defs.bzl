@@ -3,8 +3,8 @@
 MdLibraryInfo = provider(
     "Info for a markdown library.",
     fields = {
-        "output": "Compiled library, as json",
-        "version": "Version of the library",
+        "output": "Compiled document, as json",
+        "metadata": "Document metadata, as json",
     },
 )
 
@@ -17,22 +17,21 @@ def _md_library_impl(ctx):
         arguments = [ctx.info_file.path, raw_version.path, ctx.label.package],
     )
 
-    version = ctx.actions.declare_file(ctx.label.name + "_version.json")
     dep_versions = ctx.actions.declare_file(ctx.label.name + "_dep_versions.json")
     base_metadata = ctx.actions.declare_file(ctx.label.name + "_base_metadata.yaml")
     dep_version_args = []
     for dep in ctx.attr.deps:
-        dep_version_args += ["--dep_version_file", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].version.path]
+        dep_version_args += ["--dep_version_file", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].metadata.path]
     extra_args = []
     if ctx.attr.increment_included_headers:
         extra_args.append("--increment_included_headers")
     if ctx.attr.version_override:
         extra_args += ["--version_override", ctx.attr.version_override]
     ctx.actions.run(
-        outputs = [version, dep_versions, base_metadata],
-        inputs = [raw_version] + [dep[MdLibraryInfo].version for dep in ctx.attr.deps],
+        outputs = [dep_versions, base_metadata],
+        inputs = [raw_version] + [dep[MdLibraryInfo].metadata for dep in ctx.attr.deps],
         executable = ctx.attr._base_metadata[DefaultInfo].files_to_run,
-        arguments = dep_version_args + extra_args + [raw_version.path, version.path, dep_versions.path, base_metadata.path],
+        arguments = dep_version_args + extra_args + [raw_version.path, dep_versions.path, base_metadata.path],
     )
 
     preprocessed = ctx.actions.declare_file(ctx.label.name + "_preprocessed.md")
@@ -47,13 +46,15 @@ def _md_library_impl(ctx):
     )
 
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.json")
+    metadata = ctx.actions.declare_file(ctx.label.name + "_metadata.json")
     ctx.actions.run(
-        outputs = [intermediate],
+        outputs = [intermediate, metadata],
         inputs = [preprocessed, base_metadata] +
                  ctx.attr._validate[DefaultInfo].files.to_list() +
                  ctx.attr._include[DefaultInfo].files.to_list() +
                  ctx.attr._starts_with_text[DefaultInfo].files.to_list() +
                  ctx.attr._wordcount[DefaultInfo].files.to_list() +
+                 ctx.attr._write_metadata[DefaultInfo].files.to_list() +
                  [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
         executable = "pandoc",
         arguments = [
@@ -61,7 +62,9 @@ def _md_library_impl(ctx):
             "--lua-filter=" + ctx.attr._include[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._starts_with_text[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._wordcount[DefaultInfo].files.to_list()[0].path,
+            "--lua-filter=" + ctx.attr._write_metadata[DefaultInfo].files.to_list()[0].path,
             "--metadata-file=" + base_metadata.path,
+            "--metadata=metadata-out-file:" + metadata.path,
             "--from=markdown+smart",
             "--to=json",
             "--strip-comments",
@@ -82,8 +85,8 @@ def _md_library_impl(ctx):
     )
 
     return [
-        DefaultInfo(files = depset([output])),
-        MdLibraryInfo(output = output, version = version),
+        DefaultInfo(files = depset([output, metadata])),
+        MdLibraryInfo(output = output, metadata = metadata),
     ]
 
 md_library = rule(
@@ -122,6 +125,9 @@ md_library = rule(
         ),
         "_wordcount": attr.label(
             default = "//lib:wordcount",
+        ),
+        "_write_metadata": attr.label(
+            default = "//lib:write_metadata",
         ),
     },
 )

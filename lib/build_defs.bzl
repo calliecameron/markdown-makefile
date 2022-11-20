@@ -70,8 +70,7 @@ def _md_library_impl(ctx):
             "--to=json",
             "--strip-comments",
             "--fail-if-warnings",
-            "--output",
-            intermediate.path,
+            "--output=" + intermediate.path,
             preprocessed.path,
         ],
     )
@@ -97,11 +96,33 @@ def _md_library_impl(ctx):
             content = "",
         )
 
-    # TODO
+    spellcheck_input = ctx.actions.declare_file(ctx.label.name + "_spellcheck_input.md")
+    ctx.actions.run(
+        outputs = [spellcheck_input],
+        inputs = [intermediate] + ctx.attr._spellcheck_input_template.files.to_list(),
+        executable = "pandoc",
+        arguments = [
+            "--from=json",
+            "--to=markdown-smart",
+            "--template=" + ctx.attr._spellcheck_input_template[DefaultInfo].files.to_list()[0].path,
+            "--fail-if-warnings",
+            "--output=" + spellcheck_input.path,
+            intermediate.path,
+        ],
+    )
+
+    spellchecked = ctx.actions.declare_file(ctx.label.name + "_spellchecked.txt")
+    ctx.actions.run(
+        outputs = [spellchecked],
+        inputs = [dictionary, spellcheck_input],
+        executable = ctx.attr._spellcheck[DefaultInfo].files_to_run,
+        arguments = [dictionary.path, spellcheck_input.path, spellchecked.path],
+    )
+
     output = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.run(
         outputs = [output],
-        inputs = [intermediate],
+        inputs = [intermediate, spellchecked],
         executable = "cp",
         arguments = [intermediate.path, output.path],
     )
@@ -157,6 +178,12 @@ md_library = rule(
         ),
         "_write_dictionary": attr.label(
             default = "//lib:write_dictionary",
+        ),
+        "_spellcheck_input_template": attr.label(
+            default = "//lib:spellcheck_input_template",
+        ),
+        "_spellcheck": attr.label(
+            default = "//lib:spellcheck",
         ),
     },
 )

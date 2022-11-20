@@ -6,3 +6,5 @@
 Test text\”
 
 !include :foo
+
+quux

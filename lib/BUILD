@@ -167,3 +167,21 @@ py_test(
     args = ["$(rootpath write_dictionary.sh)"],
     data = ["write_dictionary.sh"],
 )
+
+filegroup(
+    name = "spellcheck_input_template",
+    srcs = ["spellcheck_input_template.md"],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "spellcheck",
+    srcs = ["spellcheck.sh"],
+)
+
+py_test(
+    name = "spellcheck_test",
+    srcs = ["spellcheck_test.py"],
+    args = ["$(rootpath spellcheck.sh)"],
+    data = ["spellcheck.sh"],
+)

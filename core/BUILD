@@ -1,35 +1,4 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
-load(":build_defs.bzl", "md_library", "md_md", "md_txt")
-
-md_library(
-    name = "foo",
-    src = "foo.md",
-    dictionaries = ["foo.dic"],
-    version_override = "blah",
-)
-
-md_md(
-    name = "foo_md",
-    lib = ":foo",
-)
-
-md_txt(
-    name = "foo_txt",
-    lib = ":foo",
-)
-
-md_library(
-    name = "bar",
-    src = "bar.md",
-    dictionaries = ["bar.dic"],
-    increment_included_headers = True,
-    deps = [":foo"],
-)
-
-md_md(
-    name = "bar_md",
-    lib = ":bar",
-)
 
 py_library(
     name = "bazel_package",
@@ -174,6 +143,7 @@ py_test(
 sh_binary(
     name = "write_dictionary",
     srcs = ["write_dictionary.sh"],
+    visibility = ["//visibility:public"],
 )
 
 py_test(
@@ -192,6 +162,7 @@ filegroup(
 sh_binary(
     name = "spellcheck",
     srcs = ["spellcheck.sh"],
+    visibility = ["//visibility:public"],
 )
 
 py_test(
@@ -199,16 +170,4 @@ py_test(
     srcs = ["spellcheck_test.py"],
     args = ["$(rootpath spellcheck.sh)"],
     data = ["spellcheck.sh"],
-)
-
-sh_binary(
-    name = "write_open_script",
-    srcs = ["write_open_script.sh"],
-)
-
-py_test(
-    name = "write_open_script_test",
-    srcs = ["write_open_script_test.py"],
-    args = ["$(rootpath write_open_script.sh)"],
-    data = ["write_open_script.sh"],
 )

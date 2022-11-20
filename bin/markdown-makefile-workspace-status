@@ -3,4 +3,4 @@
 set -eu
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-"${THIS_DIR}/../lib/workspace_status.py"
+"${THIS_DIR}/../core/workspace_status.py"

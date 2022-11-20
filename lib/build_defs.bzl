@@ -16,6 +16,7 @@ def _md_library_impl(ctx):
         inputs = [ctx.info_file],
         executable = ctx.attr._raw_version[DefaultInfo].files_to_run,
         arguments = [ctx.info_file.path, raw_version.path, ctx.label.package],
+        progress_message = "%{label}: computing version",
     )
 
     dep_versions = ctx.actions.declare_file(ctx.label.name + "_dep_versions.json")
@@ -33,6 +34,7 @@ def _md_library_impl(ctx):
         inputs = [raw_version] + [dep[MdLibraryInfo].metadata for dep in ctx.attr.deps],
         executable = ctx.attr._base_metadata[DefaultInfo].files_to_run,
         arguments = dep_version_args + extra_args + [raw_version.path, dep_versions.path, base_metadata.path],
+        progress_message = "%{label}: generating base metadata",
     )
 
     preprocessed = ctx.actions.declare_file(ctx.label.name + "_preprocessed.md")
@@ -44,6 +46,7 @@ def _md_library_impl(ctx):
         inputs = [ctx.file.src],
         executable = ctx.attr._preprocess[DefaultInfo].files_to_run,
         arguments = dep_args + [ctx.file.src.path, preprocessed.path, ctx.label.package],
+        progress_message = "%{label}: preprocessing markdown",
     )
 
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.json")
@@ -73,6 +76,7 @@ def _md_library_impl(ctx):
             "--output=" + intermediate.path,
             preprocessed.path,
         ],
+        progress_message = "%{label}: compiling markdown",
     )
 
     dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
@@ -89,6 +93,7 @@ def _md_library_impl(ctx):
             arguments = [dictionary.path] +
                         dict_args +
                         [dep[MdLibraryInfo].dictionary.path for dep in ctx.attr.deps],
+            progress_message = "%{label}: generating dictionary",
         )
     else:
         ctx.actions.write(
@@ -109,6 +114,7 @@ def _md_library_impl(ctx):
             "--output=" + spellcheck_input.path,
             intermediate.path,
         ],
+        progress_message = "%{label}: generating input for spellchecking",
     )
 
     spellchecked = ctx.actions.declare_file(ctx.label.name + "_spellchecked.txt")
@@ -117,6 +123,7 @@ def _md_library_impl(ctx):
         inputs = [dictionary, spellcheck_input],
         executable = ctx.attr._spellcheck[DefaultInfo].files_to_run,
         arguments = [dictionary.path, spellcheck_input.path, spellchecked.path],
+        progress_message = "%{label}: spellchecking",
     )
 
     output = ctx.actions.declare_file(ctx.label.name + ".json")
@@ -125,6 +132,7 @@ def _md_library_impl(ctx):
         inputs = [intermediate, spellchecked],
         executable = "cp",
         arguments = [intermediate.path, output.path],
+        progress_message = "%{label}: generating output",
     )
 
     return [
@@ -134,23 +142,29 @@ def _md_library_impl(ctx):
 
 md_library = rule(
     implementation = _md_library_impl,
+    doc = "md_library compiles and validates a single markdown file.",
     attrs = {
         "src": attr.label(
             allow_single_file = [".md"],
+            doc = "A markdown source file.",
         ),
         "deps": attr.label_list(
             allow_empty = True,
             providers = [MdLibraryInfo],
+            doc = "Other md_library targets used in !include statements in src.",
         ),
         "dictionaries": attr.label_list(
             allow_empty = True,
             allow_files = [".dic"],
+            doc = "Dictionary files for spellchecking.",
         ),
         "increment_included_headers": attr.bool(
             default = False,
+            doc = "If true, header level in included files is incremented, e.g. level 1 headers become level 2 headers. If false, headers are unchanged.",
         ),
         "version_override": attr.string(
             default = "",
+            doc = "Set the document version to this value, rather than the computed value. Should only be used for testing.",
         ),
         "_raw_version": attr.label(
             default = "//lib:raw_version",

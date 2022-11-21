@@ -101,9 +101,9 @@ def _md_doc_impl(ctx):
         inputs = [ctx.attr.docx[MdDocxInfo].output],
         executable = "unoconv",
         arguments = [
-            "-f",
+            "--format",
             "doc",
-            "-o",
+            "--output",
             output.path,
             ctx.attr.docx[MdDocxInfo].output.path,
         ],
@@ -166,7 +166,7 @@ def _md_ms_docx_impl(ctx):
         arguments = [
             "--overwrite",
             "--modern",
-            "-o",
+            "--output",
             intermediate_docx.path,
             "--lua-filter=" + ctx.attr._filter[DefaultInfo].files.to_list()[0].path,
             intermediate_md.path,

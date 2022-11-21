@@ -151,6 +151,22 @@ def md_document(
     native.filegroup(
         name = name + "_all",
         srcs = [name + "_" + f for f in _FORMATS],
+        data = [name + "_" + f for f in _FORMATS],
+        visibility = ["//visibility:private"],
+    )
+
+    native.genrule(
+        name = name + "_save_sh",
+        outs = [name + "_save.sh"],
+        cmd = "$(location //utils:write_save_script) %s $@" % native.package_name(),
+        exec_tools = ["//utils:write_save_script"],
+        visibility = ["//visibility:private"],
+    )
+
+    native.sh_binary(
+        name = name + "_save",
+        srcs = [name + "_save.sh"],
+        data = [name + "_all"],
         visibility = ["//visibility:private"],
     )
 
@@ -161,3 +177,8 @@ def md_document(
                 actual = name + "_" + f,
                 visibility = ["//visibility:private"],
             )
+        native.alias(
+            name = "save",
+            actual = name + "_save",
+            visibility = ["//visibility:private"],
+        )

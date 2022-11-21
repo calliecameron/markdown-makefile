@@ -100,9 +100,9 @@ ZIP_CLEANER := $(MARKDOWN_MAKEFILE_DIR)/templates/zip-cleaner.sh
 
 # doc_ms: $(OUT_BASE)_ms.doc
 
-save: all
-	@rm -rf $(SAVED_DIR)
-	@cp -a $(OUT_DIR) $(SAVED_DIR)
+# save: all
+# 	@rm -rf $(SAVED_DIR)
+# 	@cp -a $(OUT_DIR) $(SAVED_DIR)
 
 gitsetup: .gitignore .gitattributes .gitconfig
 

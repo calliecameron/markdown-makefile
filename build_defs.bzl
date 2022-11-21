@@ -51,6 +51,7 @@ def md_library(
         dictionaries = native.glob([name + ".dic"]) + extra_dictionaries,
         increment_included_headers = increment_included_headers,
         version_override = version_override,
+        visibility = ["//visibility:public"],
     )
 
 def md_document(
@@ -91,49 +92,61 @@ def md_document(
     _md_md(
         name = name + "_md",
         lib = lib,
+        visibility = ["//visibility:private"],
     )
     _md_txt(
         name = name + "_txt",
         lib = lib,
+        visibility = ["//visibility:private"],
     )
     _md_tex_intermediate(
         name = name + "_tex_intermediate",
         lib = lib,
+        visibility = ["//visibility:private"],
     )
     _md_tex(
         name = name + "_tex",
         intermediate = name + "_tex_intermediate",
+        visibility = ["//visibility:private"],
     )
     _md_pdf(
         name = name + "_pdf",
         intermediate = name + "_tex_intermediate",
+        visibility = ["//visibility:private"],
     )
     _md_epub(
         name = name + "_epub",
         lib = lib,
+        visibility = ["//visibility:private"],
     )
     _md_mobi(
         name = name + "_mobi",
         epub = name + "_epub",
+        visibility = ["//visibility:private"],
     )
     _md_odt(
         name = name + "_odt",
         lib = lib,
+        visibility = ["//visibility:private"],
     )
     _md_docx(
         name = name + "_docx",
         lib = lib,
+        visibility = ["//visibility:private"],
     )
     _md_doc(
         name = name + "_doc",
         docx = name + "_docx",
+        visibility = ["//visibility:private"],
     )
     _md_ms_docx(
         name = name + "_ms_docx",
         lib = lib,
+        visibility = ["//visibility:private"],
     )
 
     native.filegroup(
         name = name + "_all",
         srcs = [name + "_" + f for f in _FORMATS],
+        visibility = ["//visibility:private"],
     )

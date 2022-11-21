@@ -63,42 +63,42 @@ GITCONFIG := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitconfig
 ZIP_CLEANER := $(MARKDOWN_MAKEFILE_DIR)/templates/zip-cleaner.sh
 
 
-# Top-level targets. These rely on the 'BASE' variable set in the user's
-# makefile.
-.FORCE:
+# # Top-level targets. These rely on the 'BASE' variable set in the user's
+# # makefile.
+# .FORCE:
 
-.PHONY: main all md txt tex pdf odt docx doc epub mobi md_ms docx_ms doc_ms save gitsetup clean .SUFFIXES .SECONDEXPANSION .FORCE .PRECIOUS
+# .PHONY: main all md txt tex pdf odt docx doc epub mobi md_ms docx_ms doc_ms save gitsetup clean .SUFFIXES .SECONDEXPANSION .FORCE .PRECIOUS
 
-main: pdf
+# main: pdf
 
-all: md txt tex pdf odt docx doc epub mobi md_ms docx_ms doc_ms
+# all: md txt tex pdf odt docx doc epub mobi md_ms docx_ms doc_ms
 
-$(OUT_DIR):
-	@mkdir -p $(OUT_DIR)
+# $(OUT_DIR):
+# 	@mkdir -p $(OUT_DIR)
 
-md: $(OUT_BASE).md
+# md: $(OUT_BASE).md
 
-txt: $(OUT_BASE).txt
+# txt: $(OUT_BASE).txt
 
-tex: $(OUT_BASE).tex
+# tex: $(OUT_BASE).tex
 
-pdf: $(OUT_BASE).pdf
+# pdf: $(OUT_BASE).pdf
 
-odt: $(OUT_BASE).odt
+# odt: $(OUT_BASE).odt
 
-docx: $(OUT_BASE).docx
+# docx: $(OUT_BASE).docx
 
-doc: $(OUT_BASE).doc
+# doc: $(OUT_BASE).doc
 
-epub: $(OUT_BASE).epub
+# epub: $(OUT_BASE).epub
 
-mobi: $(OUT_BASE).mobi
+# mobi: $(OUT_BASE).mobi
 
-md_ms: $(OUT_BASE)_ms.md
+# md_ms: $(OUT_BASE)_ms.md
 
-docx_ms: $(OUT_BASE)_ms.docx
+# docx_ms: $(OUT_BASE)_ms.docx
 
-doc_ms: $(OUT_BASE)_ms.doc
+# doc_ms: $(OUT_BASE)_ms.doc
 
 save: all
 	@rm -rf $(SAVED_DIR)
@@ -116,8 +116,8 @@ gitsetup: .gitignore .gitattributes .gitconfig
 	@cp $(GITCONFIG) .gitconfig
 	@git config --local include.path ../.gitconfig
 
-clean:
-	@rm -rf $(OUT_DIR) *~ $(EXTRA_CLEAN_DEPS)
+# clean:
+# 	@rm -rf $(OUT_DIR) *~ $(EXTRA_CLEAN_DEPS)
 
 
 # # Markdown output. All other formats should only depend on $(OUT_DIR)/%.md,
@@ -201,12 +201,12 @@ clean:
 # 	@pandoc --from=markdown+smart --include-in-header=$(OUT_DIR)/_$*_header.tex --include-before-body=$(OUT_DIR)/_$*_before.tex $(LATEX_FLAGS) $(EXTRA_LATEX_FLAGS) $(LATEX_VARS) $(EXTRA_PANDOC_FLAGS) -o $@ $<
 
 
-# Word-processor outputs.
-DOCX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/reference.docx
-DOCX_FILTER := $(MARKDOWN_MAKEFILE_DIR)/templates/docx-filter.lua
-METADATA_MS := $(OUT_DIR)/_%_metadata_ms.yaml
-METADATA_MS_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-ms-metadata.sh
-MS_DOCX_FILTER := $(MARKDOWN_MAKEFILE_DIR)/templates/ms-docx-filter.lua
+# # Word-processor outputs.
+# DOCX_TEMPLATE := $(MARKDOWN_MAKEFILE_DIR)/templates/reference.docx
+# DOCX_FILTER := $(MARKDOWN_MAKEFILE_DIR)/templates/docx-filter.lua
+# METADATA_MS := $(OUT_DIR)/_%_metadata_ms.yaml
+# METADATA_MS_GENERATOR := $(MARKDOWN_MAKEFILE_DIR)/templates/generate-ms-metadata.sh
+# MS_DOCX_FILTER := $(MARKDOWN_MAKEFILE_DIR)/templates/ms-docx-filter.lua
 
 # $(OUT_DIR)/%.odt: $(OUT_DIR)/%.md
 # 	@pandoc --from=markdown+smart $(EXTRA_PANDOC_FLAGS) -o $@ $<

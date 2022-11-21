@@ -60,7 +60,8 @@ def md_document(
         extra_dictionaries = None,
         increment_included_headers = False,
         version_override = None,
-        existing_lib = None):
+        existing_lib = None,
+        main_document = True):
     """md_document compiles a markdown source file into many formats.
 
     Args:
@@ -74,6 +75,8 @@ def md_document(
             the computed value. Should only be used for testing.
         existing_lib: use an existing md_library rather than creating one; if
             set, most other args must not be set.
+        main_document: whether this is the main document in the package; creates
+            some convenience aliases.
     """
     if existing_lib:
         if deps or extra_dictionaries or increment_included_headers or version_override:
@@ -150,3 +153,11 @@ def md_document(
         srcs = [name + "_" + f for f in _FORMATS],
         visibility = ["//visibility:private"],
     )
+
+    if main_document:
+        for f in _FORMATS:
+            native.alias(
+                name = f,
+                actual = name + "_" + f,
+                visibility = ["//visibility:private"],
+            )

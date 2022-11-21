@@ -73,3 +73,10 @@ sh_binary(
     srcs = ["zip_cleaner.sh"],
     visibility = ["//visibility:public"],
 )
+
+py_test(
+    name = "zip_cleaner_test",
+    srcs = ["zip_cleaner_test.py"],
+    args = ["$(rootpath zip_cleaner.sh)"],
+    data = ["zip_cleaner.sh"],
+)

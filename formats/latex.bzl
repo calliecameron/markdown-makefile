@@ -79,7 +79,7 @@ def _tex_output_impl(ctx, ext, to, extra_args):
             "--include-in-header=" + ctx.attr.intermediate[MdTexIntermediateInfo].header.path,
             "--include-before-body=" + ctx.attr.intermediate[MdTexIntermediateInfo].before.path,
             "--template=" + ctx.attr._template[DefaultInfo].files.to_list()[0].path,
-        ] + extra_args + _LATEX_VARS,
+        ] + extra_args + _LATEX_VARS + ctx.attr.extra_pandoc_flags,
         ctx.attr.intermediate,
         ctx.attr._write_open_script,
     )
@@ -93,6 +93,9 @@ def _tex_output_rule(impl, ext):
             "intermediate": attr.label(
                 providers = [MdLibraryInfo, MdTexIntermediateInfo],
                 doc = "An md_tex_intermediate target.",
+            ),
+            "extra_pandoc_flags": attr.string_list(
+                doc = "Extra flags to pass to pandoc",
             ),
             "_write_open_script": write_open_script(),
             "_template": attr.label(

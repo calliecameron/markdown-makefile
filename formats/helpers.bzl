@@ -61,7 +61,7 @@ def pandoc_for_output(ctx, ext, to_format, inputs, args, lib):
     return output
 
 def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, lib, write_open_script):
-    file = pandoc_for_output(ctx, ext, to_format, inputs, args, lib)
+    file = pandoc_for_output(ctx, ext, to_format, inputs, args + ctx.attr.extra_pandoc_flags, lib)
     script = open_script(ctx, ext, file, write_open_script)
 
     return [default_info_for_ext(ctx, file, script)]
@@ -75,6 +75,9 @@ def simple_pandoc_output_rule(impl, ext):
             "lib": attr.label(
                 providers = [MdLibraryInfo],
                 doc = "An md_library target.",
+            ),
+            "extra_pandoc_flags": attr.string_list(
+                doc = "Extra flags to pass to pandoc",
             ),
             "_write_open_script": write_open_script(),
         },

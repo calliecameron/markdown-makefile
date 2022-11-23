@@ -17,7 +17,7 @@ def _md_epub_impl(ctx):
         "epub",
         "epub",
         [ctx.attr._css[DefaultInfo].files.to_list()[0]],
-        ["--css=" + ctx.attr._css[DefaultInfo].files.to_list()[0].path],
+        ["--css=" + ctx.attr._css[DefaultInfo].files.to_list()[0].path] + ctx.attr.extra_pandoc_flags,
         ctx.attr.lib,
         intermediate,
     )
@@ -41,6 +41,9 @@ md_epub = rule(
         "lib": attr.label(
             providers = [MdLibraryInfo],
             doc = "An md_library target.",
+        ),
+        "extra_pandoc_flags": attr.string_list(
+            doc = "Extra flags to pass to pandoc",
         ),
         "_css": attr.label(
             default = "//formats:epub_css",

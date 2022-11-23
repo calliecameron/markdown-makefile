@@ -17,7 +17,7 @@ def _md_odt_impl(ctx):
         "odt",
         "odt",
         [],
-        [],
+        ctx.attr.extra_pandoc_flags,
         ctx.attr.lib,
         intermediate,
     )
@@ -40,6 +40,9 @@ md_odt = rule(
             providers = [MdLibraryInfo],
             doc = "An md_library target.",
         ),
+        "extra_pandoc_flags": attr.string_list(
+            doc = "Extra flags to pass to pandoc",
+        ),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
     },
@@ -58,7 +61,7 @@ def _md_docx_impl(ctx):
         [
             "--reference-doc=" + ctx.attr._template[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._filter[DefaultInfo].files.to_list()[0].path,
-        ],
+        ] + ctx.attr.extra_pandoc_flags,
         ctx.attr.lib,
         intermediate,
     )
@@ -82,6 +85,9 @@ md_docx = rule(
         "lib": attr.label(
             providers = [MdLibraryInfo],
             doc = "An md_library target.",
+        ),
+        "extra_pandoc_flags": attr.string_list(
+            doc = "Extra flags to pass to pandoc",
         ),
         "_template": attr.label(
             default = "//formats:reference_docx",

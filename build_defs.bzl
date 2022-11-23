@@ -68,6 +68,8 @@ def md_document(
         deps = None,
         extra_dictionaries = None,
         increment_included_headers = False,
+        extra_pandoc_flags = None,
+        extra_latex_flags = None,
         version_override = None,
         existing_lib = None,
         main_document = True):
@@ -81,6 +83,9 @@ def md_document(
         increment_included_headers: if true, header level in included files is
             incremented, e.g. level 1 headers become level 2 headers. If false,
             headers are unchanged.
+        extra_pandoc_flags: extra flags to pass to pandoc.
+        extra_latex_flags: extra flags to pass to pandoc for latex-based
+            formats.
         version_override: set the document version to this value, rather than
             the computed value. Should only be used for testing.
         existing_lib: use an existing md_library rather than creating one; if
@@ -103,14 +108,19 @@ def md_document(
         )
         lib = name
 
+    extra_pandoc_flags = extra_pandoc_flags or []
+    extra_latex_flags = extra_latex_flags or []
+
     _md_md(
         name = name + "_md",
         lib = lib,
+        extra_pandoc_flags = extra_pandoc_flags,
         visibility = ["//visibility:private"],
     )
     _md_txt(
         name = name + "_txt",
         lib = lib,
+        extra_pandoc_flags = extra_pandoc_flags,
         visibility = ["//visibility:private"],
     )
     _md_tex_intermediate(
@@ -121,16 +131,19 @@ def md_document(
     _md_tex(
         name = name + "_tex",
         intermediate = name + "_tex_intermediate",
+        extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
         visibility = ["//visibility:private"],
     )
     _md_pdf(
         name = name + "_pdf",
         intermediate = name + "_tex_intermediate",
+        extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
         visibility = ["//visibility:private"],
     )
     _md_epub(
         name = name + "_epub",
         lib = lib,
+        extra_pandoc_flags = extra_pandoc_flags,
         visibility = ["//visibility:private"],
     )
     _md_mobi(
@@ -141,11 +154,13 @@ def md_document(
     _md_odt(
         name = name + "_odt",
         lib = lib,
+        extra_pandoc_flags = extra_pandoc_flags,
         visibility = ["//visibility:private"],
     )
     _md_docx(
         name = name + "_docx",
         lib = lib,
+        extra_pandoc_flags = extra_pandoc_flags,
         visibility = ["//visibility:private"],
     )
     _md_doc(

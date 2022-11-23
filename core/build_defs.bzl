@@ -7,6 +7,7 @@ MdLibraryInfo = provider(
         "output": "Compiled document, as json",
         "metadata": "Document metadata, as json",
         "dictionary": "Dictionary used for spellchecking",
+        "data": "Data deps of the document",
     },
 )
 
@@ -136,9 +137,10 @@ def _md_library_impl(ctx):
         progress_message = "%{label}: generating output",
     )
 
+    data = depset(ctx.attr.data, transitive = [dep[MdLibraryInfo].data for dep in ctx.attr.deps])
     return [
         DefaultInfo(files = depset([output, metadata, dictionary])),
-        MdLibraryInfo(name = ctx.label.name, output = output, metadata = metadata, dictionary = dictionary),
+        MdLibraryInfo(name = ctx.label.name, output = output, metadata = metadata, dictionary = dictionary, data = data),
     ]
 
 md_library = rule(
@@ -158,6 +160,10 @@ md_library = rule(
             allow_empty = True,
             allow_files = [".dic"],
             doc = "Dictionary files for spellchecking.",
+        ),
+        "data": attr.label_list(
+            allow_empty = True,
+            doc = "Data dependencies.",
         ),
         "increment_included_headers": attr.bool(
             default = False,

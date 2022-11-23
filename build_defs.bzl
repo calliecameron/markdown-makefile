@@ -24,6 +24,7 @@ def md_library(
         src = None,
         deps = None,
         extra_dictionaries = None,
+        data = None,
         increment_included_headers = False,
         version_override = ""):
     """md_library represents a markdown source file.
@@ -33,6 +34,7 @@ def md_library(
         src: the source file, if different from <name>.md.
         deps: other md_library targets used in !include statements in src.
         extra_dictionaries: extra dictionaries for spellchecking.
+        data: data dependencies.
         increment_included_headers: if true, header level in included files is
             incremented, e.g. level 1 headers become level 2 headers. If false,
             headers are unchanged.
@@ -43,12 +45,14 @@ def md_library(
         src = name + ".md"
     deps = deps or []
     extra_dictionaries = extra_dictionaries or []
+    data = data or []
 
     _md_library(
         name = name,
         src = src,
         deps = deps,
         dictionaries = native.glob([name + ".dic"]) + extra_dictionaries,
+        data = data,
         increment_included_headers = increment_included_headers,
         version_override = version_override,
         visibility = ["//visibility:public"],
@@ -67,6 +71,7 @@ def md_document(
         src = None,
         deps = None,
         extra_dictionaries = None,
+        data = None,
         increment_included_headers = False,
         extra_pandoc_flags = None,
         extra_latex_flags = None,
@@ -80,6 +85,7 @@ def md_document(
         src: the source file, if different from <name>.md.
         deps: other md_library targets used in !include statements in src.
         extra_dictionaries: extra dictionaries for spellchecking.
+        data: data dependencies.
         increment_included_headers: if true, header level in included files is
             incremented, e.g. level 1 headers become level 2 headers. If false,
             headers are unchanged.
@@ -103,6 +109,7 @@ def md_document(
             src = src,
             deps = deps,
             extra_dictionaries = extra_dictionaries,
+            data = data,
             increment_included_headers = increment_included_headers,
             version_override = version_override,
         )

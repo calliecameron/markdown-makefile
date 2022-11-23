@@ -42,7 +42,7 @@ def pandoc(ctx, ext, to_format, inputs, args, lib, output, progress_message = No
     progress_message = "%{label}: " + progress_message
     ctx.actions.run(
         outputs = [output],
-        inputs = [lib[MdLibraryInfo].output] + inputs,
+        inputs = [lib[MdLibraryInfo].output] + lib[MdLibraryInfo].data.to_list() + inputs,
         executable = "pandoc",
         arguments = [
             "--from=json",

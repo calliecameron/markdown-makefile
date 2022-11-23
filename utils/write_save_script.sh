@@ -3,22 +3,25 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") package out_file"
+    echo "Usage: $(basename "${0}") out_file package"
     exit 1
 }
 
 test -z "${1:-}" && usage
-PACKAGE="${1}"
-test -z "${2:-}" && usage
-OUT_FILE="${2}"
+OUT_FILE="${1}"
+PACKAGE="${2:-}" # Package will be empty in the root package.
+
+if [ -n "${PACKAGE}" ]; then
+    PACKAGE="${PACKAGE}/"
+fi
 
 cat >"${OUT_FILE}" <<EOF
 #!/bin/bash
 
 set -eu
 
-OUTPUT_DIR="${PACKAGE}/output"
-SAVE_DIR="\${BUILD_WORKSPACE_DIRECTORY}/${PACKAGE}/saved"
+OUTPUT_DIR="${PACKAGE}output"
+SAVE_DIR="\${BUILD_WORKSPACE_DIRECTORY}/${PACKAGE}saved"
 
 mkdir -p "\${SAVE_DIR}"
 cd "\${OUTPUT_DIR}"

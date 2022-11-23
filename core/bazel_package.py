@@ -66,8 +66,8 @@ def _validate_target(target: str) -> None:
 
 
 def canonicalise_label(label: str, current_package: str) -> Tuple[str, str]:
-    if not current_package:
-        raise ValueError('Current package must be specified')
+    if not label and not current_package:
+        raise ValueError('Label or current package must be specified')
 
     match = re.fullmatch(r'((?P<absolute>//)(?P<package>[^:]*))?:?(?P<target>[^:]+)?', label)
     if match is None:

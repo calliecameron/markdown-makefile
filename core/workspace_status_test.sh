@@ -12,6 +12,9 @@ SCRIPT="${PWD}/${1}"
 
 cd "${TEST_TMPDIR}"
 
+# Not a git repo, root package
+touch BUILD
+
 # Not a git repo
 mkdir a
 touch a/BUILD
@@ -61,6 +64,9 @@ PATH="${TEST_TMPDIR}/bin:${PATH}" "${SCRIPT}" && exit 1
 OUTPUT="$("${SCRIPT}")"
 
 echo "${OUTPUT}" | grep 'STABLE_PANDOC_VERSION '
+
+echo "${OUTPUT}" | grep 'STABLE_VERSION_ unversioned'
+echo "${OUTPUT}" | grep 'STABLE_REPO_ unversioned'
 
 echo "${OUTPUT}" | grep 'STABLE_VERSION_A unversioned'
 echo "${OUTPUT}" | grep 'STABLE_REPO_A unversioned'

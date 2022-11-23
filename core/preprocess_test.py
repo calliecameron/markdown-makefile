@@ -31,6 +31,7 @@ class TestPreprocess(unittest.TestCase):
             preprocess.get_include('!include ', 'a')
         with self.assertRaises(ValueError):
             preprocess.get_include('!include a:b:c', 'a')
+        self.assertEqual(preprocess.get_include('!include foo', ''), ':foo')
         self.assertEqual(preprocess.get_include('!include foo', 'a'), 'a:foo')
         self.assertEqual(preprocess.get_include('!include  :foo', 'a'), 'a:foo')
         self.assertEqual(preprocess.get_include('!include //:bar', 'a'), ':bar')
@@ -45,8 +46,8 @@ class TestPreprocess(unittest.TestCase):
 
         data = (GOOD % (':bar', '//blah:yay')).split('\n')
         self.assertNotEqual(preprocess.preprocess(
-            data, {'a:bar': 'a/bar.json', 'baz:quux': 'baz/quux.json'}, 'a'), [])
-        self.assertEqual('\n'.join(data), GOOD % ('a/bar.json', '//blah:yay'))
+            data, {':bar': 'bar.json', 'baz:quux': 'baz/quux.json'}, ''), [])
+        self.assertEqual('\n'.join(data), GOOD % ('bar.json', '//blah:yay'))
 
         self.assertNotEqual(preprocess.preprocess(['“'], {}, 'a'), [])
         self.assertNotEqual(preprocess.preprocess(['”'], {}, 'a'), [])
@@ -86,6 +87,13 @@ class TestPreprocess(unittest.TestCase):
             'a',
             [('a:bar', 'a/bar.json'), ('baz:quux', 'baz/quux.json')])
         self.assertEqual(output, GOOD % ('a/bar.json', 'baz/quux.json'))
+
+    def test_main_root_package(self) -> None:
+        output = self.run_script(
+            GOOD % (':bar', '//baz:quux'),
+            '',
+            [(':bar', 'bar.json'), ('baz:quux', 'baz/quux.json')])
+        self.assertEqual(output, GOOD % ('bar.json', 'baz/quux.json'))
 
     def test_main_fails(self) -> None:
         with self.assertRaises(subprocess.CalledProcessError):

@@ -15,12 +15,15 @@ class TestBazelPackage(unittest.TestCase):
 
     def test_package_key(self) -> None:
         self.assertEqual(bazel_package.package_key('a-b_/cd'), 'A_HYPHENMINUS_B___SOLIDUS_CD')
+        self.assertEqual(bazel_package.package_key(''), '')
 
     def test_version_key(self) -> None:
         self.assertEqual(bazel_package.version_key('foo'), 'STABLE_VERSION_foo')
+        self.assertEqual(bazel_package.version_key(''), 'STABLE_VERSION_')
 
     def test_repo_key(self) -> None:
         self.assertEqual(bazel_package.repo_key('foo'), 'STABLE_REPO_foo')
+        self.assertEqual(bazel_package.repo_key(''), 'STABLE_REPO_')
 
     def test_validate_package(self) -> None:
         bazel_package._validate_package('')
@@ -58,8 +61,6 @@ class TestBazelPackage(unittest.TestCase):
         with self.assertRaises(ValueError):
             bazel_package.canonicalise_label('', '')
         with self.assertRaises(ValueError):
-            bazel_package.canonicalise_label('a', '')
-        with self.assertRaises(ValueError):
             bazel_package.canonicalise_label('', 'a')
         with self.assertRaises(ValueError):
             bazel_package.canonicalise_label('/', 'a')
@@ -89,6 +90,7 @@ class TestBazelPackage(unittest.TestCase):
         self.assertEqual(bazel_package.canonicalise_label('//:a/b', 'z'), ('', 'a/b'))
         self.assertEqual(bazel_package.canonicalise_label(':a/b', 'z'), ('z', 'a/b'))
         self.assertEqual(bazel_package.canonicalise_label('a/b', 'z'), ('z', 'a/b'))
+        self.assertEqual(bazel_package.canonicalise_label('a', ''), ('', 'a'))
 
 
 if __name__ == '__main__':

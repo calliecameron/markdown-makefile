@@ -16,6 +16,8 @@ EXPECTED_PANDOC_VERSION = '2.19.2'
 
 @contextlib.contextmanager
 def chdir(path: str) -> Iterator[None]:
+    if not path:
+        path = '.'
     original_dir = os.getcwd()
     os.chdir(path)
     try:
@@ -78,7 +80,10 @@ def find_packages(root: str) -> List[str]:
     packages = []
     for dirpath, _, filenames in os.walk(root):
         if 'BUILD' in filenames:
-            packages.append(os.path.relpath(dirpath, root))
+            package = os.path.relpath(dirpath, root)
+            if package == '.':
+                package = ''
+            packages.append(package)
     return sorted(packages)
 
 

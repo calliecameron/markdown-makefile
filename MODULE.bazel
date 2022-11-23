@@ -1,3 +1,5 @@
+"""Module definition for markdown_makefile."""
+
 module(
     name = "markdown_makefile",
     version = "0.0.0",

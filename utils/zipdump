@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+
+function usage() {
+    echo "Usage: $(basename "${0}") file"
+    exit 1
+}
+
+test -z "${1:-}" && usage
+FILE="${1}"
+
+printf 'File hash: %s\n' "$(md5sum <"${FILE}")"
+unzip -c -a "${FILE}" | tail -n +2

@@ -185,3 +185,19 @@ def md_document(
             actual = name + "_save",
             visibility = ["//visibility:private"],
         )
+
+def md_git_repo(name = None):  # buildifier: disable=unused-variable
+    native.genrule(
+        name = "git_update_sh",
+        outs = ["git_update.sh"],
+        cmd = "$(location @markdown_makefile//utils:write_git_update_script) $@ %s" % native.package_name(),
+        exec_tools = ["@markdown_makefile//utils:write_git_update_script"],
+        visibility = ["//visibility:private"],
+    )
+
+    native.sh_binary(
+        name = "git_update",
+        srcs = ["git_update.sh"],
+        data = ["@markdown_makefile//utils:git_utils"],
+        visibility = ["//visibility:private"],
+    )

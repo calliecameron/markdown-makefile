@@ -54,6 +54,14 @@ def md_library(
         visibility = ["//visibility:public"],
     )
 
+    # The test just checks that the library builds, so the actual test script
+    # doesn't need to do anything.
+    native.sh_test(
+        name = name + "_test",
+        srcs = ["@markdown_makefile//utils:do_nothing"],
+        data = [name],
+    )
+
 def md_document(
         name,
         src = None,

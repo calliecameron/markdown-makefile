@@ -25,3 +25,9 @@ py_test(
     args = ["$(rootpath write_git_update_script.sh)"],
     data = ["write_git_update_script.sh"],
 )
+
+filegroup(
+    name = "do_nothing",
+    srcs = ["do_nothing.sh"],
+    visibility = ["//visibility:public"],
+)

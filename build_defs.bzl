@@ -56,6 +56,7 @@ def md_library(
 
 def md_document(
         name,
+        src = None,
         deps = None,
         extra_dictionaries = None,
         increment_included_headers = False,
@@ -66,6 +67,7 @@ def md_document(
 
     Args:
         name: the name of the document.
+        src: the source file, if different from <name>.md.
         deps: other md_library targets used in !include statements in src.
         extra_dictionaries: extra dictionaries for spellchecking.
         increment_included_headers: if true, header level in included files is
@@ -79,12 +81,13 @@ def md_document(
             some convenience aliases.
     """
     if existing_lib:
-        if deps or extra_dictionaries or increment_included_headers or version_override:
+        if src or deps or extra_dictionaries or increment_included_headers or version_override:
             native.fail("Other args must not be set when existing_lib is set")
         lib = existing_lib
     else:
         md_library(
             name = name,
+            src = src,
             deps = deps,
             extra_dictionaries = extra_dictionaries,
             increment_included_headers = increment_included_headers,

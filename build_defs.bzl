@@ -161,8 +161,8 @@ def md_document(
     native.genrule(
         name = name + "_save_sh",
         outs = [name + "_save.sh"],
-        cmd = "$(location @markdown_makefile//utils:write_save_script) $@ %s" % native.package_name(),
-        exec_tools = ["@markdown_makefile//utils:write_save_script"],
+        cmd = "$(location @markdown_makefile//formats:write_save_script) $@ %s" % native.package_name(),
+        exec_tools = ["@markdown_makefile//formats:write_save_script"],
         visibility = ["//visibility:private"],
     )
 

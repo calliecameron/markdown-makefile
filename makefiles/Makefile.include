@@ -24,43 +24,43 @@
 #        When unset, use current time.
 #
 
-MAKEFLAGS += --no-builtin-rules --no-builtin-variables
-.SUFFIXES:
-.SECONDEXPANSION:
+# MAKEFLAGS += --no-builtin-rules --no-builtin-variables
+# .SUFFIXES:
+# .SECONDEXPANSION:
 
-ifndef BASE
-$(error BASE must be set to the document name)
-endif
+# ifndef BASE
+# $(error BASE must be set to the document name)
+# endif
 
-PANDOC_VERSION=$(shell pandoc --version | grep '^pandoc')
-ifneq ($(PANDOC_VERSION),pandoc 2.13)
-$(warning "Unsupported pandoc version; expected 2.13, got $(PANDOC_VERSION)")
-endif
+# PANDOC_VERSION=$(shell pandoc --version | grep '^pandoc')
+# ifneq ($(PANDOC_VERSION),pandoc 2.13)
+# $(warning "Unsupported pandoc version; expected 2.13, got $(PANDOC_VERSION)")
+# endif
 
 
 # User-modifiable variables
-EXTRA_DICTIONARIES ?=
-EXTRA_PREPROCESSING_FLAGS ?=
+# EXTRA_DICTIONARIES ?=
+# EXTRA_PREPROCESSING_FLAGS ?=
 EXTRA_PANDOC_FLAGS ?=
-EXTRA_LATEX_FLAGS ?=
+# EXTRA_LATEX_FLAGS ?=
 EXTRA_DEPS ?=
-EXTRA_CLEAN_DEPS ?=
-DOC_VERSION ?=
-SOURCE_DATE_EPOCH ?=
+# EXTRA_CLEAN_DEPS ?=
+# DOC_VERSION ?=
+# SOURCE_DATE_EPOCH ?=
 
 ifdef SOURCE_DATE_EPOCH
 export SOURCE_DATE_EPOCH
 endif
 
 
-# Base variables
-OUT_DIR := output
-OUT_BASE := $(OUT_DIR)/$(BASE)
-SAVED_DIR := saved
-GITIGNORE := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitignore
-GITATTRIBUTES := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitattributes
-GITCONFIG := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitconfig
-ZIP_CLEANER := $(MARKDOWN_MAKEFILE_DIR)/templates/zip-cleaner.sh
+# # Base variables
+# OUT_DIR := output
+# OUT_BASE := $(OUT_DIR)/$(BASE)
+# SAVED_DIR := saved
+# GITIGNORE := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitignore
+# GITATTRIBUTES := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitattributes
+# GITCONFIG := $(MARKDOWN_MAKEFILE_DIR)/templates/default-gitconfig
+# ZIP_CLEANER := $(MARKDOWN_MAKEFILE_DIR)/templates/zip-cleaner.sh
 
 
 # # Top-level targets. These rely on the 'BASE' variable set in the user's
@@ -243,4 +243,4 @@ gitsetup: .gitignore .gitattributes .gitconfig
 # 	@ebook-convert $< $@
 
 
-.PRECIOUS: $(PREPROCESSED) $(METADATA) $(COMPLETE) $(VALIDATION_INPUT) $(METADATA_VALIDATION_INPUT) $(VALIDATED) $(DICTIONARY) $(SPELLCHECKED) $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED) $(METADATA_MS)
+# .PRECIOUS: $(PREPROCESSED) $(METADATA) $(COMPLETE) $(VALIDATION_INPUT) $(METADATA_VALIDATION_INPUT) $(VALIDATED) $(DICTIONARY) $(SPELLCHECKED) $(LATEX_HEADER_PROCESSED) $(LATEX_BEFORE_PROCESSED) $(METADATA_MS)

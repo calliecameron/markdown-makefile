@@ -37,6 +37,12 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+sh_binary(
+    name = "ebook_convert",
+    srcs = ["ebook_convert.sh"],
+    visibility = ["//visibility:public"],
+)
+
 filegroup(
     name = "reference_docx",
     srcs = ["reference.docx"],

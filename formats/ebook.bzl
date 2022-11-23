@@ -58,7 +58,7 @@ def _md_mobi_impl(ctx):
     ctx.actions.run(
         outputs = [output],
         inputs = [ctx.attr.epub[MdEpubInfo].output],
-        executable = "ebook-convert",
+        executable = ctx.attr._ebook_convert[DefaultInfo].files_to_run,
         arguments = [
             ctx.attr.epub[MdEpubInfo].output.path,
             output.path,
@@ -78,6 +78,9 @@ md_mobi = rule(
         "epub": attr.label(
             providers = [MdLibraryInfo, MdEpubInfo],
             doc = "An md_epub target.",
+        ),
+        "_ebook_convert": attr.label(
+            default = "//formats:ebook_convert",
         ),
         "_write_open_script": write_open_script(),
     },

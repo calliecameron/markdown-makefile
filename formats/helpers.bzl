@@ -2,6 +2,10 @@
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
 
+def expand_locations(ctx, lib, args):
+    data = lib[MdLibraryInfo].data.to_list()
+    return [ctx.expand_location(arg, targets = data) for arg in args]
+
 def output_for_ext(ctx, ext, lib):
     return ctx.actions.declare_file("output/" + lib[MdLibraryInfo].name + "." + ext)
 
@@ -37,12 +41,27 @@ def open_script(ctx, ext, file, write_open_script):
     return script
 
 def pandoc(ctx, ext, to_format, inputs, args, lib, output, progress_message = None):
+    """Run pandoc.
+
+    Args:
+        ctx: rule ctx.
+        ext: file extension of the output format.
+        to_format: pandoc output format.
+        inputs: action inputs.
+        args: extra action args.
+        lib: something that provides MdLibraryInfo.
+        output: the output file.
+        progress_message: message to display when running the action.
+    """
     if not progress_message:
         progress_message = "generating " + ext + " output"
     progress_message = "%{label}: " + progress_message
+    data_inputs = []
+    for target in lib[MdLibraryInfo].data.to_list():
+        data_inputs += target.files.to_list()
     ctx.actions.run(
         outputs = [output],
-        inputs = [lib[MdLibraryInfo].output] + lib[MdLibraryInfo].data.to_list() + inputs,
+        inputs = [lib[MdLibraryInfo].output] + data_inputs + inputs,
         executable = "pandoc",
         arguments = [
             "--from=json",
@@ -61,7 +80,7 @@ def pandoc_for_output(ctx, ext, to_format, inputs, args, lib):
     return output
 
 def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, lib, write_open_script):
-    file = pandoc_for_output(ctx, ext, to_format, inputs, args + ctx.attr.extra_pandoc_flags, lib)
+    file = pandoc_for_output(ctx, ext, to_format, inputs, args + expand_locations(ctx, lib, ctx.attr.extra_pandoc_flags), lib)
     script = open_script(ctx, ext, file, write_open_script)
 
     return [default_info_for_ext(ctx, file, script)]

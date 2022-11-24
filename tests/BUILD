@@ -8,8 +8,15 @@ md_document(
 
 md_document(
     name = "bar",
-    extra_latex_flags = ["--number-sections"],
-    extra_pandoc_flags = ["--table-of-contents"],
+    data = ["custom-toc.tex"],
+    extra_latex_flags = [
+        "--number-sections",
+        "--include-in-header=$(rootpath custom-toc.tex)",
+    ],
+    extra_pandoc_flags = [
+        "--table-of-contents",
+        "--toc-depth=1",
+    ],
     increment_included_headers = True,
     deps = [":foo"],
 )

@@ -1,7 +1,7 @@
 """Rules for ebook outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "open_script", "output_for_ext", "pandoc", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "output_for_ext", "pandoc", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdEpubInfo = provider(
     "Info for epub output",
@@ -17,7 +17,7 @@ def _md_epub_impl(ctx):
         "epub",
         "epub",
         [ctx.attr._css[DefaultInfo].files.to_list()[0]],
-        ["--css=" + ctx.attr._css[DefaultInfo].files.to_list()[0].path] + ctx.attr.extra_pandoc_flags,
+        ["--css=" + ctx.attr._css[DefaultInfo].files.to_list()[0].path] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
         ctx.attr.lib,
         intermediate,
     )

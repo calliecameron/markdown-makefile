@@ -1,7 +1,7 @@
 """Rules for word-processor outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "open_script", "output_for_ext", "pandoc", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "output_for_ext", "pandoc", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdDocxInfo = provider(
     "Info for docx output",
@@ -17,7 +17,7 @@ def _md_odt_impl(ctx):
         "odt",
         "odt",
         [],
-        ctx.attr.extra_pandoc_flags,
+        expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
         ctx.attr.lib,
         intermediate,
     )
@@ -61,7 +61,7 @@ def _md_docx_impl(ctx):
         [
             "--reference-doc=" + ctx.attr._template[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._filter[DefaultInfo].files.to_list()[0].path,
-        ] + ctx.attr.extra_pandoc_flags,
+        ] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
         ctx.attr.lib,
         intermediate,
     )

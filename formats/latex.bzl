@@ -1,7 +1,7 @@
 """Rules for latex-based outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "doc_for_ext", "pandoc", "simple_pandoc_output_impl", "write_open_script")
+load(":helpers.bzl", "doc_for_ext", "expand_locations", "pandoc", "simple_pandoc_output_impl", "write_open_script")
 
 _LATEX_VARS = [
     "--variable=fontsize:12pt",
@@ -79,7 +79,7 @@ def _tex_output_impl(ctx, ext, to, extra_args):
             "--include-in-header=" + ctx.attr.intermediate[MdTexIntermediateInfo].header.path,
             "--include-before-body=" + ctx.attr.intermediate[MdTexIntermediateInfo].before.path,
             "--template=" + ctx.attr._template[DefaultInfo].files.to_list()[0].path,
-        ] + extra_args + _LATEX_VARS + ctx.attr.extra_pandoc_flags,
+        ] + extra_args + _LATEX_VARS + expand_locations(ctx, ctx.attr.intermediate, ctx.attr.extra_pandoc_flags),
         ctx.attr.intermediate,
         ctx.attr._write_open_script,
     )

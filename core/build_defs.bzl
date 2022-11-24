@@ -163,6 +163,7 @@ md_library = rule(
         ),
         "data": attr.label_list(
             allow_empty = True,
+            allow_files = True,
             doc = "Data dependencies.",
         ),
         "increment_included_headers": attr.bool(

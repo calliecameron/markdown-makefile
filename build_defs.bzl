@@ -6,6 +6,7 @@ load("//formats:misc.bzl", _md_md = "md_md", _md_txt = "md_txt")
 load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
 load("//formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
 load("//formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
+load("//utils:git_repo.bzl", _md_git_repo = "md_git_repo")
 
 _FORMATS = [
     "md",
@@ -214,18 +215,4 @@ def md_document(
             visibility = ["//visibility:private"],
         )
 
-def md_git_repo(name = None):  # buildifier: disable=unused-variable
-    native.genrule(
-        name = "git_update_sh",
-        outs = ["git_update.sh"],
-        cmd = "$(location @markdown_makefile//utils:write_git_update_script) $@ %s" % native.package_name(),
-        exec_tools = ["@markdown_makefile//utils:write_git_update_script"],
-        visibility = ["//visibility:private"],
-    )
-
-    native.sh_binary(
-        name = "git_update",
-        srcs = ["git_update.sh"],
-        data = ["@markdown_makefile//utils:git_utils"],
-        visibility = ["//visibility:private"],
-    )
+md_git_repo = _md_git_repo

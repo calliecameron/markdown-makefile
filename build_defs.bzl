@@ -1,5 +1,6 @@
 """Public API of the module."""
 
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("//core:build_defs.bzl", _md_library = "md_library")
 load("//formats:misc.bzl", _md_md = "md_md", _md_txt = "md_txt")
 load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
@@ -58,12 +59,9 @@ def md_library(
         visibility = ["//visibility:public"],
     )
 
-    # The test just checks that the library builds, so the actual test script
-    # doesn't need to do anything.
-    native.sh_test(
+    build_test(
         name = name + "_test",
-        srcs = ["@markdown_makefile//utils:do_nothing"],
-        data = [name],
+        targets = [name],
     )
 
 def md_document(

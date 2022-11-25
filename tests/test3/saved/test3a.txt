@@ -1,5 +1,5 @@
 The Title Is ‘Baz’
-The Author
+An Author
 23 February 2019
 
 -   This is a section

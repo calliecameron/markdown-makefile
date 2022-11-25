@@ -1,6 +1,6 @@
 ---
 author:
-- The Author
+- An Author
 date: 23 February 2019
 docversion: reproducible
 identifier:

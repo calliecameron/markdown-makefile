@@ -66,9 +66,7 @@ class TestCollectionSrc(unittest.TestCase):
 
 # Foo
 
-**Bar**
-
-&nbsp;
+### Bar
 
 !include //foo
 """)
@@ -111,19 +109,13 @@ class TestCollectionSrc(unittest.TestCase):
 
 # Foo
 
-**2 January**
-
-&nbsp;
+### 2 January
 
 !include //foo
 
 # Bar
 
-**Baz**
-
-**3 January**
-
-&nbsp;
+### Baz, 3 January
 
 !include //bar
 

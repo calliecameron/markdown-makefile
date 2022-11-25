@@ -1,7 +1,6 @@
 ---
 author:
-- The Author
-date: 23 February 2019
+- An Author
 docversion: reproducible
 identifier:
 - scheme: DOI

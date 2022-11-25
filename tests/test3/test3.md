@@ -1,7 +1,7 @@
 ---
 title: The Title Is 'Baz'
 author:
-- The Author
+- An Author
 date: 23 February 2019
 identifier:
 - scheme: DOI

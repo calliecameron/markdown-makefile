@@ -28,12 +28,13 @@ def main() -> None:
         author = j['author'][0]
         print_author = author != args.author
         print_date = 'date' in j and j['date']
-        if print_author or print_date:
-            if print_author:
-                output += [f'**{author}**', '']
-            if print_date:
-                output += [f'**{j["date"]}**', '']
-            output += ['&nbsp;', '']
+        tagline = []
+        if print_author:
+            tagline.append(author)
+        if print_date:
+            tagline.append(j['date'])
+        if tagline:
+            output += ['### ' + ', '.join(tagline), '']
         output += [f'!include //{target}', '']
 
     with open(args.out_file, 'w', encoding='utf-8') as f:

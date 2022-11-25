@@ -7,18 +7,15 @@ lang: en-GB
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"
 title: Test 4
-wordcount: 768
+wordcount: 777
 ---
 
 -   [The Title](#the-title){#toc-the-title}
 -   [The Title](#the-title-1){#toc-the-title-1}
 -   [The Title Is ‘Baz’](#the-title-is-baz){#toc-the-title-is-baz}
+-   [Title](#title){#toc-title}
 
 # The Title
-
-**23 February 2019**
-
- 
 
 This is some text before a section. It shouldn’t be indented.
 
@@ -64,9 +61,7 @@ letters with accents: ëóû.
 
 # The Title
 
-**23 February 2019**
-
- 
+### An Author
 
 This is some text before a section. It shouldn’t be indented. Each
 section should start on a new page (but subsections shouldn’t).
@@ -117,9 +112,7 @@ And this is *even more italic text*.
 
 # The Title Is ‘Baz’
 
-**23 February 2019**
-
- 
+### An Author, 23 February 2019
 
 ## This is a section {#this-is-a-section}
 
@@ -187,6 +180,12 @@ This is a new paragraph. This text is [Small Caps]{.smallcaps}.
 ## This is a second section {#this-is-a-second-section}
 
 And this is *even more italic text*.
+
+# Title
+
+### 4 January 2022
+
+This is text before a section. It shouldn’t be indented.
 
 [^1]: This is a footnote. It should appear at the bottom of the page.
 

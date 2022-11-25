@@ -6,15 +6,12 @@ def expand_locations(ctx, lib, args):
     data = lib[MdLibraryInfo].data.to_list()
     return [ctx.expand_location(arg, targets = data) for arg in args]
 
-def output_for_ext(ctx, ext, lib):
-    return ctx.actions.declare_file("output/" + lib[MdLibraryInfo].name + "." + ext)
-
 def doc_for_ext(ext):
     return "md_" + ext + " generates " + ext + " output from an md_library."
 
 def default_info_for_ext(ctx, output, script):
     return DefaultInfo(
-        files = depset([script]),
+        files = depset([output, script]),
         runfiles = ctx.runfiles(files = [output]),
         executable = script,
     )
@@ -75,7 +72,7 @@ def pandoc(ctx, ext, to_format, inputs, args, lib, output, progress_message = No
     )
 
 def pandoc_for_output(ctx, ext, to_format, inputs, args, lib):
-    output = output_for_ext(ctx, ext, lib)
+    output = ctx.outputs.out
     pandoc(ctx, ext, to_format, inputs, args, lib, output)
     return output
 
@@ -98,6 +95,7 @@ def simple_pandoc_output_rule(impl, ext):
             "extra_pandoc_flags": attr.string_list(
                 doc = "Extra flags to pass to pandoc",
             ),
+            "out": attr.output(),
             "_write_open_script": write_open_script(),
         },
     )

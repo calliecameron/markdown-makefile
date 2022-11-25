@@ -20,3 +20,8 @@ md_document(
     increment_included_headers = True,
     deps = [":foo"],
 )
+
+exports_files(
+    ["diff_test.sh"],
+    visibility = ["__subpackages__"],
+)

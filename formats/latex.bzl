@@ -97,6 +97,7 @@ def _tex_output_rule(impl, ext):
             "extra_pandoc_flags": attr.string_list(
                 doc = "Extra flags to pass to pandoc",
             ),
+            "out": attr.output(),
             "_write_open_script": write_open_script(),
             "_template": attr.label(
                 default = "//formats:tex_template",

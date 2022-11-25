@@ -1,7 +1,7 @@
 """Rules for ebook outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "output_for_ext", "pandoc", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdEpubInfo = provider(
     "Info for epub output",
@@ -22,7 +22,7 @@ def _md_epub_impl(ctx):
         intermediate,
     )
 
-    output = output_for_ext(ctx, "epub", ctx.attr.lib)
+    output = ctx.outputs.out
     zip_cleaner(ctx, intermediate, output, ctx.attr._zip_cleaner)
 
     script = open_script(ctx, "epub", output, ctx.attr._write_open_script)
@@ -45,6 +45,7 @@ md_epub = rule(
         "extra_pandoc_flags": attr.string_list(
             doc = "Extra flags to pass to pandoc",
         ),
+        "out": attr.output(),
         "_css": attr.label(
             default = "//formats:epub_css",
         ),
@@ -54,7 +55,7 @@ md_epub = rule(
 )
 
 def _md_mobi_impl(ctx):
-    output = output_for_ext(ctx, "mobi", ctx.attr.epub)
+    output = ctx.outputs.out
     ctx.actions.run(
         outputs = [output],
         inputs = [ctx.attr.epub[MdEpubInfo].output],
@@ -79,6 +80,7 @@ md_mobi = rule(
             providers = [MdLibraryInfo, MdEpubInfo],
             doc = "An md_epub target.",
         ),
+        "out": attr.output(),
         "_ebook_convert": attr.label(
             default = "//formats:ebook_convert",
         ),

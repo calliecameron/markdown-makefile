@@ -22,6 +22,9 @@ _FORMATS = [
     "ms_docx",
 ]
 
+def _output(name, ext):
+    return "output/%s.%s" % (name, ext)
+
 def md_library(
         name,
         src = None,
@@ -122,12 +125,14 @@ def md_document(
         name = name + "_md",
         lib = lib,
         extra_pandoc_flags = extra_pandoc_flags,
+        out = _output(name, "md"),
         visibility = ["//visibility:private"],
     )
     _md_txt(
         name = name + "_txt",
         lib = lib,
         extra_pandoc_flags = extra_pandoc_flags,
+        out = _output(name, "txt"),
         visibility = ["//visibility:private"],
     )
     _md_tex_intermediate(
@@ -139,45 +144,53 @@ def md_document(
         name = name + "_tex",
         intermediate = name + "_tex_intermediate",
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
+        out = _output(name, "tex"),
         visibility = ["//visibility:private"],
     )
     _md_pdf(
         name = name + "_pdf",
         intermediate = name + "_tex_intermediate",
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
+        out = _output(name, "pdf"),
         visibility = ["//visibility:private"],
     )
     _md_epub(
         name = name + "_epub",
         lib = lib,
         extra_pandoc_flags = extra_pandoc_flags,
+        out = _output(name, "epub"),
         visibility = ["//visibility:private"],
     )
     _md_mobi(
         name = name + "_mobi",
         epub = name + "_epub",
+        out = _output(name, "mobi"),
         visibility = ["//visibility:private"],
     )
     _md_odt(
         name = name + "_odt",
         lib = lib,
         extra_pandoc_flags = extra_pandoc_flags,
+        out = _output(name, "odt"),
         visibility = ["//visibility:private"],
     )
     _md_docx(
         name = name + "_docx",
         lib = lib,
         extra_pandoc_flags = extra_pandoc_flags,
+        out = _output(name, "docx"),
         visibility = ["//visibility:private"],
     )
     _md_doc(
         name = name + "_doc",
         docx = name + "_docx",
+        out = _output(name, "doc"),
         visibility = ["//visibility:private"],
     )
     _md_ms_docx(
         name = name + "_ms_docx",
         lib = lib,
+        out = _output(name, "ms.docx"),
         visibility = ["//visibility:private"],
     )
 

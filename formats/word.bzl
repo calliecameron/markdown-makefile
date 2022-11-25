@@ -1,7 +1,7 @@
 """Rules for word-processor outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "output_for_ext", "pandoc", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdDocxInfo = provider(
     "Info for docx output",
@@ -22,7 +22,7 @@ def _md_odt_impl(ctx):
         intermediate,
     )
 
-    output = output_for_ext(ctx, "odt", ctx.attr.lib)
+    output = ctx.outputs.out
     zip_cleaner(ctx, intermediate, output, ctx.attr._zip_cleaner)
 
     script = open_script(ctx, "odt", output, ctx.attr._write_open_script)
@@ -43,6 +43,7 @@ md_odt = rule(
         "extra_pandoc_flags": attr.string_list(
             doc = "Extra flags to pass to pandoc",
         ),
+        "out": attr.output(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
     },
@@ -66,7 +67,7 @@ def _md_docx_impl(ctx):
         intermediate,
     )
 
-    output = output_for_ext(ctx, "docx", ctx.attr.lib)
+    output = ctx.outputs.out
     zip_cleaner(ctx, intermediate, output, ctx.attr._zip_cleaner)
 
     script = open_script(ctx, "docx", output, ctx.attr._write_open_script)
@@ -89,6 +90,7 @@ md_docx = rule(
         "extra_pandoc_flags": attr.string_list(
             doc = "Extra flags to pass to pandoc",
         ),
+        "out": attr.output(),
         "_template": attr.label(
             default = "//formats:reference_docx",
         ),
@@ -101,7 +103,7 @@ md_docx = rule(
 )
 
 def _md_doc_impl(ctx):
-    output = output_for_ext(ctx, "doc", ctx.attr.docx)
+    output = ctx.outputs.out
     ctx.actions.run(
         outputs = [output],
         inputs = [ctx.attr.docx[MdDocxInfo].output],
@@ -132,6 +134,7 @@ md_doc = rule(
             providers = [MdLibraryInfo, MdDocxInfo],
             doc = "An md_docx target.",
         ),
+        "out": attr.output(),
         "_write_open_script": write_open_script(),
     },
 )
@@ -180,7 +183,7 @@ def _md_ms_docx_impl(ctx):
         progress_message = "%{label}: generating ms.docx output",
     )
 
-    output = output_for_ext(ctx, "ms.docx", ctx.attr.lib)
+    output = ctx.outputs.out
     zip_cleaner(ctx, intermediate_docx, output, ctx.attr._zip_cleaner)
 
     script = open_script(ctx, "ms.docx", output, ctx.attr._write_open_script)
@@ -198,6 +201,7 @@ md_ms_docx = rule(
             providers = [MdLibraryInfo],
             doc = "An md_library target.",
         ),
+        "out": attr.output(),
         "_ms_metadata": attr.label(
             default = "//formats:ms_metadata",
         ),

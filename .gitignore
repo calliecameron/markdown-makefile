@@ -1,9 +1,6 @@
 *~
+/bazel-*
 auto/
 .dir-locals.el
 .env
-/bazel-bin
-/bazel-out
-/bazel-testlogs
-/bazel-markdown-makefile
 __pycache__/

@@ -8,7 +8,7 @@ function usage() {
 }
 
 test -z "${1:-}" && usage
-SCRIPT="${PWD}/${1}"
+SCRIPT="${1}"
 test -z "${2:-}" && usage
 DOCDUMP="${2}"
 test -z "${3:-}" && usage

@@ -84,7 +84,7 @@ def _md_library_impl(ctx):
     )
 
     dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
-    if ctx.attr.dictionaries:
+    if ctx.attr.dictionaries or ctx.attr.deps:
         dict_inputs = []
         dict_args = []
         for d in ctx.attr.dictionaries:

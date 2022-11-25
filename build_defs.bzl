@@ -7,6 +7,7 @@ load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_inte
 load("//formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
 load("//formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
 load("//utils:git_repo.bzl", _md_git_repo = "md_git_repo")
+load("//utils:workspace.bzl", _md_workspace = "md_workspace")
 
 _FORMATS = [
     "md",
@@ -216,3 +217,4 @@ def md_document(
         )
 
 md_git_repo = _md_git_repo
+md_workspace = _md_workspace

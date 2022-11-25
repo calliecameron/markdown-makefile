@@ -3,7 +3,7 @@
 set -eux
 
 function usage() {
-    echo "Usage: $(basename "${0}") git_update_script docdump pdfdump zipdump gitattributes gitconfig gitignore"
+    echo "Usage: $(basename "${0}") git_update_script docdump pdfdump zipdump gitattributes gitconfig gitignore precommit"
     exit 1
 }
 
@@ -21,6 +21,8 @@ test -z "${6:-}" && usage
 GITCONFIG="${6}"
 test -z "${7:-}" && usage
 GITIGNORE="${7}"
+test -z "${8:-}" && usage
+PRECOMMIT="${8}"
 
 (
     cd "${TEST_TMPDIR}"
@@ -36,6 +38,7 @@ BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}" "${SCRIPT}" \
     "${GITATTRIBUTES}" \
     "${GITCONFIG}" \
     "${GITIGNORE}" \
+    "${PRECOMMIT}" \
     a
 
 diff "${DOCDUMP}" "${TEST_TMPDIR}/a/.bin/docdump"
@@ -50,4 +53,6 @@ diff "${GITCONFIG}" "${TEST_TMPDIR}/a/.gitconfig"
 [ "$(stat -c '%a' "${TEST_TMPDIR}/a/.gitconfig")" = '600' ]
 diff "${GITIGNORE}" "${TEST_TMPDIR}/a/.gitignore"
 [ "$(stat -c '%a' "${TEST_TMPDIR}/a/.gitignore")" = '600' ]
+diff "${PRECOMMIT}" "${TEST_TMPDIR}/a/.git/hooks/pre-commit"
+[ "$(stat -c '%a' "${TEST_TMPDIR}/a/.git/hooks/pre-commit")" = '700' ]
 grep 'path = ../.gitconfig' "${TEST_TMPDIR}/a/.git/config" >/dev/null

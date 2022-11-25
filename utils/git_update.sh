@@ -3,7 +3,7 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") docdump pdfdump zipdump gitattributes gitconfig gitignore package"
+    echo "Usage: $(basename "${0}") docdump pdfdump zipdump gitattributes gitconfig gitignore precommit package"
     exit 1
 }
 
@@ -19,7 +19,9 @@ test -z "${5:-}" && usage
 GITCONFIG="${5}"
 test -z "${6:-}" && usage
 GITIGNORE="${6}"
-PACKAGE="${7:-}" # Package will be empty in the root package.
+test -z "${7:-}" && usage
+PRECOMMIT="${7}"
+PACKAGE="${8:-}" # Package will be empty in the root package.
 
 if [ -n "${PACKAGE}" ]; then
     SOURCE_DIR="${BUILD_WORKSPACE_DIRECTORY}/${PACKAGE}"
@@ -45,5 +47,7 @@ cp "${GITATTRIBUTES}" "${SOURCE_DIR}/.gitattributes"
 cp "${GITCONFIG}" "${SOURCE_DIR}/.gitconfig"
 cp "${GITIGNORE}" "${SOURCE_DIR}/.gitignore"
 chmod u=rw "${SOURCE_DIR}/.gitattributes" "${SOURCE_DIR}/.gitconfig" "${SOURCE_DIR}/.gitignore"
+cp "${PRECOMMIT}" "${SOURCE_DIR}/.git/hooks/pre-commit"
+chmod u=rwx "${SOURCE_DIR}/.git/hooks/pre-commit"
 cd "${SOURCE_DIR}"
 git config --local include.path ../.gitconfig

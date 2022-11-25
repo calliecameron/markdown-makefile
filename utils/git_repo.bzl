@@ -8,6 +8,7 @@ def md_git_repo(name = None):  # buildifier: disable=unused-variable
         "$(rootpath @markdown_makefile//utils:default_gitattributes)",
         "$(rootpath @markdown_makefile//utils:default_gitconfig)",
         "$(rootpath @markdown_makefile//utils:default_gitignore)",
+        "$(rootpath @markdown_makefile//utils:precommit)",
     ]
     common_data = [
         "@markdown_makefile//utils:docdump",
@@ -16,6 +17,7 @@ def md_git_repo(name = None):  # buildifier: disable=unused-variable
         "@markdown_makefile//utils:default_gitattributes",
         "@markdown_makefile//utils:default_gitconfig",
         "@markdown_makefile//utils:default_gitignore",
+        "@markdown_makefile//utils:precommit",
     ]
 
     native.sh_binary(
@@ -37,6 +39,7 @@ def md_git_repo(name = None):  # buildifier: disable=unused-variable
             ".gitconfig",
             ".gitignore",
             ".git/config",
+            ".git/hooks/pre-commit",
         ],
         args = common_args + [
             "$(rootpath .bin/docdump)",
@@ -46,6 +49,7 @@ def md_git_repo(name = None):  # buildifier: disable=unused-variable
             "$(rootpath .gitconfig)",
             "$(rootpath .gitignore)",
             "$(rootpath .git/config)",
+            "$(rootpath .git/hooks/pre-commit)",
         ],
         visibility = ["//visibility:private"],
     )

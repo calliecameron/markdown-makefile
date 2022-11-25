@@ -6,6 +6,7 @@ exports_files(
         "default_gitattributes",
         "default_gitconfig",
         "default_gitignore",
+        "precommit",
         "git_update.sh",
         "git_test.sh",
     ],
@@ -23,6 +24,7 @@ sh_test(
         "$(rootpath default_gitattributes)",
         "$(rootpath default_gitconfig)",
         "$(rootpath default_gitignore)",
+        "$(rootpath precommit)",
     ],
     data = [
         "default_gitattributes",
@@ -31,6 +33,7 @@ sh_test(
         "docdump",
         "git_update.sh",
         "pdfdump",
+        "precommit",
         "zipdump",
     ],
 )

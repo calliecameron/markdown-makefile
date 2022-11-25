@@ -24,10 +24,12 @@ def diff_test(target, name = None):  # buildifier: disable=unused-variable
     """
     _diff_test(target, "md", "cat")
     _diff_test(target, "txt", "cat")
+
     _diff_test(target, "tex", "cat")
     _diff_test(target, "pdf", "$(rootpath //utils:pdfdump)", "//utils:pdfdump")
+
     _diff_test(target, "epub", "$(rootpath //utils:zipdump)", "//utils:zipdump")
-    # Mobi is nondeterministic, so we don't diff it.
+    # Mobi is nondeterministic, so we don't test it
 
     _diff_test(target, "odt", "$(rootpath //utils:zipdump)", "//utils:zipdump")
     _diff_test(target, "docx", "$(rootpath //utils:zipdump)", "//utils:zipdump")

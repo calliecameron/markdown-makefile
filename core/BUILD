@@ -140,6 +140,20 @@ py_test(
     deps = [":test_utils"],
 )
 
+filegroup(
+    name = "cleanup",
+    srcs = ["cleanup.lua"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "cleanup_test",
+    srcs = ["cleanup_test.py"],
+    args = ["$(rootpath cleanup.lua)"],
+    data = ["cleanup.lua"],
+    deps = [":test_utils"],
+)
+
 sh_binary(
     name = "write_dictionary",
     srcs = ["write_dictionary.sh"],

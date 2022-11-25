@@ -61,6 +61,7 @@ def _md_library_impl(ctx):
                  ctx.attr._starts_with_text[DefaultInfo].files.to_list() +
                  ctx.attr._wordcount[DefaultInfo].files.to_list() +
                  ctx.attr._write_metadata[DefaultInfo].files.to_list() +
+                 ctx.attr._cleanup[DefaultInfo].files.to_list() +
                  [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
         executable = "pandoc",
         arguments = [
@@ -69,6 +70,7 @@ def _md_library_impl(ctx):
             "--lua-filter=" + ctx.attr._starts_with_text[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._wordcount[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._write_metadata[DefaultInfo].files.to_list()[0].path,
+            "--lua-filter=" + ctx.attr._cleanup[DefaultInfo].files.to_list()[0].path,
             "--metadata-file=" + base_metadata.path,
             "--metadata=metadata-out-file:" + metadata.path,
             "--from=markdown+smart",
@@ -197,6 +199,9 @@ md_library = rule(
         ),
         "_write_metadata": attr.label(
             default = "//core:write_metadata",
+        ),
+        "_cleanup": attr.label(
+            default = "//core:cleanup",
         ),
         "_write_dictionary": attr.label(
             default = "//core:write_dictionary",

@@ -7,7 +7,6 @@ identifier:
 - scheme: DOI
   text: "doi:10.234234.234/33"
 lang: en-GB
-repo: /home/callie/markdown-makefile-dev/markdown-makefile/.git
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 starts-with-text: t
 subject: "Version: reproducible"

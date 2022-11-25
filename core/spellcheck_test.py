@@ -10,7 +10,7 @@ SCRIPT = ''
 
 DOC = """The Title
 
-Test text baz
+Test text baz shouldn’t fail
 """
 
 

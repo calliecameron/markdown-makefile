@@ -15,9 +15,10 @@ test -z "${3:-}" && usage
 OUT_FILE="${3}"
 
 # Hunspell doesn't like single curly quotes
+# shellcheck disable=SC1112
 OUTPUT="$(
     perl -pe 's/(\W)‘/$1/g;s/’(\W)/$1/g;s/^‘//;s/’$//;' <"${IN_FILE}" |
-        HOME="${PWD}" hunspell -d en_GB -p "${DICT_FILE}" -l |
+        HOME="${PWD}" LC_ALL='en_GB.UTF-8' hunspell -d en_GB -p "${DICT_FILE}" -l |
         LC_ALL=C sort |
         uniq
 )"

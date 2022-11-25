@@ -56,7 +56,7 @@ fi
 echo
 
 if [ -n "${DIFF}" ]; then
-    echo 'Found diff'
+    echo "Found diff; 'bazel run :git_update' to fix"
     exit 1
 fi
 

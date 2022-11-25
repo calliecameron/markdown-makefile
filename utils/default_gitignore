@@ -1,2 +1,6 @@
 *~
 /bazel-*
+auto/
+.dir-locals.el
+.env
+__pycache__/

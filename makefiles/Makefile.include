@@ -104,17 +104,17 @@ endif
 # 	@rm -rf $(SAVED_DIR)
 # 	@cp -a $(OUT_DIR) $(SAVED_DIR)
 
-gitsetup: .gitignore .gitattributes .gitconfig
+# gitsetup: .gitignore .gitattributes .gitconfig
 
-.gitignore: .FORCE
-	@cp $(GITIGNORE) .gitignore
+# .gitignore: .FORCE
+# 	@cp $(GITIGNORE) .gitignore
 
-.gitattributes: .FORCE
-	@cp $(GITATTRIBUTES) .gitattributes
+# .gitattributes: .FORCE
+# 	@cp $(GITATTRIBUTES) .gitattributes
 
-.gitconfig: .FORCE
-	@cp $(GITCONFIG) .gitconfig
-	@git config --local include.path ../.gitconfig
+# .gitconfig: .FORCE
+# 	@cp $(GITCONFIG) .gitconfig
+# 	@git config --local include.path ../.gitconfig
 
 # clean:
 # 	@rm -rf $(OUT_DIR) *~ $(EXTRA_CLEAN_DEPS)

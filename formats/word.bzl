@@ -18,6 +18,7 @@ def _md_odt_impl(ctx):
         "odt",
         [],
         expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
+        {},
         ctx.attr.lib,
         intermediate,
     )
@@ -63,6 +64,7 @@ def _md_docx_impl(ctx):
             "--reference-doc=" + ctx.attr._template[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._filter[DefaultInfo].files.to_list()[0].path,
         ] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
+        {},
         ctx.attr.lib,
         intermediate,
     )
@@ -162,6 +164,7 @@ def _md_ms_docx_impl(ctx):
             "--metadata-file=" + metadata.path,
             "--standalone",
         ],
+        {},
         ctx.attr.lib,
         intermediate_md,
         "generating ms intermediate markdown",

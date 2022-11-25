@@ -31,6 +31,7 @@ def _md_tex_intermediate_impl(ctx):
             "latex",
             [template[DefaultInfo].files.to_list()[0]],
             ["--template=" + template[DefaultInfo].files.to_list()[0].path] + _LATEX_VARS,
+            {},
             ctx.attr.lib,
             output,
             "generating latex " + name,
@@ -66,6 +67,9 @@ md_tex_intermediate = rule(
 )
 
 def _tex_output_impl(ctx, ext, to, extra_args):
+    env = {}
+    if ctx.attr.timestamp_override:
+        env["SOURCE_DATE_EPOCH"] = ctx.attr.timestamp_override
     return simple_pandoc_output_impl(
         ctx,
         ext,
@@ -80,6 +84,7 @@ def _tex_output_impl(ctx, ext, to, extra_args):
             "--include-before-body=" + ctx.attr.intermediate[MdTexIntermediateInfo].before.path,
             "--template=" + ctx.attr._template[DefaultInfo].files.to_list()[0].path,
         ] + extra_args + _LATEX_VARS + expand_locations(ctx, ctx.attr.intermediate, ctx.attr.extra_pandoc_flags),
+        env,
         ctx.attr.intermediate,
         ctx.attr._write_open_script,
     )
@@ -97,6 +102,7 @@ def _tex_output_rule(impl, ext):
             "extra_pandoc_flags": attr.string_list(
                 doc = "Extra flags to pass to pandoc",
             ),
+            "timestamp_override": attr.string(),
             "out": attr.output(),
             "_write_open_script": write_open_script(),
             "_template": attr.label(

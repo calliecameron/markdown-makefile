@@ -18,6 +18,7 @@ def _md_epub_impl(ctx):
         "epub",
         [ctx.attr._css[DefaultInfo].files.to_list()[0]],
         ["--css=" + ctx.attr._css[DefaultInfo].files.to_list()[0].path] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
+        {},
         ctx.attr.lib,
         intermediate,
     )

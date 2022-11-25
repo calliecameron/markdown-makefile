@@ -37,7 +37,7 @@ def open_script(ctx, ext, file, write_open_script):
     )
     return script
 
-def pandoc(ctx, ext, to_format, inputs, args, lib, output, progress_message = None):
+def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message = None):
     """Run pandoc.
 
     Args:
@@ -46,6 +46,7 @@ def pandoc(ctx, ext, to_format, inputs, args, lib, output, progress_message = No
         to_format: pandoc output format.
         inputs: action inputs.
         args: extra action args.
+        env: environment variables to pass to pandoc.
         lib: something that provides MdLibraryInfo.
         output: the output file.
         progress_message: message to display when running the action.
@@ -68,16 +69,17 @@ def pandoc(ctx, ext, to_format, inputs, args, lib, output, progress_message = No
         ] + args + [
             lib[MdLibraryInfo].output.path,
         ],
+        env = env,
         progress_message = progress_message,
     )
 
-def pandoc_for_output(ctx, ext, to_format, inputs, args, lib):
+def pandoc_for_output(ctx, ext, to_format, inputs, args, env, lib):
     output = ctx.outputs.out
-    pandoc(ctx, ext, to_format, inputs, args, lib, output)
+    pandoc(ctx, ext, to_format, inputs, args, env, lib, output)
     return output
 
-def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, lib, write_open_script):
-    file = pandoc_for_output(ctx, ext, to_format, inputs, args + expand_locations(ctx, lib, ctx.attr.extra_pandoc_flags), lib)
+def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, env, lib, write_open_script):
+    file = pandoc_for_output(ctx, ext, to_format, inputs, args + expand_locations(ctx, lib, ctx.attr.extra_pandoc_flags), env, lib)
     script = open_script(ctx, ext, file, write_open_script)
 
     return [default_info_for_ext(ctx, file, script)]

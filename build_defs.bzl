@@ -79,6 +79,7 @@ def md_document(
         extra_pandoc_flags = None,
         extra_latex_flags = None,
         version_override = None,
+        timestamp_override = None,
         existing_lib = None,
         main_document = True):
     """md_document compiles a markdown source file into many formats.
@@ -97,6 +98,8 @@ def md_document(
             formats.
         version_override: set the document version to this value, rather than
             the computed value. Should only be used for testing.
+        timestamp_override: set the build timestamp to this value, rather than
+            the current value. Should only be used for testing.
         existing_lib: use an existing md_library rather than creating one; if
             set, most other args must not be set.
         main_document: whether this is the main document in the package; creates
@@ -145,6 +148,7 @@ def md_document(
         intermediate = name + "_tex_intermediate",
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
         out = _output(name, "tex"),
+        timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_pdf(
@@ -152,6 +156,7 @@ def md_document(
         intermediate = name + "_tex_intermediate",
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
         out = _output(name, "pdf"),
+        timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_epub(

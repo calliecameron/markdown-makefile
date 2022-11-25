@@ -6,6 +6,7 @@ load("//formats:misc.bzl", _md_md = "md_md", _md_txt = "md_txt")
 load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
 load("//formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
 load("//formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
+load("//utils:collection.bzl", _md_collection_src = "md_collection_src")
 load("//utils:git_repo.bzl", _md_git_repo = "md_git_repo")
 load("//utils:workspace.bzl", _md_workspace = "md_workspace")
 
@@ -238,6 +239,58 @@ def md_document(
             actual = name + "_save",
             visibility = ["//visibility:private"],
         )
+
+def md_collection(
+        name,
+        title,
+        author,
+        deps,
+        date = None,
+        version_override = None,
+        timestamp_override = None,
+        main_document = True):
+    """md_collection collects multiple documents into a single document.
+
+    Args:
+        name: the name of the document.
+        title: the title of the collection.
+        author: the author of the collection.
+        date: the date of the collection.
+        deps: md_library targets to include in the collection.
+            formats.
+        version_override: set the document version to this value, rather than
+            the computed value. Should only be used for testing.
+        timestamp_override: set the build timestamp to this value, rather than
+            the current value. Should only be used for testing.
+        main_document: whether this is the main document in the package; creates
+            some convenience aliases.
+    """
+    _md_collection_src(
+        name = name + "_src",
+        title = title,
+        author = author,
+        date = date or "",
+        deps = deps,
+    )
+
+    md_document(
+        name = name,
+        src = name + "_src",
+        deps = deps,
+        data = ["@markdown_makefile//utils:collection_header.tex"],
+        increment_included_headers = True,
+        extra_pandoc_flags = [
+            "--table-of-contents",
+            "--toc-depth=1",
+        ],
+        extra_latex_flags = [
+            "--variable=section-page-break",
+            "--include-in-header=$(rootpath @markdown_makefile//utils:collection_header.tex)",
+        ],
+        version_override = version_override,
+        timestamp_override = timestamp_override,
+        main_document = main_document,
+    )
 
 md_git_repo = _md_git_repo
 md_workspace = _md_workspace

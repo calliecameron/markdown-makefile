@@ -8,7 +8,7 @@ import bazel_package
 INCLUDE = '!include'
 CURLY_QUOTES = '“”‘’'
 INCLUDE_MSG = ("Incorrectly-formatted include. Must be '!include <md_library label>', e.g. "
-               "'!include //foo:bar'. %s")
+               "'!include //foo:bar'. %s, %s")
 CURLY_QUOTE_MSG = 'Literal curly quotes must be backslash-escaped.'
 EN_DASH_MSG = "Literal en-dashes must be replaced with '--'"
 EM_DASH_MSG = "Literal em-dashes must be replaced with '---'"

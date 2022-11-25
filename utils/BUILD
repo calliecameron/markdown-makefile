@@ -1,3 +1,5 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_test")
+
 exports_files(
     [
         "bindump",
@@ -11,6 +13,7 @@ exports_files(
         "git_update.sh",
         "git_test.sh",
         "new_package.sh",
+        "collection_header.tex",
     ],
     visibility = ["//visibility:public"],
 )
@@ -47,4 +50,17 @@ sh_test(
     srcs = ["new_package_test.sh"],
     args = ["$(rootpath new_package.sh)"],
     data = ["new_package.sh"],
+)
+
+py_binary(
+    name = "collection_src",
+    srcs = ["collection_src.py"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "collection_src_test",
+    srcs = ["collection_src_test.py"],
+    args = ["$(rootpath collection_src.py)"],
+    data = ["collection_src.py"],
 )

@@ -1,8 +1,8 @@
-% The Title
-% The Author
-% 23 February 2019
-
 ---
+title: The Title
+author:
+- The Author
+date: 23 February 2019
 identifier:
 - scheme: DOI
   text: doi:10.234234.234/33
@@ -30,13 +30,13 @@ Test text test text test text.
 > | This is a quoted line block. It should be indented slightly
 > | and have a *line break* after 'slightly', and **formatting**.
 
-> | “These literal double curly quotes, used where smart
+> | \“These literal double curly quotes, used where smart
 > | quotes gets it wrong, curl the right way even though
-> | they're on different lines.”
+> | they're on different lines.\”
 
-> | ‘These literal single curly quotes, used where smart
+> | \‘These literal single curly quotes, used where smart
 > | quotes gets it wrong, curl the right way even though
-> | they're on different lines.’
+> | they're on different lines.\’
 
 After this line there should be stars.
 

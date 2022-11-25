@@ -1,7 +1,7 @@
 """Rules for latex-based outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "doc_for_ext", "expand_locations", "pandoc", "simple_pandoc_output_impl", "write_open_script")
+load(":helpers.bzl", "doc_for_ext", "expand_locations", "pandoc", "simple_pandoc_output_impl", "timestamp_override", "write_open_script")
 
 _LATEX_VARS = [
     "--variable=fontsize:12pt",
@@ -67,9 +67,6 @@ md_tex_intermediate = rule(
 )
 
 def _tex_output_impl(ctx, ext, to, extra_args):
-    env = {}
-    if ctx.attr.timestamp_override:
-        env["SOURCE_DATE_EPOCH"] = ctx.attr.timestamp_override
     return simple_pandoc_output_impl(
         ctx,
         ext,
@@ -86,7 +83,7 @@ def _tex_output_impl(ctx, ext, to, extra_args):
             "--template=" + ctx.attr._template[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._filter[DefaultInfo].files.to_list()[0].path,
         ] + extra_args + _LATEX_VARS + expand_locations(ctx, ctx.attr.intermediate, ctx.attr.extra_pandoc_flags),
-        env,
+        timestamp_override(ctx),
         ctx.attr.intermediate,
         ctx.attr._write_open_script,
     )

@@ -16,6 +16,12 @@ def default_info_for_ext(ctx, output, script):
         executable = script,
     )
 
+def timestamp_override(ctx):
+    env = {}
+    if ctx.attr.timestamp_override:
+        env["SOURCE_DATE_EPOCH"] = ctx.attr.timestamp_override
+    return env
+
 def write_open_script():
     return attr.label(
         default = "//formats:write_open_script",

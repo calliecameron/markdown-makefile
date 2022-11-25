@@ -164,6 +164,7 @@ def md_document(
         lib = lib,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "epub"),
+        timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_mobi(

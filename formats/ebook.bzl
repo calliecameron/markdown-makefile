@@ -1,7 +1,7 @@
 """Rules for ebook outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdEpubInfo = provider(
     "Info for epub output",
@@ -18,7 +18,7 @@ def _md_epub_impl(ctx):
         "epub",
         [ctx.attr._css[DefaultInfo].files.to_list()[0]],
         ["--css=" + ctx.attr._css[DefaultInfo].files.to_list()[0].path] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
-        {},
+        timestamp_override(ctx),
         ctx.attr.lib,
         intermediate,
     )
@@ -47,6 +47,7 @@ md_epub = rule(
             doc = "Extra flags to pass to pandoc",
         ),
         "out": attr.output(),
+        "timestamp_override": attr.string(),
         "_css": attr.label(
             default = "//formats:epub_css",
         ),

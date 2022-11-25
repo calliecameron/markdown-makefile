@@ -16,7 +16,16 @@ def _diff_test(target, ext, tool, tool_target = None):
     )
 
 def diff_test(target, name = None):  # buildifier: disable=unused-variable
+    """Diff tests for target's output.
+
+    Args:
+        target: name of the output.
+        name: unused.
+    """
     _diff_test(target, "md", "cat")
     _diff_test(target, "txt", "cat")
     _diff_test(target, "tex", "cat")
     _diff_test(target, "pdf", "$(rootpath //utils:pdfdump)", "//utils:pdfdump")
+    _diff_test(target, "epub", "$(rootpath //utils:zipdump)", "//utils:zipdump")
+    # Mobi is nondeterministic, so we don't diff it.
+    

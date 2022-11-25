@@ -52,6 +52,9 @@ if [ -z "${IS_GIT_REPO}" ]; then
         cd "${SOURCE_DIR}"
         git init .
     )
+fi
+
+if [ -d "${SOURCE_DIR}/.git" ]; then
     cat >"${SOURCE_DIR}/BUILD" <<EOF
 load("@markdown_makefile//:build_defs.bzl", "md_document", "md_git_repo")
 

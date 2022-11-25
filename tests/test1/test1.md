@@ -1,6 +1,7 @@
 ---
 title: The Title
-author: The Author
+author:
+- The Author
 date: 23 February 2019
 identifier:
 - scheme: DOI

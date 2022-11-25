@@ -7,21 +7,22 @@ identifier:
 - scheme: DOI
   text: "doi:10.234234.234/33"
 lang: en-GB
-source-md5: f167cd23d83cea06094082828f8aa62b
+repo: /home/callie/markdown-makefile-dev/markdown-makefile/.git
+source-md5: 2518a18c39cbd5e88b46c164d163e14a
 starts-with-text: t
 subject: "Version: reproducible"
 title: The Title
-wordcount: 217
+wordcount: 218
 ---
 
-This is some text before a section. It shouldn't be indented.
+This is some text before a section. It shouldn’t be indented.
 
 # This is a section
 
 This is some test text. This is formatted in *italics* and **bold**,
-with - various -- dashes---, and trailing dots...
+with - various – dashes—, and trailing dots…
 
-'These quotes should be curly,' and "so should these." There should be a
+‘These quotes should be curly,’ and “so should these.” There should be a
 blank line before the next paragraph:
 
  
@@ -34,19 +35,19 @@ should be `monospace`.
 
 Test text test text test text.
 
-> This is a quote block. It should be indented slightly and shouldn't
+> This is a quote block. It should be indented slightly and shouldn’t
 > contain a line break.
 
 > | This is a quoted line block. It should be indented slightly
-> | and have a *line break* after 'slightly', and **formatting**.
+> | and have a *line break* after ‘slightly’, and **formatting**.
 
 > | “These literal double curly quotes, used where smart
 > | quotes gets it wrong, curl the right way even though
-> | they're on different lines.”
+> | they’re on different lines.”
 
 > | ‘These literal single curly quotes, used where smart
 > | quotes gets it wrong, curl the right way even though
-> | they're on different lines.’
+> | they’re on different lines.’
 
 After this line there should be stars.
 

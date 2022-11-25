@@ -16,4 +16,5 @@ def _diff_test(target, ext, tool):
     )
 
 def diff_test(target, name = None):  # buildifier: disable=unused-variable
+    _diff_test(target, "md", "cat")
     _diff_test(target, "txt", "cat")

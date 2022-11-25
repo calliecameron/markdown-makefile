@@ -141,6 +141,7 @@ def md_document(
     _md_tex_intermediate(
         name = name + "_tex_intermediate",
         lib = lib,
+        extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
         visibility = ["//visibility:private"],
     )
     _md_tex(

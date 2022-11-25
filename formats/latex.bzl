@@ -30,7 +30,8 @@ def _md_tex_intermediate_impl(ctx):
             "",
             "latex",
             [template[DefaultInfo].files.to_list()[0]],
-            ["--template=" + template[DefaultInfo].files.to_list()[0].path] + _LATEX_VARS,
+            ["--template=" + template[DefaultInfo].files.to_list()[0].path] +
+            _LATEX_VARS + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
             {},
             ctx.attr.lib,
             output,
@@ -56,6 +57,9 @@ md_tex_intermediate = rule(
         "lib": attr.label(
             providers = [MdLibraryInfo],
             doc = "An md_library target.",
+        ),
+        "extra_pandoc_flags": attr.string_list(
+            doc = "Extra flags to pass to pandoc",
         ),
         "_header_template": attr.label(
             default = "//formats:latex_header_template",

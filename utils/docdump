@@ -10,5 +10,5 @@ function usage() {
 test -z "${1:-}" && usage
 FILE="${1}"
 
-printf 'File hash: %s\n' "$(md5sum < "${FILE}")"
+printf 'File hash: %s\n' "$(md5sum <"${FILE}")"
 catdoc "${FILE}"

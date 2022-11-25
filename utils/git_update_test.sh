@@ -3,26 +3,28 @@
 set -eux
 
 function usage() {
-    echo "Usage: $(basename "${0}") git_update_script docdump pdfdump zipdump gitattributes gitconfig gitignore precommit"
+    echo "Usage: $(basename "${0}") git_update_script bindump docdump pdfdump zipdump gitattributes gitconfig gitignore precommit"
     exit 1
 }
 
 test -z "${1:-}" && usage
 SCRIPT="${1}"
 test -z "${2:-}" && usage
-DOCDUMP="${2}"
+BINDUMP="${2}"
 test -z "${3:-}" && usage
-PDFDUMP="${3}"
+DOCDUMP="${3}"
 test -z "${4:-}" && usage
-ZIPDUMP="${4}"
+PDFDUMP="${4}"
 test -z "${5:-}" && usage
-GITATTRIBUTES="${5}"
+ZIPDUMP="${5}"
 test -z "${6:-}" && usage
-GITCONFIG="${6}"
+GITATTRIBUTES="${6}"
 test -z "${7:-}" && usage
-GITIGNORE="${7}"
+GITCONFIG="${7}"
 test -z "${8:-}" && usage
-PRECOMMIT="${8}"
+GITIGNORE="${8}"
+test -z "${9:-}" && usage
+PRECOMMIT="${9}"
 
 (
     cd "${TEST_TMPDIR}"
@@ -32,6 +34,7 @@ PRECOMMIT="${8}"
 )
 
 BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}" "${SCRIPT}" \
+    "${BINDUMP}" \
     "${DOCDUMP}" \
     "${PDFDUMP}" \
     "${ZIPDUMP}" \
@@ -41,6 +44,8 @@ BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}" "${SCRIPT}" \
     "${PRECOMMIT}" \
     a
 
+diff "${BINDUMP}" "${TEST_TMPDIR}/a/.bin/bindump"
+[ "$(stat -c '%a' "${TEST_TMPDIR}/a/.bin/bindump")" = '700' ]
 diff "${DOCDUMP}" "${TEST_TMPDIR}/a/.bin/docdump"
 [ "$(stat -c '%a' "${TEST_TMPDIR}/a/.bin/docdump")" = '700' ]
 diff "${PDFDUMP}" "${TEST_TMPDIR}/a/.bin/pdfdump"

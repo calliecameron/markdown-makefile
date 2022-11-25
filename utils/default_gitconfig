@@ -4,7 +4,7 @@ cachetextconv = true
 binary = true
 
 [diff "binary"]
-textconv = hexdump -v -C
+textconv = .bin/bindump
 cachetextconv = true
 binary = true
 

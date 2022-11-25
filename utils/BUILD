@@ -1,5 +1,6 @@
 exports_files(
     [
+        "bindump",
         "docdump",
         "pdfdump",
         "zipdump",
@@ -19,6 +20,7 @@ sh_test(
     srcs = ["git_update_test.sh"],
     args = [
         "$(rootpath git_update.sh)",
+        "$(rootpath bindump)",
         "$(rootpath docdump)",
         "$(rootpath pdfdump)",
         "$(rootpath zipdump)",
@@ -28,6 +30,7 @@ sh_test(
         "$(rootpath precommit)",
     ],
     data = [
+        "bindump",
         "default_gitattributes",
         "default_gitconfig",
         "default_gitignore",

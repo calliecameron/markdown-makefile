@@ -3,25 +3,27 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") docdump pdfdump zipdump gitattributes gitconfig gitignore precommit package"
+    echo "Usage: $(basename "${0}") bindump docdump pdfdump zipdump gitattributes gitconfig gitignore precommit package"
     exit 1
 }
 
 test -z "${1:-}" && usage
-DOCDUMP="${1}"
+BINDUMP="${1}"
 test -z "${2:-}" && usage
-PDFDUMP="${2}"
+DOCDUMP="${2}"
 test -z "${3:-}" && usage
-ZIPDUMP="${3}"
+PDFDUMP="${3}"
 test -z "${4:-}" && usage
-GITATTRIBUTES="${4}"
+ZIPDUMP="${4}"
 test -z "${5:-}" && usage
-GITCONFIG="${5}"
+GITATTRIBUTES="${5}"
 test -z "${6:-}" && usage
-GITIGNORE="${6}"
+GITCONFIG="${6}"
 test -z "${7:-}" && usage
-PRECOMMIT="${7}"
-PACKAGE="${8:-}" # Package will be empty in the root package.
+GITIGNORE="${7}"
+test -z "${8:-}" && usage
+PRECOMMIT="${8}"
+PACKAGE="${9:-}" # Package will be empty in the root package.
 
 if [ -n "${PACKAGE}" ]; then
     SOURCE_DIR="${BUILD_WORKSPACE_DIRECTORY}/${PACKAGE}"
@@ -38,10 +40,11 @@ if [ ! -d "${GIT_DIR}" ]; then
 fi
 
 mkdir -p "${BIN_DIR}"
+cp "${BINDUMP}" "${BIN_DIR}/bindump"
 cp "${DOCDUMP}" "${BIN_DIR}/docdump"
 cp "${PDFDUMP}" "${BIN_DIR}/pdfdump"
 cp "${ZIPDUMP}" "${BIN_DIR}/zipdump"
-chmod u=rwx "${BIN_DIR}/docdump" "${BIN_DIR}/pdfdump" "${BIN_DIR}/zipdump"
+chmod u=rwx "${BIN_DIR}/bindump" "${BIN_DIR}/docdump" "${BIN_DIR}/pdfdump" "${BIN_DIR}/zipdump"
 
 cp "${GITATTRIBUTES}" "${SOURCE_DIR}/.gitattributes"
 cp "${GITCONFIG}" "${SOURCE_DIR}/.gitconfig"

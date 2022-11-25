@@ -10,7 +10,7 @@ Text before a section in simple include.
 
 Text before recursive include, with *italic*, **bold**, "curly quotes," and--- an em dash.
 
-!include include2.md
+!include include2
 
 Text after recursive include. Here is a pound sign (£), a euro sign (€), and three letters with accents: ëóû.
 

@@ -1,8 +1,8 @@
-% The Title Is 'Baz'
-% The Author
-% 23 February 2019
-
 ---
+title: The Title Is 'Baz'
+author:
+- The Author
+date: 23 February 2019
 identifier:
 - scheme: DOI
   text: doi:10.234234.234/33
@@ -18,7 +18,7 @@ This is some test text. This is formatted in *italics* and **bold**, with - vari
 
 And then we do a simple include:
 
-!include include1.md
+!include include1
 
 Text after simple include.
 

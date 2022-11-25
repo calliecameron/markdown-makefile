@@ -1,14 +1,13 @@
-% Based on the template from Pandoc 2.13. Custom sections are marked
+% Based on the template from Pandoc 2.19.2. Custom sections are marked
 % 'CUSTOM'. Customisations go in included files where possible, but
 % this isn't always possible.
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
 \documentclass[
   12pt,
-  british,
   a4paper,
 ]{article}
 \usepackage{amsmath,amssymb}
@@ -32,14 +31,40 @@
 }{}
 \usepackage{fancyvrb}
 \usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\usepackage[a4paper]{geometry}
+\usepackage[normalem]{ulem}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+\babelprovide[main,import]{british}
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\usepackage{bold-extra}
+\usepackage[perpage,symbol*]{footmisc}
 
-% CUSTOM
-% titlesec must be loaded before hyperref, otherwise links point to the wrong
-% place. Therefore it can't go in header-includes, which are after hyperref.
-% END CUSTOM
 
+\special{pdf:trailerid [
+    <2518a18c39cbd5e88b46c164d163e14a>
+    <2518a18c39cbd5e88b46c164d163e14a>
+]}
+\usepackage{titletoc}
+\titlecontents{section}[2.4em]{}{}{\hspace*{-2.4em}}{ \titlerule\contentspage}
+\usepackage{titletoc}
+\titlecontents{section}[2.4em]{}{}{\hspace*{-2.4em}}{ \titlerule\contentspage}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\VerbatimFootnotes % allow verbatim text in footnotes
 \hypersetup{
   pdftitle={The Title Is `Baz'},
   pdfauthor={The Author},
@@ -51,49 +76,6 @@
   citecolor={Blue},
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
-\VerbatimFootnotes % allow verbatim text in footnotes
-\usepackage[a4paper]{geometry}
-\usepackage[normalem]{ulem}
-% Avoid problems with \sout in headers with hyperref
-\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-\usepackage{bold-extra}
-\usepackage[perpage,symbol*]{footmisc}
-
-% This makes horizontal rules for section breaks appear as three stars, rather
-% than a solid line. Unfortunately 'rule' is used in other places, such as
-% footnotes - hence the conditional gymnastics. Hopefully it doesn't break
-% anything else.
-\newif\iffootnote
-\let\Footnote\footnote
-\renewcommand\footnote[1]{\begingroup\footnotetrue\Footnote{#1}\endgroup}
-
-\let\OldRule\rule
-\renewcommand{\rule}[2]{\iffootnote\OldRule{#1}{#2}\else* * *\fi}
-
-\special{pdf:trailerid [
-    <be42db5898a8e2eb0bd3f4e44dcab8db>
-    <be42db5898a8e2eb0bd3f4e44dcab8db>
-]}
-\usepackage{titletoc}
-\titlecontents{section}[2.4em]{}{}{\hspace*{-2.4em}}{ \titlerule\contentspage}
-\ifXeTeX
-  % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
-  \usepackage{polyglossia}
-  \setmainlanguage[variant=british]{english}
-\else
-  \usepackage[main=british]{babel}
-% get rid of language-specific shorthands (see #6817):
-\let\LanguageShortHands\languageshorthands
-\def\languageshorthands#1{}
-\fi
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 
 \title{The Title Is `Baz'}
 \author{The Author}
@@ -171,7 +153,7 @@ they're on different lines.'
 
 Test text test text test text. After this line there should be stars.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{center}* * *\end{center}
 
 And then there should be some text \textsuperscript{in~superscript} and
 \textsubscript{in~subscript}, and a footnote\footnote{This is a

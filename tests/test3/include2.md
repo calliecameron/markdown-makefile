@@ -6,13 +6,13 @@ Text in recursive include, with *italic*, **bold**, "curly quotes," and--- an em
 
 ## Subsection in recursive include
 
-> | “These literal double curly quotes, used where smart
+> | \“These literal double curly quotes, used where smart
 > | quotes gets it wrong, curl the right way even though
-> | they're on different lines.”
+> | they're on different lines.\”
 
-> | ‘These literal single curly quotes, used where smart
+> | \‘These literal single curly quotes, used where smart
 > | quotes gets it wrong, curl the right way even though
-> | they're on different lines.’
+> | they're on different lines.\’
 
 Test text test text test text. After this line there should be stars.
 

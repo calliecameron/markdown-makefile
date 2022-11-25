@@ -14,20 +14,26 @@ py_test(
 )
 
 filegroup(
-    name = "tex_header_template",
+    name = "latex_header_template",
     srcs = ["header_template.tex"],
     visibility = ["//visibility:public"],
 )
 
 filegroup(
-    name = "tex_before_template",
+    name = "latex_before_template",
     srcs = ["before_template.tex"],
     visibility = ["//visibility:public"],
 )
 
 filegroup(
-    name = "tex_template",
+    name = "latex_template",
     srcs = ["template.tex"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "latex_filter",
+    srcs = ["latex_filter.lua"],
     visibility = ["//visibility:public"],
 )
 

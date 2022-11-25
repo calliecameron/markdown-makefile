@@ -58,10 +58,10 @@ md_tex_intermediate = rule(
             doc = "An md_library target.",
         ),
         "_header_template": attr.label(
-            default = "//formats:tex_header_template",
+            default = "//formats:latex_header_template",
         ),
         "_before_template": attr.label(
-            default = "//formats:tex_before_template",
+            default = "//formats:latex_before_template",
         ),
     },
 )
@@ -78,11 +78,13 @@ def _tex_output_impl(ctx, ext, to, extra_args):
             ctx.attr.intermediate[MdTexIntermediateInfo].header,
             ctx.attr.intermediate[MdTexIntermediateInfo].before,
             ctx.attr._template[DefaultInfo].files.to_list()[0],
+            ctx.attr._filter[DefaultInfo].files.to_list()[0],
         ],
         [
             "--include-in-header=" + ctx.attr.intermediate[MdTexIntermediateInfo].header.path,
             "--include-before-body=" + ctx.attr.intermediate[MdTexIntermediateInfo].before.path,
             "--template=" + ctx.attr._template[DefaultInfo].files.to_list()[0].path,
+            "--lua-filter=" + ctx.attr._filter[DefaultInfo].files.to_list()[0].path,
         ] + extra_args + _LATEX_VARS + expand_locations(ctx, ctx.attr.intermediate, ctx.attr.extra_pandoc_flags),
         env,
         ctx.attr.intermediate,
@@ -106,7 +108,10 @@ def _tex_output_rule(impl, ext):
             "out": attr.output(),
             "_write_open_script": write_open_script(),
             "_template": attr.label(
-                default = "//formats:tex_template",
+                default = "//formats:latex_template",
+            ),
+            "_filter": attr.label(
+                default = "//formats:latex_filter",
             ),
         },
     )

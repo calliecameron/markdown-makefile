@@ -175,9 +175,14 @@ def _md_ms_docx_impl(ctx):
     intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.docx")
     ctx.actions.run(
         outputs = [intermediate_docx],
-        inputs = [intermediate_md, ctx.attr._filter[DefaultInfo].files.to_list()[0]],
-        executable = ctx.attr._md2short[DefaultInfo].files_to_run,
+        inputs = [
+            ctx.attr._md2short[DefaultInfo].files.to_list()[0],
+            intermediate_md,
+            ctx.attr._filter[DefaultInfo].files.to_list()[0],
+        ],
+        executable = ctx.attr._ms_docx[DefaultInfo].files_to_run,
         arguments = [
+            ctx.attr._md2short[DefaultInfo].files.to_list()[0].path,
             "--overwrite",
             "--modern",
             "--output",
@@ -211,6 +216,9 @@ md_ms_docx = rule(
         "timestamp_override": attr.string(),
         "_ms_metadata": attr.label(
             default = "//formats:ms_metadata",
+        ),
+        "_ms_docx": attr.label(
+            default = "//formats:ms_docx",
         ),
         "_md2short": attr.label(
             default = "@shunn//:md2short",

@@ -17,4 +17,4 @@ TOOL="${3}"
 "${TOOL}" "${FILE1}" >"${TEST_TMPDIR}/file1"
 "${TOOL}" "${FILE2}" >"${TEST_TMPDIR}/file2"
 
-diff "${TEST_TMPDIR}/file1" "${TEST_TMPDIR}/file2"
+diff -a "${TEST_TMPDIR}/file1" "${TEST_TMPDIR}/file2"

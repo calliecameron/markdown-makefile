@@ -178,6 +178,7 @@ def md_document(
         lib = lib,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "odt"),
+        timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_docx(
@@ -185,6 +186,7 @@ def md_document(
         lib = lib,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "docx"),
+        timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_doc(
@@ -197,6 +199,7 @@ def md_document(
         name = name + "_ms_docx",
         lib = lib,
         out = _output(name, "ms.docx"),
+        timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
 

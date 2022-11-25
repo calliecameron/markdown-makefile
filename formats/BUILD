@@ -74,6 +74,19 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+sh_test(
+    name = "ms_docx_filter_test",
+    srcs = ["ms_docx_filter_test.sh"],
+    args = [
+        "$(rootpath ms_docx_filter.lua)",
+        "$(rootpath reference.docx)",
+    ],
+    data = [
+        "ms_docx_filter.lua",
+        "reference.docx",
+    ],
+)
+
 sh_binary(
     name = "zip_cleaner",
     srcs = ["zip_cleaner.sh"],

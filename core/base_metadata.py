@@ -1,5 +1,6 @@
 from typing import Dict
 import argparse
+import hashlib
 import json
 
 
@@ -58,6 +59,7 @@ def get_metadata(version: str, repo: str, increment_included_headers: bool) -> D
         'subject': f'Version: {version}',
         'lang': 'en-GB',
         'repo': repo,
+        'source-md5': hashlib.md5(version.encode('utf-8')).hexdigest(),
     }
     if increment_included_headers:
         out['increment-included-headers'] = 't'

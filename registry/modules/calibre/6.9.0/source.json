@@ -1,0 +1,8 @@
+{
+    "url": "https://download.calibre-ebook.com/6.9.0/calibre-6.9.0-x86_64.txz",
+    "integrity": "sha384-ZtjpRV74a6m1sXQtJm1Dq6KyEl4LrkBlg/54TX49KQjSowlHnvIVGpf4i1VcnBC8",
+    "patch_strip": 0,
+    "patches": {
+        "build.patch": "sha384-DVVMv5jbVZ5qld9HYlpwk66PriUIfHXIEoHa1UCJGG3UpV4zHcS0xIuXZSOXDXZP"
+    }
+}

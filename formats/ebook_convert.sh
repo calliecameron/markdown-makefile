@@ -1,7 +1,7 @@
 #!/bin/bash
 # ebook-convert is chatty, so we wrap it and capture the output.
 
-OUTPUT="$(ebook-convert "${@}" 2>&1)"
+OUTPUT="$("${1}" "${@:2}" 2>&1)"
 EXIT_CODE="$?"
 
 if [ "${EXIT_CODE}" != '0' ]; then

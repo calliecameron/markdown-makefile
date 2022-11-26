@@ -25,6 +25,11 @@ bazel_dep(
     version = "0.4.0.1",
 )
 
+bazel_dep(
+    name = "calibre",
+    version = "6.9.0",
+)
+
 archive_override(
     module_name = "rules_python",
     urls = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.14.0.tar.gz",

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -eu
+
+THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "${THIS_DIR}" || exit 1
+
+DONE_FIRST=''
+
+bazel query 'filter(.*_summary, kind(py_binary, //...))' | LC_ALL=C sort | while read -r line; do
+    if [ -z "${DONE_FIRST}" ]; then
+        HEADER_ARG='--header'
+        DONE_FIRST='t'
+    else
+        HEADER_ARG=''
+    fi
+    # shellcheck disable=SC2086
+    if ! bazel run "${line}" -- ${HEADER_ARG}; then
+        echo "${line},,,ERROR"
+    fi
+done

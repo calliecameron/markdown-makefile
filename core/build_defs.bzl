@@ -52,7 +52,7 @@ def _md_library_impl(ctx):
     )
 
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.json")
-    metadata = ctx.actions.declare_file(ctx.label.name + "_metadata.json")
+    metadata = ctx.outputs.metadata_out
     ctx.actions.run(
         outputs = [intermediate, metadata],
         inputs = [preprocessed, base_metadata] +
@@ -175,6 +175,9 @@ md_library = rule(
         "version_override": attr.string(
             default = "",
             doc = "Set the document version to this value, rather than the computed value. Should only be used for testing.",
+        ),
+        "metadata_out": attr.output(
+            doc = "Label of the output metadata file.",
         ),
         "_pandoc": attr.label(
             default = "@pandoc//:pandoc",

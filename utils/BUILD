@@ -14,6 +14,7 @@ exports_files(
         "git_test.sh",
         "new_package.sh",
         "workspace_status",
+        "workspace_summary",
         "workspace_update.sh",
         "workspace_test.sh",
         "collection_header.tex",
@@ -21,6 +22,7 @@ exports_files(
         "mypy_test.py",
         "flake8_test.py",
         "autopep8_test.py",
+        "summary.py",
     ],
     visibility = ["//visibility:public"],
 )
@@ -85,9 +87,11 @@ sh_test(
     args = [
         "$(rootpath workspace_update.sh)",
         "$(rootpath workspace_status)",
+        "$(rootpath workspace_summary)",
     ],
     data = [
         "workspace_status",
+        "workspace_summary",
         "workspace_update.sh",
     ],
 )
@@ -103,5 +107,13 @@ py_test(
     srcs = ["collection_src_test.py"],
     args = ["$(rootpath collection_src.py)"],
     data = ["collection_src.py"],
+    deps = [":test_utils"],
+)
+
+py_test(
+    name = "summary_test",
+    srcs = ["summary_test.py"],
+    args = ["$(rootpath summary.py)"],
+    data = ["summary.py"],
     deps = [":test_utils"],
 )

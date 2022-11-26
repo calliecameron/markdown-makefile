@@ -1,6 +1,7 @@
 """Public API of the module."""
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@rules_python//python:defs.bzl", "py_binary")
 load("//core:build_defs.bzl", _md_library = "md_library")
 load("//formats:misc.bzl", _md_md = "md_md", _md_txt = "md_txt")
 load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
@@ -62,12 +63,25 @@ def md_library(
         data = data,
         increment_included_headers = increment_included_headers,
         version_override = version_override,
+        metadata_out = name + "_metadata.json",
         visibility = ["//visibility:public"],
     )
 
     build_test(
         name = name + "_test",
         targets = [name],
+    )
+
+    py_binary(
+        name = name + "_summary",
+        srcs = ["@markdown_makefile//utils:summary.py"],
+        main = "summary.py",
+        data = [name, name + "_metadata.json"],
+        args = [
+            "//%s:%s" % (native.package_name(), name),
+            "$(rootpath %s_metadata.json)" % name,
+        ],
+        visibility = ["//visibility:private"],
     )
 
 def md_document(

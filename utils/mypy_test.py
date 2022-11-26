@@ -1,7 +1,7 @@
 import sys
 from mypy import api
 
-result = api.run(sys.argv[1:])
+result = api.run(sys.argv[1:])  # pylint: disable=c-extension-no-member
 
 if result[0]:
     print('\nType checking report:\n')

@@ -19,6 +19,7 @@ exports_files(
         "collection_header.tex",
         "collection_before.tex",
         "mypy_test.py",
+        "flake8_test.py",
     ],
     visibility = ["//visibility:public"],
 )

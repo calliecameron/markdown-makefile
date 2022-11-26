@@ -24,3 +24,21 @@ def py_validation():
         ],
         deps = [requirement("mypy")],
     )
+
+    py_test(
+        name = "flake8_test",
+        srcs = ["//utils:flake8_test.py"],
+        args = [
+            "--config=$(rootpath //:.flake8)",
+            "core",
+            "formats",
+            "utils",
+        ],
+        data = [
+            "//:.flake8",
+            "//core:py_srcs",
+            "//formats:py_srcs",
+            "//utils:py_srcs",
+        ],
+        deps = [requirement("flake8")],
+    )

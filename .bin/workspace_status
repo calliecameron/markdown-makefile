@@ -12,10 +12,6 @@ import subprocess
 import unicodedata
 
 
-PANDOC_VERSION_KEY = 'STABLE_PANDOC_VERSION'
-EXPECTED_PANDOC_VERSION = '2.19.2'
-
-
 def normalised_char_name(char: str) -> str:
     if len(char) != 1:
         raise ValueError(f"char must be a single character, got '{char}'")
@@ -133,28 +129,8 @@ def get_package_data(root: str) -> List[Tuple[str, str]]:
     return out
 
 
-def get_pandoc_version() -> Tuple[str, str]:
-    try:
-        output = subprocess.run(
-            ['pandoc', '--version'],
-            capture_output=True, encoding='utf-8', check=True).stdout.strip()
-    except subprocess.CalledProcessError as e:
-        raise ValueError('Failed to get pandoc version') from e
-
-    prefix = 'pandoc '
-    for line in output.split('\n'):
-        if line.startswith(prefix):
-            version = line[len(prefix):]
-            if version != EXPECTED_PANDOC_VERSION:
-                raise ValueError(
-                    f'Got pandoc version {version}; expected {EXPECTED_PANDOC_VERSION}')
-            return PANDOC_VERSION_KEY, version
-
-    raise ValueError('Failed to get pandoc version')
-
-
 def main() -> None:
-    data = [get_pandoc_version()] + get_package_data(os.getcwd())
+    data = get_package_data(os.getcwd())
     print('\n'.join([f'{key} {value}' for key, value in data]))
 
 

@@ -10,26 +10,20 @@ def main() -> None:
     parser.add_argument('package')
     args = parser.parse_args()
 
-    pandoc_version_key = bazel_package.PANDOC_VERSION_KEY + ' '
     key = bazel_package.package_key(args.package)
     version_key = bazel_package.version_key(key) + ' '
     repo_key = bazel_package.repo_key(key) + ' '
 
-    pandoc_version = ''
     version = ''
     repo = ''
 
     with open(args.infile, encoding='utf-8') as f:
         for line in f:
-            if line.startswith(pandoc_version_key):
-                pandoc_version = line[len(pandoc_version_key):].strip()
-            elif line.startswith(version_key):
+            if line.startswith(version_key):
                 version = line[len(version_key):].strip()
             elif line.startswith(repo_key):
                 repo = line[len(repo_key):].strip()
 
-    if not pandoc_version:
-        raise ValueError('Pandoc version not found')
     if not version:
         raise ValueError('Package version not found')
     if not repo:
@@ -37,7 +31,6 @@ def main() -> None:
 
     with open(args.outfile, mode='w', encoding='utf-8') as f:
         json.dump({
-            'pandoc_version': pandoc_version,
             'docversion': version,
             'repo': repo,
         }, f, sort_keys=True, indent=4)

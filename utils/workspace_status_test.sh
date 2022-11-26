@@ -54,16 +54,8 @@ git add foo
 git commit -m 'Test'
 cd "${TEST_TMPDIR}"
 
-# Fake pandoc
-mkdir bin
-printf '#!/bin/bash\necho pandoc foo' >bin/pandoc
-chmod u+x bin/pandoc
-PATH="${TEST_TMPDIR}/bin:${PATH}" "${SCRIPT}" && exit 1
-
 # Test output
 OUTPUT="$("${SCRIPT}")"
-
-echo "${OUTPUT}" | grep 'STABLE_PANDOC_VERSION '
 
 echo "${OUTPUT}" | grep 'STABLE_VERSION_ unversioned'
 echo "${OUTPUT}" | grep 'STABLE_REPO_ unversioned'

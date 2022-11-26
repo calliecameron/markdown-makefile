@@ -4,9 +4,6 @@ import string
 import unicodedata
 
 
-PANDOC_VERSION_KEY = 'STABLE_PANDOC_VERSION'
-
-
 def _normalised_char_name(char: str) -> str:
     if len(char) != 1:
         raise ValueError(f"char must be a single character, got '{char}'")

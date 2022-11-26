@@ -31,38 +31,26 @@ class TestRawVersion(unittest.TestCase):
             return f.read()
 
     def test_raw_version(self) -> None:
-        self.assertEqual(self.run_script("""STABLE_PANDOC_VERSION 1.2.3
-STABLE_VERSION_A_SOLIDUS_B 10
+        self.assertEqual(self.run_script("""STABLE_VERSION_A_SOLIDUS_B 10
 STABLE_REPO_A_SOLIDUS_B /foo/.git
 STABLE_VERSION_B 11
 STABLE_REPO_B /bar/.git
 """, 'a/b'), """{
     "docversion": "10",
-    "pandoc_version": "1.2.3",
     "repo": "/foo/.git"
 }""")
 
     def test_raw_version_root_package(self) -> None:
-        self.assertEqual(self.run_script("""STABLE_PANDOC_VERSION 1.2.3
-STABLE_VERSION_ 10
+        self.assertEqual(self.run_script("""STABLE_VERSION_ 10
 STABLE_REPO_ /foo/.git
 STABLE_VERSION_B 11
 STABLE_REPO_B /bar/.git
 """, ''), """{
     "docversion": "10",
-    "pandoc_version": "1.2.3",
     "repo": "/foo/.git"
 }""")
 
     def test_raw_version_fails(self) -> None:
-        # Missing pandoc version
-        with self.assertRaises(subprocess.CalledProcessError):
-            self.run_script("""STABLE_VERSION_A_SOLIDUS_B 10
-STABLE_REPO_A_SOLIDUS_B /foo/.git
-STABLE_VERSION_B 11
-STABLE_REPO_B /bar/.git
-""", 'a/b')
-
         # Missing version
         with self.assertRaises(subprocess.CalledProcessError):
             self.run_script("""STABLE_PANDOC_VERSION 1.2.3

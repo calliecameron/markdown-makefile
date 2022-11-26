@@ -14,7 +14,7 @@ def main() -> None:
     with open(args.metadata, encoding='utf-8') as f:
         j = json.load(f)
 
-    out = csv.DictWriter(sys.stdout, ['target', 'title', 'wordcount', 'status'])
+    out = csv.DictWriter(sys.stdout, ['target', 'title', 'wordcount', 'version', 'status'])
 
     if args.header:
         out.writeheader()
@@ -23,6 +23,7 @@ def main() -> None:
         'target': args.target,
         'title': j['title'] if 'title' in j else '',
         'wordcount': j['wordcount'],
+        'version': j['docversion'],
         'status': 'DIRTY' if 'dirty' in j['docversion'] else 'ok',
     })
 

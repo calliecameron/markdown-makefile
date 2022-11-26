@@ -47,11 +47,11 @@ class TestSummary(unittest.TestCase):
     def test_summary(self) -> None:
         self.assertEqual(
             self.run_script('Foo', 10, 'bar', False),
-            '//foo:bar,Foo,10,ok\n')
+            '//foo:bar,Foo,10,bar,ok\n')
 
         self.assertEqual(
             self.run_script('Foo', 10, 'bar, dirty', True),
-            'target,title,wordcount,status\n//foo:bar,Foo,10,DIRTY\n')
+            'target,title,wordcount,version,status\n//foo:bar,Foo,10,"bar, dirty",DIRTY\n')
 
 
 if __name__ == '__main__':

@@ -5,6 +5,12 @@ set -eu
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${THIS_DIR}" || exit 1
 
+if [ "${1:-}" = '--raw' ]; then
+    OUTPUT_TOOL='cat'
+else
+    OUTPUT_TOOL='csvlook'
+fi
+
 DONE_FIRST=''
 
 bazel query 'filter(.*_summary$, kind(py_binary, //...))' | LC_ALL=C sort | while read -r line; do
@@ -18,4 +24,4 @@ bazel query 'filter(.*_summary$, kind(py_binary, //...))' | LC_ALL=C sort | whil
     if ! bazel run "${line}" -- ${HEADER_ARG}; then
         echo "${line},,,ERROR"
     fi
-done
+done | "${OUTPUT_TOOL}"

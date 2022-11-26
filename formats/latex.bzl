@@ -1,7 +1,7 @@
 """Rules for latex-based outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "doc_for_ext", "expand_locations", "pandoc", "simple_pandoc_output_impl", "timestamp_override", "write_open_script")
+load(":helpers.bzl", "doc_for_ext", "expand_locations", "pandoc", "pandoc_script", "simple_pandoc_output_impl", "timestamp_override", "write_open_script")
 
 _LATEX_VARS = [
     "--variable=fontsize:12pt",
@@ -61,6 +61,7 @@ md_tex_intermediate = rule(
         "extra_pandoc_flags": attr.string_list(
             doc = "Extra flags to pass to pandoc",
         ),
+        "_pandoc": pandoc_script(),
         "_header_template": attr.label(
             default = "//formats:latex_header_template",
         ),
@@ -107,6 +108,7 @@ def _tex_output_rule(impl, ext):
             ),
             "timestamp_override": attr.string(),
             "out": attr.output(),
+            "_pandoc": pandoc_script(),
             "_write_open_script": write_open_script(),
             "_template": attr.label(
                 default = "//formats:latex_template",

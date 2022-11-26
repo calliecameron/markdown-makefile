@@ -5,6 +5,6 @@
     "patch_strip": 0,
     "patches": {
         "build.patch": "sha384-uZBcRaobmqmH0q4f2Yl2HCKdRKgp/h6FDmpWvv2TJdQfMrh4ujEmBiLK+ouXjIOK",
-        "md2short_dot_sh.patch": "sha384-tCSNMzlAVMZ6oiSBo8c4RYmGwNbQlz+IZ/4xGBuLVyitbWGOAhX1W9vg3Ay+NiLo"
+        "md2short_dot_sh.patch": "sha384-+xWmbVy2hwdSQsXX9x+Ay810k/FMGjXNo67Idzdw7N7huY9C4dFghnpHHMT3YkGF"
     }
 }

@@ -1,17 +1,18 @@
 --- bin/md2short.sh
 +++ bin/md2short.sh
-@@ -81,6 +81,10 @@ else
+@@ -81,6 +81,11 @@ else
      TEMPLATE='template.docx'
  fi
 
 +if [[ -z "${PANDOC}" ]]; then
-+    PANDOC=pandoc
++    echo "PANDOC environment variable not set"
++    exit 1
 +fi
 +
  # Create a temporary data directory
  echo "Creating temporary directory."
  export PANDOC_DATA_DIR
-@@ -95,7 +99,7 @@ echo "Files extracted."
+@@ -95,7 +100,7 @@ echo "Files extracted."
 
  # Run pandoc
  echo "Running Pandoc."

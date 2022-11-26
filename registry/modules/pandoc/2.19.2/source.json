@@ -1,0 +1,9 @@
+{
+    "url": "https://github.com/jgm/pandoc/releases/download/2.19.2/pandoc-2.19.2-linux-amd64.tar.gz",
+    "integrity": "sha384-oj6+B44+L6mP+lR9F/c4UjWHpreSMX/VBYiJLw8AoFhPf6QBjBoi0Db0ba2MT/ad",
+    "strip_prefix": "pandoc-2.19.2",
+    "patch_strip": 0,
+    "patches": {
+        "build.patch": "sha384-+Kij6OJ4bo+j3FFXoDZSaejQL/zqgr0Kq3+5qyOulOYyKstQc8J+TLU/qV3XZXZJ"
+    }
+}

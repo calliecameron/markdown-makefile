@@ -63,7 +63,7 @@ def _md_library_impl(ctx):
                  ctx.attr._write_metadata[DefaultInfo].files.to_list() +
                  ctx.attr._cleanup[DefaultInfo].files.to_list() +
                  [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
-        executable = "pandoc",
+        executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         arguments = [
             "--filter=" + ctx.attr._validate[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._include[DefaultInfo].files.to_list()[0].path,
@@ -109,7 +109,7 @@ def _md_library_impl(ctx):
     ctx.actions.run(
         outputs = [spellcheck_input],
         inputs = [intermediate] + ctx.attr._spellcheck_input_template.files.to_list(),
-        executable = "pandoc",
+        executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         arguments = [
             "--from=json",
             "--to=markdown-smart",
@@ -175,6 +175,9 @@ md_library = rule(
         "version_override": attr.string(
             default = "",
             doc = "Set the document version to this value, rather than the computed value. Should only be used for testing.",
+        ),
+        "_pandoc": attr.label(
+            default = "@pandoc//:pandoc",
         ),
         "_raw_version": attr.label(
             default = "//core:raw_version",

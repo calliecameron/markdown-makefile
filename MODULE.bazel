@@ -5,9 +5,25 @@ module(
     version = "0.0.0",
 )
 
-bazel_dep(name = "bazel_skylib", version = "1.3.0")
+bazel_dep(
+    name = "bazel_skylib",
+    version = "1.3.0",
+)
 
-bazel_dep(name = "rules_python", version = "0.14.0")
+bazel_dep(
+    name = "rules_python",
+    version = "0.14.0",
+)
+
+bazel_dep(
+    name = "pandoc",
+    version = "2.19.2",
+)
+
+bazel_dep(
+    name = "prosegrinder_pandoc_templates",
+    version = "0.4.0.1",
+)
 
 archive_override(
     module_name = "rules_python",
@@ -24,5 +40,3 @@ pip.parse(
 )
 
 use_repo(pip, "pip")
-
-bazel_dep(name = "prosegrinder_pandoc_templates", version = "0.4.0.1")

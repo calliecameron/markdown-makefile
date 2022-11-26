@@ -3,6 +3,7 @@ import unittest
 import test_utils
 
 
+PANDOC = ''
 FILTER = ''
 
 GOOD = """% “Hello” ‘world’
@@ -15,23 +16,25 @@ GOOD = """% “Hello” ‘world’
 class TestValidate(unittest.TestCase):
 
     def test_validate_succeeds(self) -> None:
-        test_utils.pandoc_filter(FILTER, GOOD)
+        test_utils.pandoc_filter(PANDOC, FILTER, GOOD)
 
     def test_validate_fails(self) -> None:
         with self.assertRaises(ValueError):
-            test_utils.pandoc_filter(FILTER, "% '")
+            test_utils.pandoc_filter(PANDOC, FILTER, "% '")
         with self.assertRaises(ValueError):
-            test_utils.pandoc_filter(FILTER, '% "')
+            test_utils.pandoc_filter(PANDOC, FILTER, '% "')
 
         with self.assertRaises(ValueError):
-            test_utils.pandoc_filter(FILTER, "'")
+            test_utils.pandoc_filter(PANDOC, FILTER, "'")
         with self.assertRaises(ValueError):
-            test_utils.pandoc_filter(FILTER, '"')
+            test_utils.pandoc_filter(PANDOC, FILTER, '"')
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
         raise ValueError('Not enough args')
+    PANDOC = sys.argv[1]
+    del sys.argv[1]
     FILTER = sys.argv[1]
     del sys.argv[1]
     unittest.main()

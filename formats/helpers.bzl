@@ -22,6 +22,11 @@ def timestamp_override(ctx):
         env["SOURCE_DATE_EPOCH"] = ctx.attr.timestamp_override
     return env
 
+def pandoc_script():
+    return attr.label(
+        default = "@pandoc//:pandoc",
+    )
+
 def write_open_script():
     return attr.label(
         default = "//formats:write_open_script",
@@ -66,7 +71,7 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
     ctx.actions.run(
         outputs = [output],
         inputs = [lib[MdLibraryInfo].output] + data_inputs + inputs,
-        executable = "pandoc",
+        executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         arguments = [
             "--from=json",
             "--to=" + to_format,
@@ -104,6 +109,7 @@ def simple_pandoc_output_rule(impl, ext):
                 doc = "Extra flags to pass to pandoc",
             ),
             "out": attr.output(),
+            "_pandoc": pandoc_script(),
             "_write_open_script": write_open_script(),
         },
     )

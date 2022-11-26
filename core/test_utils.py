@@ -5,12 +5,13 @@ import sys
 
 
 def _pandoc(
-        filter_arg: str, filter_filename: str, stdin: str, extra_args: List[str]) -> Dict[str, Any]:
+        pandoc: str, filter_arg: str, filter_filename: str, stdin: str, extra_args: List[str]
+) -> Dict[str, Any]:
     sys.stderr.write(f"Running pandoc filter '{filter_filename}' on input {stdin}\n")
     try:
         output = subprocess.run(
             [
-                'pandoc',
+                pandoc,
                 '--from=markdown-smart',
                 '--to=json',
                 f'{filter_arg}={filter_filename}',
@@ -25,10 +26,12 @@ def _pandoc(
 
 
 def pandoc_lua_filter(
-        filter_filename: str, stdin: str, extra_args: Optional[List[str]] = None) -> Dict[str, Any]:
-    return _pandoc('--lua-filter', filter_filename, stdin, extra_args or [])
+        pandoc: str, filter_filename: str, stdin: str, extra_args: Optional[List[str]] = None
+) -> Dict[str, Any]:
+    return _pandoc(pandoc, '--lua-filter', filter_filename, stdin, extra_args or [])
 
 
 def pandoc_filter(
-        filter_filename: str, stdin: str, extra_args: Optional[List[str]] = None) -> Dict[str, Any]:
-    return _pandoc('--filter', filter_filename, stdin, extra_args or [])
+        pandoc: str, filter_filename: str, stdin: str, extra_args: Optional[List[str]] = None
+) -> Dict[str, Any]:
+    return _pandoc(pandoc, '--filter', filter_filename, stdin, extra_args or [])

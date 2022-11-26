@@ -1,7 +1,7 @@
 """Rules for ebook outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdEpubInfo = provider(
     "Info for epub output",
@@ -51,6 +51,7 @@ md_epub = rule(
         "_css": attr.label(
             default = "//formats:epub_css",
         ),
+        "_pandoc": pandoc_script(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
     },

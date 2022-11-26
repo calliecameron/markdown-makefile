@@ -1,7 +1,7 @@
 """Rules for word-processor outputs."""
 
 load("//core:build_defs.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdDocxInfo = provider(
     "Info for docx output",
@@ -46,6 +46,7 @@ md_odt = rule(
         ),
         "out": attr.output(),
         "timestamp_override": attr.string(),
+        "_pandoc": pandoc_script(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
     },
@@ -101,6 +102,7 @@ md_docx = rule(
         "_filter": attr.label(
             default = "//formats:docx_filter",
         ),
+        "_pandoc": pandoc_script(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
     },
@@ -173,12 +175,15 @@ def _md_ms_docx_impl(ctx):
     )
 
     intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.docx")
+    env = timestamp_override(ctx)
+    env["PANDOC"] = ctx.attr._pandoc[DefaultInfo].files_to_run.executable.path
     ctx.actions.run(
         outputs = [intermediate_docx],
         inputs = [
             ctx.attr._md2short[DefaultInfo].files.to_list()[0],
             intermediate_md,
             ctx.attr._filter[DefaultInfo].files.to_list()[0],
+            ctx.attr._pandoc[DefaultInfo].files_to_run.executable,
         ],
         executable = ctx.attr._ms_docx[DefaultInfo].files_to_run,
         arguments = [
@@ -190,7 +195,7 @@ def _md_ms_docx_impl(ctx):
             "--lua-filter=" + ctx.attr._filter[DefaultInfo].files.to_list()[0].path,
             intermediate_md.path,
         ],
-        env = timestamp_override(ctx),
+        env = env,
         progress_message = "%{label}: generating ms.docx output",
     )
 
@@ -226,6 +231,7 @@ md_ms_docx = rule(
         "_filter": attr.label(
             default = "//formats:ms_docx_filter",
         ),
+        "_pandoc": pandoc_script(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
     },

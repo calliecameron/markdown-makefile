@@ -69,8 +69,14 @@ filegroup(
 py_test(
     name = "validate_test",
     srcs = ["validate_test.py"],
-    args = ["$(rootpath validate.py)"],
-    data = ["validate.py"],
+    args = [
+        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath validate.py)",
+    ],
+    data = [
+        "validate.py",
+        "@pandoc",
+    ],
     deps = [":test_utils"],
 )
 
@@ -83,8 +89,14 @@ filegroup(
 py_test(
     name = "include_test",
     srcs = ["include_test.py"],
-    args = ["$(rootpath include.lua)"],
-    data = ["include.lua"],
+    args = [
+        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath include.lua)",
+    ],
+    data = [
+        "include.lua",
+        "@pandoc",
+    ],
     deps = [":test_utils"],
 )
 
@@ -97,8 +109,14 @@ filegroup(
 py_test(
     name = "wordcount_test",
     srcs = ["wordcount_test.py"],
-    args = ["$(rootpath wordcount.lua)"],
-    data = ["wordcount.lua"],
+    args = [
+        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath wordcount.lua)",
+    ],
+    data = [
+        "wordcount.lua",
+        "@pandoc",
+    ],
     deps = [":test_utils"],
 )
 
@@ -111,8 +129,14 @@ filegroup(
 py_test(
     name = "starts_with_text_test",
     srcs = ["starts_with_text_test.py"],
-    args = ["$(rootpath starts_with_text.lua)"],
-    data = ["starts_with_text.lua"],
+    args = [
+        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath starts_with_text.lua)",
+    ],
+    data = [
+        "starts_with_text.lua",
+        "@pandoc",
+    ],
     deps = [":test_utils"],
 )
 
@@ -125,8 +149,14 @@ filegroup(
 py_test(
     name = "write_metadata_test",
     srcs = ["write_metadata_test.py"],
-    args = ["$(rootpath write_metadata.lua)"],
-    data = ["write_metadata.lua"],
+    args = [
+        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath write_metadata.lua)",
+    ],
+    data = [
+        "write_metadata.lua",
+        "@pandoc",
+    ],
     deps = [":test_utils"],
 )
 
@@ -139,8 +169,14 @@ filegroup(
 py_test(
     name = "cleanup_test",
     srcs = ["cleanup_test.py"],
-    args = ["$(rootpath cleanup.lua)"],
-    data = ["cleanup.lua"],
+    args = [
+        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath cleanup.lua)",
+    ],
+    data = [
+        "cleanup.lua",
+        "@pandoc",
+    ],
     deps = [":test_utils"],
 )
 

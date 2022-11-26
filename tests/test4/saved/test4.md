@@ -3,6 +3,9 @@ author:
 - The Author
 date: 1 January 2022
 docversion: reproducible
+identifier:
+- scheme: DOI
+  text: "doi:10.234234.234/33"
 lang: en-GB
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"

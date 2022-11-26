@@ -246,6 +246,7 @@ def md_collection(
         author,
         deps,
         date = None,
+        extra_metadata = None,
         version_override = None,
         timestamp_override = None,
         main_document = True):
@@ -258,6 +259,7 @@ def md_collection(
         date: the date of the collection.
         deps: md_library targets to include in the collection.
             formats.
+        extra_metadata: a metadata file to include.
         version_override: set the document version to this value, rather than
             the computed value. Should only be used for testing.
         timestamp_override: set the build timestamp to this value, rather than
@@ -277,12 +279,12 @@ def md_collection(
         name = name,
         src = name + "_src",
         deps = deps,
-        data = ["@markdown_makefile//utils:collection_header.tex"],
+        data = ["@markdown_makefile//utils:collection_header.tex"] + ([extra_metadata] if extra_metadata else []),
         increment_included_headers = True,
         extra_pandoc_flags = [
             "--table-of-contents",
             "--toc-depth=1",
-        ],
+        ] + (["--metadata-file=$(rootpath %s)" % extra_metadata] if extra_metadata else []),
         extra_latex_flags = [
             "--variable=section-page-break",
             "--include-in-header=$(rootpath @markdown_makefile//utils:collection_header.tex)",

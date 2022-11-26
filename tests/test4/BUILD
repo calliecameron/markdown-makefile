@@ -5,6 +5,7 @@ md_collection(
     name = "test4",
     author = "The Author",
     date = "1 January 2022",
+    extra_metadata = "test4.yaml",
     timestamp_override = "1618243321",
     title = "Test 4",
     version_override = "reproducible",

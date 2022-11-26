@@ -4,6 +4,7 @@ import os.path
 import subprocess
 import sys
 import unittest
+import utils.test_utils
 
 
 SCRIPT = ''
@@ -17,7 +18,7 @@ Test text baz shouldn’t fail
 class TestWriteDictionary(unittest.TestCase):
 
     def run_spellcheck(self, doc: str, dictionary: List[str]) -> str:
-        test_tmpdir = os.getenv('TEST_TMPDIR')
+        test_tmpdir = utils.test_utils.tmpdir()
 
         in_file = os.path.join(test_tmpdir, 'in.md')
         with open(in_file, 'w', encoding='utf-8') as f:

@@ -1,5 +1,6 @@
-from typing import Any, Dict, List, Optional
+from typing import cast, Any, Dict, List, Optional
 import json
+import os
 import subprocess
 import sys
 
@@ -22,7 +23,7 @@ def _pandoc(
     j = json.loads(output.stdout)
     sys.stderr.write(f'Pandoc AST: {j}\n')
     sys.stderr.write(f'Pandoc stderr: {output.stderr}\n')
-    return j
+    return cast(Dict[str, Any], j)
 
 
 def pandoc_lua_filter(
@@ -35,3 +36,10 @@ def pandoc_filter(
         pandoc: str, filter_filename: str, stdin: str, extra_args: Optional[List[str]] = None
 ) -> Dict[str, Any]:
     return _pandoc(pandoc, '--filter', filter_filename, stdin, extra_args or [])
+
+
+def tmpdir() -> str:
+    tmp = os.getenv('TEST_TMPDIR')
+    if not tmp:
+        raise ValueError("Couldn't get TEST_TMPDIR")
+    return tmp

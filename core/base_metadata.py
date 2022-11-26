@@ -37,17 +37,17 @@ def get_version(
                        (', unversioned deps' if unversioned_deps else '')), raw_version.repo)
 
     # Dirty or unversioned deps in the same repo are OK
-    dirty_deps = [t for (t, v) in dirty_deps if v.repo != version.repo]
-    unversioned_deps = [t for (t, v) in unversioned_deps if v.repo != version.repo]
+    bad_dirty_deps = [t for (t, v) in dirty_deps if v.repo != version.repo]
+    bad_unversioned_deps = [t for (t, v) in unversioned_deps if v.repo != version.repo]
 
-    if dirty_deps or unversioned_deps:
+    if bad_dirty_deps or bad_unversioned_deps:
         msg = ['Target has dirty or unversioned deps']
-        if dirty_deps:
+        if bad_dirty_deps:
             msg.append('Dirty deps:')
-            msg += ['  ' + dep for dep in dirty_deps]
-        if unversioned_deps:
+            msg += ['  ' + dep for dep in bad_dirty_deps]
+        if bad_unversioned_deps:
             msg.append('Unversioned deps:')
-            msg += ['  ' + dep for dep in unversioned_deps]
+            msg += ['  ' + dep for dep in bad_unversioned_deps]
         raise ValueError('\n'.join(msg))
 
     return version

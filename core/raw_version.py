@@ -1,6 +1,6 @@
 import argparse
 import json
-import bazel_package
+import core.bazel_package
 
 
 def main() -> None:
@@ -10,9 +10,9 @@ def main() -> None:
     parser.add_argument('package')
     args = parser.parse_args()
 
-    key = bazel_package.package_key(args.package)
-    version_key = bazel_package.version_key(key) + ' '
-    repo_key = bazel_package.repo_key(key) + ' '
+    key = core.bazel_package.package_key(args.package)
+    version_key = core.bazel_package.version_key(key) + ' '
+    repo_key = core.bazel_package.repo_key(key) + ' '
 
     version = ''
     repo = ''

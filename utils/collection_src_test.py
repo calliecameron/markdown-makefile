@@ -5,6 +5,7 @@ import os.path
 import subprocess
 import sys
 import unittest
+import utils.test_utils
 
 
 SCRIPT = ''
@@ -23,7 +24,7 @@ class TestCollectionSrc(unittest.TestCase):
     def run_script(
             self, title: str, author: str, date: str, metadata: List[Tuple[str, Dict[str, Any]]]
     ) -> str:
-        test_tmpdir = os.getenv('TEST_TMPDIR')
+        test_tmpdir = utils.test_utils.tmpdir()
 
         dep_args = []
         for i, m in enumerate(metadata):

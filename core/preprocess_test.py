@@ -4,7 +4,8 @@ import os.path
 import subprocess
 import sys
 import unittest
-import preprocess
+import core.preprocess
+import utils.test_utils
 
 
 SCRIPT = ''
@@ -24,41 +25,41 @@ Some -- dashes---
 class TestPreprocess(unittest.TestCase):
 
     def test_process_include(self) -> None:
-        self.assertEqual(preprocess.get_include('foo bar', 'a'), None)
+        self.assertEqual(core.preprocess.get_include('foo bar', 'a'), None)
         with self.assertRaises(ValueError):
-            preprocess.get_include('!include', 'a')
+            core.preprocess.get_include('!include', 'a')
         with self.assertRaises(ValueError):
-            preprocess.get_include('!include ', 'a')
+            core.preprocess.get_include('!include ', 'a')
         with self.assertRaises(ValueError):
-            preprocess.get_include('!include a:b:c', 'a')
-        self.assertEqual(preprocess.get_include('!include foo', ''), ':foo')
-        self.assertEqual(preprocess.get_include('!include foo', 'a'), 'a:foo')
-        self.assertEqual(preprocess.get_include('!include  :foo', 'a'), 'a:foo')
-        self.assertEqual(preprocess.get_include('!include //:bar', 'a'), ':bar')
-        self.assertEqual(preprocess.get_include('!include //foo:bar', 'a'), 'foo:bar')
-        self.assertEqual(preprocess.get_include('!include //foo', 'a'), 'foo:foo')
+            core.preprocess.get_include('!include a:b:c', 'a')
+        self.assertEqual(core.preprocess.get_include('!include foo', ''), ':foo')
+        self.assertEqual(core.preprocess.get_include('!include foo', 'a'), 'a:foo')
+        self.assertEqual(core.preprocess.get_include('!include  :foo', 'a'), 'a:foo')
+        self.assertEqual(core.preprocess.get_include('!include //:bar', 'a'), ':bar')
+        self.assertEqual(core.preprocess.get_include('!include //foo:bar', 'a'), 'foo:bar')
+        self.assertEqual(core.preprocess.get_include('!include //foo', 'a'), 'foo:foo')
 
     def test_preprocess(self) -> None:
         data = (GOOD % ('//foo:bar', '//baz:quux')).split('\n')
-        self.assertEqual(preprocess.preprocess(
+        self.assertEqual(core.preprocess.preprocess(
             data, {'foo:bar': 'foo/bar.json', 'baz:quux': 'baz/quux.json'}, 'a'), [])
         self.assertEqual('\n'.join(data), GOOD % ('foo/bar.json', 'baz/quux.json'))
 
         data = (GOOD % (':bar', '//blah:yay')).split('\n')
-        self.assertNotEqual(preprocess.preprocess(
+        self.assertNotEqual(core.preprocess.preprocess(
             data, {':bar': 'bar.json', 'baz:quux': 'baz/quux.json'}, ''), [])
         self.assertEqual('\n'.join(data), GOOD % ('bar.json', '//blah:yay'))
 
-        self.assertNotEqual(preprocess.preprocess(['“'], {}, 'a'), [])
-        self.assertNotEqual(preprocess.preprocess(['”'], {}, 'a'), [])
-        self.assertNotEqual(preprocess.preprocess(['‘'], {}, 'a'), [])
-        self.assertNotEqual(preprocess.preprocess(['’'], {}, 'a'), [])
-        self.assertNotEqual(preprocess.preprocess(['–'], {}, 'a'), [])
-        self.assertNotEqual(preprocess.preprocess(['—'], {}, 'a'), [])
-        self.assertNotEqual(preprocess.preprocess(['…'], {}, 'a'), [])
+        self.assertNotEqual(core.preprocess.preprocess(['“'], {}, 'a'), [])
+        self.assertNotEqual(core.preprocess.preprocess(['”'], {}, 'a'), [])
+        self.assertNotEqual(core.preprocess.preprocess(['‘'], {}, 'a'), [])
+        self.assertNotEqual(core.preprocess.preprocess(['’'], {}, 'a'), [])
+        self.assertNotEqual(core.preprocess.preprocess(['–'], {}, 'a'), [])
+        self.assertNotEqual(core.preprocess.preprocess(['—'], {}, 'a'), [])
+        self.assertNotEqual(core.preprocess.preprocess(['…'], {}, 'a'), [])
 
     def run_script(self, content: str, current_package: str, deps: List[Tuple[str, str]]) -> str:
-        test_tmpdir = os.getenv('TEST_TMPDIR')
+        test_tmpdir = utils.test_utils.tmpdir()
 
         in_file = os.path.join(test_tmpdir, 'in.md')
         with open(in_file, 'w', encoding='utf-8') as f:

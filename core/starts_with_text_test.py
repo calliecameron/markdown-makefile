@@ -1,6 +1,6 @@
 import sys
 import unittest
-import test_utils
+import utils.test_utils
 
 PANDOC = ''
 FILTER = ''
@@ -9,10 +9,10 @@ FILTER = ''
 class TestStartsWithText(unittest.TestCase):
 
     def test_starts_with_text(self) -> None:
-        j = test_utils.pandoc_lua_filter(PANDOC, FILTER, 'Foo')
+        j = utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, 'Foo')
         self.assertEqual(j['meta']['starts-with-text']['c'], 't')
 
-        j = test_utils.pandoc_lua_filter(PANDOC, FILTER, '# Foo\n\nBar.')
+        j = utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, '# Foo\n\nBar.')
         self.assertEqual(j['meta']['starts-with-text']['c'], '')
 
 

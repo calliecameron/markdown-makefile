@@ -2,7 +2,7 @@ import os
 import os.path
 import sys
 import unittest
-import test_utils
+import utils.test_utils
 
 PANDOC = ''
 FILTER = ''
@@ -21,10 +21,10 @@ Baz quux test yay.
 class TestWriteMetadata(unittest.TestCase):
 
     def test_write_metadata(self) -> None:
-        test_tmpdir = os.getenv('TEST_TMPDIR')
+        test_tmpdir = utils.test_utils.tmpdir()
         metadata_out_file = os.path.join(test_tmpdir, 'metadata.json')
 
-        test_utils.pandoc_lua_filter(
+        utils.test_utils.pandoc_lua_filter(
             PANDOC, FILTER, DOC, [f'--metadata=metadata-out-file:{metadata_out_file}'])
 
         with open(metadata_out_file, encoding='utf-8') as f:

@@ -3,6 +3,7 @@ import os.path
 import subprocess
 import sys
 import unittest
+import utils.test_utils
 
 
 SCRIPT = ''
@@ -11,7 +12,7 @@ SCRIPT = ''
 class TestWriteOpenScript(unittest.TestCase):
 
     def test_write_open_script(self) -> None:
-        test_tmpdir = os.getenv('TEST_TMPDIR')
+        test_tmpdir = utils.test_utils.tmpdir()
 
         out_file = os.path.join(test_tmpdir, 'out.sh')
 

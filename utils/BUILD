@@ -18,7 +18,21 @@ exports_files(
         "workspace_test.sh",
         "collection_header.tex",
         "collection_before.tex",
+        "mypy_test.py",
     ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "py_srcs",
+    data = glob(["*.py"]) + ["workspace_status"],
+    visibility = ["//:__pkg__"],
+)
+
+py_library(
+    name = "test_utils",
+    testonly = True,
+    srcs = ["test_utils.py"],
     visibility = ["//visibility:public"],
 )
 
@@ -87,4 +101,5 @@ py_test(
     srcs = ["collection_src_test.py"],
     args = ["$(rootpath collection_src.py)"],
     data = ["collection_src.py"],
+    deps = [":test_utils"],
 )

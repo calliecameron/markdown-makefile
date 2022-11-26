@@ -1,5 +1,11 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_test")
 
+filegroup(
+    name = "py_srcs",
+    data = glob(["*.py"]),
+    visibility = ["//:__pkg__"],
+)
+
 sh_binary(
     name = "write_open_script",
     srcs = ["write_open_script.sh"],
@@ -11,6 +17,7 @@ py_test(
     srcs = ["write_open_script_test.py"],
     args = ["$(rootpath write_open_script.sh)"],
     data = ["write_open_script.sh"],
+    deps = ["//utils:test_utils"],
 )
 
 filegroup(
@@ -72,6 +79,7 @@ py_test(
     srcs = ["ms_metadata_test.py"],
     args = ["$(rootpath ms_metadata.py)"],
     data = ["ms_metadata.py"],
+    deps = ["//utils:test_utils"],
 )
 
 filegroup(
@@ -112,6 +120,7 @@ py_test(
     srcs = ["zip_cleaner_test.py"],
     args = ["$(rootpath zip_cleaner.sh)"],
     data = ["zip_cleaner.sh"],
+    deps = ["//utils:test_utils"],
 )
 
 sh_binary(
@@ -125,4 +134,5 @@ py_test(
     srcs = ["write_save_script_test.py"],
     args = ["$(rootpath write_save_script.sh)"],
     data = ["write_save_script.sh"],
+    deps = ["//utils:test_utils"],
 )

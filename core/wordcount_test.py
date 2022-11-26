@@ -1,6 +1,6 @@
 import sys
 import unittest
-import test_utils
+import utils.test_utils
 
 PANDOC = ''
 FILTER = ''
@@ -16,7 +16,7 @@ Baz quux test yay.
 class TestWordcount(unittest.TestCase):
 
     def test_wordcount(self) -> None:
-        j = test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC)
+        j = utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC)
         self.assertEqual(j['meta']['wordcount']['c'], '6')
 
 

@@ -1,5 +1,11 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
 
+filegroup(
+    name = "py_srcs",
+    data = glob(["*.py"]),
+    visibility = ["//:__pkg__"],
+)
+
 py_library(
     name = "bazel_package",
     srcs = ["bazel_package.py"],
@@ -22,7 +28,11 @@ py_test(
     name = "raw_version_test",
     srcs = ["raw_version_test.py"],
     args = ["$(rootpath raw_version.py)"],
-    data = ["raw_version.py"],
+    data = [
+        "bazel_package.py",
+        "raw_version.py",
+    ],
+    deps = ["//utils:test_utils"],
 )
 
 py_binary(
@@ -36,7 +46,10 @@ py_test(
     srcs = ["base_metadata_test.py"],
     args = ["$(rootpath base_metadata.py)"],
     data = ["base_metadata.py"],
-    deps = [":base_metadata"],
+    deps = [
+        ":base_metadata",
+        "//utils:test_utils",
+    ],
 )
 
 py_binary(
@@ -51,13 +64,10 @@ py_test(
     srcs = ["preprocess_test.py"],
     args = ["$(rootpath preprocess.py)"],
     data = ["preprocess.py"],
-    deps = [":preprocess"],
-)
-
-py_library(
-    name = "test_utils",
-    testonly = True,
-    srcs = ["test_utils.py"],
+    deps = [
+        ":preprocess",
+        "//utils:test_utils",
+    ],
 )
 
 filegroup(
@@ -77,7 +87,7 @@ py_test(
         "validate.py",
         "@pandoc",
     ],
-    deps = [":test_utils"],
+    deps = ["//utils:test_utils"],
 )
 
 filegroup(
@@ -97,7 +107,7 @@ py_test(
         "include.lua",
         "@pandoc",
     ],
-    deps = [":test_utils"],
+    deps = ["//utils:test_utils"],
 )
 
 filegroup(
@@ -117,7 +127,7 @@ py_test(
         "wordcount.lua",
         "@pandoc",
     ],
-    deps = [":test_utils"],
+    deps = ["//utils:test_utils"],
 )
 
 filegroup(
@@ -137,7 +147,7 @@ py_test(
         "starts_with_text.lua",
         "@pandoc",
     ],
-    deps = [":test_utils"],
+    deps = ["//utils:test_utils"],
 )
 
 filegroup(
@@ -157,7 +167,7 @@ py_test(
         "write_metadata.lua",
         "@pandoc",
     ],
-    deps = [":test_utils"],
+    deps = ["//utils:test_utils"],
 )
 
 filegroup(
@@ -177,7 +187,7 @@ py_test(
         "cleanup.lua",
         "@pandoc",
     ],
-    deps = [":test_utils"],
+    deps = ["//utils:test_utils"],
 )
 
 sh_binary(
@@ -191,6 +201,7 @@ py_test(
     srcs = ["write_dictionary_test.py"],
     args = ["$(rootpath write_dictionary.sh)"],
     data = ["write_dictionary.sh"],
+    deps = ["//utils:test_utils"],
 )
 
 filegroup(
@@ -210,4 +221,5 @@ py_test(
     srcs = ["spellcheck_test.py"],
     args = ["$(rootpath spellcheck.sh)"],
     data = ["spellcheck.sh"],
+    deps = ["//utils:test_utils"],
 )

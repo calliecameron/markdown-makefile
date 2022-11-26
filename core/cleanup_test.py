@@ -1,6 +1,6 @@
 import sys
 import unittest
-import test_utils
+import utils.test_utils
 
 PANDOC = ''
 FILTER = ''
@@ -16,7 +16,7 @@ repo: bar
 class TestCleanup(unittest.TestCase):
 
     def test_cleanup(self) -> None:
-        j = test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC)
+        j = utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC)
         self.assertNotIn('repo', j['meta'])
 
 

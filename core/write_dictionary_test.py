@@ -3,7 +3,7 @@ import os.path
 import subprocess
 import sys
 import unittest
-
+import utils.test_utils
 
 SCRIPT = ''
 
@@ -11,7 +11,7 @@ SCRIPT = ''
 class TestWriteDictionary(unittest.TestCase):
 
     def test_write_dictionary(self) -> None:
-        test_tmpdir = os.getenv('TEST_TMPDIR')
+        test_tmpdir = utils.test_utils.tmpdir()
 
         in_file_1 = os.path.join(test_tmpdir, 'in1.dic')
         with open(in_file_1, 'w', encoding='utf-8') as f:

@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional, Tuple
 import argparse
 import sys
-import bazel_package
+import core.bazel_package
 
 # pylint: disable=consider-using-enumerate
 
@@ -22,7 +22,7 @@ def get_include(line: str, current_package: str) -> Optional[str]:
     if not label.startswith(' '):
         raise ValueError(f'Include statement must be followed by a space: {line}')
     label = label.lstrip(' ')
-    package, target = bazel_package.canonicalise_label(label, current_package)
+    package, target = core.bazel_package.canonicalise_label(label, current_package)
     return package + ':' + target
 
 

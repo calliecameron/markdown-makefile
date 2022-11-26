@@ -3,6 +3,7 @@ import os.path
 import subprocess
 import sys
 import unittest
+import utils.test_utils
 
 
 SCRIPT = ''
@@ -11,7 +12,7 @@ SCRIPT = ''
 class TestZipCleaner(unittest.TestCase):
 
     def test_zip_cleaner(self) -> None:
-        test_tmpdir = os.getenv('TEST_TMPDIR')
+        test_tmpdir = utils.test_utils.tmpdir()
 
         txt_file = os.path.join(test_tmpdir, 'in.txt')
         with open(txt_file, 'w', encoding='utf-8') as f:

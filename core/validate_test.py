@@ -1,6 +1,6 @@
 import sys
 import unittest
-import test_utils
+import utils.test_utils
 
 
 PANDOC = ''
@@ -16,18 +16,18 @@ GOOD = """% “Hello” ‘world’
 class TestValidate(unittest.TestCase):
 
     def test_validate_succeeds(self) -> None:
-        test_utils.pandoc_filter(PANDOC, FILTER, GOOD)
+        utils.test_utils.pandoc_filter(PANDOC, FILTER, GOOD)
 
     def test_validate_fails(self) -> None:
         with self.assertRaises(ValueError):
-            test_utils.pandoc_filter(PANDOC, FILTER, "% '")
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, "% '")
         with self.assertRaises(ValueError):
-            test_utils.pandoc_filter(PANDOC, FILTER, '% "')
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, '% "')
 
         with self.assertRaises(ValueError):
-            test_utils.pandoc_filter(PANDOC, FILTER, "'")
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, "'")
         with self.assertRaises(ValueError):
-            test_utils.pandoc_filter(PANDOC, FILTER, '"')
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, '"')
 
 
 if __name__ == '__main__':

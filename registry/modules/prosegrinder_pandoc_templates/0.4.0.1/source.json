@@ -1,0 +1,9 @@
+{
+    "url": "https://github.com/prosegrinder/pandoc-templates/archive/a99f1e2.zip",
+    "integrity": "sha384-b7ncmtVPWSsT0WJ01QWvtDpyGYnHMKPXgaM2maPygYxOi6j20iC3irRd+HufI0RN",
+    "strip_prefix": "pandoc-templates-a99f1e26862191a0965f59c15bf0eb8f65e92509",
+    "patch_strip": 0,
+    "patches": {
+        "build.patch": "sha384-uZBcRaobmqmH0q4f2Yl2HCKdRKgp/h6FDmpWvv2TJdQfMrh4ujEmBiLK+ouXjIOK"
+    }
+}

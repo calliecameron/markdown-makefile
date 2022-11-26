@@ -221,7 +221,7 @@ md_ms_docx = rule(
             default = "//formats:ms_docx",
         ),
         "_md2short": attr.label(
-            default = "@shunn//:md2short",
+            default = "@prosegrinder_pandoc_templates//:md2short",
         ),
         "_filter": attr.label(
             default = "//formats:ms_docx_filter",

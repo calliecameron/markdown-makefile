@@ -23,15 +23,24 @@ test -z "${7:-}" && usage
 GITIGNORE="${7}"
 test -z "${8:-}" && usage
 PRECOMMIT="${8}"
-LOCAL_BINDUMP="${9:-}"
-LOCAL_DOCDUMP="${10:-}"
-LOCAL_PDFDUMP="${11:-}"
-LOCAL_ZIPDUMP="${12:-}"
-LOCAL_GITATTRIBUTES="${13:-}"
-LOCAL_GITCONFIG="${14:-}"
-LOCAL_GITIGNORE="${15:-}"
-LOCAL_REPO_CONFIG="${16:-}"
-LOCAL_PRECOMMIT="${17:-}"
+test -z "${9:-}" && usage
+LOCAL_BINDUMP="${9}"
+test -z "${10:-}" && usage
+LOCAL_DOCDUMP="${10}"
+test -z "${11:-}" && usage
+LOCAL_PDFDUMP="${11}"
+test -z "${12:-}" && usage
+LOCAL_ZIPDUMP="${12}"
+test -z "${13:-}" && usage
+LOCAL_GITATTRIBUTES="${13}"
+test -z "${14:-}" && usage
+LOCAL_GITCONFIG="${14}"
+test -z "${15:-}" && usage
+LOCAL_GITIGNORE="${15}"
+test -z "${16:-}" && usage
+LOCAL_REPO_CONFIG="${16}"
+test -z "${17:-}" && usage
+LOCAL_PRECOMMIT="${17}"
 
 DIFF=''
 

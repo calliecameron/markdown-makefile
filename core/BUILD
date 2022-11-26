@@ -11,16 +11,6 @@ py_test(
     deps = [":bazel_package"],
 )
 
-sh_test(
-    name = "workspace_status_test",
-    srcs = ["workspace_status_test.sh"],
-    args = ["$(rootpath workspace_status.py)"],
-    data = [
-        "bazel_package.py",
-        "workspace_status.py",
-    ],
-)
-
 py_binary(
     name = "raw_version",
     srcs = ["raw_version.py"],

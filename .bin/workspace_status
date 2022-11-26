@@ -7,11 +7,41 @@ import datetime
 import os
 import os.path
 import re
+import string
 import subprocess
-import bazel_package
+import unicodedata
 
 
+PANDOC_VERSION_KEY = 'STABLE_PANDOC_VERSION'
 EXPECTED_PANDOC_VERSION = '2.19.2'
+
+
+def normalised_char_name(char: str) -> str:
+    if len(char) != 1:
+        raise ValueError(f"char must be a single character, got '{char}'")
+    valid = frozenset(string.ascii_uppercase + '_')
+    return ''.join([c for c in unicodedata.name(char) if c in valid])
+
+
+def package_key(path: str) -> str:
+    # Keys can only contain uppercase letters and underscores.
+    path = path.upper().replace('_', '__')
+    valid = frozenset(string.ascii_uppercase + '_')
+    parts = []
+    for c in path:
+        if c in valid:
+            parts.append(c)
+        else:
+            parts.append('_' + normalised_char_name(c) + '_')
+    return ''.join(parts)
+
+
+def version_key(key: str) -> str:
+    return 'STABLE_VERSION_' + key
+
+
+def repo_key(key: str) -> str:
+    return 'STABLE_REPO_' + key
 
 
 @contextlib.contextmanager
@@ -97,9 +127,9 @@ def get_package_data(root: str) -> List[Tuple[str, str]]:
         else:
             version = 'unversioned'
             repo = 'unversioned'
-        key = bazel_package.package_key(path)
-        out.append((bazel_package.version_key(key), version))
-        out.append((bazel_package.repo_key(key), repo))
+        key = package_key(path)
+        out.append((version_key(key), version))
+        out.append((repo_key(key), repo))
     return out
 
 
@@ -118,7 +148,7 @@ def get_pandoc_version() -> Tuple[str, str]:
             if version != EXPECTED_PANDOC_VERSION:
                 raise ValueError(
                     f'Got pandoc version {version}; expected {EXPECTED_PANDOC_VERSION}')
-            return bazel_package.PANDOC_VERSION_KEY, version
+            return PANDOC_VERSION_KEY, version
 
     raise ValueError('Failed to get pandoc version')
 

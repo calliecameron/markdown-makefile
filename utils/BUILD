@@ -13,6 +13,9 @@ exports_files(
         "git_update.sh",
         "git_test.sh",
         "new_package.sh",
+        "workspace_status",
+        "workspace_update.sh",
+        "workspace_test.sh",
         "collection_header.tex",
         "collection_before.tex",
     ],
@@ -51,6 +54,26 @@ sh_test(
     srcs = ["new_package_test.sh"],
     args = ["$(rootpath new_package.sh)"],
     data = ["new_package.sh"],
+)
+
+sh_test(
+    name = "workspace_status_test",
+    srcs = ["workspace_status_test.sh"],
+    args = ["$(rootpath workspace_status)"],
+    data = ["workspace_status"],
+)
+
+sh_test(
+    name = "workspace_update_test",
+    srcs = ["workspace_update_test.sh"],
+    args = [
+        "$(rootpath workspace_update.sh)",
+        "$(rootpath workspace_status)",
+    ],
+    data = [
+        "workspace_status",
+        "workspace_update.sh",
+    ],
 )
 
 py_binary(

@@ -68,6 +68,12 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+sh_binary(
+    name = "unoconv",
+    srcs = ["unoconv.sh"],
+    visibility = ["//visibility:public"],
+)
+
 py_binary(
     name = "ms_metadata",
     srcs = ["ms_metadata.py"],

@@ -113,7 +113,7 @@ def _md_doc_impl(ctx):
     ctx.actions.run(
         outputs = [output],
         inputs = [ctx.attr.docx[MdDocxInfo].output],
-        executable = "unoconv",
+        executable = ctx.attr._unoconv[DefaultInfo].files_to_run,
         arguments = [
             "--format",
             "doc",
@@ -141,6 +141,9 @@ md_doc = rule(
             doc = "An md_docx target.",
         ),
         "out": attr.output(),
+        "_unoconv": attr.label(
+            default = "//formats:unoconv",
+        ),
         "_write_open_script": write_open_script(),
     },
 )

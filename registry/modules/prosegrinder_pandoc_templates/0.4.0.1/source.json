@@ -4,6 +4,7 @@
     "strip_prefix": "pandoc-templates-a99f1e26862191a0965f59c15bf0eb8f65e92509",
     "patch_strip": 0,
     "patches": {
-        "build.patch": "sha384-uZBcRaobmqmH0q4f2Yl2HCKdRKgp/h6FDmpWvv2TJdQfMrh4ujEmBiLK+ouXjIOK"
+        "build.patch": "sha384-uZBcRaobmqmH0q4f2Yl2HCKdRKgp/h6FDmpWvv2TJdQfMrh4ujEmBiLK+ouXjIOK",
+        "md2short_dot_sh.patch": "sha384-tCSNMzlAVMZ6oiSBo8c4RYmGwNbQlz+IZ/4xGBuLVyitbWGOAhX1W9vg3Ay+NiLo"
     }
 }

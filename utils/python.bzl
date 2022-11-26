@@ -42,3 +42,27 @@ def py_validation():
         ],
         deps = [requirement("flake8")],
     )
+
+    py_test(
+        name = "autopep8_test",
+        srcs = ["//utils:autopep8_test.py"],
+        args = [
+            "--global-config=$(rootpath //:.flake8)",
+            "--recursive",
+            "--diff",
+            "--exit-code",
+            "--aggressive",
+            "--aggressive",
+            "--aggressive",
+            "core",
+            "formats",
+            "utils",
+        ],
+        data = [
+            "//:.flake8",
+            "//core:py_srcs",
+            "//formats:py_srcs",
+            "//utils:py_srcs",
+        ],
+        deps = [requirement("autopep8")],
+    )

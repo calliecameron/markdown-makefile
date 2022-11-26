@@ -1,42 +1,67 @@
 # markdown-makefile
 
-Pandoc wrapper to convert markdown to other formats with a single `make` command.
+Opinionated bazel rules for markdown, using pandoc. Converts markdown to many
+output formats.
 
-    $ ls
-    hello.md  Makefile
-    $ make pdf
-    $ ls
-    hello.md  Makefile  output/
-    $ ls output
-    hello.pdf
+## Installation
 
+Install dependencies:
 
-## Dependencies
+```shell
+sudo apt-get install FOO
+```
 
-Required:
+Set up your workspace:
 
-- Pandoc 2.13
-- Python 3
+```shell
+cat > .bazelrc <<EOF
+build "--workspace_status_command=/bin/bash -c 'if [ -x ./.bin/workspace_status ]; then ./.bin/workspace_status; fi'"
+common --experimental_enable_bzlmod --registry=https://raw.githubusercontent.com/calliecameron/markdown-makefile/master/registry --registry=https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main
+EOF
+cat > .bazelversion <<EOF
+6.0.0rc2
+EOF
+touch WORKSPACE
+cat > MODULE.bazel <<EOF
+module(
+    name = "my_module",
+    version = "0.0.0",
+)
 
-Optional:
+bazel_dep(
+    name = "markdown_makefile",
+    version = "<VERSION>",
+)
+EOF
+cat > BUILD <<EOF
+load("@markdown_makefile//:build_defs.bzl", "md_workspace")
 
-- Xelatex for PDF output
-- Unoconv for DOC output
-- `ebook-convert` from Calibre for MOBI output
-- [prosegrinder/pandoc-templates](https://github.com/prosegrinder/pandoc-templates) for DOCX output in [Shunn manuscript format](https://www.shunn.net/format/story/)
-- Hunspell for spellchecking
-- Git to include commit information in generated files
+md_workspace()
+EOF
+bazel run :workspace_update
+bazel test :workspace_test
+```
 
+If your workspace is also the root of a git repo, add `md_git_repo()` to the
+BUILD file, and run `bazel run :git_update`.
 
-## Setup
+## Usage
 
-Set `MARKDOWN_MAKEFILE_DIR` to point to this directory, then source `env.sh`.
+Example BUILD file:
 
-Run `pip install -r requirements.txt`.
+```build
+load("@markdown_makefile//:build_defs.bzl", "md_document")
 
-Run `markdown-makefile` to copy a new makefile into the current directory.
+md_document(
+    name = "foo",
+)
+```
 
+By default this looks for source file `foo.md`. See the loaded bzl file for
+docs.
 
-## Testing
+Compile to different formats by running e.g. `bazel build :pdf` or
+`bazel build :epub`. View the results with e.g. `bazel run :pdf`.
 
-To ensure it works on your system (i.e. not affected by quirks in the Pandoc or LaTeX installation), run `make all` in each of the tests, and compare the files in `output` to those in `saved`.
+To initialise a subdirectory with a default BUILD file, run `bazel run //:new`
+in that directory.

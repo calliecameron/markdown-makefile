@@ -14,6 +14,7 @@ exports_files(
         "git_test.sh",
         "new_package.sh",
         "collection_header.tex",
+        "collection_before.tex",
     ],
     visibility = ["//visibility:public"],
 )

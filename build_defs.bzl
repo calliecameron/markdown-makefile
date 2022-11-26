@@ -279,7 +279,10 @@ def md_collection(
         name = name,
         src = name + "_src",
         deps = deps,
-        data = ["@markdown_makefile//utils:collection_header.tex"] + ([extra_metadata] if extra_metadata else []),
+        data = [
+            "@markdown_makefile//utils:collection_header.tex",
+            "@markdown_makefile//utils:collection_before.tex",
+        ] + ([extra_metadata] if extra_metadata else []),
         increment_included_headers = True,
         extra_pandoc_flags = [
             "--table-of-contents",
@@ -288,6 +291,7 @@ def md_collection(
         extra_latex_flags = [
             "--variable=section-page-break",
             "--include-in-header=$(rootpath @markdown_makefile//utils:collection_header.tex)",
+            "--include-before-body=$(rootpath @markdown_makefile//utils:collection_before.tex)",
         ],
         version_override = version_override,
         timestamp_override = timestamp_override,

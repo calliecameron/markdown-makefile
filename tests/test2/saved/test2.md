@@ -10,7 +10,7 @@ source-md5: 2518a18c39cbd5e88b46c164d163e14a
 starts-with-text: t
 subject: "Version: reproducible"
 title: The Title
-wordcount: 241
+wordcount: 247
 ---
 
 This is some text before a section. It shouldn’t be indented. Each
@@ -57,6 +57,10 @@ Caps]{.smallcaps}. Here is a pound sign (£), a euro sign (€), and three
 letters with accents: ëóû.
 
 # This is a second section
+
+![foo](tests/test2/image.png){width="50%"}
+
+There is an image here.
 
 And this is *even more italic text*.
 

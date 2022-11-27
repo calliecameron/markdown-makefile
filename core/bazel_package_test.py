@@ -42,7 +42,7 @@ class TestBazelPackage(unittest.TestCase):
     def test_validate_target(self) -> None:
         core.bazel_package._validate_target('')
         core.bazel_package._validate_target('a')
-        core.bazel_package._validate_target('abc/DEF123%-@^_"#$&\'()*-+,;<=>?[]{|}~/.a')
+        core.bazel_package._validate_target('abc/DEF123%-@^_"#$&\'(*-+,;<=>?[]{|}~/.a')
 
         with self.assertRaises(ValueError):
             core.bazel_package._validate_target('!')

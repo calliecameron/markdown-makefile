@@ -46,7 +46,10 @@ def _validate_package(package: str) -> None:
 
 
 def _validate_target(target: str) -> None:
-    valid = string.ascii_letters + string.digits + '%-@^_"#$&\'()*-+,;<=>?[]{|}~/.'
+    # We deliberately exclude closing parenthesis from this list, even though
+    # it's valid according to the bazel spec, because it messes up markdown
+    # image handling.
+    valid = string.ascii_letters + string.digits + '%-@^_"#$&\'(*-+,;<=>?[]{|}~/.'
     for c in target:
         if c not in valid:
             raise ValueError(f"Invalid character '{c}' in target: {target}")

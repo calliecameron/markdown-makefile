@@ -100,6 +100,10 @@ is a pound sign (£), a euro sign (€), and three letters with accents:
 
 This is a second section
 
+[foo]
+
+There is an image here.
+
 And this is even more italic text.
 
 The Title Is ‘Baz’

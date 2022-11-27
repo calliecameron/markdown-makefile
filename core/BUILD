@@ -210,6 +210,26 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+filegroup(
+    name = "spellcheck_filter",
+    srcs = ["spellcheck_filter.lua"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "spellcheck_filter_test",
+    srcs = ["spellcheck_filter_test.py"],
+    args = [
+        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath spellcheck_filter.lua)",
+    ],
+    data = [
+        "spellcheck_filter.lua",
+        "@pandoc",
+    ],
+    deps = ["//utils:test_utils"],
+)
+
 sh_binary(
     name = "spellcheck",
     srcs = ["spellcheck.sh"],

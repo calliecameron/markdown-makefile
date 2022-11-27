@@ -33,6 +33,7 @@ def md_library(
         deps = None,
         extra_dictionaries = None,
         data = None,
+        images = None,
         increment_included_headers = False,
         version_override = ""):
     """md_library represents a markdown source file.
@@ -43,6 +44,7 @@ def md_library(
         deps: other md_library targets used in !include statements in src.
         extra_dictionaries: extra dictionaries for spellchecking.
         data: data dependencies.
+        images: image dependencies.
         increment_included_headers: if true, header level in included files is
             incremented, e.g. level 1 headers become level 2 headers. If false,
             headers are unchanged.
@@ -54,6 +56,7 @@ def md_library(
     deps = deps or []
     extra_dictionaries = extra_dictionaries or []
     data = data or []
+    images = images or []
 
     _md_library(
         name = name,
@@ -61,6 +64,7 @@ def md_library(
         deps = deps,
         dictionaries = native.glob([name + ".dic"]) + extra_dictionaries,
         data = data,
+        images = images,
         increment_included_headers = increment_included_headers,
         version_override = version_override,
         metadata_out = name + "_metadata.json",
@@ -90,6 +94,7 @@ def md_document(
         deps = None,
         extra_dictionaries = None,
         data = None,
+        images = None,
         increment_included_headers = False,
         extra_pandoc_flags = None,
         extra_latex_flags = None,
@@ -105,6 +110,7 @@ def md_document(
         deps: other md_library targets used in !include statements in src.
         extra_dictionaries: extra dictionaries for spellchecking.
         data: data dependencies.
+        images: image dependencies.
         increment_included_headers: if true, header level in included files is
             incremented, e.g. level 1 headers become level 2 headers. If false,
             headers are unchanged.
@@ -121,7 +127,7 @@ def md_document(
             some convenience aliases.
     """
     if existing_lib:
-        if src or deps or extra_dictionaries or increment_included_headers or version_override:
+        if src or deps or extra_dictionaries or data or images or increment_included_headers or version_override:
             native.fail("Other args must not be set when existing_lib is set")
         lib = existing_lib
     else:
@@ -131,6 +137,7 @@ def md_document(
             deps = deps,
             extra_dictionaries = extra_dictionaries,
             data = data,
+            images = images,
             increment_included_headers = increment_included_headers,
             version_override = version_override,
         )

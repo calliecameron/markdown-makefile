@@ -180,9 +180,12 @@ def _md_ms_docx_impl(ctx):
     intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.docx")
     env = timestamp_override(ctx)
     env["PANDOC"] = ctx.attr._pandoc[DefaultInfo].files_to_run.executable.path
+    data_inputs = []
+    for target in ctx.attr.lib[MdLibraryInfo].data.to_list():
+        data_inputs += target.files.to_list()
     ctx.actions.run(
         outputs = [intermediate_docx],
-        inputs = [
+        inputs = data_inputs + [
             ctx.attr._md2short[DefaultInfo].files.to_list()[0],
             intermediate_md,
             ctx.attr._filter[DefaultInfo].files.to_list()[0],

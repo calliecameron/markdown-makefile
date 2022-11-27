@@ -45,4 +45,8 @@ This is a new paragraph after the stars. This text is <span style="font-variant:
 
 # This is a second section
 
+![foo](image.png){width=50%}
+
+There is an image here.
+
 And this is *even more italic text*.

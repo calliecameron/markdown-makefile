@@ -43,11 +43,14 @@ def _md_library_impl(ctx):
     dep_args = []
     for dep in ctx.attr.deps:
         dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].output.path]
+    image_args = []
+    for image in ctx.attr.images:
+        image_args += ["--image", image.label.package + ":" + image.label.name, image[DefaultInfo].files.to_list()[0].path]
     ctx.actions.run(
         outputs = [preprocessed],
         inputs = [ctx.file.src],
         executable = ctx.attr._preprocess[DefaultInfo].files_to_run,
-        arguments = dep_args + [ctx.file.src.path, preprocessed.path, ctx.label.package],
+        arguments = dep_args + image_args + [ctx.file.src.path, preprocessed.path, ctx.label.package],
         progress_message = "%{label}: preprocessing markdown",
     )
 
@@ -108,9 +111,12 @@ def _md_library_impl(ctx):
     spellcheck_input = ctx.actions.declare_file(ctx.label.name + "_spellcheck_input.md")
     ctx.actions.run(
         outputs = [spellcheck_input],
-        inputs = [intermediate] + ctx.attr._spellcheck_input_template.files.to_list(),
+        inputs = [intermediate] +
+                 ctx.attr._spellcheck_input_template.files.to_list() +
+                 ctx.attr._spellcheck_filter.files.to_list(),
         executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         arguments = [
+            "--lua-filter=" + ctx.attr._spellcheck_filter[DefaultInfo].files.to_list()[0].path,
             "--from=json",
             "--to=markdown-smart",
             "--template=" + ctx.attr._spellcheck_input_template[DefaultInfo].files.to_list()[0].path,
@@ -139,7 +145,7 @@ def _md_library_impl(ctx):
         progress_message = "%{label}: generating output",
     )
 
-    data = depset(ctx.attr.data, transitive = [dep[MdLibraryInfo].data for dep in ctx.attr.deps])
+    data = depset(ctx.attr.data + ctx.attr.images, transitive = [dep[MdLibraryInfo].data for dep in ctx.attr.deps])
     return [
         DefaultInfo(files = depset([output, metadata, dictionary])),
         MdLibraryInfo(name = ctx.label.name, output = output, metadata = metadata, dictionary = dictionary, data = data),
@@ -167,6 +173,11 @@ md_library = rule(
             allow_empty = True,
             allow_files = True,
             doc = "Data dependencies.",
+        ),
+        "images": attr.label_list(
+            allow_empty = True,
+            allow_files = True,
+            doc = "Image dependencies.",
         ),
         "increment_included_headers": attr.bool(
             default = False,
@@ -214,6 +225,9 @@ md_library = rule(
         ),
         "_spellcheck_input_template": attr.label(
             default = "//core:spellcheck_input_template",
+        ),
+        "_spellcheck_filter": attr.label(
+            default = "//core:spellcheck_filter",
         ),
         "_spellcheck": attr.label(
             default = "//core:spellcheck",

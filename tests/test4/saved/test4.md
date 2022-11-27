@@ -10,7 +10,7 @@ lang: en-GB
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"
 title: Test 4
-wordcount: 777
+wordcount: 783
 ---
 
 -   [The Title](#the-title){#toc-the-title}
@@ -110,6 +110,10 @@ Caps]{.smallcaps}. Here is a pound sign (£), a euro sign (€), and three
 letters with accents: ëóû.
 
 ## This is a second section
+
+![foo](tests/test2/image.png){width="50%"}
+
+There is an image here.
 
 And this is *even more italic text*.
 

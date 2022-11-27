@@ -6,6 +6,20 @@ filegroup(
     visibility = ["//:__pkg__"],
 )
 
+exports_files(
+    [
+        "validate.py",
+        "include.lua",
+        "starts_with_text.lua",
+        "wordcount.lua",
+        "write_metadata.lua",
+        "cleanup.lua",
+        "spellcheck_input_template.md",
+        "spellcheck_filter.lua",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 py_library(
     name = "bazel_package",
     srcs = ["bazel_package.py"],
@@ -70,12 +84,6 @@ py_test(
     ],
 )
 
-filegroup(
-    name = "validate",
-    srcs = ["validate.py"],
-    visibility = ["//visibility:public"],
-)
-
 py_test(
     name = "validate_test",
     srcs = ["validate_test.py"],
@@ -88,12 +96,6 @@ py_test(
         "@pandoc",
     ],
     deps = ["//utils:test_utils"],
-)
-
-filegroup(
-    name = "include",
-    srcs = ["include.lua"],
-    visibility = ["//visibility:public"],
 )
 
 py_test(
@@ -110,10 +112,18 @@ py_test(
     deps = ["//utils:test_utils"],
 )
 
-filegroup(
-    name = "wordcount",
-    srcs = ["wordcount.lua"],
-    visibility = ["//visibility:public"],
+py_test(
+    name = "starts_with_text_test",
+    srcs = ["starts_with_text_test.py"],
+    args = [
+        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath starts_with_text.lua)",
+    ],
+    data = [
+        "starts_with_text.lua",
+        "@pandoc",
+    ],
+    deps = ["//utils:test_utils"],
 )
 
 py_test(
@@ -130,32 +140,6 @@ py_test(
     deps = ["//utils:test_utils"],
 )
 
-filegroup(
-    name = "starts_with_text",
-    srcs = ["starts_with_text.lua"],
-    visibility = ["//visibility:public"],
-)
-
-py_test(
-    name = "starts_with_text_test",
-    srcs = ["starts_with_text_test.py"],
-    args = [
-        "$(rootpath @pandoc//:pandoc)",
-        "$(rootpath starts_with_text.lua)",
-    ],
-    data = [
-        "starts_with_text.lua",
-        "@pandoc",
-    ],
-    deps = ["//utils:test_utils"],
-)
-
-filegroup(
-    name = "write_metadata",
-    srcs = ["write_metadata.lua"],
-    visibility = ["//visibility:public"],
-)
-
 py_test(
     name = "write_metadata_test",
     srcs = ["write_metadata_test.py"],
@@ -168,12 +152,6 @@ py_test(
         "@pandoc",
     ],
     deps = ["//utils:test_utils"],
-)
-
-filegroup(
-    name = "cleanup",
-    srcs = ["cleanup.lua"],
-    visibility = ["//visibility:public"],
 )
 
 py_test(
@@ -202,18 +180,6 @@ py_test(
     args = ["$(rootpath write_dictionary.sh)"],
     data = ["write_dictionary.sh"],
     deps = ["//utils:test_utils"],
-)
-
-filegroup(
-    name = "spellcheck_input_template",
-    srcs = ["spellcheck_input_template.md"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
-    name = "spellcheck_filter",
-    srcs = ["spellcheck_filter.lua"],
-    visibility = ["//visibility:public"],
 )
 
 py_test(

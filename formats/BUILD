@@ -6,6 +6,20 @@ filegroup(
     visibility = ["//:__pkg__"],
 )
 
+exports_files(
+    [
+        "header_template.tex",
+        "before_template.tex",
+        "template.tex",
+        "latex_filter.lua",
+        "epub.css",
+        "reference.docx",
+        "docx_filter.lua",
+        "ms_docx_filter.lua",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 sh_binary(
     name = "write_open_script",
     srcs = ["write_open_script.sh"],
@@ -20,51 +34,9 @@ py_test(
     deps = ["//utils:test_utils"],
 )
 
-filegroup(
-    name = "latex_header_template",
-    srcs = ["header_template.tex"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
-    name = "latex_before_template",
-    srcs = ["before_template.tex"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
-    name = "latex_template",
-    srcs = ["template.tex"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
-    name = "latex_filter",
-    srcs = ["latex_filter.lua"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
-    name = "epub_css",
-    srcs = ["epub.css"],
-    visibility = ["//visibility:public"],
-)
-
 sh_binary(
     name = "ebook_convert",
     srcs = ["ebook_convert.sh"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
-    name = "reference_docx",
-    srcs = ["reference.docx"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
-    name = "docx_filter",
-    srcs = ["docx_filter.lua"],
     visibility = ["//visibility:public"],
 )
 
@@ -86,12 +58,6 @@ py_test(
     args = ["$(rootpath ms_metadata.py)"],
     data = ["ms_metadata.py"],
     deps = ["//utils:test_utils"],
-)
-
-filegroup(
-    name = "ms_docx_filter",
-    srcs = ["ms_docx_filter.lua"],
-    visibility = ["//visibility:public"],
 )
 
 sh_test(

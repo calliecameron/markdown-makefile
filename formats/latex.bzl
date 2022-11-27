@@ -29,8 +29,8 @@ def _md_tex_intermediate_impl(ctx):
             ctx,
             "",
             "latex",
-            [template[DefaultInfo].files.to_list()[0]],
-            ["--template=" + template[DefaultInfo].files.to_list()[0].path] +
+            [template],
+            ["--template=" + template.path] +
             _LATEX_VARS + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
             {},
             ctx.attr.lib,
@@ -39,10 +39,10 @@ def _md_tex_intermediate_impl(ctx):
         )
 
     header = ctx.actions.declare_file(ctx.label.name + "_header.tex")
-    gen_intermediate(header, ctx.attr._header_template, "header")
+    gen_intermediate(header, ctx.file._header_template, "header")
 
     before = ctx.actions.declare_file(ctx.label.name + "_before.tex")
-    gen_intermediate(before, ctx.attr._before_template, "before")
+    gen_intermediate(before, ctx.file._before_template, "before")
 
     return [
         DefaultInfo(files = depset([header, before])),
@@ -63,10 +63,12 @@ md_tex_intermediate = rule(
         ),
         "_pandoc": pandoc_script(),
         "_header_template": attr.label(
-            default = "//formats:latex_header_template",
+            allow_single_file = True,
+            default = "//formats:header_template.tex",
         ),
         "_before_template": attr.label(
-            default = "//formats:latex_before_template",
+            allow_single_file = True,
+            default = "//formats:before_template.tex",
         ),
     },
 )
@@ -79,14 +81,14 @@ def _tex_output_impl(ctx, ext, to, extra_args):
         [
             ctx.attr.intermediate[MdTexIntermediateInfo].header,
             ctx.attr.intermediate[MdTexIntermediateInfo].before,
-            ctx.attr._template[DefaultInfo].files.to_list()[0],
-            ctx.attr._filter[DefaultInfo].files.to_list()[0],
+            ctx.file._template,
+            ctx.file._filter,
         ],
         [
             "--include-in-header=" + ctx.attr.intermediate[MdTexIntermediateInfo].header.path,
             "--include-before-body=" + ctx.attr.intermediate[MdTexIntermediateInfo].before.path,
-            "--template=" + ctx.attr._template[DefaultInfo].files.to_list()[0].path,
-            "--lua-filter=" + ctx.attr._filter[DefaultInfo].files.to_list()[0].path,
+            "--template=" + ctx.file._template.path,
+            "--lua-filter=" + ctx.file._filter.path,
         ] + extra_args + _LATEX_VARS + expand_locations(ctx, ctx.attr.intermediate, ctx.attr.extra_pandoc_flags),
         timestamp_override(ctx),
         ctx.attr.intermediate,
@@ -111,10 +113,12 @@ def _tex_output_rule(impl, ext):
             "_pandoc": pandoc_script(),
             "_write_open_script": write_open_script(),
             "_template": attr.label(
-                default = "//formats:latex_template",
+                allow_single_file = True,
+                default = "//formats:template.tex",
             ),
             "_filter": attr.label(
-                default = "//formats:latex_filter",
+                allow_single_file = True,
+                default = "//formats:latex_filter.lua",
             ),
         },
     )

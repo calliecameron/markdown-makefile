@@ -58,22 +58,24 @@ def _md_library_impl(ctx):
     intermediate_metadata = ctx.actions.declare_file(ctx.label.name + "_intermediate_metadata.json")
     ctx.actions.run(
         outputs = [intermediate, intermediate_metadata],
-        inputs = [preprocessed, base_metadata] +
-                 ctx.attr._validate[DefaultInfo].files.to_list() +
-                 ctx.attr._include[DefaultInfo].files.to_list() +
-                 ctx.attr._starts_with_text[DefaultInfo].files.to_list() +
-                 ctx.attr._wordcount[DefaultInfo].files.to_list() +
-                 ctx.attr._write_metadata[DefaultInfo].files.to_list() +
-                 ctx.attr._cleanup[DefaultInfo].files.to_list() +
-                 [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
+        inputs = [
+            preprocessed,
+            base_metadata,
+            ctx.file._validate,
+            ctx.file._include,
+            ctx.file._starts_with_text,
+            ctx.file._wordcount,
+            ctx.file._write_metadata,
+            ctx.file._cleanup,
+        ] + [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
         executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         arguments = [
-            "--filter=" + ctx.attr._validate[DefaultInfo].files.to_list()[0].path,
-            "--lua-filter=" + ctx.attr._include[DefaultInfo].files.to_list()[0].path,
-            "--lua-filter=" + ctx.attr._starts_with_text[DefaultInfo].files.to_list()[0].path,
-            "--lua-filter=" + ctx.attr._wordcount[DefaultInfo].files.to_list()[0].path,
-            "--lua-filter=" + ctx.attr._write_metadata[DefaultInfo].files.to_list()[0].path,
-            "--lua-filter=" + ctx.attr._cleanup[DefaultInfo].files.to_list()[0].path,
+            "--filter=" + ctx.file._validate.path,
+            "--lua-filter=" + ctx.file._include.path,
+            "--lua-filter=" + ctx.file._starts_with_text.path,
+            "--lua-filter=" + ctx.file._wordcount.path,
+            "--lua-filter=" + ctx.file._write_metadata.path,
+            "--lua-filter=" + ctx.file._cleanup.path,
             "--metadata-file=" + base_metadata.path,
             "--metadata=metadata-out-file:" + intermediate_metadata.path,
             "--from=markdown+smart",
@@ -111,15 +113,17 @@ def _md_library_impl(ctx):
     spellcheck_input = ctx.actions.declare_file(ctx.label.name + "_spellcheck_input.md")
     ctx.actions.run(
         outputs = [spellcheck_input],
-        inputs = [intermediate] +
-                 ctx.attr._spellcheck_input_template.files.to_list() +
-                 ctx.attr._spellcheck_filter.files.to_list(),
+        inputs = [
+            intermediate,
+            ctx.file._spellcheck_input_template,
+            ctx.file._spellcheck_filter,
+        ],
         executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         arguments = [
-            "--lua-filter=" + ctx.attr._spellcheck_filter[DefaultInfo].files.to_list()[0].path,
+            "--lua-filter=" + ctx.file._spellcheck_filter.path,
             "--from=json",
             "--to=markdown-smart",
-            "--template=" + ctx.attr._spellcheck_input_template[DefaultInfo].files.to_list()[0].path,
+            "--template=" + ctx.file._spellcheck_input_template.path,
             "--fail-if-warnings",
             "--output=" + spellcheck_input.path,
             intermediate.path,
@@ -154,7 +158,10 @@ def _md_library_impl(ctx):
         progress_message = "%{label}: generating metadata",
     )
 
-    data = depset(ctx.attr.data + ctx.attr.images, transitive = [dep[MdLibraryInfo].data for dep in ctx.attr.deps])
+    data = depset(
+        ctx.attr.data + ctx.attr.images,
+        transitive = [dep[MdLibraryInfo].data for dep in ctx.attr.deps],
+    )
     return [
         DefaultInfo(files = depset([output, metadata, dictionary])),
         MdLibraryInfo(name = ctx.label.name, output = output, metadata = metadata, dictionary = dictionary, data = data),
@@ -212,31 +219,39 @@ md_library = rule(
             default = "//core:preprocess",
         ),
         "_validate": attr.label(
-            default = "//core:validate",
+            allow_single_file = True,
+            default = "//core:validate.py",
         ),
         "_include": attr.label(
-            default = "//core:include",
+            allow_single_file = True,
+            default = "//core:include.lua",
         ),
         "_starts_with_text": attr.label(
-            default = "//core:starts_with_text",
+            allow_single_file = True,
+            default = "//core:starts_with_text.lua",
         ),
         "_wordcount": attr.label(
-            default = "//core:wordcount",
+            allow_single_file = True,
+            default = "//core:wordcount.lua",
         ),
         "_write_metadata": attr.label(
-            default = "//core:write_metadata",
+            allow_single_file = True,
+            default = "//core:write_metadata.lua",
         ),
         "_cleanup": attr.label(
-            default = "//core:cleanup",
+            allow_single_file = True,
+            default = "//core:cleanup.lua",
         ),
         "_write_dictionary": attr.label(
             default = "//core:write_dictionary",
         ),
         "_spellcheck_input_template": attr.label(
-            default = "//core:spellcheck_input_template",
+            allow_single_file = True,
+            default = "//core:spellcheck_input_template.md",
         ),
         "_spellcheck_filter": attr.label(
-            default = "//core:spellcheck_filter",
+            allow_single_file = True,
+            default = "//core:spellcheck_filter.lua",
         ),
         "_spellcheck": attr.label(
             default = "//core:spellcheck",

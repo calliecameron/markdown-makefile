@@ -8,7 +8,9 @@ output formats.
 Install dependencies:
 
 ```shell
-sudo apt-get install FOO
+sudo apt-get install catdoc csvkit git gcc hunspell hunspell-en-gb libegl1 libopengl0 libxkbcommon0 poppler-utils python3-pip strip-nondeterminism texlive-xetex unoconv
+
+pip install pdfminer
 ```
 
 Set up your workspace:

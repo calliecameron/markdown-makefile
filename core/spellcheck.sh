@@ -14,6 +14,12 @@ IN_FILE="${2}"
 test -z "${3:-}" && usage
 OUT_FILE="${3}"
 
+if ! command -v hunspell &>/dev/null; then
+    echo "ERROR: hunspell is not installed" >&2
+    echo >&2
+    exit 1
+fi
+
 # Hunspell doesn't like single curly quotes
 # shellcheck disable=SC1112
 OUTPUT="$(

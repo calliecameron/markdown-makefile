@@ -22,6 +22,6 @@ bazel query 'filter(.*_summary$, kind(py_binary, //...))' | LC_ALL=C sort | whil
     fi
     # shellcheck disable=SC2086
     if ! bazel run "${line}" -- ${HEADER_ARG}; then
-        echo "${line},,,,ERROR"
+        echo "${line//_summary/},,,,ERROR"
     fi
 done | "${OUTPUT_TOOL[@]}"

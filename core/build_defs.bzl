@@ -55,9 +55,9 @@ def _md_library_impl(ctx):
     )
 
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.json")
-    metadata = ctx.outputs.metadata_out
+    intermediate_metadata = ctx.actions.declare_file(ctx.label.name + "_intermediate_metadata.json")
     ctx.actions.run(
-        outputs = [intermediate, metadata],
+        outputs = [intermediate, intermediate_metadata],
         inputs = [preprocessed, base_metadata] +
                  ctx.attr._validate[DefaultInfo].files.to_list() +
                  ctx.attr._include[DefaultInfo].files.to_list() +
@@ -75,7 +75,7 @@ def _md_library_impl(ctx):
             "--lua-filter=" + ctx.attr._write_metadata[DefaultInfo].files.to_list()[0].path,
             "--lua-filter=" + ctx.attr._cleanup[DefaultInfo].files.to_list()[0].path,
             "--metadata-file=" + base_metadata.path,
-            "--metadata=metadata-out-file:" + metadata.path,
+            "--metadata=metadata-out-file:" + intermediate_metadata.path,
             "--from=markdown+smart",
             "--to=json",
             "--strip-comments",
@@ -143,6 +143,15 @@ def _md_library_impl(ctx):
         executable = "cp",
         arguments = [intermediate.path, output.path],
         progress_message = "%{label}: generating output",
+    )
+
+    metadata = ctx.outputs.metadata_out
+    ctx.actions.run(
+        outputs = [metadata],
+        inputs = [output, intermediate_metadata],
+        executable = "cp",
+        arguments = [intermediate_metadata.path, metadata.path],
+        progress_message = "%{label}: generating metadata",
     )
 
     data = depset(ctx.attr.data + ctx.attr.images, transitive = [dep[MdLibraryInfo].data for dep in ctx.attr.deps])

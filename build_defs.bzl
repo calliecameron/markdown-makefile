@@ -80,7 +80,7 @@ def md_library(
         name = name + "_summary",
         srcs = ["@markdown_makefile//utils:summary.py"],
         main = "summary.py",
-        data = [name, name + "_metadata.json"],
+        data = [name + "_metadata.json"],
         args = [
             "//%s:%s" % (native.package_name(), name),
             "$(rootpath %s_metadata.json)" % name,

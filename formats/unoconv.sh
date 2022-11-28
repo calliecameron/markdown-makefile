@@ -3,13 +3,17 @@
 
 LOCK="/tmp/markdown-makefile-unoconv.lock"
 
+function unlock() {
+    rm -rf "${LOCK}"
+}
+
 while ! mkdir "${LOCK}" &>/dev/null; do
     sleep 1
 done
 
+trap unlock EXIT
+
 unoconv "${@}"
 EXIT_CODE="$?"
-
-rmdir "${LOCK}"
 
 exit "${EXIT_CODE}"

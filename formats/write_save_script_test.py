@@ -37,7 +37,7 @@ mkdir -p "${SAVE_DIR}"
 cd "${OUTPUT_DIR}"
 cp -t "${SAVE_DIR}" *
 cd "${SAVE_DIR}"
-chmod u=rw *
+chmod u=rw,go= *
 """)
 
     def test_write_save_script_root_package(self) -> None:
@@ -52,7 +52,7 @@ mkdir -p "${SAVE_DIR}"
 cd "${OUTPUT_DIR}"
 cp -t "${SAVE_DIR}" *
 cd "${SAVE_DIR}"
-chmod u=rw *
+chmod u=rw,go= *
 """)
 
 

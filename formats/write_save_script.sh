@@ -27,7 +27,7 @@ mkdir -p "\${SAVE_DIR}"
 cd "\${OUTPUT_DIR}"
 cp -t "\${SAVE_DIR}" *
 cd "\${SAVE_DIR}"
-chmod u=rw *
+chmod u=rw,go= *
 EOF
 
 chmod u+x "${OUT_FILE}"

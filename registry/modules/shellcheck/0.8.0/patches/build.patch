@@ -1,0 +1,7 @@
+--- /dev/null
++++ BUILD
+@@ -0,0 +1,4 @@
++exports_files(
++    ["shellcheck"],
++    visibility = ["//visibility:public"],
++)

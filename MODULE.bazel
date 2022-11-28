@@ -30,6 +30,11 @@ bazel_dep(
     version = "6.9.0",
 )
 
+bazel_dep(
+    name = "shellcheck",
+    version = "0.8.0",
+)
+
 pip = use_extension("@rules_python//python:extensions.bzl", "pip")
 
 pip.parse(

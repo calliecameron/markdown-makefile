@@ -66,3 +66,23 @@ def py_validation():
         ],
         deps = [requirement("autopep8")],
     )
+
+def sh_validation(name = None):  # buildifier: disable=unused-variable
+    native.sh_test(
+        name = "shellcheck_test",
+        srcs = ["//utils:shellcheck.sh"],
+        args = [
+            "$(rootpath @shellcheck//:shellcheck)",
+            "core",
+            "formats",
+            "tests",
+            "utils",
+        ],
+        data = [
+            "@shellcheck//:shellcheck",
+            "//core:sh_srcs",
+            "//formats:sh_srcs",
+            "//tests:sh_srcs",
+            "//utils:sh_srcs",
+        ],
+    )

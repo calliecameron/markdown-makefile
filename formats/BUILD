@@ -6,6 +6,12 @@ filegroup(
     visibility = ["//:__pkg__"],
 )
 
+filegroup(
+    name = "sh_srcs",
+    data = glob(["*.sh"]),
+    visibility = ["//:__pkg__"],
+)
+
 exports_files(
     [
         "header_template.tex",

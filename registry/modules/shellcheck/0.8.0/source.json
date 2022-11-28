@@ -1,0 +1,9 @@
+{
+    "url": "https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz",
+    "integrity": "sha384-sFq/GwwRvyp/7lkNqnasUP7zbH2l9lJ/iNaIAp11998+k56FVJz5PP02BbZjfWnn",
+    "strip_prefix": "shellcheck-v0.8.0",
+    "patch_strip": 0,
+    "patches": {
+        "build.patch": "sha384-seNyZ5y9IqV7N3ewYzFWUUsMkaSryK1Qb7777OAvnDJtSa8Suw5maVCQrUnkngrc"
+    }
+}

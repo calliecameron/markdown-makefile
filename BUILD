@@ -1,6 +1,6 @@
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("//:build_defs.bzl", "md_git_repo", "md_workspace")
-load("//utils:python.bzl", "py_validation")
+load("//utils:validation.bzl", "py_validation", "sh_validation")
 
 compile_pip_requirements(
     name = "requirements",
@@ -13,3 +13,5 @@ md_workspace()
 md_git_repo()
 
 py_validation()
+
+sh_validation()

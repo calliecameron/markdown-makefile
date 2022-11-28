@@ -23,6 +23,7 @@ exports_files(
         "mypy_test.py",
         "flake8_test.py",
         "autopep8_test.py",
+        "shellcheck.sh",
         "summary.py",
     ],
     visibility = ["//visibility:public"],
@@ -31,6 +32,18 @@ exports_files(
 filegroup(
     name = "py_srcs",
     data = glob(["*.py"]) + ["workspace_status"],
+    visibility = ["//:__pkg__"],
+)
+
+filegroup(
+    name = "sh_srcs",
+    data = glob(["*.sh"]) + [
+        "bindump",
+        "docdump",
+        "pdfdump",
+        "precommit",
+        "workspace_summary",
+    ],
     visibility = ["//:__pkg__"],
 )
 

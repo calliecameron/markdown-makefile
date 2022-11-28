@@ -13,10 +13,12 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
         data = [
             "@markdown_makefile//utils:workspace_status",
             "@markdown_makefile//utils:workspace_summary",
+            "@markdown_makefile//utils:bazelversion",
         ],
         args = [
             "$(rootpath @markdown_makefile//utils:workspace_status)",
             "$(rootpath @markdown_makefile//utils:workspace_summary)",
+            "$(rootpath @markdown_makefile//utils:bazelversion)",
         ],
         visibility = ["//visibility:private"],
     )
@@ -27,14 +29,18 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
         data = [
             "@markdown_makefile//utils:workspace_status",
             "@markdown_makefile//utils:workspace_summary",
+            "@markdown_makefile//utils:bazelversion",
             ".bin/workspace_status",
             "workspace_summary",
+            ".bazelversion",
         ],
         args = [
             "$(rootpath @markdown_makefile//utils:workspace_status)",
             "$(rootpath @markdown_makefile//utils:workspace_summary)",
+            "$(rootpath @markdown_makefile//utils:bazelversion)",
             "$(rootpath .bin/workspace_status)",
             "$(rootpath workspace_summary)",
+            "$(rootpath .bazelversion)",
         ],
         visibility = ["//visibility:private"],
     )

@@ -15,6 +15,7 @@ exports_files(
         "new_package.sh",
         "workspace_status",
         "workspace_summary",
+        "bazelversion",
         "workspace_update.sh",
         "workspace_test.sh",
         "collection_header.tex",
@@ -88,8 +89,10 @@ sh_test(
         "$(rootpath workspace_update.sh)",
         "$(rootpath workspace_status)",
         "$(rootpath workspace_summary)",
+        "$(rootpath bazelversion)",
     ],
     data = [
+        "bazelversion",
         "workspace_status",
         "workspace_summary",
         "workspace_update.sh",

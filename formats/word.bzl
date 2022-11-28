@@ -163,22 +163,6 @@ def _md_ms_docx_impl(ctx):
         progress_message = "%{label}: generating ms metadata",
     )
 
-    intermediate_md = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.md")
-    pandoc(
-        ctx,
-        "",
-        "markdown-smart",
-        [ctx.attr.lib[MdLibraryInfo].output, metadata],
-        [
-            "--metadata-file=" + metadata.path,
-            "--standalone",
-        ],
-        {},
-        ctx.attr.lib,
-        intermediate_md,
-        "generating ms intermediate markdown",
-    )
-
     intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.docx")
     env = timestamp_override(ctx)
     env["PANDOC"] = ctx.attr._pandoc[DefaultInfo].files_to_run.executable.path
@@ -189,7 +173,8 @@ def _md_ms_docx_impl(ctx):
         outputs = [intermediate_docx],
         inputs = data_inputs + [
             ctx.attr._md2short[DefaultInfo].files_to_run.executable,
-            intermediate_md,
+            ctx.attr.lib[MdLibraryInfo].output,
+            metadata,
             ctx.file._filter,
             ctx.attr._pandoc[DefaultInfo].files_to_run.executable,
         ],
@@ -198,10 +183,13 @@ def _md_ms_docx_impl(ctx):
             ctx.attr._md2short[DefaultInfo].files_to_run.executable.path,
             "--overwrite",
             "--modern",
+            "--from",
+            "json",
             "--output",
             intermediate_docx.path,
+            "--metadata-file=" + metadata.path,
             "--lua-filter=" + ctx.file._filter.path,
-            intermediate_md.path,
+            ctx.attr.lib[MdLibraryInfo].output.path,
         ],
         env = env,
         progress_message = "%{label}: generating ms.docx output",

@@ -1,6 +1,6 @@
 --- bin/md2short.sh
 +++ bin/md2short.sh
-@@ -81,6 +81,11 @@ else
+@@ -89,6 +89,11 @@ else
      TEMPLATE='template.docx'
  fi
 
@@ -12,12 +12,12 @@
  # Create a temporary data directory
  echo "Creating temporary directory."
  export PANDOC_DATA_DIR
-@@ -95,7 +100,7 @@ echo "Files extracted."
+@@ -103,7 +108,7 @@ echo "Files extracted."
 
  # Run pandoc
  echo "Running Pandoc."
 -pandoc \
 +"${PANDOC}" \
-   --from=markdown \
+   "--from=$FROM_FORMAT" \
    --to=docx \
    --lua-filter="$SHUNN_SHORT_STORY_DIR/shunnshort.lua" \

@@ -1,0 +1,10 @@
+{
+    "url": "https://github.com/prosegrinder/pandoc-templates/archive/a7bd124cd3dcd18bc6aae0c63c153092437b20a7.zip",
+    "integrity": "sha384-whUU5q7yt1thpMdZ8risWgG6l5/ANjcpJDRE8Y5WsQolxBUegQ3geUfyYCFteOmG",
+    "strip_prefix": "pandoc-templates-a7bd124cd3dcd18bc6aae0c63c153092437b20a7",
+    "patch_strip": 0,
+    "patches": {
+        "build.patch": "sha384-uZBcRaobmqmH0q4f2Yl2HCKdRKgp/h6FDmpWvv2TJdQfMrh4ujEmBiLK+ouXjIOK",
+        "md2short_dot_sh.patch": "sha384-octDQuUdRpiobxO6G+/cAvcsMJKlnEgCrr0fuZ4ijwwxhALjMTdQsAcHGkgpn0Z6"
+    }
+}

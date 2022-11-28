@@ -23,7 +23,7 @@ exports_files(
         "mypy_test.py",
         "flake8_test.py",
         "autopep8_test.py",
-        "shellcheck.sh",
+        "shellcheck_test.sh",
         "summary.py",
     ],
     visibility = ["//visibility:public"],

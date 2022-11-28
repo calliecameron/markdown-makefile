@@ -70,7 +70,7 @@ def py_validation():
 def sh_validation(name = None):  # buildifier: disable=unused-variable
     native.sh_test(
         name = "shellcheck_test",
-        srcs = ["//utils:shellcheck.sh"],
+        srcs = ["//utils:shellcheck_test.sh"],
         args = [
             "$(rootpath @shellcheck//:shellcheck)",
             "core",

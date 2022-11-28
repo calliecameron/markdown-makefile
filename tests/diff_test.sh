@@ -14,6 +14,12 @@ FILE2="${2}"
 test -z "${3:-}" && usage
 TOOL="${3}"
 
+if cmp "${FILE1}" "${FILE2}" &>/dev/null; then
+    # If the files are identical, we don't need to run 'tool', which can be
+    # slow.
+    exit 0
+fi
+
 "${TOOL}" "${FILE1}" >"${TEST_TMPDIR}/file1"
 "${TOOL}" "${FILE2}" >"${TEST_TMPDIR}/file2"
 

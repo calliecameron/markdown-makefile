@@ -25,6 +25,7 @@ def diff_test(target, skip_doc = False, name = None):  # buildifier: disable=unu
     """
     _diff_test(target, "md", "cat")
     _diff_test(target, "txt", "cat")
+    _diff_test(target, "html", "cat")
 
     _diff_test(target, "tex", "cat")
     _diff_test(target, "pdf", "$(rootpath //utils:pdfdump)", "//utils:pdfdump")

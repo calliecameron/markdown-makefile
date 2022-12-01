@@ -3,7 +3,7 @@
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@rules_python//python:defs.bzl", "py_binary")
 load("//core:build_defs.bzl", _md_library = "md_library")
-load("//formats:misc.bzl", _md_md = "md_md", _md_txt = "md_txt")
+load("//formats:misc.bzl", _md_html = "md_html", _md_md = "md_md", _md_txt = "md_txt")
 load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
 load("//formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
 load("//formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
@@ -14,6 +14,7 @@ load("//utils:workspace.bzl", _md_workspace = "md_workspace")
 _FORMATS = [
     "md",
     "txt",
+    "html",
     "tex",
     "pdf",
     "epub",
@@ -158,6 +159,13 @@ def md_document(
         lib = lib,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "txt"),
+        visibility = ["//visibility:private"],
+    )
+    _md_html(
+        name = name + "_html",
+        lib = lib,
+        extra_pandoc_flags = extra_pandoc_flags,
+        out = _output(name, "html"),
         visibility = ["//visibility:private"],
     )
     _md_tex_intermediate(

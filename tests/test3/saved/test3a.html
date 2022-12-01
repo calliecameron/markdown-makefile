@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="An Author" />
+  <meta name="dcterms.date" content="2019-02-23" />
+  <title>The Title Is ‘Baz’</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">The Title Is ‘Baz’</h1>
+<p class="author">An Author</p>
+<p class="date">23 February 2019</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#this-is-a-section" id="toc-this-is-a-section">This is a
+section</a></li>
+<li><a href="#section-in-simple-include"
+id="toc-section-in-simple-include">Section in simple include</a></li>
+<li><a href="#section-in-recursive-include"
+id="toc-section-in-recursive-include">Section in recursive
+include</a></li>
+<li><a href="#second-section-in-simple-include"
+id="toc-second-section-in-simple-include">Second section in simple
+include</a></li>
+<li><a href="#this-is-a-second-section"
+id="toc-this-is-a-second-section">This is a second section</a></li>
+</ul>
+</nav>
+<h1 id="this-is-a-section">This is a section</h1>
+<p>This is some test text. This is formatted in <em>italics</em> and
+<strong>bold</strong>, with - various – dashes—, and trailing dots…</p>
+<p>‘These quotes should be curly,’ and “so should these.” There should
+be a blank line before the next paragraph:</p>
+<p> </p>
+<p>And then we do a simple include:</p>
+<p>Text before a section in simple include.</p>
+<h1 id="section-in-simple-include">Section in simple include</h1>
+<blockquote>
+<p>This is a quote block. It should be indented slightly and shouldn’t
+contain a line break.</p>
+</blockquote>
+<blockquote>
+<div class="line-block">This is a quoted line block. It should be
+indented slightly<br />
+and have a <em>line break</em> after ‘slightly’, and
+<strong>formatting</strong>.</div>
+</blockquote>
+<p>Text before recursive include, with <em>italic</em>,
+<strong>bold</strong>, “curly quotes,” and— an em dash.</p>
+<p>Text before section in recursive include.</p>
+<h1 id="section-in-recursive-include">Section in recursive include</h1>
+<p>Text in recursive include, with <em>italic</em>,
+<strong>bold</strong>, “curly quotes,” and— an em dash.</p>
+<h2 id="subsection-in-recursive-include">Subsection in recursive
+include</h2>
+<blockquote>
+<div class="line-block">“These literal double curly quotes, used where
+smart<br />
+quotes gets it wrong, curl the right way even though<br />
+they’re on different lines.”</div>
+</blockquote>
+<blockquote>
+<div class="line-block">‘These literal single curly quotes, used where
+smart<br />
+quotes gets it wrong, curl the right way even though<br />
+they’re on different lines.’</div>
+</blockquote>
+<p>Test text test text test text. After this line there should be
+stars.</p>
+<hr />
+<p>And then there should be some text <sup>in superscript</sup> and
+<sub>in subscript</sub>, and a footnote<a href="#fn1"
+class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+with a star, a footnote<a href="#fn2" class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a> with a dagger, and this should be
+<code>monospace</code>.</p>
+<p>Text after recursive include. Here is a pound sign (£), a euro sign
+(€), and three letters with accents: ëóû.</p>
+<h1 id="second-section-in-simple-include">Second section in simple
+include</h1>
+<p>Test text.</p>
+<p>Text after simple include.</p>
+<h2 id="subsection">Subsection</h2>
+<p>This is a new paragraph. This text is <span class="smallcaps">Small
+Caps</span>.</p>
+<h1 id="this-is-a-second-section">This is a second section</h1>
+<p>And this is <em>even more italic text</em>.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This is a footnote. It should appear at the bottom of
+the page.<a href="#fnref1" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Another footnote.<a href="#fnref2" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

@@ -14,6 +14,8 @@ exports_files(
         "git_test.sh",
         "new_package.sh",
         "workspace_status",
+        "workspace_contents_build",
+        "workspace_contents_bzl",
         "workspace_summary",
         "bazelversion",
         "workspace_update.sh",
@@ -101,11 +103,15 @@ sh_test(
     args = [
         "$(rootpath workspace_update.sh)",
         "$(rootpath workspace_status)",
+        "$(rootpath workspace_contents_build)",
+        "$(rootpath workspace_contents_bzl)",
         "$(rootpath workspace_summary)",
         "$(rootpath bazelversion)",
     ],
     data = [
         "bazelversion",
+        "workspace_contents_build",
+        "workspace_contents_bzl",
         "workspace_status",
         "workspace_summary",
         "workspace_update.sh",
@@ -126,10 +132,30 @@ py_test(
     deps = [":test_utils"],
 )
 
+py_binary(
+    name = "group_summary",
+    srcs = ["group_summary.py"],
+    visibility = ["//visibility:public"],
+)
+
 py_test(
-    name = "summary_test",
-    srcs = ["summary_test.py"],
-    args = ["$(rootpath summary.py)"],
-    data = ["summary.py"],
+    name = "group_summary_test",
+    srcs = ["group_summary_test.py"],
+    args = ["$(rootpath group_summary.py)"],
+    data = ["group_summary.py"],
     deps = [":test_utils"],
+)
+
+sh_binary(
+    name = "write_group_summary_script",
+    srcs = ["write_group_summary_script.sh"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "write_group_summary_script_test",
+    srcs = ["write_group_summary_script_test.py"],
+    args = ["$(rootpath write_group_summary_script.sh)"],
+    data = ["write_group_summary_script.sh"],
+    deps = ["//utils:test_utils"],
 )

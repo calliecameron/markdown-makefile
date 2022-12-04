@@ -1,13 +1,13 @@
 """Public API of the module."""
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-load("@rules_python//python:defs.bzl", "py_binary")
 load("//core:build_defs.bzl", _md_library = "md_library")
 load("//formats:misc.bzl", _md_html = "md_html", _md_md = "md_md", _md_txt = "md_txt")
 load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
 load("//formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
 load("//formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
 load("//utils:collection.bzl", _md_collection_src = "md_collection_src")
+load("//utils:aggregation.bzl", _md_group = "md_group", _md_group_summary = "md_group_summary")
 load("//utils:git_repo.bzl", _md_git_repo = "md_git_repo")
 load("//utils:workspace.bzl", _md_workspace = "md_workspace")
 
@@ -75,18 +75,6 @@ def md_library(
     build_test(
         name = name + "_test",
         targets = [name],
-    )
-
-    py_binary(
-        name = name + "_summary",
-        srcs = ["@markdown_makefile//utils:summary.py"],
-        main = "summary.py",
-        data = [name + "_metadata.json"],
-        args = [
-            "//%s:%s" % (native.package_name(), name),
-            "$(rootpath %s_metadata.json)" % name,
-        ],
-        visibility = ["//visibility:private"],
     )
 
 def md_document(
@@ -287,7 +275,6 @@ def md_collection(
         author: the author of the collection.
         date: the date of the collection.
         deps: md_library targets to include in the collection.
-            formats.
         extra_metadata: a metadata file to include.
         version_override: set the document version to this value, rather than
             the computed value. Should only be used for testing.
@@ -325,6 +312,25 @@ def md_collection(
         version_override = version_override,
         timestamp_override = timestamp_override,
         main_document = main_document,
+    )
+
+def md_group(name, deps):
+    """md_group is a group of md_library targets.
+
+    Args:
+        name: the name of the group.
+        deps: md_library targets to include in the group.
+    """
+    _md_group(
+        name = name,
+        deps = deps,
+        visibility = ["//visibility:private"],
+    )
+
+    _md_group_summary(
+        name = name + "_summary",
+        deps = name,
+        visibility = ["//visibility:private"],
     )
 
 md_git_repo = _md_git_repo

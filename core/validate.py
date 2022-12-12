@@ -8,7 +8,7 @@ import sys
 PUBLICATION_STR_KEYS = [
     'venue',
     'paid',
-    'note',
+    'notes',
 ]
 
 PUBLICATION_DATE_KEYS = [

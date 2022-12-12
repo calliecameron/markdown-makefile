@@ -8,7 +8,7 @@ identifier:
 lang: en-GB
 publications:
 - accepted: 2022-10-12
-  note: foo bar baz
+  notes: foo bar baz
   paid: £10
   published: 2022-10-13
   submitted: 2022-10-11

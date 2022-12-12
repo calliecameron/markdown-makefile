@@ -13,7 +13,7 @@ publications:
   urls:
   - "http://example.com"
   paid: £10
-  note: foo bar baz
+  notes: foo bar baz
 ---
 
 This is some text before a section. It shouldn't be indented. Each section should start on a new page (but subsections shouldn't).

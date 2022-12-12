@@ -18,7 +18,7 @@ publications:
   paid: £10
   urls:
   - "http://example.com"
-  note: foo bar
+  notes: foo bar
 ---
 
 “Foo” ‘bar’
@@ -79,7 +79,7 @@ publications:
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- note:
+- notes:
   - foo
 ---
 """)

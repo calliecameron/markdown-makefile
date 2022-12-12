@@ -1,6 +1,6 @@
 """Collection rules."""
 
-load("//core:build_defs.bzl", "MdLibraryInfo")
+load("//core:core.bzl", "MdLibraryInfo")
 
 def _md_collection_src_impl(ctx):
     output = ctx.actions.declare_file(ctx.label.name + ".md")

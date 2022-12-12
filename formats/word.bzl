@@ -1,6 +1,6 @@
 """Rules for word-processor outputs."""
 
-load("//core:build_defs.bzl", "MdLibraryInfo")
+load("//core:core.bzl", "MdLibraryInfo")
 load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdDocxInfo = provider(

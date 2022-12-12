@@ -1,6 +1,6 @@
 """Aggregation rules."""
 
-load("//core:build_defs.bzl", "MdLibraryInfo")
+load("//core:core.bzl", "MdLibraryInfo")
 
 MdGroupInfo = provider(
     "Info for a group of markdown libraries.",

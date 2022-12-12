@@ -1,6 +1,6 @@
 """Rules for latex-based outputs."""
 
-load("//core:build_defs.bzl", "MdLibraryInfo")
+load("//core:core.bzl", "MdLibraryInfo")
 load(":helpers.bzl", "doc_for_ext", "expand_locations", "pandoc", "pandoc_script", "simple_pandoc_output_impl", "timestamp_override", "write_open_script")
 
 _LATEX_VARS = [

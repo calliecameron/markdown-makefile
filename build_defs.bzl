@@ -1,7 +1,7 @@
 """Public API of the module."""
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-load("//core:build_defs.bzl", _md_library = "md_library")
+load("//core:core.bzl", _md_library = "md_library")
 load("//formats:misc.bzl", _md_html = "md_html", _md_md = "md_md", _md_txt = "md_txt")
 load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
 load("//formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")

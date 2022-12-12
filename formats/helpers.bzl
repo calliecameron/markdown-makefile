@@ -1,6 +1,6 @@
 """Helpers for output formats."""
 
-load("//core:build_defs.bzl", "MdLibraryInfo")
+load("//core:core.bzl", "MdLibraryInfo")
 
 def expand_locations(ctx, lib, args):
     data = lib[MdLibraryInfo].data.to_list()

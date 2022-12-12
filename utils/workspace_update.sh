@@ -3,7 +3,7 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") workspace_status workspace_contents_build workspace_contents_bzl workspace_summary bazelversion"
+    echo "Usage: $(basename "${0}") workspace_status workspace_contents_build workspace_contents_bzl workspace_summary workspace_publications bazelversion"
     exit 1
 }
 
@@ -16,7 +16,9 @@ WORKSPACE_CONTENTS_BZL="${3}"
 test -z "${4:-}" && usage
 WORKSPACE_SUMMARY="${4}"
 test -z "${5:-}" && usage
-BAZELVERSION="${5}"
+WORKSPACE_PUBLICATIONS="${5}"
+test -z "${6:-}" && usage
+BAZELVERSION="${6}"
 
 SOURCE_DIR="${BUILD_WORKSPACE_DIRECTORY}"
 BIN_DIR="${SOURCE_DIR}/.bin"
@@ -38,6 +40,9 @@ chmod u=rw,go= "${CONTENTS_DIR}/workspace_contents.bzl"
 
 cp "${WORKSPACE_SUMMARY}" "${SOURCE_DIR}/workspace_summary"
 chmod u=rwx,go= "${SOURCE_DIR}/workspace_summary"
+
+cp "${WORKSPACE_PUBLICATIONS}" "${SOURCE_DIR}/workspace_publications"
+chmod u=rwx,go= "${SOURCE_DIR}/workspace_publications"
 
 cp "${BAZELVERSION}" "${SOURCE_DIR}/.bazelversion"
 chmod u=rw,go= "${SOURCE_DIR}/.bazelversion"

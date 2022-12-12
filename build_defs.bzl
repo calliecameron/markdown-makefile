@@ -7,7 +7,7 @@ load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_inte
 load("//formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
 load("//formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
 load("//utils:collection.bzl", _md_collection_src = "md_collection_src")
-load("//utils:aggregation.bzl", _md_group = "md_group", _md_group_summary = "md_group_summary")
+load("//utils:aggregation.bzl", _md_group = "md_group", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
 load("//utils:git_repo.bzl", _md_git_repo = "md_git_repo")
 load("//utils:workspace.bzl", _md_workspace = "md_workspace")
 
@@ -329,6 +329,12 @@ def md_group(name, deps):
 
     _md_group_summary(
         name = name + "_summary",
+        deps = name,
+        visibility = ["//visibility:private"],
+    )
+
+    _md_group_publications(
+        name = name + "_publications",
         deps = name,
         visibility = ["//visibility:private"],
     )

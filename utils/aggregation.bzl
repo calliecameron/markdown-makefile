@@ -78,3 +78,51 @@ md_group_summary = rule(
         ),
     },
 )
+
+def _md_group_publications_impl(ctx):
+    dep_args = []
+    for dep in ctx.attr.deps[MdGroupInfo].deps:
+        dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].metadata.path]
+    publications = ctx.actions.declare_file(ctx.label.name + ".html")
+    ctx.actions.run(
+        outputs = [publications],
+        inputs = [dep[MdLibraryInfo].metadata for dep in ctx.attr.deps[MdGroupInfo].deps],
+        executable = ctx.attr._group_publications[DefaultInfo].files_to_run,
+        arguments = [publications.path] + dep_args,
+        progress_message = "%{label}: generating publications",
+    )
+
+    script = ctx.actions.declare_file(ctx.label.name + ".sh")
+    ctx.actions.run(
+        outputs = [script],
+        inputs = [publications],
+        executable = ctx.attr._write_group_publications_script[DefaultInfo].files_to_run,
+        arguments = [ctx.workspace_name, publications.short_path, script.path],
+        progress_message = "%{label}: generating publications script",
+    )
+
+    return [
+        DefaultInfo(
+            files = depset([publications, script]),
+            runfiles = ctx.runfiles(files = [publications]),
+            executable = script,
+        ),
+    ]
+
+md_group_publications = rule(
+    implementation = _md_group_publications_impl,
+    executable = True,
+    doc = "md_group_publications displays the publications of an md_group.",
+    attrs = {
+        "deps": attr.label(
+            providers = [MdGroupInfo],
+            doc = "md_group to process.",
+        ),
+        "_group_publications": attr.label(
+            default = "//utils:group_publications",
+        ),
+        "_write_group_publications_script": attr.label(
+            default = "//utils:write_group_publications_script",
+        ),
+    },
+)

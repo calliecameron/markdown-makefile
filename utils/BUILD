@@ -13,6 +13,7 @@ exports_files(
         "workspace_contents_build",
         "workspace_contents_bzl",
         "workspace_summary",
+        "workspace_publications",
         "bazelversion",
         "workspace_update.sh",
         "workspace_test.sh",
@@ -115,12 +116,14 @@ sh_test(
         "$(rootpath workspace_contents_build)",
         "$(rootpath workspace_contents_bzl)",
         "$(rootpath workspace_summary)",
+        "$(rootpath workspace_publications)",
         "$(rootpath bazelversion)",
     ],
     data = [
         "bazelversion",
         "workspace_contents_build",
         "workspace_contents_bzl",
+        "workspace_publications",
         "workspace_status",
         "workspace_summary",
         "workspace_update.sh",
@@ -166,5 +169,33 @@ py_test(
     srcs = ["write_group_summary_script_test.py"],
     args = ["$(rootpath write_group_summary_script.sh)"],
     data = ["write_group_summary_script.sh"],
+    deps = ["//utils:test_utils"],
+)
+
+py_binary(
+    name = "group_publications",
+    srcs = ["group_publications.py"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "group_publications_test",
+    srcs = ["group_publications_test.py"],
+    args = ["$(rootpath group_publications.py)"],
+    data = ["group_publications.py"],
+    deps = [":test_utils"],
+)
+
+sh_binary(
+    name = "write_group_publications_script",
+    srcs = ["write_group_publications_script.sh"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "write_group_publications_script_test",
+    srcs = ["write_group_publications_script_test.py"],
+    args = ["$(rootpath write_group_publications_script.sh)"],
+    data = ["write_group_publications_script.sh"],
     deps = ["//utils:test_utils"],
 )

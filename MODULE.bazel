@@ -22,7 +22,7 @@ bazel_dep(
 
 bazel_dep(
     name = "prosegrinder_pandoc_templates",
-    version = "0.4.0.2",
+    version = "0.4.0.3",
 )
 
 bazel_dep(

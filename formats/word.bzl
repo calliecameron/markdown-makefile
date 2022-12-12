@@ -172,15 +172,13 @@ def _md_ms_docx_impl(ctx):
     ctx.actions.run(
         outputs = [intermediate_docx],
         inputs = data_inputs + [
-            ctx.attr._md2short[DefaultInfo].files_to_run.executable,
             ctx.attr.lib[MdLibraryInfo].output,
             metadata,
             ctx.file._filter,
             ctx.attr._pandoc[DefaultInfo].files_to_run.executable,
         ],
-        executable = ctx.attr._ms_docx[DefaultInfo].files_to_run,
+        executable = ctx.attr._md2short[DefaultInfo].files_to_run,
         arguments = [
-            ctx.attr._md2short[DefaultInfo].files_to_run.executable.path,
             "--overwrite",
             "--modern",
             "--from",
@@ -217,9 +215,6 @@ md_ms_docx = rule(
         "timestamp_override": attr.string(),
         "_ms_metadata": attr.label(
             default = "//formats:ms_metadata",
-        ),
-        "_ms_docx": attr.label(
-            default = "//formats:ms_docx",
         ),
         "_md2short": attr.label(
             default = "@prosegrinder_pandoc_templates//:md2short",

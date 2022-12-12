@@ -82,12 +82,6 @@ sh_test(
 )
 
 sh_binary(
-    name = "ms_docx",
-    srcs = ["ms_docx.sh"],
-    visibility = ["//visibility:public"],
-)
-
-sh_binary(
     name = "zip_cleaner",
     srcs = ["zip_cleaner.sh"],
     visibility = ["//visibility:public"],

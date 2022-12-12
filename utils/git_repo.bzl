@@ -2,20 +2,12 @@
 
 def md_git_repo(name = None):  # buildifier: disable=unused-variable
     common_args = [
-        "$(rootpath @markdown_makefile//utils:bindump)",
-        "$(rootpath @markdown_makefile//utils:docdump)",
-        "$(rootpath @markdown_makefile//utils:pdfdump)",
-        "$(rootpath @markdown_makefile//utils:zipdump)",
         "$(rootpath @markdown_makefile//utils:default_gitattributes)",
         "$(rootpath @markdown_makefile//utils:default_gitconfig)",
         "$(rootpath @markdown_makefile//utils:default_gitignore)",
         "$(rootpath @markdown_makefile//utils:precommit)",
     ]
     common_data = [
-        "@markdown_makefile//utils:bindump",
-        "@markdown_makefile//utils:docdump",
-        "@markdown_makefile//utils:pdfdump",
-        "@markdown_makefile//utils:zipdump",
         "@markdown_makefile//utils:default_gitattributes",
         "@markdown_makefile//utils:default_gitconfig",
         "@markdown_makefile//utils:default_gitignore",
@@ -34,10 +26,6 @@ def md_git_repo(name = None):  # buildifier: disable=unused-variable
         name = "git_test",
         srcs = ["@markdown_makefile//utils:git_test.sh"],
         data = common_data + [
-            ".bin/bindump",
-            ".bin/docdump",
-            ".bin/pdfdump",
-            ".bin/zipdump",
             ".gitattributes",
             ".gitconfig",
             ".gitignore",
@@ -45,10 +33,6 @@ def md_git_repo(name = None):  # buildifier: disable=unused-variable
             ".git/hooks/pre-commit",
         ],
         args = common_args + [
-            "$(rootpath .bin/bindump)",
-            "$(rootpath .bin/docdump)",
-            "$(rootpath .bin/pdfdump)",
-            "$(rootpath .bin/zipdump)",
             "$(rootpath .gitattributes)",
             "$(rootpath .gitconfig)",
             "$(rootpath .gitignore)",

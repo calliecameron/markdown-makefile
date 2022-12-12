@@ -10,5 +10,13 @@ function usage() {
 test -z "${1:-}" && usage
 FILE="${1}"
 
+if [[ "${FILE}" != /* ]]; then
+    FILE="${BUILD_WORKING_DIRECTORY}/${FILE}"
+fi
+
 printf 'File hash: %s\n' "$(md5sum <"${FILE}")"
-hexdump -v -C "${FILE}"
+pdfinfo "${FILE}"
+echo '----------'
+pdf2txt.py "${FILE}"
+echo '----------'
+dumppdf.py "${FILE}"

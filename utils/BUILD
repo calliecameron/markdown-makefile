@@ -2,10 +2,6 @@ load("@rules_python//python:defs.bzl", "py_binary", "py_test")
 
 exports_files(
     [
-        "bindump",
-        "docdump",
-        "pdfdump",
-        "zipdump",
         "default_gitattributes",
         "default_gitconfig",
         "default_gitignore",
@@ -40,9 +36,6 @@ filegroup(
 filegroup(
     name = "sh_srcs",
     data = glob(["*.sh"]) + [
-        "bindump",
-        "docdump",
-        "pdfdump",
         "precommit",
         "workspace_summary",
     ],
@@ -56,30 +49,46 @@ py_library(
     visibility = ["//visibility:public"],
 )
 
+sh_binary(
+    name = "bindump",
+    srcs = ["bindump.sh"],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "docdump",
+    srcs = ["docdump.sh"],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "pdfdump",
+    srcs = ["pdfdump.sh"],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "zipdump",
+    srcs = ["zipdump.sh"],
+    visibility = ["//visibility:public"],
+)
+
 sh_test(
     name = "git_update_test",
     srcs = ["git_update_test.sh"],
     args = [
         "$(rootpath git_update.sh)",
-        "$(rootpath bindump)",
-        "$(rootpath docdump)",
-        "$(rootpath pdfdump)",
-        "$(rootpath zipdump)",
         "$(rootpath default_gitattributes)",
         "$(rootpath default_gitconfig)",
         "$(rootpath default_gitignore)",
         "$(rootpath precommit)",
     ],
     data = [
-        "bindump",
         "default_gitattributes",
         "default_gitconfig",
         "default_gitignore",
-        "docdump",
         "git_update.sh",
-        "pdfdump",
         "precommit",
-        "zipdump",
     ],
 )
 

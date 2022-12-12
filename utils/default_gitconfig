@@ -1,19 +1,19 @@
-[diff "doc"]
-textconv = .bin/docdump
+[diff "binary"]
+textconv = bash -c 'bazel run --ui_event_filters=-info,-stdout,-stderr --noshow_progress @markdown_makefile//utils:bindump -- "${0}"'
 cachetextconv = true
 binary = true
 
-[diff "binary"]
-textconv = .bin/bindump
+[diff "doc"]
+textconv = bash -c 'bazel run --ui_event_filters=-info,-stdout,-stderr --noshow_progress @markdown_makefile//utils:docdump -- "${0}"'
 cachetextconv = true
 binary = true
 
 [diff "pdf"]
-textconv = .bin/pdfdump
+textconv = bash -c 'bazel run --ui_event_filters=-info,-stdout,-stderr --noshow_progress @markdown_makefile//utils:pdfdump -- "${0}"'
 cachetextconv = true
 binary = true
 
 [diff "zip"]
-textconv = .bin/zipdump
+textconv = bash -c 'bazel run --ui_event_filters=-info,-stdout,-stderr --noshow_progress @markdown_makefile//utils:zipdump -- "${0}"'
 cachetextconv = true
 binary = true

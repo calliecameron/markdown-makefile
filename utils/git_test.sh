@@ -3,44 +3,28 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") bindump docdump pdfdump zipdump gitattributes gitconfig gitignore precommit local_bindump local_docdump local_pdfdump local_zipdump local_gitattributes local_gitconfig local_gitinore local_repo_config local_precommit"
+    echo "Usage: $(basename "${0}") gitattributes gitconfig gitignore precommit local_gitattributes local_gitconfig local_gitinore local_repo_config local_precommit"
     exit 1
 }
 
 test -z "${1:-}" && usage
-BINDUMP="${1}"
+GITATTRIBUTES="${1}"
 test -z "${2:-}" && usage
-DOCDUMP="${2}"
+GITCONFIG="${2}"
 test -z "${3:-}" && usage
-PDFDUMP="${3}"
+GITIGNORE="${3}"
 test -z "${4:-}" && usage
-ZIPDUMP="${4}"
+PRECOMMIT="${4}"
 test -z "${5:-}" && usage
-GITATTRIBUTES="${5}"
+LOCAL_GITATTRIBUTES="${5}"
 test -z "${6:-}" && usage
-GITCONFIG="${6}"
+LOCAL_GITCONFIG="${6}"
 test -z "${7:-}" && usage
-GITIGNORE="${7}"
+LOCAL_GITIGNORE="${7}"
 test -z "${8:-}" && usage
-PRECOMMIT="${8}"
+LOCAL_REPO_CONFIG="${8}"
 test -z "${9:-}" && usage
-LOCAL_BINDUMP="${9}"
-test -z "${10:-}" && usage
-LOCAL_DOCDUMP="${10}"
-test -z "${11:-}" && usage
-LOCAL_PDFDUMP="${11}"
-test -z "${12:-}" && usage
-LOCAL_ZIPDUMP="${12}"
-test -z "${13:-}" && usage
-LOCAL_GITATTRIBUTES="${13}"
-test -z "${14:-}" && usage
-LOCAL_GITCONFIG="${14}"
-test -z "${15:-}" && usage
-LOCAL_GITIGNORE="${15}"
-test -z "${16:-}" && usage
-LOCAL_REPO_CONFIG="${16}"
-test -z "${17:-}" && usage
-LOCAL_PRECOMMIT="${17}"
+LOCAL_PRECOMMIT="${9}"
 
 DIFF=''
 
@@ -59,10 +43,6 @@ function diff_file() {
     echo
 }
 
-diff_file "${BINDUMP}" "${LOCAL_BINDUMP}" '700'
-diff_file "${DOCDUMP}" "${LOCAL_DOCDUMP}" '700'
-diff_file "${PDFDUMP}" "${LOCAL_PDFDUMP}" '700'
-diff_file "${ZIPDUMP}" "${LOCAL_ZIPDUMP}" '700'
 diff_file "${GITATTRIBUTES}" "${LOCAL_GITATTRIBUTES}" '600'
 diff_file "${GITCONFIG}" "${LOCAL_GITCONFIG}" '600'
 diff_file "${GITIGNORE}" "${LOCAL_GITIGNORE}" '600'

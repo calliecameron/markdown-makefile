@@ -19,7 +19,6 @@ md_collection(
 )
 
 diff_test(
-    skip_doc = True,
     target = "test4",
 )
 

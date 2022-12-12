@@ -15,12 +15,11 @@ def _diff_test(target, ext, tool, tool_target = None):
         ],
     )
 
-def diff_test(target, skip_doc = False, name = None):  # buildifier: disable=unused-variable
+def diff_test(target, name = None):  # buildifier: disable=unused-variable
     """Diff tests for target's output.
 
     Args:
         target: name of the output.
-        skip_doc: don't test doc.
         name: unused.
     """
     _diff_test(target, "md", "cat")
@@ -35,7 +34,6 @@ def diff_test(target, skip_doc = False, name = None):  # buildifier: disable=unu
 
     _diff_test(target, "odt", "$(rootpath //utils:zipdump)", "//utils:zipdump")
     _diff_test(target, "docx", "$(rootpath //utils:zipdump)", "//utils:zipdump")
-    if not skip_doc:
-        # Doc is sometimes nondeterministic, so we don't test it
-        _diff_test(target, "doc", "$(rootpath //utils:docdump)", "//utils:docdump")
+    # Doc is nondeterministic, so we don't test it
+
     _diff_test(target, "ms.docx", "$(rootpath //utils:zipdump)", "//utils:zipdump")

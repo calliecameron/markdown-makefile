@@ -25,7 +25,6 @@ md_document(
 )
 
 diff_test(
-    skip_doc = True,
     target = "test3",
 )
 
@@ -42,6 +41,5 @@ md_document(
 )
 
 diff_test(
-    skip_doc = True,
     target = "test3a",
 )

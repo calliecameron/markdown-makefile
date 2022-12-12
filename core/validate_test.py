@@ -19,6 +19,7 @@ publications:
   urls:
   - "http://example.com"
   notes: foo bar
+notes: baz quux
 ---
 
 “Foo” ‘bar’
@@ -179,6 +180,15 @@ publications:
 publications:
 - withdrawn: 2022-12-01
   published: 2022-12-02
+---
+""")
+
+        # Wrong type (should be string)
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+---
+notes:
+- foo
 ---
 """)
 

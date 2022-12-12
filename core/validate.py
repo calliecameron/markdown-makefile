@@ -126,11 +126,19 @@ def validate_publications(j: Dict[str, Any]) -> None:
                           "were rejected or withdrawn")
 
 
+def validate_notes(j: Dict[str, Any]) -> None:
+    if 'meta' not in j or 'notes' not in j['meta']:
+        return
+    notes = j['meta']['notes']
+    assert_is_string(notes, "'ntes' must be a string")
+
+
 def validate() -> None:
     raw = sys.stdin.read()
     j = json.loads(raw)
     validate_text(j)
     validate_publications(j)
+    validate_notes(j)
     sys.stdout.write(raw)
 
 

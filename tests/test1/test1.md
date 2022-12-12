@@ -15,6 +15,7 @@ publications:
 - venue: Bar
   submitted: 2022-11-11
   rejected: 2022-11-12
+notes: foo
 ---
 
 This is some text before a section. It shouldn't be indented.

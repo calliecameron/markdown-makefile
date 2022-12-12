@@ -6,6 +6,7 @@ identifier:
 - scheme: DOI
   text: "doi:10.234234.234/33"
 lang: en-GB
+notes: foo
 publications:
 - accepted: 2022-12-12
   published: 2022-12-13

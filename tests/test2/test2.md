@@ -5,6 +5,15 @@ author:
 identifier:
 - scheme: DOI
   text: doi:10.234234.234/33
+publications:
+- venue: Bar
+  submitted: 2022-10-11
+  accepted: 2022-10-12
+  published: 2022-10-13
+  urls:
+  - "http://example.com"
+  paid: £10
+  note: foo bar baz
 ---
 
 This is some text before a section. It shouldn't be indented. Each section should start on a new page (but subsections shouldn't).

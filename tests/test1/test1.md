@@ -5,6 +5,16 @@ author:
 identifier:
 - scheme: DOI
   text: doi:10.234234.234/33
+publications:
+- venue: Foo
+  submitted: 2022-12-11
+  accepted: 2022-12-12
+  published: 2022-12-13
+  urls:
+  - "http://example.com"
+- venue: Bar
+  submitted: 2022-11-11
+  rejected: 2022-11-12
 ---
 
 This is some text before a section. It shouldn't be indented.

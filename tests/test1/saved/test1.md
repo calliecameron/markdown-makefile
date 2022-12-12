@@ -6,6 +6,16 @@ identifier:
 - scheme: DOI
   text: "doi:10.234234.234/33"
 lang: en-GB
+publications:
+- accepted: 2022-12-12
+  published: 2022-12-13
+  submitted: 2022-12-11
+  urls:
+  - "http://example.com"
+  venue: Foo
+- rejected: 2022-11-12
+  submitted: 2022-11-11
+  venue: Bar
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 starts-with-text: t
 subject: "Version: reproducible"

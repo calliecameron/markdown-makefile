@@ -1,9 +1,0 @@
-{
-    "url": "https://github.com/bazelbuild/rules_python/archive/00545742ad2450863aeb82353d4275a1e5ed3f24.zip",
-    "integrity": "sha384-RQgmcz2uTNCJwkjvU4Iv2TTvtJdA/AmvmsGAzr3XIJ8W0HNn2rz7UrC5HqoZamdA",
-    "strip_prefix": "rules_python-00545742ad2450863aeb82353d4275a1e5ed3f24",
-    "patch_strip": 0,
-    "patches": {
-        "module_dot_bazel.patch": "sha384-NSCul7vQBKreIt8TWfOLhzVmAxYZMPDuBSNflUxM4+xIwACIlyKxW22q2DdvSpiL"
-    }
-}

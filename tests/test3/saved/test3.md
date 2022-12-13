@@ -7,6 +7,9 @@ identifier:
 - scheme: DOI
   text: "doi:10.234234.234/33"
 lang: en-GB
+publications:
+- self-published: 2022-12-12
+  venue: Baz
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"
 title: The Title Is ‘Baz’

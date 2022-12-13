@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 import argparse
 import json
 
-STATES = ['submitted', 'rejected', 'withdrawn', 'accepted', 'published']
+STATES = ['submitted', 'rejected', 'withdrawn', 'accepted', 'self-published', 'published']
 
 
 def generate_header(venues: List[str]) -> List[str]:
@@ -51,7 +51,7 @@ def generate_cell(target: str, p: Dict[str, Any]) -> str:
     latest = ''
     for state in STATES:
         if state in p:
-            content.append(p[state] + ' ' + state.title())
+            content.append(p[state] + ' ' + state.capitalize())
             latest = state
     return '<td class="%s" title="%s">%s</td>' % (
         latest, target + ', ' + p['venue'], '<br>'.join(content))
@@ -102,6 +102,7 @@ def generate_head() -> List[str]:
         '.rejected { background-color: #ff6d6d; }',
         '.withdrawn { background-color: #ff972f; }',
         '.accepted { background-color: #729fcf; }',
+        '.self-published { background-color: #158466; }',
         '.published { background-color: #81d41a; }',
         '</style>',
         '</head>',

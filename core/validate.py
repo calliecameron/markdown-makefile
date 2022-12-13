@@ -1,26 +1,38 @@
 #!/usr/bin/env python3
 
-from typing import Any, Dict, List
+from typing import Any, Dict, FrozenSet, List
 import datetime
 import json
 import sys
 
+VENUE = 'venue'
+PAID = 'paid'
+NOTES = 'notes'
+SUBMITTED = 'submitted'
+REJECTED = 'rejected'
+WITHDRAWN = 'withdrawn'
+SELF_PUBLISHED = 'self-published'
+ACCEPTED = 'accepted'
+PUBLISHED = 'published'
+URLS = 'urls'
+
 PUBLICATION_STR_KEYS = [
-    'venue',
-    'paid',
-    'notes',
+    VENUE,
+    PAID,
+    NOTES,
 ]
 
 PUBLICATION_DATE_KEYS = [
-    'submitted',
-    'rejected',
-    'withdrawn',
-    'accepted',
-    'published',
+    SUBMITTED,
+    REJECTED,
+    WITHDRAWN,
+    SELF_PUBLISHED,
+    ACCEPTED,
+    PUBLISHED,
 ]
 
 PUBLICATION_KEYS = frozenset(
-    PUBLICATION_STR_KEYS + PUBLICATION_DATE_KEYS + ['urls']
+    PUBLICATION_STR_KEYS + PUBLICATION_DATE_KEYS + [URLS]
 )
 
 
@@ -82,17 +94,30 @@ def assert_is_string(j: Dict[str, Any], msg: str) -> None:
         fail_metadata(msg)
 
 
+def assert_no_conflicts(key: str, keys: FrozenSet[str], not_allowed: FrozenSet[str]) -> None:
+    if key in keys and len(keys & not_allowed) > 0:
+        fail_metadata(
+            "when '%s' is in a publication item, %s cannot also be specified" % (key, not_allowed))
+
+
 def validate_publications(j: Dict[str, Any]) -> None:
     if 'meta' not in j or 'publications' not in j['meta']:
         return
     ps = j['meta']['publications']
     assert_is_list(ps, "'publications' must be a list")
     for p in ps['c']:
-        assert_is_dict(p, "item in 'publbications' must be a dict")
+        assert_is_dict(p, "item in 'publications' must be a dict")
         data = p['c']
         keys = frozenset(data.keys())
         if not keys.issubset(PUBLICATION_KEYS):
             fail_metadata("unknown keys %s in 'publications' item" % (keys - PUBLICATION_KEYS))
+
+        if VENUE not in keys:
+            fail_metadata("'%s' is required in 'publications' item" % VENUE)
+
+        if not keys & frozenset(PUBLICATION_DATE_KEYS):
+            fail_metadata("at least one of %s is required in 'publications' item" %
+                          PUBLICATION_DATE_KEYS)
 
         for k in sorted(PUBLICATION_STR_KEYS):
             if k in data:
@@ -110,27 +135,29 @@ def validate_publications(j: Dict[str, Any]) -> None:
                 except ValueError:
                     fail_metadata("'%s' in 'publications' item must be a date; got '%s'" % (k, v))
 
-        if 'urls' in data:
-            urls = data['urls']
-            assert_is_list(urls, "'urls' in 'publications' item must be a list")
+        if URLS in data:
+            urls = data[URLS]
+            assert_is_list(urls, "'%s' in 'publications' item must be a list" % URLS)
             for url in urls['c']:
-                assert_is_string(url, "'urls' item in 'publications' item must be a string")
+                assert_is_string(url, "'%s' item in 'publications' item must be a string" % URLS)
 
-        keys = frozenset(data.keys())
-        if len(keys & frozenset(['accepted', 'rejected', 'withdrawn'])) > 1:
-            fail_metadata("'accepted', 'rejected' and 'withdrawn' in 'publications' item "
-                          "are mutually exclusive")
+        mutually_exclusive = frozenset([ACCEPTED, REJECTED, WITHDRAWN, SELF_PUBLISHED])
+        if len(keys & mutually_exclusive) > 1:
+            fail_metadata("%s in 'publications' item are mutually exclusive" % mutually_exclusive)
 
-        if ('rejected' in keys or 'withdrawn' in keys) and 'published' in keys:
-            fail_metadata("'published' cannot be specified for publication items that "
-                          "were rejected or withdrawn")
+        assert_no_conflicts(
+            SELF_PUBLISHED, keys,
+            frozenset([SUBMITTED, REJECTED, WITHDRAWN, ACCEPTED, PUBLISHED]))
+        assert_no_conflicts(
+            PUBLISHED, keys,
+            frozenset([REJECTED, WITHDRAWN, SELF_PUBLISHED]))
 
 
 def validate_notes(j: Dict[str, Any]) -> None:
     if 'meta' not in j or 'notes' not in j['meta']:
         return
     notes = j['meta']['notes']
-    assert_is_string(notes, "'ntes' must be a string")
+    assert_is_string(notes, "'notes' must be a string")
 
 
 def validate() -> None:

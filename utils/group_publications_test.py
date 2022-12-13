@@ -7,6 +7,7 @@ import sys
 import unittest
 import utils.test_utils
 
+# pylint: disable=line-too-long
 
 SCRIPT = ''
 
@@ -52,7 +53,7 @@ class TestPublications(unittest.TestCase):
                     {
                         'venue': 'Foo',
                         'submitted': '2022-11-13',
-                        'accepted': '2022-11-14',
+                        'self-published': '2022-11-14',
                     },
                 ]
             })
@@ -86,6 +87,7 @@ th, td { border: 1px solid; padding: 5px; }
 .rejected { background-color: #ff6d6d; }
 .withdrawn { background-color: #ff972f; }
 .accepted { background-color: #729fcf; }
+.self-published { background-color: #158466; }
 .published { background-color: #81d41a; }
 </style>
 </head>
@@ -109,7 +111,7 @@ th, td { border: 1px solid; padding: 5px; }
 <td>20</td>
 <td></td>
 <td></td>
-<td class="accepted" title="//baz:quux, Foo">2022-11-13 Submitted<br>2022-11-14 Accepted</td>
+<td class="self-published" title="//baz:quux, Foo">2022-11-13 Submitted<br>2022-11-14 Self-published</td>
 </tr>
 <tr>
 <td>//foo:bar</td>
@@ -127,7 +129,7 @@ th, td { border: 1px solid; padding: 5px; }
     "docversion": "quux, dirty",
     "publications": [
         {
-            "accepted": "2022-11-14",
+            "self-published": "2022-11-14",
             "submitted": "2022-11-13",
             "venue": "Foo"
         }
@@ -155,7 +157,7 @@ th, td { border: 1px solid; padding: 5px; }
 }</pre></code>
 </body>
 </html>
-""")
+""")  # noqa: E501
 
 
 if __name__ == '__main__':

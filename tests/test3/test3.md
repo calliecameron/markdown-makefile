@@ -6,6 +6,9 @@ date: 23 February 2019
 identifier:
 - scheme: DOI
   text: doi:10.234234.234/33
+publications:
+- venue: Baz
+  self-published: 2022-12-12
 ---
 
 # This is a section

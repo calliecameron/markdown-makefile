@@ -59,6 +59,24 @@ publications:
 ---
 """)
 
+        # Missing required key
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+---
+publications:
+- notes: foo
+---
+""")
+
+        # Missing required key
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+---
+publications:
+- venue: bar
+---
+""")
+
         # Wrong type (should be string)
         with self.assertRaises(ValueError):
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
@@ -66,13 +84,16 @@ publications:
 publications:
 - venue:
   - foo
+  submitted: 2022-10-10
 ---
 """)
         with self.assertRaises(ValueError):
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- paid:
+- venue: foo
+  submitted: 2022-10-10
+  paid:
   - foo
 ---
 """)
@@ -80,7 +101,9 @@ publications:
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- notes:
+- venue: foo
+  submitted: 2022-10-10
+  notes:
   - foo
 ---
 """)
@@ -90,35 +113,48 @@ publications:
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- submitted: foo
+- venue: foo
+  submitted: foo
 ---
 """)
         with self.assertRaises(ValueError):
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- accepted: foo
+- venue: foo
+  accepted: foo
 ---
 """)
         with self.assertRaises(ValueError):
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- rejected: foo
+- venue: foo
+  rejected: foo
 ---
 """)
         with self.assertRaises(ValueError):
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- withdrawn: foo
+- venue: foo
+  withdrawn: foo
 ---
 """)
         with self.assertRaises(ValueError):
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- published: foo
+- venue: foo
+  published: foo
+---
+""")
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+---
+publications:
+- venue: foo
+  self-published: foo
 ---
 """)
 
@@ -127,7 +163,9 @@ publications:
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- urls: foo
+- venue: foo
+  submitted: 2022-10-10
+  urls: foo
 ---
 """)
 
@@ -136,7 +174,9 @@ publications:
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- urls:
+- venue: foo
+  submitted: 2022-10-10
+  urls:
   - foo: bar
 ---
 """)
@@ -146,7 +186,8 @@ publications:
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- accepted: 2022-12-01
+- venue: foo
+  accepted: 2022-12-01
   rejected: 2022-12-02
 ---
 """)
@@ -154,7 +195,8 @@ publications:
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- accepted: 2022-12-01
+- venue: foo
+  accepted: 2022-12-01
   withdrawn: 2022-12-02
 ---
 """)
@@ -162,7 +204,8 @@ publications:
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- rejected: 2022-12-01
+- venue: foo
+  rejected: 2022-12-01
   withdrawn: 2022-12-02
 ---
 """)
@@ -170,7 +213,8 @@ publications:
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- rejected: 2022-12-01
+- venue: foo
+  rejected: 2022-12-01
   published: 2022-12-02
 ---
 """)
@@ -178,8 +222,54 @@ publications:
             utils.test_utils.pandoc_filter(PANDOC, FILTER, """
 ---
 publications:
-- withdrawn: 2022-12-01
+- venue: foo
+  withdrawn: 2022-12-01
   published: 2022-12-02
+---
+""")
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+---
+publications:
+- venue: foo
+  self-published: 2022-12-01
+  published: 2022-12-02
+---
+""")
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+---
+publications:
+- venue: foo
+  self-published: 2022-12-01
+  submitted: 2022-12-02
+---
+""")
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+---
+publications:
+- venue: foo
+  self-published: 2022-12-01
+  rejected: 2022-12-02
+---
+""")
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+---
+publications:
+- venue: foo
+  self-published: 2022-12-01
+  withdrawn: 2022-12-02
+---
+""")
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+---
+publications:
+- venue: foo
+  self-published: 2022-12-01
+  accepted: 2022-12-02
 ---
 """)
 

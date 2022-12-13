@@ -27,7 +27,7 @@ def generate_header(venues: List[str]) -> List[str]:
 def generate_row(target: str, data: Dict[str, Any], venues: List[str]) -> List[str]:
     out = [
         '<tr>',
-        '<td>%s</td>' % html.escape(target, quote=False),
+        '<td><a href="#%s">%s</a></td>' % (html.escape(target), html.escape(target, quote=False)),
         '<td>%s</td>' % html.escape(data.get('title', ''), quote=False),
         '<td>%s</td>' % html.escape(data.get('wordcount', ''), quote=False),
         '<td style="border-right: 3px solid">%s</td>' % html.escape(
@@ -88,7 +88,7 @@ def generate_details(data: Dict[str, Any]) -> List[str]:
     for target in sorted(data):
         if 'publications' in data[target] and data[target]['publications']:
             out += [
-                '<h3>%s</h3>' % html.escape(target, quote=False),
+                '<h3 id="%s">%s</h3>' % (html.escape(target), html.escape(target, quote=False)),
                 '<code><pre>%s</pre></code>' % html.escape(
                     json.dumps(data[target], sort_keys=True, indent=4), quote=False),
             ]

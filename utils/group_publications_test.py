@@ -106,7 +106,7 @@ th, td { border: 1px solid; padding: 5px; }
 </thead>
 <tbody>
 <tr>
-<td>//baz:quux</td>
+<td><a href="#//baz:quux">//baz:quux</a></td>
 <td>Baz</td>
 <td>20</td>
 <td style="border-right: 3px solid"></td>
@@ -114,7 +114,7 @@ th, td { border: 1px solid; padding: 5px; }
 <td class="self-published" title="//baz:quux, Foo">2022-11-13 Submitted<br>2022-11-14 Self-published</td>
 </tr>
 <tr>
-<td>//foo:bar</td>
+<td><a href="#//foo:bar">//foo:bar</a></td>
 <td>Foo &lt;Bar&gt;</td>
 <td>10</td>
 <td style="border-right: 3px solid"></td>
@@ -124,7 +124,7 @@ th, td { border: 1px solid; padding: 5px; }
 </tbody>
 </table>
 <h2>Details</h2>
-<h3>//baz:quux</h3>
+<h3 id="//baz:quux">//baz:quux</h3>
 <code><pre>{
     "docversion": "quux, dirty",
     "publications": [
@@ -137,7 +137,7 @@ th, td { border: 1px solid; padding: 5px; }
     "title": "Baz",
     "wordcount": "20"
 }</pre></code>
-<h3>//foo:bar</h3>
+<h3 id="//foo:bar">//foo:bar</h3>
 <code><pre>{
     "docversion": "bar",
     "publications": [

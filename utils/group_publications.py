@@ -12,7 +12,7 @@ def generate_header(venues: List[str]) -> List[str]:
         '<th>Target</th>',
         '<th>Title</th>',
         '<th>Wordcount</th>',
-        '<th>Notes</th>'
+        '<th style="border-right: 3px solid">Notes</th>'
     ]
     for v in venues:
         out.append('<th>%s</th>' % v)
@@ -29,7 +29,7 @@ def generate_row(target: str, data: Dict[str, Any], venues: List[str]) -> List[s
         '<td>%s</td>' % target,
         '<td>%s</td>' % data.get('title', ''),
         '<td>%s</td>' % data.get('wordcount', ''),
-        '<td>%s</td>' % data.get('notes', ''),
+        '<td style="border-right: 3px solid">%s</td>' % data.get('notes', ''),
     ]
 
     ps = {}

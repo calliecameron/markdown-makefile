@@ -99,7 +99,7 @@ th, td { border: 1px solid; padding: 5px; }
 <th>Target</th>
 <th>Title</th>
 <th>Wordcount</th>
-<th>Notes</th>
+<th style="border-right: 3px solid">Notes</th>
 <th>Bar</th>
 <th>Foo</th>
 </tr>
@@ -109,7 +109,7 @@ th, td { border: 1px solid; padding: 5px; }
 <td>//baz:quux</td>
 <td>Baz</td>
 <td>20</td>
-<td></td>
+<td style="border-right: 3px solid"></td>
 <td></td>
 <td class="self-published" title="//baz:quux, Foo">2022-11-13 Submitted<br>2022-11-14 Self-published</td>
 </tr>
@@ -117,7 +117,7 @@ th, td { border: 1px solid; padding: 5px; }
 <td>//foo:bar</td>
 <td>Foo</td>
 <td>10</td>
-<td></td>
+<td style="border-right: 3px solid"></td>
 <td class="rejected" title="//foo:bar, Bar">2022-10-13 Submitted<br>2022-10-14 Rejected</td>
 <td class="published" title="//foo:bar, Foo">2022-12-13 Submitted<br>2022-12-14 Published</td>
 </tr>

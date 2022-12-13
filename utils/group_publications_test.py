@@ -83,6 +83,8 @@ class TestPublications(unittest.TestCase):
 <style>
 table { border-collapse: collapse; }
 th, td { border: 1px solid; padding: 5px; }
+a:link { color: black; }
+a:visited { color: black; }
 .submitted { background-color: #ffff00; }
 .rejected { background-color: #ff6d6d; }
 .withdrawn { background-color: #ff972f; }
@@ -106,7 +108,7 @@ th, td { border: 1px solid; padding: 5px; }
 </thead>
 <tbody>
 <tr>
-<td><a href="#//baz:quux">//baz:quux</a></td>
+<td class="self-published"><a href="#//baz:quux">//baz:quux</a></td>
 <td>Baz</td>
 <td>20</td>
 <td style="border-right: 3px solid"></td>
@@ -114,7 +116,7 @@ th, td { border: 1px solid; padding: 5px; }
 <td class="self-published" title="//baz:quux, Foo">2022-11-13 Submitted<br>2022-11-14 Self-published</td>
 </tr>
 <tr>
-<td><a href="#//foo:bar">//foo:bar</a></td>
+<td class="published"><a href="#//foo:bar">//foo:bar</a></td>
 <td>Foo &lt;Bar&gt;</td>
 <td>10</td>
 <td style="border-right: 3px solid"></td>

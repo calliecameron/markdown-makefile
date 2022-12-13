@@ -3,7 +3,16 @@ import argparse
 import html
 import json
 
-STATES = ['submitted', 'rejected', 'withdrawn', 'accepted', 'self-published', 'published']
+VENUE = 'venue'
+SUBMITTED = 'submitted'
+REJECTED = 'rejected'
+WITHDRAWN = 'withdrawn'
+SELF_PUBLISHED = 'self-published'
+ACCEPTED = 'accepted'
+PUBLISHED = 'published'
+
+
+STATES = [SUBMITTED, REJECTED, WITHDRAWN, ACCEPTED, SELF_PUBLISHED, PUBLISHED]
 
 
 def generate_header(venues: List[str]) -> List[str]:
@@ -25,18 +34,36 @@ def generate_header(venues: List[str]) -> List[str]:
 
 
 def generate_row(target: str, data: Dict[str, Any], venues: List[str]) -> List[str]:
+    ps = {}
+    for p in data['publications']:
+        ps[p[VENUE]] = p
+
+    states = set()
+    for p in ps.values():
+        if SUBMITTED in p and REJECTED not in p and WITHDRAWN not in p:
+            states.add(SUBMITTED)
+        if ACCEPTED in p:
+            states.add(ACCEPTED)
+        if SELF_PUBLISHED in p:
+            states.add(SELF_PUBLISHED)
+        if PUBLISHED in p:
+            states.add(PUBLISHED)
+
+    class_attr = ''
+    for state in (PUBLISHED, SELF_PUBLISHED, ACCEPTED, SUBMITTED):
+        if state in states:
+            class_attr = state
+            break
+
     out = [
         '<tr>',
-        '<td><a href="#%s">%s</a></td>' % (html.escape(target), html.escape(target, quote=False)),
+        '<td class="%s"><a href="#%s">%s</a></td>' % (
+            class_attr, html.escape(target), html.escape(target, quote=False)),
         '<td>%s</td>' % html.escape(data.get('title', ''), quote=False),
         '<td>%s</td>' % html.escape(data.get('wordcount', ''), quote=False),
         '<td style="border-right: 3px solid">%s</td>' % html.escape(
             data.get('notes', ''), quote=False),
     ]
-
-    ps = {}
-    for p in data['publications']:
-        ps[p['venue']] = p
 
     for v in sorted(venues):
         if v in ps:
@@ -57,7 +84,7 @@ def generate_cell(target: str, p: Dict[str, Any]) -> str:
             latest = state
     return '<td class="%s" title="%s">%s</td>' % (
         latest,
-        html.escape(target + ', ' + p['venue']),
+        html.escape(target + ', ' + p[VENUE]),
         '<br>'.join([html.escape(c, quote=False) for c in content]))
 
 
@@ -68,8 +95,8 @@ def generate_table(data: Dict[str, Any]) -> List[str]:
     for target in data:
         if 'publications' in data[target]:
             for p in data[target]['publications']:
-                if 'venue' in p:
-                    venue_set.add(p['venue'])
+                if VENUE in p:
+                    venue_set.add(p[VENUE])
     venues = sorted(venue_set)
 
     out += generate_header(venues)
@@ -103,6 +130,8 @@ def generate_head() -> List[str]:
         '<style>',
         'table { border-collapse: collapse; }',
         'th, td { border: 1px solid; padding: 5px; }',
+        'a:link { color: black; }',
+        'a:visited { color: black; }',
         '.submitted { background-color: #ffff00; }',
         '.rejected { background-color: #ff6d6d; }',
         '.withdrawn { background-color: #ff972f; }',

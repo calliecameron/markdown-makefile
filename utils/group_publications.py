@@ -1,5 +1,6 @@
 from typing import Any, Dict, List
 import argparse
+import html
 import json
 
 STATES = ['submitted', 'rejected', 'withdrawn', 'accepted', 'self-published', 'published']
@@ -15,7 +16,7 @@ def generate_header(venues: List[str]) -> List[str]:
         '<th style="border-right: 3px solid">Notes</th>'
     ]
     for v in venues:
-        out.append('<th>%s</th>' % v)
+        out.append('<th>%s</th>' % html.escape(v, quote=False))
     out += [
         '</tr>',
         '</thead>'
@@ -26,10 +27,11 @@ def generate_header(venues: List[str]) -> List[str]:
 def generate_row(target: str, data: Dict[str, Any], venues: List[str]) -> List[str]:
     out = [
         '<tr>',
-        '<td>%s</td>' % target,
-        '<td>%s</td>' % data.get('title', ''),
-        '<td>%s</td>' % data.get('wordcount', ''),
-        '<td style="border-right: 3px solid">%s</td>' % data.get('notes', ''),
+        '<td>%s</td>' % html.escape(target, quote=False),
+        '<td>%s</td>' % html.escape(data.get('title', ''), quote=False),
+        '<td>%s</td>' % html.escape(data.get('wordcount', ''), quote=False),
+        '<td style="border-right: 3px solid">%s</td>' % html.escape(
+            data.get('notes', ''), quote=False),
     ]
 
     ps = {}
@@ -54,7 +56,9 @@ def generate_cell(target: str, p: Dict[str, Any]) -> str:
             content.append(p[state] + ' ' + state.capitalize())
             latest = state
     return '<td class="%s" title="%s">%s</td>' % (
-        latest, target + ', ' + p['venue'], '<br>'.join(content))
+        latest,
+        html.escape(target + ', ' + p['venue']),
+        '<br>'.join([html.escape(c, quote=False) for c in content]))
 
 
 def generate_table(data: Dict[str, Any]) -> List[str]:
@@ -84,8 +88,9 @@ def generate_details(data: Dict[str, Any]) -> List[str]:
     for target in sorted(data):
         if 'publications' in data[target] and data[target]['publications']:
             out += [
-                '<h3>%s</h3>' % target,
-                '<code><pre>%s</pre></code>' % json.dumps(data[target], sort_keys=True, indent=4),
+                '<h3>%s</h3>' % html.escape(target, quote=False),
+                '<code><pre>%s</pre></code>' % html.escape(
+                    json.dumps(data[target], sort_keys=True, indent=4), quote=False),
             ]
     return out
 

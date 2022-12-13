@@ -25,7 +25,7 @@ class TestPublications(unittest.TestCase):
         self.dump_file(
             metadata1,
             {
-                'title': 'Foo',
+                'title': 'Foo <Bar>',
                 'wordcount': '10',
                 'docversion': 'bar',
                 'publications': [
@@ -115,7 +115,7 @@ th, td { border: 1px solid; padding: 5px; }
 </tr>
 <tr>
 <td>//foo:bar</td>
-<td>Foo</td>
+<td>Foo &lt;Bar&gt;</td>
 <td>10</td>
 <td style="border-right: 3px solid"></td>
 <td class="rejected" title="//foo:bar, Bar">2022-10-13 Submitted<br>2022-10-14 Rejected</td>
@@ -152,7 +152,7 @@ th, td { border: 1px solid; padding: 5px; }
             "venue": "Bar"
         }
     ],
-    "title": "Foo",
+    "title": "Foo &lt;Bar&gt;",
     "wordcount": "10"
 }</pre></code>
 </body>

@@ -39,7 +39,7 @@ odt, docx, doc, and docx in
     `.bazelversion`:
 
     ```text
-    6.0.0rc4
+    6.0.0rc5
     ```
 
     `WORKSPACE`:

@@ -1,6 +1,10 @@
 """Workspace macros."""
 
-def md_workspace(name = None):  # buildifier: disable=unused-variable
+_DEFAULT_REGISTRY = "https://raw.githubusercontent.com/calliecameron/markdown-makefile/master/registry"
+
+def md_workspace(registry_override = None, name = None):  # buildifier: disable=unused-variable
+    registry = registry_override or _DEFAULT_REGISTRY
+
     native.sh_binary(
         name = "new",
         srcs = ["@markdown_makefile//utils:new_package.sh"],
@@ -17,6 +21,7 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
             "@markdown_makefile//utils:workspace_summary",
             "@markdown_makefile//utils:workspace_publications",
             "@markdown_makefile//utils:bazelversion",
+            "@markdown_makefile//utils:bazelrc",
         ],
         args = [
             "$(rootpath @markdown_makefile//utils:workspace_status)",
@@ -25,6 +30,8 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
             "$(rootpath @markdown_makefile//utils:workspace_summary)",
             "$(rootpath @markdown_makefile//utils:workspace_publications)",
             "$(rootpath @markdown_makefile//utils:bazelversion)",
+            "$(rootpath @markdown_makefile//utils:bazelrc)",
+            registry,
         ],
         visibility = ["//visibility:private"],
     )
@@ -39,12 +46,14 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
             "@markdown_makefile//utils:workspace_summary",
             "@markdown_makefile//utils:workspace_publications",
             "@markdown_makefile//utils:bazelversion",
+            "@markdown_makefile//utils:bazelrc",
             ".bin/workspace_status",
             "//.workspace_contents:BUILD",
             "//.workspace_contents:workspace_contents.bzl",
             "workspace_summary",
             "workspace_publications",
             ".bazelversion",
+            ".bazelrc",
         ],
         args = [
             "$(rootpath @markdown_makefile//utils:workspace_status)",
@@ -53,12 +62,15 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
             "$(rootpath @markdown_makefile//utils:workspace_summary)",
             "$(rootpath @markdown_makefile//utils:workspace_publications)",
             "$(rootpath @markdown_makefile//utils:bazelversion)",
+            "$(rootpath @markdown_makefile//utils:bazelrc)",
             "$(rootpath .bin/workspace_status)",
             "$(rootpath //.workspace_contents:BUILD)",
             "$(rootpath //.workspace_contents:workspace_contents.bzl)",
             "$(rootpath workspace_summary)",
             "$(rootpath workspace_publications)",
             "$(rootpath .bazelversion)",
+            "$(rootpath .bazelrc)",
+            registry,
         ],
         visibility = ["//visibility:private"],
     )

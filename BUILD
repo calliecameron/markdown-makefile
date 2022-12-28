@@ -6,9 +6,12 @@ compile_pip_requirements(
     name = "requirements",
     requirements_in = "requirements.txt",
     requirements_txt = "requirements_lock.txt",
+    tags = ["requires-network"],
 )
 
-md_workspace()
+md_workspace(
+    registry_override = "file:///%workspace%/registry",
+)
 
 md_git_repo()
 

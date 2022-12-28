@@ -3,7 +3,7 @@
 set -eux
 
 function usage() {
-    echo "Usage: $(basename "${0}") workspace_update_script workspace_status workspace_contents_build workspace_contents_bzl workspace_summary workspace_publications bazelversion"
+    echo "Usage: $(basename "${0}") workspace_update_script workspace_status workspace_contents_build workspace_contents_bzl workspace_summary workspace_publications bazelversion bazelrc"
     exit 1
 }
 
@@ -21,6 +21,10 @@ test -z "${6:-}" && usage
 WORKSPACE_PUBLICATIONS="${6}"
 test -z "${7:-}" && usage
 BAZELVERSION="${7}"
+test -z "${8:-}" && usage
+BAZELRC="${8}"
+
+REGISTRY='foo'
 
 BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}" "${SCRIPT}" \
     "${WORKSPACE_STATUS}" \
@@ -28,7 +32,12 @@ BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}" "${SCRIPT}" \
     "${WORKSPACE_CONTENTS_BZL}" \
     "${WORKSPACE_SUMMARY}" \
     "${WORKSPACE_PUBLICATIONS}" \
-    "${BAZELVERSION}"
+    "${BAZELVERSION}" \
+    "${BAZELRC}" \
+    "${REGISTRY}"
+
+TMP_BAZELRC="${TEST_TMPDIR}/tmp_bazelrc"
+sed "s|@@@@@|${REGISTRY}|g" <"${BAZELRC}" >"${TMP_BAZELRC}"
 
 diff "${WORKSPACE_STATUS}" "${TEST_TMPDIR}/.bin/workspace_status"
 [ "$(stat -c '%a' "${TEST_TMPDIR}/.bin/workspace_status")" = '700' ]
@@ -41,4 +50,6 @@ diff "${WORKSPACE_SUMMARY}" "${TEST_TMPDIR}/workspace_summary"
 diff "${WORKSPACE_PUBLICATIONS}" "${TEST_TMPDIR}/workspace_publications"
 [ "$(stat -c '%a' "${TEST_TMPDIR}/workspace_publications")" = '700' ]
 diff "${BAZELVERSION}" "${TEST_TMPDIR}/.bazelversion"
+[ "$(stat -c '%a' "${TEST_TMPDIR}/.bazelversion")" = '600' ]
+diff "${TMP_BAZELRC}" "${TEST_TMPDIR}/.bazelrc"
 [ "$(stat -c '%a' "${TEST_TMPDIR}/.bazelversion")" = '600' ]

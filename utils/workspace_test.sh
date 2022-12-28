@@ -3,7 +3,7 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") workspace_status workspace_contents_build workspace_contents_bzl workspace_summary workspace_publications bazelversion local_workspace_status local_workspace_contents_build local_workspace_contents_bzl local_workspace_summary local_workspace_publications local_bazelversion"
+    echo "Usage: $(basename "${0}") workspace_status workspace_contents_build workspace_contents_bzl workspace_summary workspace_publications bazelversion bazelrc local_workspace_status local_workspace_contents_build local_workspace_contents_bzl local_workspace_summary local_workspace_publications local_bazelversion local_bazelrc registry"
     exit 1
 }
 
@@ -20,17 +20,23 @@ WORKSPACE_PUBLICATIONS="${5}"
 test -z "${6:-}" && usage
 BAZELVERSION="${6}"
 test -z "${7:-}" && usage
-LOCAL_WORKSPACE_STATUS="${7}"
+BAZELRC="${7}"
 test -z "${8:-}" && usage
-LOCAL_WORKSPACE_CONTENTS_BUILD="${8}"
+LOCAL_WORKSPACE_STATUS="${8}"
 test -z "${9:-}" && usage
-LOCAL_WORKSPACE_CONTENTS_BZL="${9}"
+LOCAL_WORKSPACE_CONTENTS_BUILD="${9}"
 test -z "${10:-}" && usage
-LOCAL_WORKSPACE_SUMMARY="${10}"
+LOCAL_WORKSPACE_CONTENTS_BZL="${10}"
 test -z "${11:-}" && usage
-LOCAL_WORKSPACE_PUBLICATIONS="${11}"
+LOCAL_WORKSPACE_SUMMARY="${11}"
 test -z "${12:-}" && usage
-LOCAL_BAZELVERSION="${12}"
+LOCAL_WORKSPACE_PUBLICATIONS="${12}"
+test -z "${13:-}" && usage
+LOCAL_BAZELVERSION="${13}"
+test -z "${14:-}" && usage
+LOCAL_BAZELRC="${14}"
+test -z "${15:-}" && usage
+REGISTRY="${15}"
 
 DIFF=''
 
@@ -62,12 +68,16 @@ function diff_mode_only() {
     echo
 }
 
+TMP_BAZELRC="${TEST_TMPDIR}/tmp_bazelrc"
+sed "s|@@@@@|${REGISTRY}|g" <"${BAZELRC}" >"${TMP_BAZELRC}"
+
 diff_file "${WORKSPACE_STATUS}" "${LOCAL_WORKSPACE_STATUS}" '700'
 diff_file "${WORKSPACE_CONTENTS_BUILD}" "${LOCAL_WORKSPACE_CONTENTS_BUILD}" '600'
 diff_mode_only "${WORKSPACE_CONTENTS_BZL}" "${LOCAL_WORKSPACE_CONTENTS_BZL}" '600'
 diff_file "${WORKSPACE_SUMMARY}" "${LOCAL_WORKSPACE_SUMMARY}" '700'
 diff_file "${WORKSPACE_PUBLICATIONS}" "${LOCAL_WORKSPACE_PUBLICATIONS}" '700'
 diff_file "${BAZELVERSION}" "${LOCAL_BAZELVERSION}" '600'
+diff_file "${TMP_BAZELRC}" "${LOCAL_BAZELRC}" '600'
 
 if [ -n "${DIFF}" ]; then
     echo "Found diff; 'bazel run :workspace_update' to fix"

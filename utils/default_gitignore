@@ -4,3 +4,4 @@ auto/
 .dir-locals.el
 .env
 __pycache__/
+/.bazelrc.user

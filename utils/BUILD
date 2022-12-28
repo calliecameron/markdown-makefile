@@ -15,6 +15,7 @@ exports_files(
         "workspace_summary",
         "workspace_publications",
         "bazelversion",
+        "bazelrc",
         "workspace_update.sh",
         "workspace_test.sh",
         "collection_header.tex",
@@ -118,8 +119,10 @@ sh_test(
         "$(rootpath workspace_summary)",
         "$(rootpath workspace_publications)",
         "$(rootpath bazelversion)",
+        "$(rootpath bazelrc)",
     ],
     data = [
+        "bazelrc",
         "bazelversion",
         "workspace_contents_build",
         "workspace_contents_bzl",

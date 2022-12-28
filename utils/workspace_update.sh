@@ -3,7 +3,7 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") workspace_status workspace_contents_build workspace_contents_bzl workspace_summary workspace_publications bazelversion"
+    echo "Usage: $(basename "${0}") workspace_status workspace_contents_build workspace_contents_bzl workspace_summary workspace_publications bazelversion bazelrc registry"
     exit 1
 }
 
@@ -19,6 +19,10 @@ test -z "${5:-}" && usage
 WORKSPACE_PUBLICATIONS="${5}"
 test -z "${6:-}" && usage
 BAZELVERSION="${6}"
+test -z "${7:-}" && usage
+BAZELRC="${7}"
+test -z "${8:-}" && usage
+REGISTRY="${8}"
 
 SOURCE_DIR="${BUILD_WORKSPACE_DIRECTORY}"
 BIN_DIR="${SOURCE_DIR}/.bin"
@@ -46,3 +50,6 @@ chmod u=rwx,go= "${SOURCE_DIR}/workspace_publications"
 
 cp "${BAZELVERSION}" "${SOURCE_DIR}/.bazelversion"
 chmod u=rw,go= "${SOURCE_DIR}/.bazelversion"
+
+sed "s|@@@@@|${REGISTRY}|g" <"${BAZELRC}" >"${SOURCE_DIR}/.bazelrc"
+chmod u=rw,go= "${SOURCE_DIR}/.bazelrc"

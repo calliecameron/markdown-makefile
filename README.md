@@ -33,13 +33,16 @@ odt, docx, doc, and docx in
 
     ```text
     build "--workspace_status_command=/bin/bash -c 'if [ -x ./.bin/workspace_status ]; then ./.bin/workspace_status; fi'"
+    build --sandbox_default_allow_network=false
+    test --build_tests_only
     common --enable_bzlmod --registry=https://raw.githubusercontent.com/calliecameron/markdown-makefile/master/registry --registry=https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main
+    try-import %workspace%/.bazelrc.user
     ```
 
     `.bazelversion`:
 
     ```text
-    6.0.0rc5
+    6.0.0
     ```
 
     `WORKSPACE`:

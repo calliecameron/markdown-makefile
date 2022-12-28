@@ -33,7 +33,7 @@ odt, docx, doc, and docx in
 
     ```text
     build "--workspace_status_command=/bin/bash -c 'if [ -x ./.bin/workspace_status ]; then ./.bin/workspace_status; fi'"
-    common --experimental_enable_bzlmod --registry=https://raw.githubusercontent.com/calliecameron/markdown-makefile/master/registry --registry=https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main
+    common --enable_bzlmod --registry=https://raw.githubusercontent.com/calliecameron/markdown-makefile/master/registry --registry=https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main
     ```
 
     `.bazelversion`:

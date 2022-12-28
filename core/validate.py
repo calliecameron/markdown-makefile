@@ -48,9 +48,9 @@ def fail_metadata(msg: str) -> None:
 def validate_str(s: str) -> None:
     if "'" in s or '"' in s:
         fail(
-            "markdown parsing failed\n\n"
-            "Found quotes that weren't converted to smart quotes. Replace them with "
-            "backslash-escaped literal curly quotes (“ ” ‘ ’).\n")
+            ("markdown parsing failed: '%s'\n\n"
+             "Found quotes that weren't converted to smart quotes. Replace them with "
+             "backslash-escaped literal curly quotes (“ ” ‘ ’).\n") % s)
 
 
 def walk_dict(ast: Dict[str, Any]) -> None:

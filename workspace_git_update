@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -eu
+
+THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "${THIS_DIR}" || exit 1
+
+bazel query 'kind(sh_binary, filter(git_update, //...))' | LC_ALL=C sort | while read -r line; do
+    bazel run "${line}"
+done

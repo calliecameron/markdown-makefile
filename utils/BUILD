@@ -14,6 +14,7 @@ exports_files(
         "workspace_contents_bzl",
         "workspace_summary",
         "workspace_publications",
+        "workspace_git_update",
         "bazelversion",
         "bazelrc",
         "workspace_update.sh",
@@ -40,6 +41,8 @@ filegroup(
     data = glob(["*.sh"]) + [
         "precommit",
         "workspace_summary",
+        "workspace_publications",
+        "workspace_git_update",
     ],
     visibility = ["//:__pkg__"],
 )
@@ -118,6 +121,7 @@ sh_test(
         "$(rootpath workspace_contents_bzl)",
         "$(rootpath workspace_summary)",
         "$(rootpath workspace_publications)",
+        "$(rootpath workspace_git_update)",
         "$(rootpath bazelversion)",
         "$(rootpath bazelrc)",
     ],
@@ -126,6 +130,7 @@ sh_test(
         "bazelversion",
         "workspace_contents_build",
         "workspace_contents_bzl",
+        "workspace_git_update",
         "workspace_publications",
         "workspace_status",
         "workspace_summary",

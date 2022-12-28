@@ -3,7 +3,7 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") workspace_status workspace_contents_build workspace_contents_bzl workspace_summary workspace_publications bazelversion bazelrc registry"
+    echo "Usage: $(basename "${0}") workspace_status workspace_contents_build workspace_contents_bzl workspace_summary workspace_publications workspace_git_update bazelversion bazelrc registry"
     exit 1
 }
 
@@ -18,11 +18,13 @@ WORKSPACE_SUMMARY="${4}"
 test -z "${5:-}" && usage
 WORKSPACE_PUBLICATIONS="${5}"
 test -z "${6:-}" && usage
-BAZELVERSION="${6}"
+WORKSPACE_GIT_UPDATE="${6}"
 test -z "${7:-}" && usage
-BAZELRC="${7}"
+BAZELVERSION="${7}"
 test -z "${8:-}" && usage
-REGISTRY="${8}"
+BAZELRC="${8}"
+test -z "${9:-}" && usage
+REGISTRY="${9}"
 
 SOURCE_DIR="${BUILD_WORKSPACE_DIRECTORY}"
 BIN_DIR="${SOURCE_DIR}/.bin"
@@ -47,6 +49,9 @@ chmod u=rwx,go= "${SOURCE_DIR}/workspace_summary"
 
 cp "${WORKSPACE_PUBLICATIONS}" "${SOURCE_DIR}/workspace_publications"
 chmod u=rwx,go= "${SOURCE_DIR}/workspace_publications"
+
+cp "${WORKSPACE_GIT_UPDATE}" "${SOURCE_DIR}/workspace_git_update"
+chmod u=rwx,go= "${SOURCE_DIR}/workspace_git_update"
 
 cp "${BAZELVERSION}" "${SOURCE_DIR}/.bazelversion"
 chmod u=rw,go= "${SOURCE_DIR}/.bazelversion"

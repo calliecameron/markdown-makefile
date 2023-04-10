@@ -9,70 +9,74 @@ import utils.test_utils
 
 # pylint: disable=line-too-long
 
-SCRIPT = ''
+SCRIPT = ""
 
 
 class TestPublications(unittest.TestCase):
-
     def dump_file(self, filename: str, content: Dict[str, Any]) -> None:
-        with open(filename, 'w', encoding='utf-8') as f:
+        with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)
 
     def test_publications(self) -> None:
         test_tmpdir = utils.test_utils.tmpdir()
 
-        metadata1 = os.path.join(test_tmpdir, 'metadata1.json')
+        metadata1 = os.path.join(test_tmpdir, "metadata1.json")
         self.dump_file(
             metadata1,
             {
-                'title': 'Foo <Bar>',
-                'wordcount': '10',
-                'docversion': 'bar',
-                'publications': [
+                "title": "Foo <Bar>",
+                "wordcount": "10",
+                "docversion": "bar",
+                "publications": [
                     {
-                        'venue': 'Foo',
-                        'submitted': '2022-12-13',
-                        'published': '2022-12-14',
+                        "venue": "Foo",
+                        "submitted": "2022-12-13",
+                        "published": "2022-12-14",
                     },
                     {
-                        'venue': 'Bar',
-                        'submitted': '2022-10-13',
-                        'rejected': '2022-10-14',
+                        "venue": "Bar",
+                        "submitted": "2022-10-13",
+                        "rejected": "2022-10-14",
                     },
-                ]
-            })
+                ],
+            },
+        )
 
-        metadata2 = os.path.join(test_tmpdir, 'metadata2.json')
+        metadata2 = os.path.join(test_tmpdir, "metadata2.json")
         self.dump_file(
             metadata2,
             {
-                'title': 'Baz',
-                'wordcount': '20',
-                'docversion': 'quux, dirty',
-                'publications': [
+                "title": "Baz",
+                "wordcount": "20",
+                "docversion": "quux, dirty",
+                "publications": [
                     {
-                        'venue': 'Foo',
-                        'submitted': '2022-11-13',
-                        'self-published': '2022-11-14',
+                        "venue": "Foo",
+                        "submitted": "2022-11-13",
+                        "self-published": "2022-11-14",
                     },
-                ]
-            })
+                ],
+            },
+        )
 
         outfile = os.path.join(test_tmpdir, "out.html")
 
-        subprocess.run([
-            sys.executable,
-            SCRIPT,
-            outfile,
-            '--dep',
-            '//foo:bar',
-            metadata1,
-            '--dep',
-            '//baz:quux',
-            metadata2
-        ], check=True)
+        subprocess.run(
+            [
+                sys.executable,
+                SCRIPT,
+                outfile,
+                "--dep",
+                "//foo:bar",
+                metadata1,
+                "--dep",
+                "//baz:quux",
+                metadata2,
+            ],
+            check=True,
+        )
 
-        with open(outfile, encoding='utf-8') as f:
+        with open(outfile, encoding="utf-8") as f:
             self.assertEqual(
                 f.read(),
                 """<!doctype html>
@@ -159,12 +163,13 @@ a:visited { color: black; }
 }</pre></code>
 </body>
 </html>
-""")  # noqa: E501
+""",  # noqa: E501
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) < 2:
-        raise ValueError('Not enough args')
+        raise ValueError("Not enough args")
     SCRIPT = sys.argv[1]
     del sys.argv[1]
     unittest.main()

@@ -2,8 +2,8 @@ import sys
 import unittest
 import utils.test_utils
 
-PANDOC = ''
-FILTER = ''
+PANDOC = ""
+FILTER = ""
 
 DOC = """% The Title
 
@@ -14,15 +14,14 @@ Baz quux test yay.
 
 
 class TestWordcount(unittest.TestCase):
-
     def test_wordcount(self) -> None:
         j = utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC)
-        self.assertEqual(j['meta']['wordcount']['c'], '6')
+        self.assertEqual(j["meta"]["wordcount"]["c"], "6")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) < 3:
-        raise ValueError('Not enough args')
+        raise ValueError("Not enough args")
     PANDOC = sys.argv[1]
     del sys.argv[1]
     FILTER = sys.argv[1]

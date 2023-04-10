@@ -8,61 +8,68 @@ import unittest
 import utils.test_utils
 
 
-SCRIPT = ''
+SCRIPT = ""
 
 
 class TestCollectionSrc(unittest.TestCase):
-
     def dump_file(self, filename: str, content: Dict[str, Any]) -> None:
-        with open(filename, 'w', encoding='utf-8') as f:
+        with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)
 
     def load_file(self, filename: str) -> str:
-        with open(filename, encoding='utf-8') as f:
+        with open(filename, encoding="utf-8") as f:
             return f.read()
 
     def run_script(
-            self, title: str, author: str, date: str, metadata: List[Tuple[str, Dict[str, Any]]]
+        self, title: str, author: str, date: str, metadata: List[Tuple[str, Dict[str, Any]]]
     ) -> str:
         test_tmpdir = utils.test_utils.tmpdir()
 
         dep_args = []
         for i, m in enumerate(metadata):
             target, data = m
-            filename = os.path.join(test_tmpdir, f'metadata_{i+1}.json')
+            filename = os.path.join(test_tmpdir, f"metadata_{i+1}.json")
             self.dump_file(filename, data)
-            dep_args += ['--dep', target, filename]
+            dep_args += ["--dep", target, filename]
 
-        out_file = os.path.join(test_tmpdir, 'out.md')
+        out_file = os.path.join(test_tmpdir, "out.md")
 
-        subprocess.run([
-            sys.executable,
-            SCRIPT,
-        ] + dep_args + [
-            title,
-            author,
-            date,
-            out_file,
-        ], check=True)
+        subprocess.run(
+            [
+                sys.executable,
+                SCRIPT,
+            ]
+            + dep_args
+            + [
+                title,
+                author,
+                date,
+                out_file,
+            ],
+            check=True,
+        )
 
         return self.load_file(out_file)
 
     def test_collection_src_simple(self) -> None:
         out = self.run_script(
-            'The Title',
-            'The Author',
-            '',
+            "The Title",
+            "The Author",
+            "",
             [
                 (
-                    'foo',
+                    "foo",
                     {
-                        'title': 'Foo',
-                        'author': ['Bar'],
+                        "title": "Foo",
+                        "author": ["Bar"],
                     },
                 ),
-            ])
+            ],
+        )
 
-        self.assertEqual(out, """% The Title
+        self.assertEqual(
+            out,
+            """% The Title
 % The Author
 
 # Foo
@@ -70,41 +77,45 @@ class TestCollectionSrc(unittest.TestCase):
 ### Bar
 
 !include //foo
-""")
+""",
+        )
 
     def test_collection_src_complex(self) -> None:
         out = self.run_script(
-            'The Title',
-            'The Author',
-            '1 January',
+            "The Title",
+            "The Author",
+            "1 January",
             [
                 (
-                    'foo',
+                    "foo",
                     {
-                        'title': 'Foo',
-                        'author': ['The Author'],
-                        'date': '2 January',
+                        "title": "Foo",
+                        "author": ["The Author"],
+                        "date": "2 January",
                     },
                 ),
                 (
-                    'bar',
+                    "bar",
                     {
-                        'title': 'Bar',
-                        'author': ['Baz'],
-                        'date': '3 January',
+                        "title": "Bar",
+                        "author": ["Baz"],
+                        "date": "3 January",
                     },
                 ),
                 (
-                    'baz',
+                    "baz",
                     {
-                        'title': 'Baz',
-                        'author': ['The Author'],
-                        'date': '',
+                        "title": "Baz",
+                        "author": ["The Author"],
+                        "date": "",
                     },
                 ),
-            ])
+            ],
+        )
 
-        self.assertEqual(out, """% The Title
+        self.assertEqual(
+            out,
+            """% The Title
 % The Author
 % 1 January
 
@@ -123,12 +134,13 @@ class TestCollectionSrc(unittest.TestCase):
 # Baz
 
 !include //baz
-""")
+""",
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) < 2:
-        raise ValueError('Not enough args')
+        raise ValueError("Not enough args")
     SCRIPT = sys.argv[1]
     del sys.argv[1]
     unittest.main()

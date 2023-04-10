@@ -23,7 +23,7 @@ exports_files(
         "collection_before.tex",
         "mypy_test.py",
         "flake8_test.py",
-        "autopep8_test.py",
+        "black_test.py",
         "shellcheck_test.sh",
         "summary.py",
     ],
@@ -32,6 +32,7 @@ exports_files(
 
 filegroup(
     name = "py_srcs",
+    srcs = glob(["*.py"]) + ["workspace_status"],
     data = glob(["*.py"]) + ["workspace_status"],
     visibility = ["//:__pkg__"],
 )
@@ -40,9 +41,9 @@ filegroup(
     name = "sh_srcs",
     data = glob(["*.sh"]) + [
         "precommit",
-        "workspace_summary",
-        "workspace_publications",
         "workspace_git_update",
+        "workspace_publications",
+        "workspace_summary",
     ],
     visibility = ["//:__pkg__"],
 )

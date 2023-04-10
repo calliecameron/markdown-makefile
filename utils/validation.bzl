@@ -44,27 +44,23 @@ def py_validation():
     )
 
     py_test(
-        name = "autopep8_test",
-        srcs = ["//utils:autopep8_test.py"],
+        name = "black_test",
+        srcs = ["//utils:black_test.py"],
         args = [
-            "--global-config=$(rootpath //:.flake8)",
-            "--recursive",
-            "--diff",
-            "--exit-code",
-            "--aggressive",
-            "--aggressive",
-            "--aggressive",
-            "core",
-            "formats",
-            "utils",
+            "--config",
+            "$(rootpath //:pyproject.toml)",
+            "--check",
+            "$(locations //core:py_srcs)",
+            "$(locations //formats:py_srcs)",
+            "$(locations //utils:py_srcs)",
         ],
         data = [
-            "//:.flake8",
+            "//:pyproject.toml",
             "//core:py_srcs",
             "//formats:py_srcs",
             "//utils:py_srcs",
         ],
-        deps = [requirement("autopep8")],
+        deps = [requirement("black")],
     )
 
 def sh_validation(name = None):  # buildifier: disable=unused-variable

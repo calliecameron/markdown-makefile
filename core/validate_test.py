@@ -3,8 +3,8 @@ import unittest
 import utils.test_utils
 
 
-PANDOC = ''
-FILTER = ''
+PANDOC = ""
+FILTER = ""
 
 GOOD = """% “Hello” ‘world’
 % Foo's name
@@ -27,7 +27,6 @@ notes: baz quux
 
 
 class TestValidate(unittest.TestCase):
-
     def test_validate_succeeds(self) -> None:
         utils.test_utils.pandoc_filter(PANDOC, FILTER, GOOD)
 
@@ -44,51 +43,74 @@ class TestValidate(unittest.TestCase):
 
         # Wrong type (should be list)
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications: foo
 ---
-""")
+""",
+            )
 
         # Unknown key
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - foo: bar
 ---
-""")
+""",
+            )
 
         # Missing required key
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - notes: foo
 ---
-""")
+""",
+            )
 
         # Missing required key
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: bar
 ---
-""")
+""",
+            )
 
         # Wrong type (should be string)
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue:
   - foo
   submitted: 2022-10-10
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
@@ -96,9 +118,13 @@ publications:
   paid:
   - foo
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
@@ -106,72 +132,104 @@ publications:
   notes:
   - foo
 ---
-""")
+""",
+            )
 
         # Wrong type (should be date)
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   submitted: foo
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   accepted: foo
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   rejected: foo
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   withdrawn: foo
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   published: foo
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   self-published: foo
 ---
-""")
+""",
+            )
 
         # Wrong type (should be list)
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   submitted: 2022-10-10
   urls: foo
 ---
-""")
+""",
+            )
 
         # Wrong type (should be list of string)
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
@@ -179,113 +237,158 @@ publications:
   urls:
   - foo: bar
 ---
-""")
+""",
+            )
 
         # Mutually exclusive keys
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   accepted: 2022-12-01
   rejected: 2022-12-02
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   accepted: 2022-12-01
   withdrawn: 2022-12-02
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   rejected: 2022-12-01
   withdrawn: 2022-12-02
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   rejected: 2022-12-01
   published: 2022-12-02
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   withdrawn: 2022-12-01
   published: 2022-12-02
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   self-published: 2022-12-01
   published: 2022-12-02
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   self-published: 2022-12-01
   submitted: 2022-12-02
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   self-published: 2022-12-01
   rejected: 2022-12-02
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   self-published: 2022-12-01
   withdrawn: 2022-12-02
 ---
-""")
+""",
+            )
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 publications:
 - venue: foo
   self-published: 2022-12-01
   accepted: 2022-12-02
 ---
-""")
+""",
+            )
 
         # Wrong type (should be string)
         with self.assertRaises(ValueError):
-            utils.test_utils.pandoc_filter(PANDOC, FILTER, """
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
 ---
 notes:
 - foo
 ---
-""")
+""",
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) < 3:
-        raise ValueError('Not enough args')
+        raise ValueError("Not enough args")
     PANDOC = sys.argv[1]
     del sys.argv[1]
     FILTER = sys.argv[1]

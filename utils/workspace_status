@@ -15,35 +15,35 @@ import unicodedata
 def normalised_char_name(char: str) -> str:
     if len(char) != 1:
         raise ValueError(f"char must be a single character, got '{char}'")
-    valid = frozenset(string.ascii_uppercase + '_')
-    return ''.join([c for c in unicodedata.name(char) if c in valid])
+    valid = frozenset(string.ascii_uppercase + "_")
+    return "".join([c for c in unicodedata.name(char) if c in valid])
 
 
 def package_key(path: str) -> str:
     # Keys can only contain uppercase letters and underscores.
-    path = path.upper().replace('_', '__')
-    valid = frozenset(string.ascii_uppercase + '_')
+    path = path.upper().replace("_", "__")
+    valid = frozenset(string.ascii_uppercase + "_")
     parts = []
     for c in path:
         if c in valid:
             parts.append(c)
         else:
-            parts.append('_' + normalised_char_name(c) + '_')
-    return ''.join(parts)
+            parts.append("_" + normalised_char_name(c) + "_")
+    return "".join(parts)
 
 
 def version_key(key: str) -> str:
-    return 'STABLE_VERSION_' + key
+    return "STABLE_VERSION_" + key
 
 
 def repo_key(key: str) -> str:
-    return 'STABLE_REPO_' + key
+    return "STABLE_REPO_" + key
 
 
 @contextlib.contextmanager
 def chdir(path: str) -> Iterator[None]:
     if not path:
-        path = '.'
+        path = "."
     original_dir = os.getcwd()
     os.chdir(path)
     try:
@@ -59,40 +59,55 @@ class GitCommit(NamedTuple):
     timestamp: int
 
     def __str__(self) -> str:
-        timestamp = datetime.datetime.fromtimestamp(
-            self.timestamp, tz=datetime.timezone.utc)
+        timestamp = datetime.datetime.fromtimestamp(self.timestamp, tz=datetime.timezone.utc)
         return f'{self.commit}{"-dirty" if self.dirty else ""}, {timestamp}'
 
 
 def get_git_commit(path: str) -> Optional[GitCommit]:
     with chdir(path):
         try:
-            repo_path = os.path.abspath(subprocess.run(
-                ['git', 'rev-parse', '--git-dir'],
-                capture_output=True, encoding='utf-8', check=True).stdout.strip())
+            repo_path = os.path.abspath(
+                subprocess.run(
+                    ["git", "rev-parse", "--git-dir"],
+                    capture_output=True,
+                    encoding="utf-8",
+                    check=True,
+                ).stdout.strip()
+            )
         except subprocess.CalledProcessError:
             # Not a git repo
             return None
 
         try:
             commit = subprocess.run(
-                ['git', 'describe', '--no-match', '--always', '--long'],
-                capture_output=True, encoding='utf-8', check=True).stdout.strip()
+                ["git", "describe", "--no-match", "--always", "--long"],
+                capture_output=True,
+                encoding="utf-8",
+                check=True,
+            ).stdout.strip()
         except subprocess.CalledProcessError:
             # New repo with no commits yet
             return None
 
         try:
-            timestamp = int(subprocess.run(
-                ['git', 'show', '--no-patch', '--no-notes', '--pretty=%ct', commit],
-                capture_output=True, encoding='utf-8', check=True).stdout.strip())
+            timestamp = int(
+                subprocess.run(
+                    ["git", "show", "--no-patch", "--no-notes", "--pretty=%ct", commit],
+                    capture_output=True,
+                    encoding="utf-8",
+                    check=True,
+                ).stdout.strip()
+            )
 
             status = subprocess.run(
-                ['git', 'status', '--porcelain', '-b'],
-                capture_output=True, encoding='utf-8', check=True).stdout.strip()
+                ["git", "status", "--porcelain", "-b"],
+                capture_output=True,
+                encoding="utf-8",
+                check=True,
+            ).stdout.strip()
             dirty = False
-            for line in status.split('\n'):
-                if re.fullmatch(r'##.*\[ahead.*\]', line) is not None or not line.startswith('##'):
+            for line in status.split("\n"):
+                if re.fullmatch(r"##.*\[ahead.*\]", line) is not None or not line.startswith("##"):
                     dirty = True
                     break
 
@@ -105,10 +120,10 @@ def get_git_commit(path: str) -> Optional[GitCommit]:
 def find_packages(root: str) -> List[str]:
     packages = []
     for dirpath, _, filenames in os.walk(root):
-        if 'BUILD' in filenames:
+        if "BUILD" in filenames:
             package = os.path.relpath(dirpath, root)
-            if package == '.':
-                package = ''
+            if package == ".":
+                package = ""
             packages.append(package)
     return sorted(packages)
 
@@ -121,8 +136,8 @@ def get_package_data(root: str) -> List[Tuple[str, str]]:
             version = str(commit)
             repo = commit.repo_path
         else:
-            version = 'unversioned'
-            repo = 'unversioned'
+            version = "unversioned"
+            repo = "unversioned"
         key = package_key(path)
         out.append((version_key(key), version))
         out.append((repo_key(key), repo))
@@ -131,8 +146,8 @@ def get_package_data(root: str) -> List[Tuple[str, str]]:
 
 def main() -> None:
     data = get_package_data(os.getcwd())
-    print('\n'.join([f'{key} {value}' for key, value in data]))
+    print("\n".join([f"{key} {value}" for key, value in data]))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

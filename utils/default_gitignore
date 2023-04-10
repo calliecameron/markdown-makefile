@@ -5,3 +5,4 @@ auto/
 .env
 __pycache__/
 /.bazelrc.user
+.vscode/

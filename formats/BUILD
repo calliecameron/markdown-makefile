@@ -2,6 +2,7 @@ load("@rules_python//python:defs.bzl", "py_binary", "py_test")
 
 filegroup(
     name = "py_srcs",
+    srcs = glob(["*.py"]),
     data = glob(["*.py"]),
     visibility = ["//:__pkg__"],
 )

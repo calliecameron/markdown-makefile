@@ -6,27 +6,31 @@ import unittest
 import utils.test_utils
 
 
-SCRIPT = ''
+SCRIPT = ""
 
 
 class TestWriteSaveScript(unittest.TestCase):
-
     def run_script(self, package: str) -> str:
         test_tmpdir = utils.test_utils.tmpdir()
 
-        out_file = os.path.join(test_tmpdir, 'out.sh')
+        out_file = os.path.join(test_tmpdir, "out.sh")
 
-        subprocess.run([
-            SCRIPT,
-            out_file,
-            package,
-        ], check=True)
+        subprocess.run(
+            [
+                SCRIPT,
+                out_file,
+                package,
+            ],
+            check=True,
+        )
 
-        with open(out_file, encoding='utf-8') as f:
+        with open(out_file, encoding="utf-8") as f:
             return f.read()
 
     def test_write_save_script(self) -> None:
-        self.assertEqual(self.run_script('foo'), """#!/bin/bash
+        self.assertEqual(
+            self.run_script("foo"),
+            """#!/bin/bash
 
 set -eu
 
@@ -38,10 +42,13 @@ cd "${OUTPUT_DIR}"
 cp -t "${SAVE_DIR}" *
 cd "${SAVE_DIR}"
 chmod u=rw,go= *
-""")
+""",
+        )
 
     def test_write_save_script_root_package(self) -> None:
-        self.assertEqual(self.run_script(''), """#!/bin/bash
+        self.assertEqual(
+            self.run_script(""),
+            """#!/bin/bash
 
 set -eu
 
@@ -53,12 +60,13 @@ cd "${OUTPUT_DIR}"
 cp -t "${SAVE_DIR}" *
 cd "${SAVE_DIR}"
 chmod u=rw,go= *
-""")
+""",
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) < 2:
-        raise ValueError('Not enough args')
+        raise ValueError("Not enough args")
     SCRIPT = sys.argv[1]
     del sys.argv[1]
     unittest.main()

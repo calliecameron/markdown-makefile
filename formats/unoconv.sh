@@ -4,6 +4,7 @@
 LOCK="/tmp/markdown-makefile-unoconv.lock"
 
 function unlock() {
+    # shellcheck disable=SC2317
     rm -rf "${LOCK}"
 }
 

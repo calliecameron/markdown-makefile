@@ -23,7 +23,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "calibre",
-    version = "6.9.0",
+    version = "6.15.1",
 )
 bazel_dep(
     name = "shellcheck",

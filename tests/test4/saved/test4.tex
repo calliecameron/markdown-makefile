@@ -1,6 +1,6 @@
-% Based on the template from Pandoc 2.19.2. Custom sections are marked
-% 'CUSTOM'. Customisations go in included files where possible, but
-% this isn't always possible.
+% Based on the template from Pandoc 3.1.2. Custom sections are marked 'CUSTOM'.
+% Customisations go in included files where possible, but this isn't always
+% possible.
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
@@ -11,16 +11,19 @@
   a4paper,
 ]{article}
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
   \setmainfont[]{TeX Gyre Termes}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -45,7 +48,12 @@
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
-\usepackage[normalem]{ulem}
+\ifLuaTeX
+  \usepackage{luacolor}
+  \usepackage[soul]{lua-ul}
+\else
+  \usepackage{soul}
+\fi
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -56,6 +64,10 @@
 \usepackage[bidi=default]{babel}
 \fi
 \babelprovide[main,import]{british}
+\ifPDFTeX
+\else
+\babelfont[british]{rm}[]{TeX Gyre Termes}
+\fi
 % get rid of language-specific shorthands (see #6817):
 \let\LanguageShortHands\languageshorthands
 \def\languageshorthands#1{}
@@ -78,7 +90,7 @@
 \fi
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \VerbatimFootnotes % allow verbatim text in footnotes
 \hypersetup{
   pdftitle={Test 4},

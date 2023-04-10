@@ -1,0 +1,9 @@
+{
+    "url": "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz",
+    "integrity": "sha384-7aT0WyaSLu4czAddZNvvGNqhetHgOemjjtZvQoEe4PfRnIJtOpPtWZoZEU6sOA03",
+    "strip_prefix": "pandoc-3.1.2",
+    "patch_strip": 0,
+    "patches": {
+        "build.patch": "sha384-+Kij6OJ4bo+j3FFXoDZSaejQL/zqgr0Kq3+5qyOulOYyKstQc8J+TLU/qV3XZXZJ"
+    }
+}

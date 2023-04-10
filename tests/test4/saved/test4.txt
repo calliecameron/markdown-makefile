@@ -87,6 +87,8 @@ This is a second section
 
 [foo]
 
+foo
+
 There is an image here.
 
 And this is even more italic text.

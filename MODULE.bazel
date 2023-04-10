@@ -15,7 +15,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "pandoc",
-    version = "2.19.2",
+    version = "3.1.2",
 )
 bazel_dep(
     name = "prosegrinder_pandoc_templates",

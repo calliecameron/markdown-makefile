@@ -44,7 +44,7 @@ class TestInclude(unittest.TestCase):
                     {"c": [{"c": "Hello.", "t": "Str"}], "t": "Para"},
                 ],
                 "meta": {},
-                "pandoc-api-version": [1, 22, 2, 1],
+                "pandoc-api-version": [1, 23],
             },
         )
         doc1_file = os.path.join(test_tmpdir, "doc1.json")
@@ -62,7 +62,7 @@ class TestInclude(unittest.TestCase):
                     {"c": [{"c": "Bar.", "t": "Str"}], "t": "Para"},
                 ],
                 "meta": {},
-                "pandoc-api-version": [1, 22, 2, 1],
+                "pandoc-api-version": [1, 23],
             },
         )
 
@@ -77,7 +77,7 @@ class TestInclude(unittest.TestCase):
                     {"c": [{"c": "Bar.", "t": "Str"}], "t": "Para"},
                 ],
                 "meta": {},
-                "pandoc-api-version": [1, 22, 2, 1],
+                "pandoc-api-version": [1, 23],
             },
         )
 

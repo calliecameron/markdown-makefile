@@ -19,7 +19,7 @@ source-md5: 2518a18c39cbd5e88b46c164d163e14a
 starts-with-text: t
 subject: "Version: reproducible"
 title: The Title
-wordcount: 247
+wordcount: 248
 ---
 
 This is some text before a section. It shouldn’t be indented. Each section should start on a new page (but subsections shouldn’t).

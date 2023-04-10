@@ -33,7 +33,7 @@ class TestSummary(unittest.TestCase):
         self.dump_file(
             metadata2,
             {
-                "title": "Baz",
+                "title": "Baz\nbaz",
                 "wordcount": "20",
                 "docversion": "quux, dirty",
             },
@@ -61,7 +61,7 @@ class TestSummary(unittest.TestCase):
                 f.read(),
                 """target,title,wordcount,version,status
 //foo:bar,Foo,10,bar,ok
-//baz:quux,Baz,20,"quux, dirty",DIRTY
+//baz:quux,Baz\\nbaz,20,"quux, dirty",DIRTY
 """,
             )
 

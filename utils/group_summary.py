@@ -19,7 +19,7 @@ def main() -> None:
             out.writerow(
                 {
                     "target": target,
-                    "title": j["title"] if "title" in j else "",
+                    "title": j["title"].replace("\n", "\\n") if "title" in j else "",
                     "wordcount": j["wordcount"],
                     "version": j["docversion"],
                     "status": "DIRTY" if "dirty" in j["docversion"] else "ok",

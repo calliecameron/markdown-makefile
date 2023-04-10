@@ -1,4 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_test")
+load("validation.bzl", "validation_srcs")
 
 exports_files(
     [
@@ -30,22 +31,14 @@ exports_files(
     visibility = ["//visibility:public"],
 )
 
-filegroup(
-    name = "py_srcs",
-    srcs = glob(["*.py"]) + ["workspace_status"],
-    data = glob(["*.py"]) + ["workspace_status"],
-    visibility = ["//:__pkg__"],
-)
-
-filegroup(
-    name = "sh_srcs",
-    data = glob(["*.sh"]) + [
+validation_srcs(
+    extra_py_files = ["workspace_status"],
+    extra_sh_files = [
         "precommit",
         "workspace_git_update",
         "workspace_publications",
         "workspace_summary",
     ],
-    visibility = ["//:__pkg__"],
 )
 
 py_library(

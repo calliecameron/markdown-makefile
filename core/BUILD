@@ -1,17 +1,7 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
+load("//utils:validation.bzl", "validation_srcs")
 
-filegroup(
-    name = "py_srcs",
-    srcs = glob(["*.py"]),
-    data = glob(["*.py"]),
-    visibility = ["//:__pkg__"],
-)
-
-filegroup(
-    name = "sh_srcs",
-    data = glob(["*.sh"]),
-    visibility = ["//:__pkg__"],
-)
+validation_srcs()
 
 exports_files(
     [

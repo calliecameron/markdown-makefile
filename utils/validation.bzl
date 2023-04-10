@@ -3,7 +3,29 @@
 load("@rules_python//python:defs.bzl", "py_test")
 load("@pip//:requirements.bzl", "requirement")
 
-def py_validation():
+def validation_srcs(name = None, extra_sh_files = None, extra_py_files = None):  # buildifier: disable=unused-variable
+    extra_sh_files = extra_sh_files or []
+    extra_py_files = extra_py_files or []
+
+    native.filegroup(
+        name = "sh_srcs",
+        srcs = native.glob(["*.sh"]) + extra_sh_files,
+        data = native.glob(["*.sh"]) + extra_sh_files,
+        visibility = ["//:__pkg__"],
+    )
+
+    native.filegroup(
+        name = "py_srcs",
+        srcs = native.glob(["*.py"]) + extra_py_files,
+        data = native.glob(["*.py"]) + extra_py_files,
+        visibility = ["//:__pkg__"],
+    )
+
+def validation(name = None):  # buildifier: disable=unused-variable
+    _py_validation()
+    _sh_validation()
+
+def _py_validation():
     py_test(
         name = "mypy_test",
         srcs = ["//utils:mypy_test.py"],
@@ -63,7 +85,7 @@ def py_validation():
         deps = [requirement("black")],
     )
 
-def sh_validation(name = None):  # buildifier: disable=unused-variable
+def _sh_validation(name = None):  # buildifier: disable=unused-variable
     native.sh_test(
         name = "shellcheck_test",
         srcs = ["//utils:shellcheck_test.sh"],

@@ -1,15 +1,12 @@
 load("//:build_defs.bzl", "md_group")
+load("//utils:validation.bzl", "validation_srcs")
 
 exports_files(
     ["diff_test.sh"],
     visibility = ["__subpackages__"],
 )
 
-filegroup(
-    name = "sh_srcs",
-    data = glob(["*.sh"]),
-    visibility = ["//:__pkg__"],
-)
+validation_srcs()
 
 md_group(
     name = "tests",

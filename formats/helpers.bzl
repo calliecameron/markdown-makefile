@@ -48,7 +48,7 @@ def open_script(ctx, ext, file, write_open_script):
     )
     return script
 
-def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message = None):
+def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message = None, include_system_path = False):
     """Run pandoc.
 
     Args:
@@ -61,6 +61,7 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
         lib: something that provides MdLibraryInfo.
         output: the output file.
         progress_message: message to display when running the action.
+        include_system_path: include system dirs on PATH.
     """
     if not progress_message:
         progress_message = "generating " + ext + " output"
@@ -68,6 +69,9 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
     data_inputs = []
     for target in lib[MdLibraryInfo].data.to_list():
         data_inputs += target.files.to_list()
+
+    if include_system_path:
+        env["PATH"] = "/usr/bin"
     ctx.actions.run(
         outputs = [output],
         inputs = [lib[MdLibraryInfo].output] + data_inputs + inputs,
@@ -84,13 +88,13 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
         progress_message = progress_message,
     )
 
-def pandoc_for_output(ctx, ext, to_format, inputs, args, env, lib):
+def pandoc_for_output(ctx, ext, to_format, inputs, args, env, lib, include_system_path = False):
     output = ctx.outputs.out
-    pandoc(ctx, ext, to_format, inputs, args, env, lib, output)
+    pandoc(ctx, ext, to_format, inputs, args, env, lib, output, include_system_path = include_system_path)
     return output
 
-def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, env, lib, write_open_script):
-    file = pandoc_for_output(ctx, ext, to_format, inputs, args + expand_locations(ctx, lib, ctx.attr.extra_pandoc_flags), env, lib)
+def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, env, lib, write_open_script, include_system_path = False):
+    file = pandoc_for_output(ctx, ext, to_format, inputs, args + expand_locations(ctx, lib, ctx.attr.extra_pandoc_flags), env, lib, include_system_path = include_system_path)
     script = open_script(ctx, ext, file, write_open_script)
 
     return [default_info_for_ext(ctx, file, script)]

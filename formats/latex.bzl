@@ -73,7 +73,7 @@ md_tex_intermediate = rule(
     },
 )
 
-def _tex_output_impl(ctx, ext, to, extra_args):
+def _tex_output_impl(ctx, ext, to, extra_args, include_system_path = False):
     return simple_pandoc_output_impl(
         ctx,
         ext,
@@ -93,6 +93,7 @@ def _tex_output_impl(ctx, ext, to, extra_args):
         timestamp_override(ctx),
         ctx.attr.intermediate,
         ctx.attr._write_open_script,
+        include_system_path = include_system_path,
     )
 
 def _tex_output_rule(impl, ext):
@@ -139,6 +140,7 @@ def _md_pdf_impl(ctx):
         "pdf",
         "pdf",
         ["--pdf-engine=/usr/bin/xelatex"],
+        include_system_path = True,
     )
 
 md_pdf = _tex_output_rule(_md_pdf_impl, "pdf")

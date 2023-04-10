@@ -20,7 +20,7 @@ if cmp "${FILE1}" "${FILE2}" &>/dev/null; then
     exit 0
 fi
 
-"${TOOL}" "${FILE1}" >"${TEST_TMPDIR}/file1"
-"${TOOL}" "${FILE2}" >"${TEST_TMPDIR}/file2"
+"${TOOL}" "$(readlink -f "${FILE1}")" >"${TEST_TMPDIR}/file1"
+"${TOOL}" "$(readlink -f "${FILE2}")" >"${TEST_TMPDIR}/file2"
 
 diff -a "${TEST_TMPDIR}/file1" "${TEST_TMPDIR}/file2"

@@ -2,6 +2,7 @@
 
 load("@rules_python//python:defs.bzl", "py_test")
 load("@pip//:requirements.bzl", "requirement")
+load("@buildifier_prebuilt//:rules.bzl", "buildifier_test")
 
 def validation_srcs(name = None, extra_sh_files = None, extra_py_files = None):  # buildifier: disable=unused-variable
     extra_sh_files = extra_sh_files or []
@@ -24,6 +25,7 @@ def validation_srcs(name = None, extra_sh_files = None, extra_py_files = None): 
 def validation(name = None):  # buildifier: disable=unused-variable
     _py_validation()
     _sh_validation()
+    _bzl_validation()
 
 def _py_validation():
     py_test(
@@ -103,4 +105,11 @@ def _sh_validation(name = None):  # buildifier: disable=unused-variable
             "//tests:sh_srcs",
             "//utils:sh_srcs",
         ],
+    )
+
+def _bzl_validation():
+    buildifier_test(
+        name = "buildifier_test",
+        no_sandbox = True,
+        workspace = "//:WORKSPACE",
     )

@@ -9,37 +9,34 @@ bazel_dep(
     name = "bazel_skylib",
     version = "1.4.1",
 )
-
 bazel_dep(
     name = "rules_python",
     version = "0.20.0",
 )
-
 bazel_dep(
     name = "pandoc",
     version = "2.19.2",
 )
-
 bazel_dep(
     name = "prosegrinder_pandoc_templates",
     version = "0.4.0.3",
 )
-
 bazel_dep(
     name = "calibre",
     version = "6.9.0",
 )
-
 bazel_dep(
     name = "shellcheck",
     version = "0.9.0",
 )
+bazel_dep(
+    name = "buildifier_prebuilt",
+    version = "6.1.0",
+)
 
 pip = use_extension("@rules_python//python:extensions.bzl", "pip")
-
 pip.parse(
     name = "pip",
     requirements_lock = "//:requirements_lock.txt",
 )
-
 use_repo(pip, "pip")

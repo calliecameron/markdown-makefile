@@ -2,20 +2,20 @@
 
 module(
     name = "markdown_makefile",
-    version = "1.0.0-pre4",
+    version = "1.0.0-pre5",
 )
 
 bazel_dep(
     name = "bazel_skylib",
-    version = "1.3.0",
+    version = "1.4.1",
 )
 bazel_dep(
     name = "rules_python",
-    version = "0.16.1",
+    version = "0.20.0",
 )
 bazel_dep(
     name = "pandoc",
-    version = "2.19.2",
+    version = "3.1.2",
 )
 bazel_dep(
     name = "prosegrinder_pandoc_templates",
@@ -23,11 +23,15 @@ bazel_dep(
 )
 bazel_dep(
     name = "calibre",
-    version = "6.9.0",
+    version = "6.15.1",
 )
 bazel_dep(
     name = "shellcheck",
-    version = "0.8.0",
+    version = "0.9.0",
+)
+bazel_dep(
+    name = "buildifier_prebuilt",
+    version = "6.1.0",
 )
 
 pip = use_extension("@rules_python//python:extensions.bzl", "pip")

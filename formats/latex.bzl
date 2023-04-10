@@ -1,7 +1,7 @@
 """Rules for latex-based outputs."""
 
 load("//core:core.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "doc_for_ext", "expand_locations", "pandoc", "pandoc_script", "simple_pandoc_output_impl", "timestamp_override", "write_open_script")
+load(":helpers.bzl", "doc_for_ext", "expand_locations", "pandoc", "pandoc_bin", "pandoc_script", "simple_pandoc_output_impl", "timestamp_override", "write_open_script")
 
 _LATEX_VARS = [
     "--variable=fontsize:12pt",
@@ -62,6 +62,7 @@ md_tex_intermediate = rule(
             doc = "Extra flags to pass to pandoc",
         ),
         "_pandoc": pandoc_script(),
+        "_pandoc_bin": pandoc_bin(),
         "_header_template": attr.label(
             allow_single_file = True,
             default = "//formats:header_template.tex",
@@ -73,7 +74,7 @@ md_tex_intermediate = rule(
     },
 )
 
-def _tex_output_impl(ctx, ext, to, extra_args, include_system_path = False):
+def _tex_output_impl(ctx, ext, to, extra_args):
     return simple_pandoc_output_impl(
         ctx,
         ext,
@@ -93,7 +94,6 @@ def _tex_output_impl(ctx, ext, to, extra_args, include_system_path = False):
         timestamp_override(ctx),
         ctx.attr.intermediate,
         ctx.attr._write_open_script,
-        include_system_path = include_system_path,
     )
 
 def _tex_output_rule(impl, ext):
@@ -112,6 +112,7 @@ def _tex_output_rule(impl, ext):
             "timestamp_override": attr.string(),
             "out": attr.output(),
             "_pandoc": pandoc_script(),
+            "_pandoc_bin": pandoc_bin(),
             "_write_open_script": write_open_script(),
             "_template": attr.label(
                 allow_single_file = True,
@@ -140,7 +141,6 @@ def _md_pdf_impl(ctx):
         "pdf",
         "pdf",
         ["--pdf-engine=/usr/bin/xelatex"],
-        include_system_path = True,
     )
 
 md_pdf = _tex_output_rule(_md_pdf_impl, "pdf")

@@ -18,6 +18,12 @@ exports_files(
 )
 
 sh_binary(
+    name = "pandoc",
+    srcs = ["pandoc.sh"],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
     name = "write_open_script",
     srcs = ["write_open_script.sh"],
     visibility = ["//visibility:public"],

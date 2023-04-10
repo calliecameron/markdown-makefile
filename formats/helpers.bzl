@@ -22,9 +22,14 @@ def timestamp_override(ctx):
         env["SOURCE_DATE_EPOCH"] = ctx.attr.timestamp_override
     return env
 
-def pandoc_script():
+def pandoc_bin():
     return attr.label(
         default = "@pandoc//:pandoc",
+    )
+
+def pandoc_script():
+    return attr.label(
+        default = "//formats:pandoc",
     )
 
 def write_open_script():
@@ -48,7 +53,7 @@ def open_script(ctx, ext, file, write_open_script):
     )
     return script
 
-def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message = None, include_system_path = False):
+def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message = None):
     """Run pandoc.
 
     Args:
@@ -61,7 +66,6 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
         lib: something that provides MdLibraryInfo.
         output: the output file.
         progress_message: message to display when running the action.
-        include_system_path: include system dirs on PATH.
     """
     if not progress_message:
         progress_message = "generating " + ext + " output"
@@ -70,13 +74,15 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
     for target in lib[MdLibraryInfo].data.to_list():
         data_inputs += target.files.to_list()
 
-    if include_system_path:
-        env["PATH"] = "/usr/bin"
     ctx.actions.run(
         outputs = [output],
-        inputs = [lib[MdLibraryInfo].output] + data_inputs + inputs,
+        inputs = [
+            lib[MdLibraryInfo].output,
+            ctx.attr._pandoc_bin.files_to_run.executable,
+        ] + data_inputs + inputs,
         executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         arguments = [
+            ctx.attr._pandoc_bin.files_to_run.executable.path,
             "--from=json",
             "--to=" + to_format,
             "--fail-if-warnings",
@@ -88,13 +94,13 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
         progress_message = progress_message,
     )
 
-def pandoc_for_output(ctx, ext, to_format, inputs, args, env, lib, include_system_path = False):
+def pandoc_for_output(ctx, ext, to_format, inputs, args, env, lib):
     output = ctx.outputs.out
-    pandoc(ctx, ext, to_format, inputs, args, env, lib, output, include_system_path = include_system_path)
+    pandoc(ctx, ext, to_format, inputs, args, env, lib, output)
     return output
 
-def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, env, lib, write_open_script, include_system_path = False):
-    file = pandoc_for_output(ctx, ext, to_format, inputs, args + expand_locations(ctx, lib, ctx.attr.extra_pandoc_flags), env, lib, include_system_path = include_system_path)
+def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, env, lib, write_open_script):
+    file = pandoc_for_output(ctx, ext, to_format, inputs, args + expand_locations(ctx, lib, ctx.attr.extra_pandoc_flags), env, lib)
     script = open_script(ctx, ext, file, write_open_script)
 
     return [default_info_for_ext(ctx, file, script)]
@@ -114,6 +120,7 @@ def simple_pandoc_output_rule(impl, ext):
             ),
             "out": attr.output(),
             "_pandoc": pandoc_script(),
+            "_pandoc_bin": pandoc_bin(),
             "_write_open_script": write_open_script(),
         },
     )

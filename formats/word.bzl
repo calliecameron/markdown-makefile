@@ -1,7 +1,7 @@
 """Rules for word-processor outputs."""
 
 load("//core:core.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_bin", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdDocxInfo = provider(
     "Info for docx output",
@@ -47,6 +47,7 @@ md_odt = rule(
         "out": attr.output(),
         "timestamp_override": attr.string(),
         "_pandoc": pandoc_script(),
+        "_pandoc_bin": pandoc_bin(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
     },
@@ -105,6 +106,7 @@ md_docx = rule(
             default = "//formats:docx_filter.lua",
         ),
         "_pandoc": pandoc_script(),
+        "_pandoc_bin": pandoc_bin(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
     },
@@ -165,7 +167,7 @@ def _md_ms_docx_impl(ctx):
 
     intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.docx")
     env = timestamp_override(ctx)
-    env["PANDOC"] = ctx.attr._pandoc[DefaultInfo].files_to_run.executable.path
+    env["PANDOC"] = ctx.attr._pandoc_bin[DefaultInfo].files_to_run.executable.path
     data_inputs = []
     for target in ctx.attr.lib[MdLibraryInfo].data.to_list():
         data_inputs += target.files.to_list()
@@ -175,7 +177,7 @@ def _md_ms_docx_impl(ctx):
             ctx.attr.lib[MdLibraryInfo].output,
             metadata,
             ctx.file._filter,
-            ctx.attr._pandoc[DefaultInfo].files_to_run.executable,
+            ctx.attr._pandoc_bin[DefaultInfo].files_to_run.executable,
         ],
         executable = ctx.attr._md2short[DefaultInfo].files_to_run,
         arguments = [
@@ -223,7 +225,7 @@ md_ms_docx = rule(
             allow_single_file = True,
             default = "//formats:ms_docx_filter.lua",
         ),
-        "_pandoc": pandoc_script(),
+        "_pandoc_bin": pandoc_bin(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
     },

@@ -24,6 +24,7 @@ class TestSummary(unittest.TestCase):
             metadata1,
             {
                 "title": "Foo",
+                "date": "10 April 2023",
                 "wordcount": "10",
                 "docversion": "bar",
             },
@@ -59,9 +60,9 @@ class TestSummary(unittest.TestCase):
         with open(outfile, encoding="utf-8") as f:
             self.assertEqual(
                 f.read(),
-                """target,title,wordcount,version,status
-//foo:bar,Foo,10,bar,ok
-//baz:quux,Baz\\nbaz,20,"quux, dirty",DIRTY
+                """target,title,date,wordcount,version,status
+//foo:bar,Foo,10 April 2023,10,bar,ok
+//baz:quux,Baz\\nbaz,,20,"quux, dirty",DIRTY
 """,
             )
 

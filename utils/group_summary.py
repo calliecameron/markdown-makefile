@@ -10,7 +10,7 @@ def main() -> None:
     args = parser.parse_args()
 
     with open(args.out_file, "w", newline="", encoding="utf-8") as outfile:
-        out = csv.DictWriter(outfile, ["target", "title", "wordcount", "version", "status"])
+        out = csv.DictWriter(outfile, ["target", "title", "date", "wordcount", "version", "status"])
         out.writeheader()
 
         for target, metadata in args.dep:
@@ -20,6 +20,7 @@ def main() -> None:
                 {
                     "target": target,
                     "title": j["title"].replace("\n", "\\n") if "title" in j else "",
+                    "date": j["date"].replace("\n", "\\n") if "date" in j else "",
                     "wordcount": j["wordcount"],
                     "version": j["docversion"],
                     "status": "DIRTY" if "dirty" in j["docversion"] else "ok",

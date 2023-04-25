@@ -2,7 +2,7 @@
 
 module(
     name = "markdown_makefile",
-    version = "1.0.0-pre5",
+    version = "1.0.0-pre6",
 )
 
 bazel_dep(

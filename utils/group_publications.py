@@ -80,9 +80,10 @@ def generate_cell(target: str, p: Dict[str, Any]) -> str:
         if state in p:
             content.append(p[state] + " " + state.capitalize())
             latest = state
-    return '<td class="%s" title="%s">%s</td>' % (
+    return '<td class="%s" title="%s"><a href="#%s">%s</a></td>' % (
         latest,
         html.escape(target + ", " + p[VENUE]),
+        html.escape(target),
         "<br>".join([html.escape(c, quote=False) for c in content]),
     )
 

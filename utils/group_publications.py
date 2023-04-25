@@ -7,12 +7,13 @@ VENUE = "venue"
 SUBMITTED = "submitted"
 REJECTED = "rejected"
 WITHDRAWN = "withdrawn"
+ABANDONED = "abandoned"
 SELF_PUBLISHED = "self-published"
 ACCEPTED = "accepted"
 PUBLISHED = "published"
 
 
-STATES = [SUBMITTED, REJECTED, WITHDRAWN, ACCEPTED, SELF_PUBLISHED, PUBLISHED]
+STATES = [SUBMITTED, REJECTED, WITHDRAWN, ABANDONED, ACCEPTED, SELF_PUBLISHED, PUBLISHED]
 
 
 def generate_header(venues: List[str]) -> List[str]:
@@ -37,7 +38,7 @@ def generate_row(target: str, data: Dict[str, Any], venues: List[str]) -> List[s
 
     states = set()
     for p in ps.values():
-        if SUBMITTED in p and REJECTED not in p and WITHDRAWN not in p:
+        if SUBMITTED in p and REJECTED not in p and WITHDRAWN not in p and ABANDONED not in p:
             states.add(SUBMITTED)
         if ACCEPTED in p:
             states.add(ACCEPTED)
@@ -133,6 +134,7 @@ def generate_head() -> List[str]:
         ".submitted { background-color: #ffff00; }",
         ".rejected { background-color: #ff6d6d; }",
         ".withdrawn { background-color: #ff972f; }",
+        ".abandoned { background-color: #cccccc; }",
         ".accepted { background-color: #729fcf; }",
         ".self-published { background-color: #158466; }",
         ".published { background-color: #81d41a; }",

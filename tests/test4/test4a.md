@@ -9,6 +9,9 @@ publications:
   rejected: 2022-10-11
 - venue: Yay
   submitted: 2022-10-10
+- venue: Blah
+  submitted: 2022-10-10
+  abandoned: 2022-11-10
 ---
 
 This is text before a section. It shouldn't be indented.

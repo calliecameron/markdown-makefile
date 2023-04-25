@@ -11,6 +11,7 @@ NOTES = "notes"
 SUBMITTED = "submitted"
 REJECTED = "rejected"
 WITHDRAWN = "withdrawn"
+ABANDONED = "abandoned"
 SELF_PUBLISHED = "self-published"
 ACCEPTED = "accepted"
 PUBLISHED = "published"
@@ -26,6 +27,7 @@ PUBLICATION_DATE_KEYS = [
     SUBMITTED,
     REJECTED,
     WITHDRAWN,
+    ABANDONED,
     SELF_PUBLISHED,
     ACCEPTED,
     PUBLISHED,
@@ -147,14 +149,18 @@ def validate_publications(j: Dict[str, Any]) -> None:
             for url in urls["c"]:
                 assert_is_string(url, "'%s' item in 'publications' item must be a string" % URLS)
 
-        mutually_exclusive = frozenset([ACCEPTED, REJECTED, WITHDRAWN, SELF_PUBLISHED])
+        mutually_exclusive = frozenset([ACCEPTED, REJECTED, WITHDRAWN, ABANDONED, SELF_PUBLISHED])
         if len(keys & mutually_exclusive) > 1:
             fail_metadata("%s in 'publications' item are mutually exclusive" % mutually_exclusive)
 
         assert_no_conflicts(
-            SELF_PUBLISHED, keys, frozenset([SUBMITTED, REJECTED, WITHDRAWN, ACCEPTED, PUBLISHED])
+            SELF_PUBLISHED,
+            keys,
+            frozenset([SUBMITTED, REJECTED, WITHDRAWN, ABANDONED, ACCEPTED, PUBLISHED]),
         )
-        assert_no_conflicts(PUBLISHED, keys, frozenset([REJECTED, WITHDRAWN, SELF_PUBLISHED]))
+        assert_no_conflicts(
+            PUBLISHED, keys, frozenset([REJECTED, WITHDRAWN, ABANDONED, SELF_PUBLISHED])
+        )
 
 
 def validate_notes(j: Dict[str, Any]) -> None:

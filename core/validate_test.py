@@ -192,6 +192,18 @@ publications:
 ---
 publications:
 - venue: foo
+  abandoned: foo
+---
+""",
+            )
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+publications:
+- venue: foo
   published: foo
 ---
 """,
@@ -275,8 +287,34 @@ publications:
 ---
 publications:
 - venue: foo
+  accepted: 2022-12-01
+  abandoned: 2022-12-02
+---
+""",
+            )
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+publications:
+- venue: foo
   rejected: 2022-12-01
   withdrawn: 2022-12-02
+---
+""",
+            )
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+publications:
+- venue: foo
+  rejected: 2022-12-01
+  abandoned: 2022-12-02
 ---
 """,
             )
@@ -302,6 +340,19 @@ publications:
 publications:
 - venue: foo
   withdrawn: 2022-12-01
+  published: 2022-12-02
+---
+""",
+            )
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+publications:
+- venue: foo
+  abandoned: 2022-12-01
   published: 2022-12-02
 ---
 """,
@@ -355,6 +406,19 @@ publications:
 - venue: foo
   self-published: 2022-12-01
   withdrawn: 2022-12-02
+---
+""",
+            )
+        with self.assertRaises(ValueError):
+            utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+publications:
+- venue: foo
+  self-published: 2022-12-01
+  abandoned: 2022-12-02
 ---
 """,
             )

@@ -92,6 +92,7 @@ a:visited { color: black; }
 .submitted { background-color: #ffff00; }
 .rejected { background-color: #ff6d6d; }
 .withdrawn { background-color: #ff972f; }
+.abandoned { background-color: #cccccc; }
 .accepted { background-color: #729fcf; }
 .self-published { background-color: #158466; }
 .published { background-color: #81d41a; }

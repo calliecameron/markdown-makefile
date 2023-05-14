@@ -13,8 +13,8 @@ odt, docx, doc, and docx in
 1. Install system dependencies (assuming Ubuntu 20.04):
 
     ```shell
-    sudo apt-get install -y catdoc csvkit git gcc hunspell hunspell-en-gb \
-        libegl1 libopengl0 libxkbcommon0 poppler-utils python3-pip \
+    sudo apt-get install -y catdoc git gcc hunspell hunspell-en-gb libegl1 \
+        libopengl0 libxkbcommon0 poppler-utils python3-pip \
         strip-nondeterminism texlive-xetex unoconv
     ```
 

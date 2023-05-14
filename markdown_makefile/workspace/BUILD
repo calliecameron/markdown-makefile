@@ -1,4 +1,4 @@
-load("//markdown_makefile/utils:validation.bzl", "validation_srcs")
+load("//markdown_makefile/validation:validation.bzl", "validation_srcs")
 
 exports_files(
     [

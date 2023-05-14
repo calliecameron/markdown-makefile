@@ -1,6 +1,6 @@
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("//:build_defs.bzl", "md_git_repo", "md_workspace")
-load("//markdown_makefile/utils:validation.bzl", "validation")
+load("//markdown_makefile/validation:validation.bzl", "validation")
 
 compile_pip_requirements(
     name = "requirements",

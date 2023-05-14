@@ -1,15 +1,11 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_test")
 load("@pip//:requirements.bzl", "requirement")
-load("validation.bzl", "validation_srcs")
+load("//markdown_makefile/validation:validation.bzl", "validation_srcs")
 
 exports_files(
     [
         "collection_header.tex",
         "collection_before.tex",
-        "mypy_test.py",
-        "flake8_test.py",
-        "black_test.py",
-        "shellcheck_test.sh",
     ],
     visibility = ["//visibility:public"],
 )

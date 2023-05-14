@@ -37,13 +37,13 @@ def diff_test(target, name = None):  # buildifier: disable=unused-variable
     _diff_test(target, "html", "cat")
 
     _diff_test(target, "tex", "cat")
-    _diff_test(target, "pdf", "$(rootpath //utils:pdfdump)", "//utils:pdfdump")
+    _diff_test(target, "pdf", "$(rootpath //markdown_makefile/utils:pdfdump)", "//markdown_makefile/utils:pdfdump")
 
-    _diff_test(target, "epub", "$(rootpath //utils:zipdump)", "//utils:zipdump")
+    _diff_test(target, "epub", "$(rootpath //markdown_makefile/utils:zipdump)", "//markdown_makefile/utils:zipdump")
     _build_test(target, "mobi")  # Mobi is nondeterministic, so we only test it builds
 
-    _diff_test(target, "odt", "$(rootpath //utils:zipdump)", "//utils:zipdump")
-    _diff_test(target, "docx", "$(rootpath //utils:zipdump)", "//utils:zipdump")
+    _diff_test(target, "odt", "$(rootpath //markdown_makefile/utils:zipdump)", "//markdown_makefile/utils:zipdump")
+    _diff_test(target, "docx", "$(rootpath //markdown_makefile/utils:zipdump)", "//markdown_makefile/utils:zipdump")
     _build_test(target, "doc")  # Doc is nondeterministic, so we only test it builds
 
-    _diff_test(target, "ms.docx", "$(rootpath //utils:zipdump)", "//utils:zipdump")
+    _diff_test(target, "ms.docx", "$(rootpath //markdown_makefile/utils:zipdump)", "//markdown_makefile/utils:zipdump")

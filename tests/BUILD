@@ -1,5 +1,5 @@
 load("//:build_defs.bzl", "md_group")
-load("//utils:validation.bzl", "validation_srcs")
+load("//markdown_makefile/utils:validation.bzl", "validation_srcs")
 
 exports_files(
     ["diff_test.sh"],

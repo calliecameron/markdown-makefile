@@ -1,15 +1,15 @@
 """Public API of the module."""
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-load("//core:core.bzl", _md_library = "md_library")
-load("//formats:misc.bzl", _md_html = "md_html", _md_md = "md_md", _md_txt = "md_txt")
-load("//formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
-load("//formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
-load("//formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
-load("//utils:collection.bzl", _md_collection_src = "md_collection_src")
-load("//utils:aggregation.bzl", _md_group = "md_group", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
-load("//utils:git_repo.bzl", _md_git_repo = "md_git_repo")
-load("//utils:workspace.bzl", _md_workspace = "md_workspace")
+load("//markdown_makefile/core:core.bzl", _md_library = "md_library")
+load("//markdown_makefile/formats:misc.bzl", _md_html = "md_html", _md_md = "md_md", _md_txt = "md_txt")
+load("//markdown_makefile/formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
+load("//markdown_makefile/formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
+load("//markdown_makefile/formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
+load("//markdown_makefile/utils:collection.bzl", _md_collection_src = "md_collection_src")
+load("//markdown_makefile/utils:aggregation.bzl", _md_group = "md_group", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
+load("//markdown_makefile/utils:git_repo.bzl", _md_git_repo = "md_git_repo")
+load("//markdown_makefile/utils:workspace.bzl", _md_workspace = "md_workspace")
 
 _FORMATS = [
     "md",
@@ -232,8 +232,8 @@ def md_document(
     native.genrule(
         name = name + "_save_sh",
         outs = [name + "_save.sh"],
-        cmd = "$(location @markdown_makefile//formats:write_save_script) $@ %s" % native.package_name(),
-        exec_tools = ["@markdown_makefile//formats:write_save_script"],
+        cmd = "$(location @markdown_makefile//markdown_makefile/formats:write_save_script) $@ %s" % native.package_name(),
+        exec_tools = ["@markdown_makefile//markdown_makefile/formats:write_save_script"],
         visibility = ["//visibility:private"],
     )
 
@@ -296,8 +296,8 @@ def md_collection(
         src = name + "_src",
         deps = deps,
         data = [
-            "@markdown_makefile//utils:collection_header.tex",
-            "@markdown_makefile//utils:collection_before.tex",
+            "@markdown_makefile//markdown_makefile/utils:collection_header.tex",
+            "@markdown_makefile//markdown_makefile/utils:collection_before.tex",
         ] + ([extra_metadata] if extra_metadata else []),
         increment_included_headers = True,
         extra_pandoc_flags = [
@@ -306,8 +306,8 @@ def md_collection(
         ] + (["--metadata-file=$(rootpath %s)" % extra_metadata] if extra_metadata else []),
         extra_latex_flags = [
             "--variable=section-page-break",
-            "--include-in-header=$(rootpath @markdown_makefile//utils:collection_header.tex)",
-            "--include-before-body=$(rootpath @markdown_makefile//utils:collection_before.tex)",
+            "--include-in-header=$(rootpath @markdown_makefile//markdown_makefile/utils:collection_header.tex)",
+            "--include-before-body=$(rootpath @markdown_makefile//markdown_makefile/utils:collection_before.tex)",
         ],
         version_override = version_override,
         timestamp_override = timestamp_override,

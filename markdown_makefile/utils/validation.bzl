@@ -95,15 +95,17 @@ def _sh_validation(name = None):  # buildifier: disable=unused-variable
             "$(rootpath @shellcheck//:shellcheck)",
             "markdown_makefile/core",
             "markdown_makefile/formats",
-            "tests",
+            "markdown_makefile/git",
             "markdown_makefile/utils",
+            "tests",
         ],
         data = [
             "@shellcheck//:shellcheck",
             "//markdown_makefile/core:sh_srcs",
             "//markdown_makefile/formats:sh_srcs",
-            "//tests:sh_srcs",
+            "//markdown_makefile/git:sh_srcs",
             "//markdown_makefile/utils:sh_srcs",
+            "//tests:sh_srcs",
         ],
     )
 

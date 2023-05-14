@@ -4,12 +4,6 @@ load("validation.bzl", "validation_srcs")
 
 exports_files(
     [
-        "default_gitattributes",
-        "default_gitconfig",
-        "default_gitignore",
-        "precommit",
-        "git_update.sh",
-        "git_test.sh",
         "new_package.sh",
         "workspace_status",
         "workspace_contents_build",
@@ -35,7 +29,6 @@ exports_files(
 validation_srcs(
     extra_py_files = ["workspace_status"],
     extra_sh_files = [
-        "precommit",
         "workspace_git_update",
         "workspace_publications",
         "workspace_summary",
@@ -71,25 +64,6 @@ sh_binary(
     name = "zipdump",
     srcs = ["zipdump.sh"],
     visibility = ["//visibility:public"],
-)
-
-sh_test(
-    name = "git_update_test",
-    srcs = ["git_update_test.sh"],
-    args = [
-        "$(rootpath git_update.sh)",
-        "$(rootpath default_gitattributes)",
-        "$(rootpath default_gitconfig)",
-        "$(rootpath default_gitignore)",
-        "$(rootpath precommit)",
-    ],
-    data = [
-        "default_gitattributes",
-        "default_gitconfig",
-        "default_gitignore",
-        "git_update.sh",
-        "precommit",
-    ],
 )
 
 sh_test(

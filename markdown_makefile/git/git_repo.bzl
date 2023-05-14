@@ -2,21 +2,21 @@
 
 def md_git_repo(name = None):  # buildifier: disable=unused-variable
     common_args = [
-        "$(rootpath @markdown_makefile//markdown_makefile/utils:default_gitattributes)",
-        "$(rootpath @markdown_makefile//markdown_makefile/utils:default_gitconfig)",
-        "$(rootpath @markdown_makefile//markdown_makefile/utils:default_gitignore)",
-        "$(rootpath @markdown_makefile//markdown_makefile/utils:precommit)",
+        "$(rootpath @markdown_makefile//markdown_makefile/git:default_gitattributes)",
+        "$(rootpath @markdown_makefile//markdown_makefile/git:default_gitconfig)",
+        "$(rootpath @markdown_makefile//markdown_makefile/git:default_gitignore)",
+        "$(rootpath @markdown_makefile//markdown_makefile/git:precommit)",
     ]
     common_data = [
-        "@markdown_makefile//markdown_makefile/utils:default_gitattributes",
-        "@markdown_makefile//markdown_makefile/utils:default_gitconfig",
-        "@markdown_makefile//markdown_makefile/utils:default_gitignore",
-        "@markdown_makefile//markdown_makefile/utils:precommit",
+        "@markdown_makefile//markdown_makefile/git:default_gitattributes",
+        "@markdown_makefile//markdown_makefile/git:default_gitconfig",
+        "@markdown_makefile//markdown_makefile/git:default_gitignore",
+        "@markdown_makefile//markdown_makefile/git:precommit",
     ]
 
     native.sh_binary(
         name = "git_update",
-        srcs = ["@markdown_makefile//markdown_makefile/utils:git_update.sh"],
+        srcs = ["@markdown_makefile//markdown_makefile/git:git_update.sh"],
         data = common_data,
         args = common_args + [native.package_name()],
         visibility = ["//visibility:private"],
@@ -24,7 +24,7 @@ def md_git_repo(name = None):  # buildifier: disable=unused-variable
 
     native.sh_test(
         name = "git_test",
-        srcs = ["@markdown_makefile//markdown_makefile/utils:git_test.sh"],
+        srcs = ["@markdown_makefile//markdown_makefile/git:git_test.sh"],
         data = common_data + [
             ".gitattributes",
             ".gitconfig",

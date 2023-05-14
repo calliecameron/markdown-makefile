@@ -1,6 +1,6 @@
 import argparse
 import json
-import markdown_makefile.core.bazel_package
+import markdown_makefile.utils.bazel_package
 
 
 def main() -> None:
@@ -10,9 +10,9 @@ def main() -> None:
     parser.add_argument("package")
     args = parser.parse_args()
 
-    key = markdown_makefile.core.bazel_package.package_key(args.package)
-    version_key = markdown_makefile.core.bazel_package.version_key(key) + " "
-    repo_key = markdown_makefile.core.bazel_package.repo_key(key) + " "
+    key = markdown_makefile.utils.bazel_package.package_key(args.package)
+    version_key = markdown_makefile.utils.bazel_package.version_key(key) + " "
+    repo_key = markdown_makefile.utils.bazel_package.repo_key(key) + " "
 
     version = ""
     repo = ""

@@ -2,7 +2,7 @@ from typing import Dict, FrozenSet, List, Optional, Set, Tuple  # noqa: F401
 import argparse
 import re
 import sys
-import markdown_makefile.core.bazel_package
+import markdown_makefile.utils.bazel_package
 
 # pylint: disable=consider-using-enumerate
 
@@ -32,7 +32,7 @@ def process_include(
         return line, None, f"Include statement must be followed by a space: {line}"
     raw_label = raw_label.lstrip(" ")
     try:
-        package, target = markdown_makefile.core.bazel_package.canonicalise_label(
+        package, target = markdown_makefile.utils.bazel_package.canonicalise_label(
             raw_label, current_package
         )
         label = package + ":" + target
@@ -53,7 +53,7 @@ def process_images(
     for match in re.finditer(r"!\[[^\]]*\]\(([^\)]+)\)", line):
         raw_label = match.group(1)
         try:
-            package, target = markdown_makefile.core.bazel_package.canonicalise_label(
+            package, target = markdown_makefile.utils.bazel_package.canonicalise_label(
                 raw_label, current_package
             )
             label = package + ":" + target

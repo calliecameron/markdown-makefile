@@ -1,4 +1,4 @@
-load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
+load("@rules_python//python:defs.bzl", "py_binary", "py_test")
 load("//markdown_makefile/validation:validation.bzl", "validation_srcs")
 
 validation_srcs()
@@ -15,17 +15,6 @@ exports_files(
         "spellcheck_filter.lua",
     ],
     visibility = ["//visibility:public"],
-)
-
-py_library(
-    name = "bazel_package",
-    srcs = ["bazel_package.py"],
-)
-
-py_test(
-    name = "bazel_package_test",
-    srcs = ["bazel_package_test.py"],
-    deps = [":bazel_package"],
 )
 
 py_binary(
@@ -48,7 +37,7 @@ py_binary(
     name = "raw_version",
     srcs = ["raw_version.py"],
     visibility = ["//visibility:public"],
-    deps = [":bazel_package"],
+    deps = ["//markdown_makefile/utils:bazel_package"],
 )
 
 py_test(
@@ -56,8 +45,8 @@ py_test(
     srcs = ["raw_version_test.py"],
     args = ["$(rootpath raw_version.py)"],
     data = [
-        "bazel_package.py",
         "raw_version.py",
+        "//markdown_makefile/utils:bazel_package",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
@@ -83,7 +72,7 @@ py_binary(
     name = "preprocess",
     srcs = ["preprocess.py"],
     visibility = ["//visibility:public"],
-    deps = [":bazel_package"],
+    deps = ["//markdown_makefile/utils:bazel_package"],
 )
 
 py_test(

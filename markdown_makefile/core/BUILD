@@ -29,6 +29,22 @@ py_test(
 )
 
 py_binary(
+    name = "combine_metadata",
+    srcs = ["combine_metadata.py"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "combine_metadata_test",
+    srcs = ["combine_metadata_test.py"],
+    args = ["$(rootpath combine_metadata.py)"],
+    data = ["combine_metadata.py"],
+    deps = [
+        "//markdown_makefile/utils:test_utils",
+    ],
+)
+
+py_binary(
     name = "raw_version",
     srcs = ["raw_version.py"],
     visibility = ["//visibility:public"],

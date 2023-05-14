@@ -1,13 +1,13 @@
 """Public API of the module."""
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-load("//markdown_makefile/core:core.bzl", _md_library = "md_library")
+load("//markdown_makefile/core:core.bzl", _md_group = "md_group", _md_library = "md_library")
 load("//markdown_makefile/formats:misc.bzl", _md_html = "md_html", _md_md = "md_md", _md_txt = "md_txt")
 load("//markdown_makefile/formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
 load("//markdown_makefile/formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
 load("//markdown_makefile/formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
 load("//markdown_makefile/utils:collection.bzl", _md_collection_src = "md_collection_src")
-load("//markdown_makefile/utils:aggregation.bzl", _md_group = "md_group", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
+load("//markdown_makefile/utils:aggregation.bzl", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
 load("//markdown_makefile/git:git_repo.bzl", _md_git_repo = "md_git_repo")
 load("//markdown_makefile/workspace:workspace.bzl", _md_workspace = "md_workspace")
 
@@ -59,10 +59,15 @@ def md_library(
     data = data or []
     images = images or []
 
+    md_group(
+        name = name + "_deps",
+        deps = deps,
+    )
+
     _md_library(
         name = name,
         src = src,
-        deps = deps,
+        deps = name + "_deps",
         dictionaries = native.glob([name + ".dic"]) + extra_dictionaries,
         data = data,
         images = images,

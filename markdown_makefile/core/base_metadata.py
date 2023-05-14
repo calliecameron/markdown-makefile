@@ -77,9 +77,8 @@ def get_metadata(version: str, repo: str, increment_included_headers: bool) -> D
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("raw_version_file")
-    parser.add_argument("dep_versions_out_file")
+    parser.add_argument("deps_metadata_file")
     parser.add_argument("metadata_out_file")
-    parser.add_argument("--dep_version_file", action="append", nargs=2, default=[])
     parser.add_argument("--increment_included_headers", action="store_true")
     parser.add_argument("--version_override", default="")
     args = parser.parse_args()
@@ -88,15 +87,12 @@ def main() -> None:
         raw_version = Version.from_dict(json.load(f))
 
     dep_versions = {}
-    for target, dep_version_file in args.dep_version_file:
-        with open(dep_version_file, encoding="utf-8") as f:
-            dep_versions[target] = Version.from_dict(json.load(f))
+    with open(args.deps_metadata_file, encoding="utf-8") as f:
+        for target, metadata in json.load(f).items():
+            dep_versions[target] = Version.from_dict(metadata)
 
     version = get_version(raw_version, dep_versions, args.version_override)
     metadata = get_metadata(version.version, version.repo, args.increment_included_headers)
-
-    with open(args.dep_versions_out_file, mode="w", encoding="utf-8") as f:
-        json.dump({t: v.to_dict() for t, v in dep_versions.items()}, f, sort_keys=True, indent=4)
 
     with open(args.metadata_out_file, mode="w", encoding="utf-8") as f:
         json.dump(metadata, f, sort_keys=True, indent=4)

@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List
 import json
 import os
 import os.path
@@ -113,7 +113,7 @@ class TestBaseMetadata(unittest.TestCase):
             },
         )
 
-    def dump_file(self, filename: str, content: Dict[str, str]) -> None:
+    def dump_file(self, filename: str, content: Dict[str, Any]) -> None:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)
 
@@ -122,20 +122,16 @@ class TestBaseMetadata(unittest.TestCase):
             return f.read()
 
     def run_script(
-        self, raw_version: Dict[str, str], deps_versions: List[Dict[str, str]], args: List[str]
-    ) -> Tuple[str, str]:
+        self, raw_version: Dict[str, str], deps_metadata: Dict[str, Dict[str, str]], args: List[str]
+    ) -> str:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
 
         raw_version_file = os.path.join(test_tmpdir, "raw_version.json")
         self.dump_file(raw_version_file, raw_version)
 
-        dep_version_args = []
-        for i, d in enumerate(deps_versions):
-            filename = os.path.join(test_tmpdir, f"deps_versions_{i+1}.json")
-            self.dump_file(filename, d)
-            dep_version_args.append(("--dep_version_file", f"dep{i+1}", filename))
+        deps_metadata_file = os.path.join(test_tmpdir, "deps_metadata.json")
+        self.dump_file(deps_metadata_file, deps_metadata)
 
-        dep_versions_out_file = os.path.join(test_tmpdir, "dep_versions_out.json")
         metadata_out_file = os.path.join(test_tmpdir, "metadata_out.json")
 
         subprocess.run(
@@ -143,22 +139,19 @@ class TestBaseMetadata(unittest.TestCase):
                 sys.executable,
                 SCRIPT,
                 raw_version_file,
-                dep_versions_out_file,
+                deps_metadata_file,
                 metadata_out_file,
             ]
-            + [a for sublist in dep_version_args for a in sublist]
             + args,
             check=True,
         )
 
-        return (self.load_file(dep_versions_out_file), self.load_file(metadata_out_file))
+        return self.load_file(metadata_out_file)
 
     def test_main_simple(self) -> None:
-        dep_versions_out, metadata_out = self.run_script(
-            {"docversion": "foo", "repo": "bar", "pandoc_version": "1"}, [], []
+        metadata_out = self.run_script(
+            {"docversion": "foo", "repo": "bar", "pandoc_version": "1"}, {}, []
         )
-
-        self.assertEqual(dep_versions_out, "{}")
 
         self.assertEqual(
             metadata_out,
@@ -172,24 +165,13 @@ class TestBaseMetadata(unittest.TestCase):
         )
 
     def test_main_complex(self) -> None:
-        dep_versions_out, metadata_out = self.run_script(
+        metadata_out = self.run_script(
             {"docversion": "foo", "repo": "bar", "pandoc_version": "1"},
-            [{"docversion": "2, dirty", "repo": "bar"}, {"docversion": "3", "repo": "quux"}],
+            {
+                "dep1": {"docversion": "2, dirty", "repo": "bar"},
+                "dep2": {"docversion": "3", "repo": "quux"},
+            },
             ["--increment_included_headers"],
-        )
-
-        self.assertEqual(
-            dep_versions_out,
-            """{
-    "dep1": {
-        "docversion": "2, dirty",
-        "repo": "bar"
-    },
-    "dep2": {
-        "docversion": "3",
-        "repo": "quux"
-    }
-}""",
         )
 
         self.assertEqual(
@@ -205,24 +187,13 @@ class TestBaseMetadata(unittest.TestCase):
         )
 
     def test_main_override(self) -> None:
-        deps_versions_out, metadata_out = self.run_script(
+        metadata_out = self.run_script(
             {"docversion": "foo", "repo": "bar", "pandoc_version": "1"},
-            [{"docversion": "2, dirty", "repo": "bar"}, {"docversion": "3", "repo": "quux"}],
+            {
+                "dep1": {"docversion": "2, dirty", "repo": "bar"},
+                "dep2": {"docversion": "3", "repo": "quux"},
+            },
             ["--increment_included_headers", "--version_override", "override"],
-        )
-
-        self.assertEqual(
-            deps_versions_out,
-            """{
-    "dep1": {
-        "docversion": "2, dirty",
-        "repo": "bar"
-    },
-    "dep2": {
-        "docversion": "3",
-        "repo": "quux"
-    }
-}""",
         )
 
         self.assertEqual(
@@ -241,7 +212,10 @@ class TestBaseMetadata(unittest.TestCase):
         with self.assertRaises(subprocess.CalledProcessError):
             self.run_script(
                 {"docversion": "foo", "repo": "bar", "pandoc_version": "1"},
-                [{"docversion": "2, dirty", "repo": "baz"}, {"docversion": "3", "repo": "quux"}],
+                {
+                    "dep1": {"docversion": "2, dirty", "repo": "baz"},
+                    "dep2": {"docversion": "3", "repo": "quux"},
+                },
                 ["--increment_included_headers", "--version_override", "override"],
             )
 

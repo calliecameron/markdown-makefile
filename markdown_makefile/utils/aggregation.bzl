@@ -1,35 +1,6 @@
 """Aggregation rules."""
 
-load("//markdown_makefile/core:core.bzl", "MdLibraryInfo")
-
-MdGroupInfo = provider(
-    "Info for a group of markdown libraries.",
-    fields = {
-        "deps": "The libraries in the group",
-    },
-)
-
-def _md_group_impl(ctx):
-    output = []
-    for dep in ctx.attr.deps:
-        output += dep[DefaultInfo].files.to_list()
-
-    return [
-        DefaultInfo(files = depset(output)),
-        MdGroupInfo(deps = ctx.attr.deps),
-    ]
-
-md_group = rule(
-    implementation = _md_group_impl,
-    doc = "md_group is a group of md_library targets.",
-    attrs = {
-        "deps": attr.label_list(
-            allow_empty = True,
-            providers = [DefaultInfo, MdLibraryInfo],
-            doc = "md_library targets to include in the group.",
-        ),
-    },
-)
+load("//markdown_makefile/core:core.bzl", "MdGroupInfo", "MdLibraryInfo")
 
 def _md_group_summary_impl(ctx):
     dep_args = []

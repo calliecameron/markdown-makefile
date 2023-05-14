@@ -1,5 +1,13 @@
 """Markdown rules."""
 
+MdGroupInfo = provider(
+    "Info for a group of markdown libraries.",
+    fields = {
+        "deps": "The libraries in the group",
+        "metadata": "Metadata of all libraries in the group, as json",
+    },
+)
+
 MdLibraryInfo = provider(
     "Info for a markdown library.",
     fields = {
@@ -8,6 +16,43 @@ MdLibraryInfo = provider(
         "metadata": "Document metadata, as json",
         "dictionary": "Dictionary used for spellchecking",
         "data": "Data deps of the document",
+    },
+)
+
+def _md_group_impl(ctx):
+    output = []
+    for dep in ctx.attr.deps:
+        output += dep[DefaultInfo].files.to_list()
+
+    metadata = ctx.actions.declare_file(ctx.label.name + "_metadata.json")
+    metadata_args = []
+    for dep in ctx.attr.deps:
+        metadata_args += ["--metadata_file", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].metadata.path]
+    ctx.actions.run(
+        outputs = [metadata],
+        inputs = [dep[MdLibraryInfo].metadata for dep in ctx.attr.deps],
+        executable = ctx.attr._combine_metadata[DefaultInfo].files_to_run,
+        arguments = metadata_args + [metadata.path],
+        progress_message = "%{label}: combining deps metadata",
+    )
+
+    return [
+        DefaultInfo(files = depset([metadata] + output)),
+        MdGroupInfo(deps = ctx.attr.deps, metadata = metadata),
+    ]
+
+md_group = rule(
+    implementation = _md_group_impl,
+    doc = "md_group is a group of md_library targets.",
+    attrs = {
+        "deps": attr.label_list(
+            allow_empty = True,
+            providers = [DefaultInfo, MdLibraryInfo],
+            doc = "md_library targets to include in the group.",
+        ),
+        "_combine_metadata": attr.label(
+            default = "//markdown_makefile/core:combine_metadata",
+        ),
     },
 )
 
@@ -21,27 +66,23 @@ def _md_library_impl(ctx):
         progress_message = "%{label}: computing version",
     )
 
-    dep_versions = ctx.actions.declare_file(ctx.label.name + "_dep_versions.json")
     base_metadata = ctx.actions.declare_file(ctx.label.name + "_base_metadata.json")
-    dep_version_args = []
-    for dep in ctx.attr.deps:
-        dep_version_args += ["--dep_version_file", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].metadata.path]
     extra_args = []
     if ctx.attr.increment_included_headers:
         extra_args.append("--increment_included_headers")
     if ctx.attr.version_override:
         extra_args += ["--version_override", ctx.attr.version_override]
     ctx.actions.run(
-        outputs = [dep_versions, base_metadata],
-        inputs = [raw_version] + [dep[MdLibraryInfo].metadata for dep in ctx.attr.deps],
+        outputs = [base_metadata],
+        inputs = [raw_version, ctx.attr.deps[MdGroupInfo].metadata],
         executable = ctx.attr._base_metadata[DefaultInfo].files_to_run,
-        arguments = dep_version_args + extra_args + [raw_version.path, dep_versions.path, base_metadata.path],
+        arguments = extra_args + [raw_version.path, ctx.attr.deps[MdGroupInfo].metadata.path, base_metadata.path],
         progress_message = "%{label}: generating base metadata",
     )
 
     preprocessed = ctx.actions.declare_file(ctx.label.name + "_preprocessed.md")
     dep_args = []
-    for dep in ctx.attr.deps:
+    for dep in ctx.attr.deps[MdGroupInfo].deps:
         dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].output.path]
     image_args = []
     for image in ctx.attr.images:
@@ -67,7 +108,7 @@ def _md_library_impl(ctx):
             ctx.file._wordcount,
             ctx.file._write_metadata,
             ctx.file._cleanup,
-        ] + [dep[MdLibraryInfo].output for dep in ctx.attr.deps],
+        ] + [dep[MdLibraryInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
         executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         arguments = [
             "--filter=" + ctx.file._validate.path,
@@ -89,7 +130,7 @@ def _md_library_impl(ctx):
     )
 
     dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
-    if ctx.attr.dictionaries or ctx.attr.deps:
+    if ctx.attr.dictionaries or ctx.attr.deps[MdGroupInfo].deps:
         dict_inputs = []
         dict_args = []
         for d in ctx.attr.dictionaries:
@@ -97,11 +138,11 @@ def _md_library_impl(ctx):
             dict_args += [f.path for f in d.files.to_list()]
         ctx.actions.run(
             outputs = [dictionary],
-            inputs = dict_inputs + [dep[MdLibraryInfo].dictionary for dep in ctx.attr.deps],
+            inputs = dict_inputs + [dep[MdLibraryInfo].dictionary for dep in ctx.attr.deps[MdGroupInfo].deps],
             executable = ctx.attr._write_dictionary[DefaultInfo].files_to_run,
             arguments = [dictionary.path] +
                         dict_args +
-                        [dep[MdLibraryInfo].dictionary.path for dep in ctx.attr.deps],
+                        [dep[MdLibraryInfo].dictionary.path for dep in ctx.attr.deps[MdGroupInfo].deps],
             progress_message = "%{label}: generating dictionary",
         )
     else:
@@ -160,7 +201,7 @@ def _md_library_impl(ctx):
 
     data = depset(
         ctx.attr.data + ctx.attr.images,
-        transitive = [dep[MdLibraryInfo].data for dep in ctx.attr.deps],
+        transitive = [dep[MdLibraryInfo].data for dep in ctx.attr.deps[MdGroupInfo].deps],
     )
     return [
         DefaultInfo(files = depset([output, metadata, dictionary])),
@@ -175,9 +216,8 @@ md_library = rule(
             allow_single_file = [".md"],
             doc = "A markdown source file.",
         ),
-        "deps": attr.label_list(
-            allow_empty = True,
-            providers = [MdLibraryInfo],
+        "deps": attr.label(
+            providers = [MdGroupInfo],
             doc = "Other md_library targets used in !include statements in src.",
         ),
         "dictionaries": attr.label_list(

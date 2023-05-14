@@ -293,7 +293,7 @@ def md_collection(
         title = title,
         author = author,
         date = date or "",
-        deps = deps,
+        deps = name + "_deps",
     )
 
     md_document(

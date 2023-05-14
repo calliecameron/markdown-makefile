@@ -7,8 +7,9 @@ def main() -> None:
     parser.add_argument("title")
     parser.add_argument("author")
     parser.add_argument("date")
+    parser.add_argument("metadata_file")
     parser.add_argument("out_file")
-    parser.add_argument("--dep", action="append", nargs=2, default=[])
+    parser.add_argument("--dep", action="append", default=[])
     args = parser.parse_args()
 
     main_author = args.author
@@ -21,9 +22,11 @@ def main() -> None:
         output.append(f"% {args.date}")
     output.append("")
 
-    for target, metadata_file in args.dep:
-        with open(metadata_file, encoding="utf-8") as f:
-            j = json.load(f)
+    with open(args.metadata_file, encoding="utf-8") as f:
+        metadata = json.load(f)
+
+    for target in args.dep:
+        j = metadata[target]
         output += [f'# {j["title"]}', ""]
         author = j["author"][0]
         print_author = author != args.author

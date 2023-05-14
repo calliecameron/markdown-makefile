@@ -1,17 +1,23 @@
 """Collection rules."""
 
-load("//markdown_makefile/core:core.bzl", "MdLibraryInfo")
+load("//markdown_makefile/core:core.bzl", "MdGroupInfo")
 
 def _md_collection_src_impl(ctx):
     output = ctx.actions.declare_file(ctx.label.name + ".md")
-    dep_metadata_args = []
-    for dep in ctx.attr.deps:
-        dep_metadata_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].metadata.path]
+    dep_args = []
+    for dep in ctx.attr.deps[MdGroupInfo].deps:
+        dep_args += ["--dep", dep.label.package + ":" + dep.label.name]
     ctx.actions.run(
         outputs = [output],
-        inputs = [dep[MdLibraryInfo].metadata for dep in ctx.attr.deps],
+        inputs = [ctx.attr.deps[MdGroupInfo].metadata],
         executable = ctx.attr._collection_src[DefaultInfo].files_to_run,
-        arguments = dep_metadata_args + [ctx.attr.title, ctx.attr.author, ctx.attr.date, output.path],
+        arguments = dep_args + [
+            ctx.attr.title,
+            ctx.attr.author,
+            ctx.attr.date,
+            ctx.attr.deps[MdGroupInfo].metadata.path,
+            output.path,
+        ],
         progress_message = "%{label}: generating collection markdown",
     )
 
@@ -30,9 +36,8 @@ md_collection_src = rule(
             mandatory = True,
         ),
         "date": attr.string(),
-        "deps": attr.label_list(
-            allow_empty = False,
-            providers = [MdLibraryInfo],
+        "deps": attr.label(
+            providers = [MdGroupInfo],
             doc = "md_library targets to include in the collection.",
         ),
         "_collection_src": attr.label(

@@ -25,12 +25,14 @@ class TestCollectionSrc(unittest.TestCase):
     ) -> str:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
 
+        metadata_out = {}
         dep_args = []
-        for i, m in enumerate(metadata):
-            target, data = m
-            filename = os.path.join(test_tmpdir, f"metadata_{i+1}.json")
-            self.dump_file(filename, data)
-            dep_args += ["--dep", target, filename]
+        for target, data in metadata:
+            metadata_out[target] = data
+            dep_args += ["--dep", target]
+
+        metadata_file = os.path.join(test_tmpdir, "metadata.json")
+        self.dump_file(metadata_file, metadata_out)
 
         out_file = os.path.join(test_tmpdir, "out.md")
 
@@ -44,6 +46,7 @@ class TestCollectionSrc(unittest.TestCase):
                 title,
                 author,
                 date,
+                metadata_file,
                 out_file,
             ],
             check=True,

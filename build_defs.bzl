@@ -6,8 +6,8 @@ load("//markdown_makefile/formats:misc.bzl", _md_html = "md_html", _md_md = "md_
 load("//markdown_makefile/formats:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
 load("//markdown_makefile/formats:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
 load("//markdown_makefile/formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
-load("//markdown_makefile/utils:collection.bzl", _md_collection_src = "md_collection_src")
-load("//markdown_makefile/utils:aggregation.bzl", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
+load("//markdown_makefile/collection:collection.bzl", _md_collection_src = "md_collection_src")
+load("//markdown_makefile/group:group.bzl", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
 load("//markdown_makefile/git:git_repo.bzl", _md_git_repo = "md_git_repo")
 load("//markdown_makefile/workspace:workspace.bzl", _md_workspace = "md_workspace")
 
@@ -301,8 +301,8 @@ def md_collection(
         src = name + "_src",
         deps = deps,
         data = [
-            "@markdown_makefile//markdown_makefile/utils:collection_header.tex",
-            "@markdown_makefile//markdown_makefile/utils:collection_before.tex",
+            "@markdown_makefile//markdown_makefile/collection:collection_header.tex",
+            "@markdown_makefile//markdown_makefile/collection:collection_before.tex",
         ] + ([extra_metadata] if extra_metadata else []),
         increment_included_headers = True,
         extra_pandoc_flags = [
@@ -311,8 +311,8 @@ def md_collection(
         ] + (["--metadata-file=$(rootpath %s)" % extra_metadata] if extra_metadata else []),
         extra_latex_flags = [
             "--variable=section-page-break",
-            "--include-in-header=$(rootpath @markdown_makefile//markdown_makefile/utils:collection_header.tex)",
-            "--include-before-body=$(rootpath @markdown_makefile//markdown_makefile/utils:collection_before.tex)",
+            "--include-in-header=$(rootpath @markdown_makefile//markdown_makefile/collection:collection_header.tex)",
+            "--include-before-body=$(rootpath @markdown_makefile//markdown_makefile/collection:collection_before.tex)",
         ],
         version_override = version_override,
         timestamp_override = timestamp_override,

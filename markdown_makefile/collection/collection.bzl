@@ -36,7 +36,7 @@ md_collection_src = rule(
             doc = "md_library targets to include in the collection.",
         ),
         "_collection_src": attr.label(
-            default = "//markdown_makefile/utils:collection_src",
+            default = "//markdown_makefile/collection:collection_src",
         ),
     },
 )

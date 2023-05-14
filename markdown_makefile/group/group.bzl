@@ -50,13 +50,13 @@ md_group_summary = rule(
             doc = "md_group to summarise.",
         ),
         "_group_summary": attr.label(
-            default = "//markdown_makefile/utils:group_summary",
+            default = "//markdown_makefile/group:group_summary",
         ),
         "_write_group_summary_script": attr.label(
-            default = "//markdown_makefile/utils:write_group_summary_script",
+            default = "//markdown_makefile/group:write_group_summary_script",
         ),
         "_group_summary_print": attr.label(
-            default = "//markdown_makefile/utils:group_summary_print",
+            default = "//markdown_makefile/group:group_summary_print",
         ),
     },
 )
@@ -101,10 +101,10 @@ md_group_publications = rule(
             doc = "md_group to process.",
         ),
         "_group_publications": attr.label(
-            default = "//markdown_makefile/utils:group_publications",
+            default = "//markdown_makefile/group:group_publications",
         ),
         "_write_group_publications_script": attr.label(
-            default = "//markdown_makefile/utils:write_group_publications_script",
+            default = "//markdown_makefile/group:write_group_publications_script",
         ),
     },
 )

@@ -49,14 +49,22 @@ def _md_group_summary_impl(ctx):
         outputs = [script],
         inputs = [summary],
         executable = ctx.attr._write_group_summary_script[DefaultInfo].files_to_run,
-        arguments = [ctx.workspace_name, summary.short_path, script.path],
+        arguments = [
+            ctx.workspace_name,
+            summary.short_path,
+            ctx.attr._group_summary_print.files_to_run.executable.short_path,
+            script.path,
+        ],
         progress_message = "%{label}: generating summary script",
     )
 
     return [
         DefaultInfo(
             files = depset([summary, script]),
-            runfiles = ctx.runfiles(files = [summary]),
+            runfiles = ctx.runfiles(
+                files = [summary],
+                transitive_files = ctx.attr._group_summary_print[DefaultInfo].default_runfiles.files,
+            ),
             executable = script,
         ),
     ]
@@ -75,6 +83,9 @@ md_group_summary = rule(
         ),
         "_write_group_summary_script": attr.label(
             default = "//utils:write_group_summary_script",
+        ),
+        "_group_summary_print": attr.label(
+            default = "//utils:group_summary_print",
         ),
     },
 )

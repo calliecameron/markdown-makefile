@@ -20,6 +20,7 @@ class TestWriteGroupSummaryScript(unittest.TestCase):
                 SCRIPT,
                 "foo",
                 "bar",
+                "baz",
                 out_file,
             ],
             check=True,
@@ -32,15 +33,9 @@ class TestWriteGroupSummaryScript(unittest.TestCase):
 
 set -eu
 
-if [ "${1:-}" = '--raw' ]; then
-    OUTPUT_TOOL=('cat')
-else
-    OUTPUT_TOOL=('csvlook' '-I')
-fi
-
 FILE_TO_OPEN="${0}.runfiles/foo/bar"
 
-"${OUTPUT_TOOL[@]}" "${FILE_TO_OPEN}"
+"${0}.runfiles/foo/baz" "${FILE_TO_OPEN}" "${@}"
 """,
             )
 

@@ -1,4 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_test")
+load("@pip//:requirements.bzl", "requirement")
 load("validation.bzl", "validation_srcs")
 
 exports_files(
@@ -157,6 +158,21 @@ py_test(
     srcs = ["group_summary_test.py"],
     args = ["$(rootpath group_summary.py)"],
     data = ["group_summary.py"],
+    deps = [":test_utils"],
+)
+
+py_binary(
+    name = "group_summary_print",
+    srcs = ["group_summary_print.py"],
+    visibility = ["//visibility:public"],
+    deps = [requirement("tabulate")],
+)
+
+py_test(
+    name = "group_summary_print_test",
+    srcs = ["group_summary_print_test.py"],
+    args = ["$(rootpath group_summary_print.py)"],
+    data = ["group_summary_print.py"],
     deps = [":test_utils"],
 )
 

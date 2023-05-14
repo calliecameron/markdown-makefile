@@ -2,7 +2,7 @@
 
 module(
     name = "markdown_makefile",
-    version = "1.0.0-pre6",
+    version = "1.0.0-pre7",
 )
 
 bazel_dep(
@@ -11,7 +11,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_python",
-    version = "0.20.0",
+    version = "0.21.0",
 )
 bazel_dep(
     name = "pandoc",

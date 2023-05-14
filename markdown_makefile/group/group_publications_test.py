@@ -20,42 +20,39 @@ class TestPublications(unittest.TestCase):
     def test_publications(self) -> None:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
 
-        metadata1 = os.path.join(test_tmpdir, "metadata1.json")
+        metadata = os.path.join(test_tmpdir, "metadata.json")
         self.dump_file(
-            metadata1,
+            metadata,
             {
-                "title": "Foo <Bar>",
-                "wordcount": "10",
-                "docversion": "bar",
-                "publications": [
-                    {
-                        "venue": "Foo",
-                        "submitted": "2022-12-13",
-                        "published": "2022-12-14",
-                    },
-                    {
-                        "venue": "Bar",
-                        "submitted": "2022-10-13",
-                        "rejected": "2022-10-14",
-                    },
-                ],
-            },
-        )
-
-        metadata2 = os.path.join(test_tmpdir, "metadata2.json")
-        self.dump_file(
-            metadata2,
-            {
-                "title": "Baz",
-                "wordcount": "20",
-                "docversion": "quux, dirty",
-                "publications": [
-                    {
-                        "venue": "Foo",
-                        "submitted": "2022-11-13",
-                        "self-published": "2022-11-14",
-                    },
-                ],
+                "//foo:bar": {
+                    "title": "Foo <Bar>",
+                    "wordcount": "10",
+                    "docversion": "bar",
+                    "publications": [
+                        {
+                            "venue": "Foo",
+                            "submitted": "2022-12-13",
+                            "published": "2022-12-14",
+                        },
+                        {
+                            "venue": "Bar",
+                            "submitted": "2022-10-13",
+                            "rejected": "2022-10-14",
+                        },
+                    ],
+                },
+                "//baz:quux": {
+                    "title": "Baz",
+                    "wordcount": "20",
+                    "docversion": "quux, dirty",
+                    "publications": [
+                        {
+                            "venue": "Foo",
+                            "submitted": "2022-11-13",
+                            "self-published": "2022-11-14",
+                        },
+                    ],
+                },
             },
         )
 
@@ -65,13 +62,8 @@ class TestPublications(unittest.TestCase):
             [
                 sys.executable,
                 SCRIPT,
+                metadata,
                 outfile,
-                "--dep",
-                "//foo:bar",
-                metadata1,
-                "--dep",
-                "//baz:quux",
-                metadata2,
             ],
             check=True,
         )

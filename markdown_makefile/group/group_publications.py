@@ -162,15 +162,12 @@ def generate_body(data: Dict[str, Any]) -> List[str]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("metadata_file")
     parser.add_argument("out_file")
-    parser.add_argument("--dep", action="append", nargs=2, default=[])
     args = parser.parse_args()
 
-    data = {}
-
-    for target, metadata in args.dep:
-        with open(metadata, encoding="utf-8") as f:
-            data[target] = json.load(f)
+    with open(args.metadata_file, encoding="utf-8") as f:
+        data = json.load(f)
 
     out = [
         "<!doctype html>",

@@ -62,15 +62,12 @@ md_group_summary = rule(
 )
 
 def _md_group_publications_impl(ctx):
-    dep_args = []
-    for dep in ctx.attr.deps[MdGroupInfo].deps:
-        dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].metadata.path]
     publications = ctx.actions.declare_file(ctx.label.name + ".html")
     ctx.actions.run(
         outputs = [publications],
-        inputs = [dep[MdLibraryInfo].metadata for dep in ctx.attr.deps[MdGroupInfo].deps],
+        inputs = [ctx.attr.deps[MdGroupInfo].metadata],
         executable = ctx.attr._group_publications[DefaultInfo].files_to_run,
-        arguments = [publications.path] + dep_args,
+        arguments = [ctx.attr.deps[MdGroupInfo].metadata.path, publications.path],
         progress_message = "%{label}: generating publications",
     )
 

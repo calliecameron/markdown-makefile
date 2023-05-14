@@ -103,28 +103,28 @@ a:visited { color: black; }
 <table>
 <thead>
 <tr>
-<th>Target</th>
-<th>Title</th>
-<th>Wordcount</th>
-<th style="border-right: 3px solid">Notes</th>
-<th>Bar</th>
-<th>Foo</th>
+<th title="Target">Target</th>
+<th title="Title">Title</th>
+<th title="Wordcount">Wordcount</th>
+<th style="border-right: 3px solid" title="Notes">Notes</th>
+<th title="Bar">Bar</th>
+<th title="Foo">Foo</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="self-published"><a href="#//baz:quux">//baz:quux</a></td>
-<td>Baz</td>
-<td>20</td>
-<td style="border-right: 3px solid"></td>
+<td class="self-published" title="//baz:quux"><a href="#//baz:quux">//baz:quux</a></td>
+<td title="Baz">Baz</td>
+<td title="20">20</td>
+<td style="border-right: 3px solid" title=""></td>
 <td></td>
 <td class="self-published" title="//baz:quux, Foo"><a href="#//baz:quux">2022-11-13 Submitted<br>2022-11-14 Self-published</a></td>
 </tr>
 <tr>
-<td class="published"><a href="#//foo:bar">//foo:bar</a></td>
-<td>Foo &lt;Bar&gt;</td>
-<td>10</td>
-<td style="border-right: 3px solid"></td>
+<td class="published" title="//foo:bar"><a href="#//foo:bar">//foo:bar</a></td>
+<td title="Foo &lt;Bar&gt;">Foo &lt;Bar&gt;</td>
+<td title="10">10</td>
+<td style="border-right: 3px solid" title=""></td>
 <td class="rejected" title="//foo:bar, Bar"><a href="#//foo:bar">2022-10-13 Submitted<br>2022-10-14 Rejected</a></td>
 <td class="published" title="//foo:bar, Foo"><a href="#//foo:bar">2022-12-13 Submitted<br>2022-12-14 Published</a></td>
 </tr>

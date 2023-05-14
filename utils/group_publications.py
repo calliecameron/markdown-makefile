@@ -20,13 +20,13 @@ def generate_header(venues: List[str]) -> List[str]:
     out = [
         "<thead>",
         "<tr>",
-        "<th>Target</th>",
-        "<th>Title</th>",
-        "<th>Wordcount</th>",
-        '<th style="border-right: 3px solid">Notes</th>',
+        '<th title="Target">Target</th>',
+        '<th title="Title">Title</th>',
+        '<th title="Wordcount">Wordcount</th>',
+        '<th style="border-right: 3px solid" title="Notes">Notes</th>',
     ]
     for v in venues:
-        out.append("<th>%s</th>" % html.escape(v, quote=False))
+        out.append('<th title="%s">%s</th>' % (html.escape(v), html.escape(v, quote=False)))
     out += ["</tr>", "</thead>"]
     return out
 
@@ -55,12 +55,17 @@ def generate_row(target: str, data: Dict[str, Any], venues: List[str]) -> List[s
 
     out = [
         "<tr>",
-        '<td class="%s"><a href="#%s">%s</a></td>'
-        % (class_attr, html.escape(target), html.escape(target, quote=False)),
-        "<td>%s</td>" % html.escape(data.get("title", ""), quote=False),
-        "<td>%s</td>" % html.escape(data.get("wordcount", ""), quote=False),
-        '<td style="border-right: 3px solid">%s</td>'
-        % html.escape(data.get("notes", ""), quote=False),
+        '<td class="%s" title="%s"><a href="#%s">%s</a></td>'
+        % (class_attr, html.escape(target), html.escape(target), html.escape(target, quote=False)),
+        '<td title="%s">%s</td>'
+        % (html.escape(data.get("title", "")), html.escape(data.get("title", ""), quote=False)),
+        '<td title="%s">%s</td>'
+        % (
+            html.escape(data.get("wordcount", "")),
+            html.escape(data.get("wordcount", ""), quote=False),
+        ),
+        '<td style="border-right: 3px solid" title="%s">%s</td>'
+        % (html.escape(data.get("notes", "")), html.escape(data.get("notes", ""), quote=False)),
     ]
 
     for v in sorted(venues):

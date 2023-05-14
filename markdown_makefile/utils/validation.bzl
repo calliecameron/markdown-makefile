@@ -36,15 +36,17 @@ def _py_validation():
             "--strict",
             "--explicit-package-bases",
             "--scripts-are-modules",
-            "markdown_makefile/core",
-            "markdown_makefile/formats",
-            "markdown_makefile/utils",
+            "$(locations //markdown_makefile/core:py_srcs)",
+            "$(locations //markdown_makefile/formats:py_srcs)",
+            "$(locations //markdown_makefile/utils:py_srcs)",
+            "$(locations //markdown_makefile/workspace:py_srcs)",
         ],
         data = [
             "//:mypy.ini",
             "//markdown_makefile/core:py_srcs",
             "//markdown_makefile/formats:py_srcs",
             "//markdown_makefile/utils:py_srcs",
+            "//markdown_makefile/workspace:py_srcs",
         ],
         deps = [requirement("mypy")],
     )
@@ -54,15 +56,17 @@ def _py_validation():
         srcs = ["//markdown_makefile/utils:flake8_test.py"],
         args = [
             "--config=$(rootpath //:.flake8)",
-            "markdown_makefile/core",
-            "markdown_makefile/formats",
-            "markdown_makefile/utils",
+            "$(locations //markdown_makefile/core:py_srcs)",
+            "$(locations //markdown_makefile/formats:py_srcs)",
+            "$(locations //markdown_makefile/utils:py_srcs)",
+            "$(locations //markdown_makefile/workspace:py_srcs)",
         ],
         data = [
             "//:.flake8",
             "//markdown_makefile/core:py_srcs",
             "//markdown_makefile/formats:py_srcs",
             "//markdown_makefile/utils:py_srcs",
+            "//markdown_makefile/workspace:py_srcs",
         ],
         deps = [requirement("flake8")],
     )
@@ -77,12 +81,14 @@ def _py_validation():
             "$(locations //markdown_makefile/core:py_srcs)",
             "$(locations //markdown_makefile/formats:py_srcs)",
             "$(locations //markdown_makefile/utils:py_srcs)",
+            "$(locations //markdown_makefile/workspace:py_srcs)",
         ],
         data = [
             "//:pyproject.toml",
             "//markdown_makefile/core:py_srcs",
             "//markdown_makefile/formats:py_srcs",
             "//markdown_makefile/utils:py_srcs",
+            "//markdown_makefile/workspace:py_srcs",
         ],
         deps = [requirement("black")],
     )
@@ -97,6 +103,7 @@ def _sh_validation(name = None):  # buildifier: disable=unused-variable
             "markdown_makefile/formats",
             "markdown_makefile/git",
             "markdown_makefile/utils",
+            "markdown_makefile/workspace",
             "tests",
         ],
         data = [
@@ -105,6 +112,7 @@ def _sh_validation(name = None):  # buildifier: disable=unused-variable
             "//markdown_makefile/formats:sh_srcs",
             "//markdown_makefile/git:sh_srcs",
             "//markdown_makefile/utils:sh_srcs",
+            "//markdown_makefile/workspace:sh_srcs",
             "//tests:sh_srcs",
         ],
     )

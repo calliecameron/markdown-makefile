@@ -9,7 +9,7 @@ load("//markdown_makefile/formats:word.bzl", _md_doc = "md_doc", _md_docx = "md_
 load("//markdown_makefile/utils:collection.bzl", _md_collection_src = "md_collection_src")
 load("//markdown_makefile/utils:aggregation.bzl", _md_group = "md_group", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
 load("//markdown_makefile/git:git_repo.bzl", _md_git_repo = "md_git_repo")
-load("//markdown_makefile/utils:workspace.bzl", _md_workspace = "md_workspace")
+load("//markdown_makefile/workspace:workspace.bzl", _md_workspace = "md_workspace")
 
 _FORMATS = [
     "md",

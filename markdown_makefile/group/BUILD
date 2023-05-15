@@ -8,6 +8,7 @@ py_binary(
     name = "group_summary",
     srcs = ["group_summary.py"],
     visibility = ["//visibility:public"],
+    deps = [requirement("tabulate")],
 )
 
 py_test(
@@ -15,21 +16,6 @@ py_test(
     srcs = ["group_summary_test.py"],
     args = ["$(rootpath group_summary.py)"],
     data = ["group_summary.py"],
-    deps = ["//markdown_makefile/utils:test_utils"],
-)
-
-py_binary(
-    name = "group_summary_print",
-    srcs = ["group_summary_print.py"],
-    visibility = ["//visibility:public"],
-    deps = [requirement("tabulate")],
-)
-
-py_test(
-    name = "group_summary_print_test",
-    srcs = ["group_summary_print_test.py"],
-    args = ["$(rootpath group_summary_print.py)"],
-    data = ["group_summary_print.py"],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
 

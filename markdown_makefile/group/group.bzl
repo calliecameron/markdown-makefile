@@ -1,29 +1,16 @@
 """Aggregation rules."""
 
-load("//markdown_makefile/core:core.bzl", "MdGroupInfo", "MdLibraryInfo")
+load("//markdown_makefile/core:core.bzl", "MdGroupInfo")
 
 def _md_group_summary_impl(ctx):
-    dep_args = []
-    for dep in ctx.attr.deps[MdGroupInfo].deps:
-        dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].metadata.path]
-    summary = ctx.actions.declare_file(ctx.label.name + ".csv")
-    ctx.actions.run(
-        outputs = [summary],
-        inputs = [dep[MdLibraryInfo].metadata for dep in ctx.attr.deps[MdGroupInfo].deps],
-        executable = ctx.attr._group_summary[DefaultInfo].files_to_run,
-        arguments = [summary.path] + dep_args,
-        progress_message = "%{label}: generating summary",
-    )
-
     script = ctx.actions.declare_file(ctx.label.name + ".sh")
     ctx.actions.run(
         outputs = [script],
-        inputs = [summary],
         executable = ctx.attr._write_group_summary_script[DefaultInfo].files_to_run,
         arguments = [
             ctx.workspace_name,
-            summary.short_path,
-            ctx.attr._group_summary_print.files_to_run.executable.short_path,
+            ctx.attr.deps[MdGroupInfo].metadata.short_path,
+            ctx.attr._group_summary.files_to_run.executable.short_path,
             script.path,
         ],
         progress_message = "%{label}: generating summary script",
@@ -31,10 +18,10 @@ def _md_group_summary_impl(ctx):
 
     return [
         DefaultInfo(
-            files = depset([summary, script]),
+            files = depset([script]),
             runfiles = ctx.runfiles(
-                files = [summary],
-                transitive_files = ctx.attr._group_summary_print[DefaultInfo].default_runfiles.files,
+                files = [ctx.attr.deps[MdGroupInfo].metadata],
+                transitive_files = ctx.attr._group_summary[DefaultInfo].default_runfiles.files,
             ),
             executable = script,
         ),
@@ -54,9 +41,6 @@ md_group_summary = rule(
         ),
         "_write_group_summary_script": attr.label(
             default = "//markdown_makefile/group:write_group_summary_script",
-        ),
-        "_group_summary_print": attr.label(
-            default = "//markdown_makefile/group:group_summary_print",
         ),
     },
 )

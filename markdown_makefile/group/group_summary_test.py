@@ -1,4 +1,3 @@
-from typing import Any, Dict
 import json
 import os
 import os.path
@@ -10,61 +9,119 @@ import markdown_makefile.utils.test_utils
 
 SCRIPT = ""
 
+DATA = {
+    "test1:foo": {
+        "title": "Foo",
+        "date": "A",
+        "wordcount": "10",
+        "docversion": "bar",
+    },
+    "test1:bar": {
+        "title": "Bar\nbaz",
+        "wordcount": "5",
+        "docversion": "quux, dirty",
+    },
+    "test2:baz": {
+        "title": "Baz",
+        "date": "C",
+        "wordcount": "20",
+        "docversion": "baz",
+    },
+}
+
 
 class TestSummary(unittest.TestCase):
-    def dump_file(self, filename: str, content: Dict[str, Any]) -> None:
-        with open(filename, "w", encoding="utf-8") as f:
-            json.dump(content, f)
+    maxDiff = None
 
-    def test_summary(self) -> None:
+    def run_script(self, filter_arg: str, raw: bool, wordcount: bool) -> str:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
+        filename = os.path.join(test_tmpdir, "in.json")
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(DATA, f)
 
-        metadata1 = os.path.join(test_tmpdir, "metadata1.json")
-        self.dump_file(
-            metadata1,
-            {
-                "title": "Foo",
-                "date": "10 April 2023",
-                "wordcount": "10",
-                "docversion": "bar",
-            },
-        )
+        args = [sys.executable, SCRIPT, filename]
+        if filter_arg:
+            args += ["--filter", filter_arg]
+        if raw:
+            args.append("--raw")
+        if wordcount:
+            args.append("--wordcount")
 
-        metadata2 = os.path.join(test_tmpdir, "metadata2.json")
-        self.dump_file(
-            metadata2,
-            {
-                "title": "Baz\nbaz",
-                "wordcount": "20",
-                "docversion": "quux, dirty",
-            },
-        )
-
-        outfile = os.path.join(test_tmpdir, "out.csv")
-
-        subprocess.run(
-            [
-                sys.executable,
-                SCRIPT,
-                outfile,
-                "--dep",
-                "//foo:bar",
-                metadata1,
-                "--dep",
-                "//baz:quux",
-                metadata2,
-            ],
+        return subprocess.run(
+            args,
             check=True,
+            capture_output=True,
+            encoding="utf-8",
+        ).stdout
+
+    def test_summary_print(self) -> None:
+        self.assertEqual(
+            self.run_script("", raw=False, wordcount=False),
+            """| target    | title    | date   |   wordcount | version     | status   |
+|-----------|----------|--------|-------------|-------------|----------|
+| test1:bar | Bar\\nbaz |        |           5 | quux, dirty | DIRTY    |
+| test1:foo | Foo      | A      |          10 | bar         | ok       |
+| test2:baz | Baz      | C      |          20 | baz         | ok       |
+""",
         )
 
-        with open(outfile, encoding="utf-8") as f:
-            self.assertEqual(
-                f.read(),
-                """target,title,date,wordcount,version,status
-//foo:bar,Foo,10 April 2023,10,bar,ok
-//baz:quux,Baz\\nbaz,,20,"quux, dirty",DIRTY
+        self.assertEqual(
+            self.run_script("", raw=False, wordcount=True),
+            """| target    | title    | date   |   wordcount | version     | status   |
+|-----------|----------|--------|-------------|-------------|----------|
+| test2:baz | Baz      | C      |          20 | baz         | ok       |
+| test1:foo | Foo      | A      |          10 | bar         | ok       |
+| test1:bar | Bar\\nbaz |        |           5 | quux, dirty | DIRTY    |
 """,
-            )
+        )
+
+        self.assertEqual(
+            self.run_script("", raw=True, wordcount=False),
+            """target,title,date,wordcount,version,status
+test1:bar,Bar\\nbaz,,5,"quux, dirty",DIRTY
+test1:foo,Foo,A,10,bar,ok
+test2:baz,Baz,C,20,baz,ok
+""",
+        )
+        self.assertEqual(
+            self.run_script("", raw=True, wordcount=True),
+            """target,title,date,wordcount,version,status
+test2:baz,Baz,C,20,baz,ok
+test1:foo,Foo,A,10,bar,ok
+test1:bar,Bar\\nbaz,,5,"quux, dirty",DIRTY
+""",
+        )
+        self.assertEqual(
+            self.run_script("test1", raw=False, wordcount=False),
+            """| target    | title    | date   |   wordcount | version     | status   |
+|-----------|----------|--------|-------------|-------------|----------|
+| test1:bar | Bar\\nbaz |        |           5 | quux, dirty | DIRTY    |
+| test1:foo | Foo      | A      |          10 | bar         | ok       |
+""",
+        )
+        self.assertEqual(
+            self.run_script("test1", raw=False, wordcount=True),
+            """| target    | title    | date   |   wordcount | version     | status   |
+|-----------|----------|--------|-------------|-------------|----------|
+| test1:foo | Foo      | A      |          10 | bar         | ok       |
+| test1:bar | Bar\\nbaz |        |           5 | quux, dirty | DIRTY    |
+""",
+        )
+
+        self.assertEqual(
+            self.run_script("test1", raw=True, wordcount=False),
+            """target,title,date,wordcount,version,status
+test1:bar,Bar\\nbaz,,5,"quux, dirty",DIRTY
+test1:foo,Foo,A,10,bar,ok
+""",
+        )
+        self.assertEqual(
+            self.run_script("test1", raw=True, wordcount=True),
+            """target,title,date,wordcount,version,status
+test1:foo,Foo,A,10,bar,ok
+test1:bar,Bar\\nbaz,,5,"quux, dirty",DIRTY
+""",
+        )
 
 
 if __name__ == "__main__":

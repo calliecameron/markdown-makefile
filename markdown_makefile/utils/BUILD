@@ -1,5 +1,6 @@
-load("//markdown_makefile/python:python.bzl", "py_library", "py_test")
+load("//markdown_makefile/python:python.bzl", "py_binary", "py_library", "py_test")
 load("//markdown_makefile/shell:shell.bzl", "sh_binary")
+load("@pip//:requirements.bzl", "requirement")
 
 py_library(
     name = "test_utils",
@@ -32,9 +33,18 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
+py_binary(
+    name = "pdf2txt",
+    srcs = ["pdf2txt.py"],
+    visibility = ["//visibility:public"],
+    deps = [requirement("pdfminer.six")],
+)
+
 sh_binary(
     name = "pdfdump",
     srcs = ["pdfdump.sh"],
+    args = ["$(rootpath pdf2txt)"],
+    data = [":pdf2txt"],
     visibility = ["//visibility:public"],
 )
 

@@ -18,16 +18,7 @@ odt, docx, doc, and docx in
         strip-nondeterminism texlive-xetex unoconv
     ```
 
-2. Install python dependencies:
-
-    ```shell
-    pip install pdfminer
-    ```
-
-    and make sure the folder containing pdf2txt.py is on the PATH (usually
-    ~/.local/bin).
-
-3. Set up the files in your workspace:
+2. Set up the files in your workspace:
 
     `.bazelrc`:
 
@@ -76,7 +67,7 @@ odt, docx, doc, and docx in
     If your workspace is also the root of a git repo, add `md_git_repo()` to the
     BUILD file.
 
-4. Initialise:
+3. Initialise:
 
     ```shell
     bazel run :workspace_update

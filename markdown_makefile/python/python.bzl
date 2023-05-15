@@ -64,7 +64,7 @@ def _py_lint(name, **kwargs):
         data = [
             "//:mypy.ini",
         ] + srcs + deps,
-        deps = [requirement("mypy")],
+        deps = [requirement("mypy")] + deps,
     )
 
     _py_test(

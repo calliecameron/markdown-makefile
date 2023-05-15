@@ -1,7 +1,7 @@
 """Rules for word-processor outputs."""
 
 load("//markdown_makefile/core:core.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_bin", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load("//markdown_makefile/formats:helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_bin", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdDocxInfo = provider(
     "Info for docx output",
@@ -99,11 +99,11 @@ md_docx = rule(
         "timestamp_override": attr.string(),
         "_template": attr.label(
             allow_single_file = True,
-            default = "//markdown_makefile/formats:reference.docx",
+            default = "//markdown_makefile/formats/word:reference.docx",
         ),
         "_filter": attr.label(
             allow_single_file = True,
-            default = "//markdown_makefile/formats:docx_filter.lua",
+            default = "//markdown_makefile/formats/word:docx_filter.lua",
         ),
         "_pandoc": pandoc_script(),
         "_pandoc_bin": pandoc_bin(),
@@ -146,7 +146,7 @@ md_doc = rule(
         ),
         "out": attr.output(),
         "_unoconv": attr.label(
-            default = "//markdown_makefile/formats:unoconv",
+            default = "//markdown_makefile/formats/word:unoconv",
         ),
         "_write_open_script": write_open_script(),
     },
@@ -216,14 +216,14 @@ md_ms_docx = rule(
         "out": attr.output(),
         "timestamp_override": attr.string(),
         "_ms_metadata": attr.label(
-            default = "//markdown_makefile/formats:ms_metadata",
+            default = "//markdown_makefile/formats/word:ms_metadata",
         ),
         "_md2short": attr.label(
             default = "@prosegrinder_pandoc_templates//:md2short",
         ),
         "_filter": attr.label(
             allow_single_file = True,
-            default = "//markdown_makefile/formats:ms_docx_filter.lua",
+            default = "//markdown_makefile/formats/word:ms_docx_filter.lua",
         ),
         "_pandoc_bin": pandoc_bin(),
         "_zip_cleaner": zip_cleaner_script(),

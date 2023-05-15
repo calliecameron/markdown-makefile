@@ -1,7 +1,7 @@
 """Rules for ebook outputs."""
 
 load("//markdown_makefile/core:core.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_bin", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load("//markdown_makefile/formats:helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_bin", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdEpubInfo = provider(
     "Info for epub output",
@@ -50,7 +50,7 @@ md_epub = rule(
         "timestamp_override": attr.string(),
         "_css": attr.label(
             allow_single_file = True,
-            default = "//markdown_makefile/formats:epub.css",
+            default = "//markdown_makefile/formats/ebook:epub.css",
         ),
         "_pandoc": pandoc_script(),
         "_pandoc_bin": pandoc_bin(),
@@ -91,7 +91,7 @@ md_mobi = rule(
         ),
         "out": attr.output(),
         "_ebook_convert": attr.label(
-            default = "//markdown_makefile/formats:ebook_convert",
+            default = "//markdown_makefile/formats/ebook:ebook_convert",
         ),
         "_ebook_convert_bin": attr.label(
             default = "@calibre//:ebook_convert",

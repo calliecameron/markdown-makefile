@@ -1,7 +1,7 @@
 """Rules for latex-based outputs."""
 
 load("//markdown_makefile/core:core.bzl", "MdLibraryInfo")
-load(":helpers.bzl", "doc_for_ext", "expand_locations", "pandoc", "pandoc_bin", "pandoc_script", "simple_pandoc_output_impl", "timestamp_override", "write_open_script")
+load("//markdown_makefile/formats:helpers.bzl", "doc_for_ext", "expand_locations", "pandoc", "pandoc_bin", "pandoc_script", "simple_pandoc_output_impl", "timestamp_override", "write_open_script")
 
 _LATEX_VARS = [
     "--variable=fontsize:12pt",
@@ -65,11 +65,11 @@ md_tex_intermediate = rule(
         "_pandoc_bin": pandoc_bin(),
         "_header_template": attr.label(
             allow_single_file = True,
-            default = "//markdown_makefile/formats:header_template.tex",
+            default = "//markdown_makefile/formats/latex:header_template.tex",
         ),
         "_before_template": attr.label(
             allow_single_file = True,
-            default = "//markdown_makefile/formats:before_template.tex",
+            default = "//markdown_makefile/formats/latex:before_template.tex",
         ),
     },
 )
@@ -116,11 +116,11 @@ def _tex_output_rule(impl, ext):
             "_write_open_script": write_open_script(),
             "_template": attr.label(
                 allow_single_file = True,
-                default = "//markdown_makefile/formats:template.tex",
+                default = "//markdown_makefile/formats/latex:template.tex",
             ),
             "_filter": attr.label(
                 allow_single_file = True,
-                default = "//markdown_makefile/formats:latex_filter.lua",
+                default = "//markdown_makefile/formats/latex:latex_filter.lua",
             ),
         },
     )

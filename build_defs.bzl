@@ -261,6 +261,16 @@ def md_document(
             actual = name + "_save",
             visibility = ["//visibility:private"],
         )
+        native.alias(
+            name = "deps_summary",
+            actual = name + "_deps_summary",
+            visibility = ["//visibility:private"],
+        )
+        native.alias(
+            name = "deps_publications",
+            actual = name + "_deps_publications",
+            visibility = ["//visibility:private"],
+        )
 
 def md_collection(
         name,

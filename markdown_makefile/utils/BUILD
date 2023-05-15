@@ -1,7 +1,5 @@
-load("@rules_python//python:defs.bzl", "py_test")
-load("//markdown_makefile/validation:validation.bzl", "validation_srcs")
-
-validation_srcs()
+load("//markdown_makefile/python:python.bzl", "py_library", "py_test")
+load("//markdown_makefile/shell:shell.bzl", "sh_binary")
 
 py_library(
     name = "test_utils",

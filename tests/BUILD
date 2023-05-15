@@ -1,12 +1,11 @@
 load("//:build_defs.bzl", "md_group")
-load("//markdown_makefile/validation:validation.bzl", "validation_srcs")
+load("//markdown_makefile/shell:shell.bzl", "sh_source")
 
-exports_files(
-    ["diff_test.sh"],
+sh_source(
+    name = "diff_test",
+    src = "diff_test.sh",
     visibility = ["__subpackages__"],
 )
-
-validation_srcs()
 
 md_group(
     name = "tests",

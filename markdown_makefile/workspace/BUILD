@@ -1,29 +1,20 @@
-load("//markdown_makefile/validation:validation.bzl", "validation_srcs")
+load("//markdown_makefile/shell:shell.bzl", "sh_source", "sh_test")
+load("//markdown_makefile/python:python.bzl", "py_source")
 
 exports_files(
     [
-        "new_package.sh",
-        "workspace_status",
         "workspace_contents_build",
         "workspace_contents_bzl",
-        "workspace_summary",
-        "workspace_publications",
-        "workspace_git_update",
         "bazelversion",
         "bazelrc",
-        "workspace_update.sh",
-        "workspace_test.sh",
     ],
     visibility = ["//visibility:public"],
 )
 
-validation_srcs(
-    extra_py_files = ["workspace_status"],
-    extra_sh_files = [
-        "workspace_git_update",
-        "workspace_publications",
-        "workspace_summary",
-    ],
+sh_source(
+    name = "new_package",
+    src = "new_package.sh",
+    visibility = ["//visibility:public"],
 )
 
 sh_test(
@@ -33,11 +24,23 @@ sh_test(
     data = ["new_package.sh"],
 )
 
+py_source(
+    name = "workspace_status",
+    src = "workspace_status",
+    visibility = ["//visibility:public"],
+)
+
 sh_test(
     name = "workspace_status_test",
     srcs = ["workspace_status_test.sh"],
     args = ["$(rootpath workspace_status)"],
     data = ["workspace_status"],
+)
+
+sh_source(
+    name = "workspace_update",
+    src = "workspace_update.sh",
+    visibility = ["//visibility:public"],
 )
 
 sh_test(
@@ -65,4 +68,28 @@ sh_test(
         "workspace_summary",
         "workspace_update.sh",
     ],
+)
+
+sh_source(
+    name = "workspace_test",
+    src = "workspace_test.sh",
+    visibility = ["//visibility:public"],
+)
+
+sh_source(
+    name = "workspace_git_update",
+    src = "workspace_git_update",
+    visibility = ["//visibility:public"],
+)
+
+sh_source(
+    name = "workspace_publications",
+    src = "workspace_publications",
+    visibility = ["//visibility:public"],
+)
+
+sh_source(
+    name = "workspace_summary",
+    src = "workspace_summary",
+    visibility = ["//visibility:public"],
 )

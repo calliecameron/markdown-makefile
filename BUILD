@@ -1,6 +1,6 @@
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("//:build_defs.bzl", "md_git_repo", "md_workspace")
-load("//markdown_makefile/validation:validation.bzl", "validation")
+load("@buildifier_prebuilt//:rules.bzl", "buildifier_test")
 
 compile_pip_requirements(
     name = "requirements",
@@ -15,4 +15,17 @@ md_workspace(
 
 md_git_repo()
 
-validation()
+buildifier_test(
+    name = "buildifier_test",
+    no_sandbox = True,
+    workspace = "//:WORKSPACE",
+)
+
+exports_files(
+    [
+        ".flake8",
+        "mypy.ini",
+        "pyproject.toml",
+    ],
+    visibility = ["//:__subpackages__"],
+)

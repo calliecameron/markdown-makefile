@@ -1,7 +1,5 @@
-load("@rules_python//python:defs.bzl", "py_binary", "py_test")
-load("//markdown_makefile/validation:validation.bzl", "validation_srcs")
-
-validation_srcs()
+load("//markdown_makefile/python:python.bzl", "py_binary", "py_test")
+load("//markdown_makefile/shell:shell.bzl", "sh_binary", "sh_test")
 
 exports_files(
     [

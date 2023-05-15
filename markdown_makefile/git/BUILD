@@ -1,21 +1,30 @@
-load("//markdown_makefile/validation:validation.bzl", "validation_srcs")
+load("//markdown_makefile/shell:shell.bzl", "sh_source", "sh_test")
 
 exports_files(
     [
         "default_gitattributes",
         "default_gitconfig",
         "default_gitignore",
-        "precommit",
-        "git_update.sh",
-        "git_test.sh",
     ],
     visibility = ["//visibility:public"],
 )
 
-validation_srcs(
-    extra_sh_files = [
-        "precommit",
-    ],
+sh_source(
+    name = "precommit",
+    src = "precommit",
+    visibility = ["//visibility:public"],
+)
+
+sh_source(
+    name = "git_update",
+    src = "git_update.sh",
+    visibility = ["//visibility:public"],
+)
+
+sh_source(
+    name = "git_test",
+    src = "git_test.sh",
+    visibility = ["//visibility:public"],
 )
 
 sh_test(

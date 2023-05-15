@@ -1,5 +1,4 @@
-load("@rules_python//python:defs.bzl", "py_binary", "py_test")
-load("//markdown_makefile/validation:validation.bzl", "validation_srcs")
+load("//markdown_makefile/python:python.bzl", "py_binary", "py_test")
 
 exports_files(
     [
@@ -8,8 +7,6 @@ exports_files(
     ],
     visibility = ["//visibility:public"],
 )
-
-validation_srcs()
 
 py_binary(
     name = "collection_src",

@@ -3,7 +3,6 @@ load("//markdown_makefile/shell:shell.bzl", "sh_binary")
 
 exports_files(
     [
-        "validate.py",
         "include.lua",
         "starts_with_text.lua",
         "wordcount.lua",
@@ -84,15 +83,21 @@ py_test(
     ],
 )
 
+py_binary(
+    name = "validate",
+    srcs = ["validate.py"],
+    visibility = ["//visibility:public"],
+)
+
 py_test(
     name = "validate_test",
     srcs = ["validate_test.py"],
     args = [
         "$(rootpath @pandoc//:pandoc)",
-        "$(rootpath validate.py)",
+        "$(rootpath validate)",
     ],
     data = [
-        "validate.py",
+        ":validate",
         "@pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],

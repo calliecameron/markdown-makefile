@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from typing import Any, Dict, FrozenSet, List
 import datetime
 import json

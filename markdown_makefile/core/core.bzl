@@ -102,7 +102,6 @@ def _md_library_impl(ctx):
         inputs = [
             preprocessed,
             base_metadata,
-            ctx.file._validate,
             ctx.file._include,
             ctx.file._starts_with_text,
             ctx.file._wordcount,
@@ -110,8 +109,9 @@ def _md_library_impl(ctx):
             ctx.file._cleanup,
         ] + [dep[MdLibraryInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
         executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
+        tools = [ctx.attr._validate[DefaultInfo].files_to_run],
         arguments = [
-            "--filter=" + ctx.file._validate.path,
+            "--filter=" + ctx.attr._validate[DefaultInfo].files_to_run.executable.path,
             "--lua-filter=" + ctx.file._include.path,
             "--lua-filter=" + ctx.file._starts_with_text.path,
             "--lua-filter=" + ctx.file._wordcount.path,
@@ -259,8 +259,7 @@ md_library = rule(
             default = "//markdown_makefile/core:preprocess",
         ),
         "_validate": attr.label(
-            allow_single_file = True,
-            default = "//markdown_makefile/core:validate.py",
+            default = "//markdown_makefile/core:validate",
         ),
         "_include": attr.label(
             allow_single_file = True,

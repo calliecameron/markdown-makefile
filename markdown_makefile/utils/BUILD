@@ -21,6 +21,18 @@ py_test(
     deps = [":bazel_package"],
 )
 
+py_library(
+    name = "publications",
+    srcs = ["publications.py"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "publications_test",
+    srcs = ["publications_test.py"],
+    deps = [":publications"],
+)
+
 sh_binary(
     name = "bindump",
     srcs = ["bindump.sh"],

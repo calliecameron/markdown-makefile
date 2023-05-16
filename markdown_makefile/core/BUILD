@@ -87,6 +87,7 @@ py_binary(
     name = "validate",
     srcs = ["validate.py"],
     visibility = ["//visibility:public"],
+    deps = ["//markdown_makefile/utils:publications"],
 )
 
 py_test(

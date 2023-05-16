@@ -1,45 +1,15 @@
-from typing import Any, Dict, FrozenSet, List
-import datetime
+from typing import cast, Any, Dict, FrozenSet, List, NoReturn
 import json
 import sys
-
-VENUE = "venue"
-PAID = "paid"
-NOTES = "notes"
-SUBMITTED = "submitted"
-REJECTED = "rejected"
-WITHDRAWN = "withdrawn"
-ABANDONED = "abandoned"
-SELF_PUBLISHED = "self-published"
-ACCEPTED = "accepted"
-PUBLISHED = "published"
-URLS = "urls"
-
-PUBLICATION_STR_KEYS = [
-    VENUE,
-    PAID,
-    NOTES,
-]
-
-PUBLICATION_DATE_KEYS = [
-    SUBMITTED,
-    REJECTED,
-    WITHDRAWN,
-    ABANDONED,
-    SELF_PUBLISHED,
-    ACCEPTED,
-    PUBLISHED,
-]
-
-PUBLICATION_KEYS = frozenset(PUBLICATION_STR_KEYS + PUBLICATION_DATE_KEYS + [URLS])
+from markdown_makefile.utils.publications import Publications
 
 
-def fail(msg: str) -> None:
+def fail(msg: str) -> NoReturn:
     sys.stderr.write("ERROR: " + msg)
     sys.exit(1)
 
 
-def fail_metadata(msg: str) -> None:
+def fail_metadata(msg: str) -> NoReturn:
     fail("invalid metadata: " + msg)
 
 
@@ -106,59 +76,51 @@ def assert_no_conflicts(key: str, keys: FrozenSet[str], not_allowed: FrozenSet[s
 def validate_publications(j: Dict[str, Any]) -> None:
     if "meta" not in j or "publications" not in j["meta"]:
         return
-    ps = j["meta"]["publications"]
-    assert_is_list(ps, "'publications' must be a list")
-    for p in ps["c"]:
+    ps_raw = j["meta"]["publications"]
+
+    def dict_to_json(elem: Dict[str, Any]) -> Dict[str, Any]:
+        out = {}  # type: Dict[str, Any]
+        for k, e in elem["c"].items():
+            if e["t"] == "MetaList":
+                out[k] = list_to_json(e)
+            elif e["t"] == "MetaInlines":
+                out[k] = inlines_to_json(e)
+            else:
+                fail_metadata(
+                    "failed to parse publications: unknown type %s in dict. %s"
+                    % (e["t"], str(ps_raw))
+                )
+        return out
+
+    def list_to_json(elem: Dict[str, Any]) -> List[Any]:
+        out = []  # type: List[Any]
+        for e in elem["c"]:
+            if e["t"] == "MetaList":
+                out.append(list_to_json(e))
+            elif e["t"] == "MetaInlines":
+                out.append(inlines_to_json(e))
+            else:
+                fail_metadata(
+                    "failed to parse publications: unknown type %s in list. %s"
+                    % (e["t"], str(ps_raw))
+                )
+        return out
+
+    def inlines_to_json(elem: Dict[str, Any]) -> str:
+        if len(elem["c"]) == 1 and elem["c"][0]["t"] == "Str":
+            return cast(str, elem["c"][0]["c"])
+        return str(elem["c"])
+
+    assert_is_list(ps_raw, "'publications' must be a list")
+    ps = []
+    for p in ps_raw["c"]:
         assert_is_dict(p, "item in 'publications' must be a dict")
-        data = p["c"]
-        keys = frozenset(data.keys())
-        if not keys.issubset(PUBLICATION_KEYS):
-            fail_metadata("unknown keys %s in 'publications' item" % (keys - PUBLICATION_KEYS))
+        ps.append(dict_to_json(p))
 
-        if VENUE not in keys:
-            fail_metadata("'%s' is required in 'publications' item" % VENUE)
-
-        if not keys & frozenset(PUBLICATION_DATE_KEYS):
-            fail_metadata(
-                "at least one of %s is required in 'publications' item" % PUBLICATION_DATE_KEYS
-            )
-
-        for k in sorted(PUBLICATION_STR_KEYS):
-            if k in data:
-                assert_is_string(data[k], "'%s' in 'publications' item must be a string" % k)
-
-        for k in sorted(PUBLICATION_DATE_KEYS):
-            if k in data:
-                if (
-                    data[k]["t"] != "MetaInlines"
-                    or len(data[k]["c"]) != 1
-                    or data[k]["c"][0]["t"] != "Str"
-                ):
-                    fail_metadata("'%s' in 'publications' item must be a string" % k)
-                v = data[k]["c"][0]["c"]
-                try:
-                    datetime.date.fromisoformat(v)
-                except ValueError:
-                    fail_metadata("'%s' in 'publications' item must be a date; got '%s'" % (k, v))
-
-        if URLS in data:
-            urls = data[URLS]
-            assert_is_list(urls, "'%s' in 'publications' item must be a list" % URLS)
-            for url in urls["c"]:
-                assert_is_string(url, "'%s' item in 'publications' item must be a string" % URLS)
-
-        mutually_exclusive = frozenset([ACCEPTED, REJECTED, WITHDRAWN, ABANDONED, SELF_PUBLISHED])
-        if len(keys & mutually_exclusive) > 1:
-            fail_metadata("%s in 'publications' item are mutually exclusive" % mutually_exclusive)
-
-        assert_no_conflicts(
-            SELF_PUBLISHED,
-            keys,
-            frozenset([SUBMITTED, REJECTED, WITHDRAWN, ABANDONED, ACCEPTED, PUBLISHED]),
-        )
-        assert_no_conflicts(
-            PUBLISHED, keys, frozenset([REJECTED, WITHDRAWN, ABANDONED, SELF_PUBLISHED])
-        )
+    try:
+        Publications.from_json(ps)
+    except ValueError as e:
+        fail_metadata("failed to parse publications: %s" % str(e))
 
 
 def validate_notes(j: Dict[str, Any]) -> None:

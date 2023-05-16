@@ -1,6 +1,12 @@
 import unittest
 from datetime import date
-from markdown_makefile.utils.publications import Dates, Publication, Publications
+from markdown_makefile.utils.publications import Date, Dates, Publication, Publications
+
+
+class TestDate(unittest.TestCase):
+    def test_date(self) -> None:
+        self.assertEqual(Date("foo", date(2023, 5, 16)).date_str(), "2023-05-16")
+        self.assertEqual(Date("foo", None).date_str(), "")
 
 
 class TestDates(unittest.TestCase):
@@ -13,6 +19,9 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.abandoned)
         self.assertIsNone(d.self_published)
         self.assertIsNone(d.published)
+        self.assertEqual(d.dates, (("submitted", date(2023, 5, 16)),))
+        self.assertEqual(d.latest, ("submitted", date(2023, 5, 16)))
+        self.assertTrue(d.active)
 
     def test_good_accepted(self) -> None:
         d = Dates(submitted=date(2023, 5, 16), accepted=date(2023, 5, 17))
@@ -23,6 +32,11 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.abandoned)
         self.assertIsNone(d.self_published)
         self.assertIsNone(d.published)
+        self.assertEqual(
+            d.dates, (("submitted", date(2023, 5, 16)), ("accepted", date(2023, 5, 17)))
+        )
+        self.assertEqual(d.latest, ("accepted", date(2023, 5, 17)))
+        self.assertTrue(d.active)
 
     def test_good_rejected(self) -> None:
         d = Dates(submitted=date(2023, 5, 16), rejected=date(2023, 5, 17))
@@ -33,6 +47,11 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.abandoned)
         self.assertIsNone(d.self_published)
         self.assertIsNone(d.published)
+        self.assertEqual(
+            d.dates, (("submitted", date(2023, 5, 16)), ("rejected", date(2023, 5, 17)))
+        )
+        self.assertEqual(d.latest, ("rejected", date(2023, 5, 17)))
+        self.assertFalse(d.active)
 
     def test_good_withdrawn(self) -> None:
         d = Dates(submitted=date(2023, 5, 16), withdrawn=date(2023, 5, 17))
@@ -43,6 +62,11 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.abandoned)
         self.assertIsNone(d.self_published)
         self.assertIsNone(d.published)
+        self.assertEqual(
+            d.dates, (("submitted", date(2023, 5, 16)), ("withdrawn", date(2023, 5, 17)))
+        )
+        self.assertEqual(d.latest, ("withdrawn", date(2023, 5, 17)))
+        self.assertFalse(d.active)
 
     def test_good_abandoned(self) -> None:
         d = Dates(submitted=date(2023, 5, 16), abandoned=date(2023, 5, 17))
@@ -53,6 +77,11 @@ class TestDates(unittest.TestCase):
         self.assertEqual(d.abandoned, date(2023, 5, 17))
         self.assertIsNone(d.self_published)
         self.assertIsNone(d.published)
+        self.assertEqual(
+            d.dates, (("submitted", date(2023, 5, 16)), ("abandoned", date(2023, 5, 17)))
+        )
+        self.assertEqual(d.latest, ("abandoned", date(2023, 5, 17)))
+        self.assertFalse(d.active)
 
     def test_good_self_published(self) -> None:
         d = Dates(self_published=date(2023, 5, 16))
@@ -63,6 +92,9 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.abandoned)
         self.assertEqual(d.self_published, date(2023, 5, 16))
         self.assertIsNone(d.published)
+        self.assertEqual(d.dates, (("self-published", date(2023, 5, 16)),))
+        self.assertEqual(d.latest, ("self-published", date(2023, 5, 16)))
+        self.assertTrue(d.active)
 
     def test_good_published(self) -> None:
         d = Dates(
@@ -75,6 +107,16 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.abandoned)
         self.assertIsNone(d.self_published)
         self.assertEqual(d.published, date(2023, 5, 18))
+        self.assertEqual(
+            d.dates,
+            (
+                ("submitted", date(2023, 5, 16)),
+                ("accepted", date(2023, 5, 17)),
+                ("published", date(2023, 5, 18)),
+            ),
+        )
+        self.assertEqual(d.latest, ("published", date(2023, 5, 18)))
+        self.assertTrue(d.active)
 
     def test_bad_none(self) -> None:
         with self.assertRaises(ValueError):
@@ -121,6 +163,16 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.abandoned)
         self.assertIsNone(d.self_published)
         self.assertEqual(d.published, date(2023, 5, 18))
+        self.assertEqual(
+            d.dates,
+            (
+                ("submitted", date(2023, 5, 16)),
+                ("accepted", date(2023, 5, 17)),
+                ("published", date(2023, 5, 18)),
+            ),
+        )
+        self.assertEqual(d.latest, ("published", date(2023, 5, 18)))
+        self.assertTrue(d.active)
 
     def test_from_json_good_self_published(self) -> None:
         d = Dates.from_json(
@@ -135,6 +187,9 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.abandoned)
         self.assertEqual(d.self_published, date(2023, 5, 18))
         self.assertIsNone(d.published)
+        self.assertEqual(d.dates, (("self-published", date(2023, 5, 18)),))
+        self.assertEqual(d.latest, ("self-published", date(2023, 5, 18)))
+        self.assertTrue(d.active)
 
     def test_from_json_bad_unknown_key(self) -> None:
         with self.assertRaises(ValueError):
@@ -335,7 +390,7 @@ class TestPublication(unittest.TestCase):
 
 
 class TestPublications(unittest.TestCase):
-    def test_good(self) -> None:
+    def test_good_active(self) -> None:
         ps = Publications(
             [
                 Publication(
@@ -354,7 +409,6 @@ class TestPublications(unittest.TestCase):
                     Dates(
                         submitted=date(2023, 5, 19),
                         accepted=date(2023, 5, 20),
-                        published=date(2023, 5, 21),
                     ),
                     ["foo2", "bar2"],
                     "baz2",
@@ -364,6 +418,8 @@ class TestPublications(unittest.TestCase):
         )
 
         self.assertEqual(len(ps.publications), 2)
+        self.assertTrue(ps.active)
+        self.assertEquals(ps.highest_active_state, "published")
 
         p = ps.publications[0]
         self.assertEqual(p.venue, "Book")
@@ -388,7 +444,65 @@ class TestPublications(unittest.TestCase):
         self.assertIsNone(d.withdrawn)
         self.assertIsNone(d.abandoned)
         self.assertIsNone(d.self_published)
-        self.assertEqual(d.published, date(2023, 5, 21))
+        self.assertIsNone(d.published)
+        self.assertEqual(p.urls, ("foo2", "bar2"))
+        self.assertEqual(p.notes, "baz2")
+        self.assertEqual(p.paid, "quux2")
+
+    def test_good_inactive(self) -> None:
+        ps = Publications(
+            [
+                Publication(
+                    "Book",
+                    Dates(
+                        submitted=date(2023, 5, 16),
+                        rejected=date(2023, 5, 17),
+                    ),
+                    ["foo", "bar"],
+                    "baz",
+                    "quux",
+                ),
+                Publication(
+                    "Book2",
+                    Dates(
+                        submitted=date(2023, 5, 19),
+                        withdrawn=date(2023, 5, 20),
+                    ),
+                    ["foo2", "bar2"],
+                    "baz2",
+                    "quux2",
+                ),
+            ]
+        )
+
+        self.assertEqual(len(ps.publications), 2)
+        self.assertFalse(ps.active)
+        self.assertEqual(ps.highest_active_state, "")
+
+        p = ps.publications[0]
+        self.assertEqual(p.venue, "Book")
+        d = p.dates
+        self.assertEqual(d.submitted, date(2023, 5, 16))
+        self.assertIsNone(d.accepted)
+        self.assertEqual(d.rejected, date(2023, 5, 17))
+        self.assertIsNone(d.withdrawn)
+        self.assertIsNone(d.abandoned)
+        self.assertIsNone(d.self_published)
+        self.assertIsNone(d.published)
+        self.assertEqual(p.urls, ("foo", "bar"))
+        self.assertEqual(p.notes, "baz")
+        self.assertEqual(p.paid, "quux")
+
+        p = ps.publications[1]
+        self.assertEqual(p.venue, "Book2")
+        d = p.dates
+        self.assertEqual(d.submitted, date(2023, 5, 19))
+        self.assertIsNone(d.accepted)
+        self.assertIsNone(d.rejected)
+        self.assertEqual(d.withdrawn, date(2023, 5, 20))
+        self.assertIsNone(d.abandoned)
+        self.assertIsNone(d.self_published)
+        self.assertIsNone(d.published)
         self.assertEqual(p.urls, ("foo2", "bar2"))
         self.assertEqual(p.notes, "baz2")
         self.assertEqual(p.paid, "quux2")

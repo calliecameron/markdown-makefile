@@ -35,13 +35,14 @@ py_binary(
     name = "group_publications",
     srcs = ["group_publications.py"],
     visibility = ["//visibility:public"],
+    deps = ["//markdown_makefile/utils:publications"],
 )
 
 py_test(
     name = "group_publications_test",
     srcs = ["group_publications_test.py"],
-    args = ["$(rootpath group_publications.py)"],
-    data = ["group_publications.py"],
+    args = ["$(rootpath group_publications)"],
+    data = ["group_publications"],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
 

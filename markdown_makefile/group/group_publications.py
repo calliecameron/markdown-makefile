@@ -2,18 +2,17 @@ from typing import Any, Dict, List
 import argparse
 import html
 import json
-
-VENUE = "venue"
-SUBMITTED = "submitted"
-REJECTED = "rejected"
-WITHDRAWN = "withdrawn"
-ABANDONED = "abandoned"
-SELF_PUBLISHED = "self-published"
-ACCEPTED = "accepted"
-PUBLISHED = "published"
-
-
-STATES = [SUBMITTED, REJECTED, WITHDRAWN, ABANDONED, ACCEPTED, SELF_PUBLISHED, PUBLISHED]
+from markdown_makefile.utils.publications import (
+    Publication,
+    Publications,
+    SUBMITTED,
+    ACCEPTED,
+    REJECTED,
+    WITHDRAWN,
+    ABANDONED,
+    SELF_PUBLISHED,
+    PUBLISHED,
+)
 
 
 def generate_header(venues: List[str]) -> List[str]:
@@ -31,41 +30,33 @@ def generate_header(venues: List[str]) -> List[str]:
     return out
 
 
-def generate_row(target: str, data: Dict[str, Any], venues: List[str]) -> List[str]:
+def generate_row(
+    target: str, data: Publications, venues: List[str], raw: Dict[str, Any]
+) -> List[str]:
     ps = {}
-    for p in data["publications"]:
-        ps[p[VENUE]] = p
+    for p in data.publications:
+        ps[p.venue] = p
 
-    states = set()
-    for p in ps.values():
-        if SUBMITTED in p and REJECTED not in p and WITHDRAWN not in p and ABANDONED not in p:
-            states.add(SUBMITTED)
-        if ACCEPTED in p:
-            states.add(ACCEPTED)
-        if SELF_PUBLISHED in p:
-            states.add(SELF_PUBLISHED)
-        if PUBLISHED in p:
-            states.add(PUBLISHED)
+    title = raw.get("title", "")
+    wordcount = raw.get("wordcount", "")
+    notes = raw.get("notes", "")
 
     class_attr = ""
-    for state in (PUBLISHED, SELF_PUBLISHED, ACCEPTED, SUBMITTED):
-        if state in states:
-            class_attr = state
-            break
+    if data.active:
+        class_attr = data.highest_active_state
 
     out = [
         "<tr>",
         '<td class="%s" title="%s"><a href="#%s">%s</a></td>'
         % (class_attr, html.escape(target), html.escape(target), html.escape(target, quote=False)),
-        '<td title="%s">%s</td>'
-        % (html.escape(data.get("title", "")), html.escape(data.get("title", ""), quote=False)),
+        '<td title="%s">%s</td>' % (html.escape(title), html.escape(title, quote=False)),
         '<td title="%s">%s</td>'
         % (
-            html.escape(data.get("wordcount", "")),
-            html.escape(data.get("wordcount", ""), quote=False),
+            html.escape(wordcount),
+            html.escape(wordcount, quote=False),
         ),
         '<td style="border-right: 3px solid" title="%s">%s</td>'
-        % (html.escape(data.get("notes", "")), html.escape(data.get("notes", ""), quote=False)),
+        % (html.escape(notes), html.escape(notes, quote=False)),
     ]
 
     for v in sorted(venues):
@@ -78,51 +69,45 @@ def generate_row(target: str, data: Dict[str, Any], venues: List[str]) -> List[s
     return out
 
 
-def generate_cell(target: str, p: Dict[str, Any]) -> str:
+def generate_cell(target: str, p: Publication) -> str:
     content = []
-    latest = ""
-    for state in STATES:
-        if state in p:
-            content.append(p[state] + " " + state.capitalize())
-            latest = state
+    for date in p.dates.dates:
+        content.append(date.date_str() + " " + date.state.capitalize())
     return '<td class="%s" title="%s"><a href="#%s">%s</a></td>' % (
-        latest,
-        html.escape(target + ", " + p[VENUE]),
+        p.dates.latest.state,
+        html.escape(target + ", " + p.venue),
         html.escape(target),
         "<br>".join([html.escape(c, quote=False) for c in content]),
     )
 
 
-def generate_table(data: Dict[str, Any]) -> List[str]:
+def generate_table(data: Dict[str, Publications], raw: Dict[str, Any]) -> List[str]:
     out = ["<table>"]
 
     venue_set = set()
-    for target in data:
-        if "publications" in data[target]:
-            for p in data[target]["publications"]:
-                if VENUE in p:
-                    venue_set.add(p[VENUE])
+    for target, ps in data.items():
+        for p in ps.publications:
+            venue_set.add(p.venue)
     venues = sorted(venue_set)
 
     out += generate_header(venues)
 
     out.append("<tbody>")
-    for target in sorted(data):
-        if "publications" in data[target] and data[target]["publications"]:
-            out += generate_row(target, data[target], venues)
+    for target, ps in sorted(data.items()):
+        out += generate_row(target, ps, venues, raw[target])
     out += ["</tbody>", "</table>"]
 
     return out
 
 
-def generate_details(data: Dict[str, Any]) -> List[str]:
+def generate_details(raw: Dict[str, Any]) -> List[str]:
     out = ["<h2>Details</h2>"]
-    for target in sorted(data):
-        if "publications" in data[target] and data[target]["publications"]:
+    for target in sorted(raw):
+        if "publications" in raw[target] and raw[target]["publications"]:
             out += [
                 '<h3 id="%s">%s</h3>' % (html.escape(target), html.escape(target, quote=False)),
                 "<code><pre>%s</pre></code>"
-                % html.escape(json.dumps(data[target], sort_keys=True, indent=4), quote=False),
+                % html.escape(json.dumps(raw[target], sort_keys=True, indent=4), quote=False),
             ]
     return out
 
@@ -137,25 +122,25 @@ def generate_head() -> List[str]:
         "th, td { border: 1px solid; padding: 5px; }",
         "a:link { color: black; }",
         "a:visited { color: black; }",
-        ".submitted { background-color: #ffff00; }",
-        ".rejected { background-color: #ff6d6d; }",
-        ".withdrawn { background-color: #ff972f; }",
-        ".abandoned { background-color: #cccccc; }",
-        ".accepted { background-color: #729fcf; }",
-        ".self-published { background-color: #158466; }",
-        ".published { background-color: #81d41a; }",
+        ".%s { background-color: #ffff00; }" % SUBMITTED,
+        ".%s { background-color: #ff6d6d; }" % REJECTED,
+        ".%s { background-color: #ff972f; }" % WITHDRAWN,
+        ".%s { background-color: #cccccc; }" % ABANDONED,
+        ".%s { background-color: #729fcf; }" % ACCEPTED,
+        ".%s { background-color: #158466; }" % SELF_PUBLISHED,
+        ".%s { background-color: #81d41a; }" % PUBLISHED,
         "</style>",
         "</head>",
     ]
 
 
-def generate_body(data: Dict[str, Any]) -> List[str]:
+def generate_body(data: Dict[str, Publications], raw: Dict[str, Any]) -> List[str]:
     out = [
         "<body>",
         "<h1>Publications</h1>",
     ]
-    out += generate_table(data)
-    out += generate_details(data)
+    out += generate_table(data, raw)
+    out += generate_details(raw)
     out += ["</body>"]
     return out
 
@@ -167,7 +152,11 @@ def main() -> None:
     args = parser.parse_args()
 
     with open(args.metadata_file, encoding="utf-8") as f:
-        data = json.load(f)
+        j = json.load(f)
+
+    data = {
+        k: Publications.from_json(v["publications"]) for k, v in j.items() if "publications" in v
+    }
 
     out = [
         "<!doctype html>",
@@ -175,7 +164,7 @@ def main() -> None:
     ]
 
     out += generate_head()
-    out += generate_body(data)
+    out += generate_body(data, j)
 
     out += [
         "</html>",

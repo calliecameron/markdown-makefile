@@ -8,6 +8,7 @@ _WORKSPACE_CONTENTS = [
     "//tests/test3:test3",
     "//tests/test4:test4",
     "//tests/test4:test4a",
+    "//tests/test5:test5",
 ]
 
 def workspace_contents():

@@ -32,6 +32,7 @@ class TestPublications(unittest.TestCase):
                         {
                             "venue": "Foo",
                             "submitted": "2022-12-13",
+                            "accepted": "2022-12-13",
                             "published": "2022-12-14",
                         },
                         {
@@ -48,7 +49,6 @@ class TestPublications(unittest.TestCase):
                     "publications": [
                         {
                             "venue": "Foo",
-                            "submitted": "2022-11-13",
                             "self-published": "2022-11-14",
                         },
                     ],
@@ -110,7 +110,7 @@ a:visited { color: black; }
 <td title="20">20</td>
 <td style="border-right: 3px solid" title=""></td>
 <td></td>
-<td class="self-published" title="//baz:quux, Foo"><a href="#//baz:quux">2022-11-13 Submitted<br>2022-11-14 Self-published</a></td>
+<td class="self-published" title="//baz:quux, Foo"><a href="#//baz:quux">2022-11-14 Self-published</a></td>
 </tr>
 <tr>
 <td class="published" title="//foo:bar"><a href="#//foo:bar">//foo:bar</a></td>
@@ -118,7 +118,7 @@ a:visited { color: black; }
 <td title="10">10</td>
 <td style="border-right: 3px solid" title=""></td>
 <td class="rejected" title="//foo:bar, Bar"><a href="#//foo:bar">2022-10-13 Submitted<br>2022-10-14 Rejected</a></td>
-<td class="published" title="//foo:bar, Foo"><a href="#//foo:bar">2022-12-13 Submitted<br>2022-12-14 Published</a></td>
+<td class="published" title="//foo:bar, Foo"><a href="#//foo:bar">2022-12-13 Submitted<br>2022-12-13 Accepted<br>2022-12-14 Published</a></td>
 </tr>
 </tbody>
 </table>
@@ -129,7 +129,6 @@ a:visited { color: black; }
     "publications": [
         {
             "self-published": "2022-11-14",
-            "submitted": "2022-11-13",
             "venue": "Foo"
         }
     ],
@@ -141,6 +140,7 @@ a:visited { color: black; }
     "docversion": "bar",
     "publications": [
         {
+            "accepted": "2022-12-13",
             "published": "2022-12-14",
             "submitted": "2022-12-13",
             "venue": "Foo"

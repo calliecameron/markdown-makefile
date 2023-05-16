@@ -11,20 +11,30 @@ def main() -> None:
     with open(args.infile, encoding="utf-8") as f:
         metadata = json.load(f)
 
-    if "title" not in metadata:
-        raise ValueError("Document title must be set")
-    if "author" not in metadata:
-        raise ValueError("Document author must be set")
+    if "title" in metadata:
+        title = metadata["title"]
+    else:
+        title = "[Untitled]"
+
+    if "author" in metadata:
+        author = metadata["author"][0]
+    else:
+        author = "[Unknown]"
 
     out = {
-        "short_title": metadata["title"],
-        "author_lastname": metadata["author"][0].split()[-1],
-        "contact_name": metadata["author"][0],
+        "short_title": title,
+        "author_lastname": author.split()[-1],
+        "contact_name": author,
         "contact_address": "`\\n`{=tex}",
         "contact_city_state_zip": "`\\n`{=tex}",
         "contact_phone": "`\\n`{=tex}",
         "contact_email": "`\\n`{=tex}",
     }
+
+    if "title" not in metadata:
+        out["title"] = title
+    if "author" not in metadata:
+        out["author"] = [author]
 
     with open(args.outfile, "w", encoding="utf-8") as f:
         json.dump(out, f, sort_keys=True, indent=4)

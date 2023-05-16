@@ -1,6 +1,13 @@
 load("//markdown_makefile/python:python.bzl", "py_test")
 load("//markdown_makefile/shell:shell.bzl", "sh_binary")
 
+exports_files(
+    [
+        "add_title.lua",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 sh_binary(
     name = "pandoc",
     srcs = ["pandoc.sh"],
@@ -46,5 +53,19 @@ py_test(
     srcs = ["write_save_script_test.py"],
     args = ["$(rootpath write_save_script.sh)"],
     data = ["write_save_script.sh"],
+    deps = ["//markdown_makefile/utils:test_utils"],
+)
+
+py_test(
+    name = "add_title_test",
+    srcs = ["add_title_test.py"],
+    args = [
+        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath add_title.lua)",
+    ],
+    data = [
+        "add_title.lua",
+        "@pandoc",
+    ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )

@@ -1,6 +1,6 @@
 """Misc output formats."""
 
-load(":helpers.bzl", "simple_pandoc_output_impl", "simple_pandoc_output_rule")
+load(":helpers.bzl", "add_title_arg", "simple_pandoc_output_impl", "simple_pandoc_output_rule")
 
 def _md_md_impl(ctx):
     return simple_pandoc_output_impl(ctx, "md", "markdown-smart", [], ["--standalone", "--wrap=none"], {}, ctx.attr.lib, ctx.attr._write_open_script)
@@ -13,6 +13,6 @@ def _md_txt_impl(ctx):
 md_txt = simple_pandoc_output_rule(_md_txt_impl, "txt")
 
 def _md_html_impl(ctx):
-    return simple_pandoc_output_impl(ctx, "html", "html", [], ["--standalone"], {}, ctx.attr.lib, ctx.attr._write_open_script)
+    return simple_pandoc_output_impl(ctx, "html", "html", [ctx.file._add_title], ["--standalone", add_title_arg(ctx)], {}, ctx.attr.lib, ctx.attr._write_open_script)
 
 md_html = simple_pandoc_output_rule(_md_html_impl, "html")

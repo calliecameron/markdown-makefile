@@ -1,7 +1,7 @@
 """Rules for ebook outputs."""
 
 load("//markdown_makefile/core:core.bzl", "MdLibraryInfo")
-load("//markdown_makefile/formats:helpers.bzl", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_bin", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
+load("//markdown_makefile/formats:helpers.bzl", "add_title_arg", "add_title_filter", "default_info_for_ext", "doc_for_ext", "expand_locations", "open_script", "pandoc", "pandoc_bin", "pandoc_script", "timestamp_override", "write_open_script", "zip_cleaner", "zip_cleaner_script")
 
 MdEpubInfo = provider(
     "Info for epub output",
@@ -16,8 +16,11 @@ def _md_epub_impl(ctx):
         ctx,
         "epub",
         "epub",
-        [ctx.file._css],
-        ["--css=" + ctx.file._css.path] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
+        [ctx.file._css, ctx.file._add_title],
+        [
+            "--css=" + ctx.file._css.path,
+            add_title_arg(ctx),
+        ] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
         timestamp_override(ctx),
         ctx.attr.lib,
         intermediate,
@@ -52,6 +55,7 @@ md_epub = rule(
             allow_single_file = True,
             default = "//markdown_makefile/formats/ebook:epub.css",
         ),
+        "_add_title": add_title_filter(),
         "_pandoc": pandoc_script(),
         "_pandoc_bin": pandoc_bin(),
         "_zip_cleaner": zip_cleaner_script(),

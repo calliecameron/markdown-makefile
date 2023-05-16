@@ -53,6 +53,15 @@ def open_script(ctx, ext, file, write_open_script):
     )
     return script
 
+def add_title_filter():
+    return attr.label(
+        allow_single_file = True,
+        default = "//markdown_makefile/formats:add_title.lua",
+    )
+
+def add_title_arg(ctx):
+    return "--lua-filter=" + ctx.file._add_title.path
+
 def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message = None):
     """Run pandoc.
 
@@ -122,6 +131,7 @@ def simple_pandoc_output_rule(impl, ext):
             "_pandoc": pandoc_script(),
             "_pandoc_bin": pandoc_bin(),
             "_write_open_script": write_open_script(),
+            "_add_title": add_title_filter(),
         },
     )
 

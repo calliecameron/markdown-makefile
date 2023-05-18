@@ -6,14 +6,17 @@ py_binary(
     name = "group_summary",
     srcs = ["group_summary.py"],
     visibility = ["//visibility:public"],
-    deps = [requirement("tabulate")],
+    deps = [
+        requirement("tabulate"),
+        "//markdown_makefile/utils:publications",
+    ],
 )
 
 py_test(
     name = "group_summary_test",
     srcs = ["group_summary_test.py"],
-    args = ["$(rootpath group_summary.py)"],
-    data = ["group_summary.py"],
+    args = ["$(rootpath group_summary)"],
+    data = ["group_summary"],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
 

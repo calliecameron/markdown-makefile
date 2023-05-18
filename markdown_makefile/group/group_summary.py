@@ -4,6 +4,7 @@ import csv
 import json
 import sys
 import tabulate
+from markdown_makefile.utils.publications import Publications
 
 
 def main() -> None:
@@ -18,12 +19,21 @@ def main() -> None:
     with open(args.in_file, encoding="utf-8") as f:
         for target, j in json.load(f).items():
             if not args.filter or args.filter in target:
+                publication = ""
+                if "publications" in j and j["publications"]:
+                    ps = Publications.from_json(j["publications"])
+                    if ps.active:
+                        publication = ps.highest_active_state
+                    else:
+                        publication = "attempted"
+
                 data.append(
                     {
                         "target": target,
                         "title": j["title"].replace("\n", "\\n") if "title" in j else "",
                         "date": j["date"].replace("\n", "\\n") if "date" in j else "",
                         "wordcount": j["wordcount"],
+                        "publication": publication,
                         "version": j["docversion"],
                         "status": "DIRTY" if "dirty" in j["docversion"] else "ok",
                     }
@@ -36,7 +46,7 @@ def main() -> None:
 
     if args.raw:
         out = csv.DictWriter(
-            sys.stdout, ["target", "title", "date", "wordcount", "version", "status"]
+            sys.stdout, ["target", "title", "date", "wordcount", "publication", "version", "status"]
         )
         out.writeheader()
         out.writerows(data)

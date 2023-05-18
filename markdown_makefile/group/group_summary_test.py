@@ -6,6 +6,7 @@ import sys
 import unittest
 import markdown_makefile.utils.test_utils
 
+# pylint: disable=line-too-long
 
 SCRIPT = ""
 
@@ -15,6 +16,14 @@ DATA = {
         "date": "A",
         "wordcount": "10",
         "docversion": "bar",
+        "publications": [
+            {
+                "venue": "foo",
+                "submitted": "2023-05-18",
+                "accepted": "2023-05-18",
+                "published": "2023-05-18",
+            },
+        ],
     },
     "test1:bar": {
         "title": "Bar\nbaz",
@@ -26,6 +35,13 @@ DATA = {
         "date": "C",
         "wordcount": "20",
         "docversion": "baz",
+        "publications": [
+            {
+                "venue": "baz",
+                "submitted": "2023-05-18",
+                "rejected": "2023-05-18",
+            },
+        ],
     },
 }
 
@@ -57,69 +73,71 @@ class TestSummary(unittest.TestCase):
     def test_summary_print(self) -> None:
         self.assertEqual(
             self.run_script("", raw=False, wordcount=False),
-            """| target    | title    | date   |   wordcount | version     | status   |
-|-----------|----------|--------|-------------|-------------|----------|
-| test1:bar | Bar\\nbaz |        |           5 | quux, dirty | DIRTY    |
-| test1:foo | Foo      | A      |          10 | bar         | ok       |
-| test2:baz | Baz      | C      |          20 | baz         | ok       |
-""",
+            """| target    | title    | date   |   wordcount | publication   | version     | status   |
+|-----------|----------|--------|-------------|---------------|-------------|----------|
+| test1:bar | Bar\\nbaz |        |           5 |               | quux, dirty | DIRTY    |
+| test1:foo | Foo      | A      |          10 | published     | bar         | ok       |
+| test2:baz | Baz      | C      |          20 | attempted     | baz         | ok       |
+""",  # noqa: E501
         )
 
         self.assertEqual(
             self.run_script("", raw=False, wordcount=True),
-            """| target    | title    | date   |   wordcount | version     | status   |
-|-----------|----------|--------|-------------|-------------|----------|
-| test2:baz | Baz      | C      |          20 | baz         | ok       |
-| test1:foo | Foo      | A      |          10 | bar         | ok       |
-| test1:bar | Bar\\nbaz |        |           5 | quux, dirty | DIRTY    |
-""",
+            """| target    | title    | date   |   wordcount | publication   | version     | status   |
+|-----------|----------|--------|-------------|---------------|-------------|----------|
+| test2:baz | Baz      | C      |          20 | attempted     | baz         | ok       |
+| test1:foo | Foo      | A      |          10 | published     | bar         | ok       |
+| test1:bar | Bar\\nbaz |        |           5 |               | quux, dirty | DIRTY    |
+""",  # noqa: E501
         )
 
         self.assertEqual(
             self.run_script("", raw=True, wordcount=False),
-            """target,title,date,wordcount,version,status
-test1:bar,Bar\\nbaz,,5,"quux, dirty",DIRTY
-test1:foo,Foo,A,10,bar,ok
-test2:baz,Baz,C,20,baz,ok
-""",
-        )
-        self.assertEqual(
-            self.run_script("", raw=True, wordcount=True),
-            """target,title,date,wordcount,version,status
-test2:baz,Baz,C,20,baz,ok
-test1:foo,Foo,A,10,bar,ok
-test1:bar,Bar\\nbaz,,5,"quux, dirty",DIRTY
-""",
-        )
-        self.assertEqual(
-            self.run_script("test1", raw=False, wordcount=False),
-            """| target    | title    | date   |   wordcount | version     | status   |
-|-----------|----------|--------|-------------|-------------|----------|
-| test1:bar | Bar\\nbaz |        |           5 | quux, dirty | DIRTY    |
-| test1:foo | Foo      | A      |          10 | bar         | ok       |
-""",
-        )
-        self.assertEqual(
-            self.run_script("test1", raw=False, wordcount=True),
-            """| target    | title    | date   |   wordcount | version     | status   |
-|-----------|----------|--------|-------------|-------------|----------|
-| test1:foo | Foo      | A      |          10 | bar         | ok       |
-| test1:bar | Bar\\nbaz |        |           5 | quux, dirty | DIRTY    |
+            """target,title,date,wordcount,publication,version,status
+test1:bar,Bar\\nbaz,,5,,"quux, dirty",DIRTY
+test1:foo,Foo,A,10,published,bar,ok
+test2:baz,Baz,C,20,attempted,baz,ok
 """,
         )
 
         self.assertEqual(
+            self.run_script("", raw=True, wordcount=True),
+            """target,title,date,wordcount,publication,version,status
+test2:baz,Baz,C,20,attempted,baz,ok
+test1:foo,Foo,A,10,published,bar,ok
+test1:bar,Bar\\nbaz,,5,,"quux, dirty",DIRTY
+""",
+        )
+
+        self.assertEqual(
+            self.run_script("test1", raw=False, wordcount=False),
+            """| target    | title    | date   |   wordcount | publication   | version     | status   |
+|-----------|----------|--------|-------------|---------------|-------------|----------|
+| test1:bar | Bar\\nbaz |        |           5 |               | quux, dirty | DIRTY    |
+| test1:foo | Foo      | A      |          10 | published     | bar         | ok       |
+""",  # noqa: E501
+        )
+        self.assertEqual(
+            self.run_script("test1", raw=False, wordcount=True),
+            """| target    | title    | date   |   wordcount | publication   | version     | status   |
+|-----------|----------|--------|-------------|---------------|-------------|----------|
+| test1:foo | Foo      | A      |          10 | published     | bar         | ok       |
+| test1:bar | Bar\\nbaz |        |           5 |               | quux, dirty | DIRTY    |
+""",  # noqa: E501
+        )
+
+        self.assertEqual(
             self.run_script("test1", raw=True, wordcount=False),
-            """target,title,date,wordcount,version,status
-test1:bar,Bar\\nbaz,,5,"quux, dirty",DIRTY
-test1:foo,Foo,A,10,bar,ok
+            """target,title,date,wordcount,publication,version,status
+test1:bar,Bar\\nbaz,,5,,"quux, dirty",DIRTY
+test1:foo,Foo,A,10,published,bar,ok
 """,
         )
         self.assertEqual(
             self.run_script("test1", raw=True, wordcount=True),
-            """target,title,date,wordcount,version,status
-test1:foo,Foo,A,10,bar,ok
-test1:bar,Bar\\nbaz,,5,"quux, dirty",DIRTY
+            """target,title,date,wordcount,publication,version,status
+test1:foo,Foo,A,10,published,bar,ok
+test1:bar,Bar\\nbaz,,5,,"quux, dirty",DIRTY
 """,
         )
 

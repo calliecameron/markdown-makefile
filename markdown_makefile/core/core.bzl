@@ -105,6 +105,7 @@ def _md_library_impl(ctx):
             ctx.file._include,
             ctx.file._starts_with_text,
             ctx.file._wordcount,
+            ctx.file._poetry_lines,
             ctx.file._write_metadata,
             ctx.file._cleanup,
         ] + [dep[MdLibraryInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
@@ -115,6 +116,7 @@ def _md_library_impl(ctx):
             "--lua-filter=" + ctx.file._include.path,
             "--lua-filter=" + ctx.file._starts_with_text.path,
             "--lua-filter=" + ctx.file._wordcount.path,
+            "--lua-filter=" + ctx.file._poetry_lines.path,
             "--lua-filter=" + ctx.file._write_metadata.path,
             "--lua-filter=" + ctx.file._cleanup.path,
             "--metadata-file=" + base_metadata.path,
@@ -272,6 +274,10 @@ md_library = rule(
         "_wordcount": attr.label(
             allow_single_file = True,
             default = "//markdown_makefile/core:wordcount.lua",
+        ),
+        "_poetry_lines": attr.label(
+            allow_single_file = True,
+            default = "//markdown_makefile/core:poetry_lines.lua",
         ),
         "_write_metadata": attr.label(
             allow_single_file = True,

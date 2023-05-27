@@ -8,6 +8,7 @@ identifier:
   text: "doi:10.234234.234/33"
 lang: en-GB
 notes: foo
+poetry-lines: 8
 publications:
 - accepted: 2022-12-12
   published: 2022-12-13

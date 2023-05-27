@@ -6,6 +6,7 @@ exports_files(
         "include.lua",
         "starts_with_text.lua",
         "wordcount.lua",
+        "poetry_lines.lua",
         "write_metadata.lua",
         "cleanup.lua",
         "spellcheck_input_template.md",
@@ -141,6 +142,20 @@ py_test(
     ],
     data = [
         "wordcount.lua",
+        "@pandoc",
+    ],
+    deps = ["//markdown_makefile/utils:test_utils"],
+)
+
+py_test(
+    name = "poetry_lines_test",
+    srcs = ["poetry_lines_test.py"],
+    args = [
+        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath poetry_lines.lua)",
+    ],
+    data = [
+        "poetry_lines.lua",
         "@pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],

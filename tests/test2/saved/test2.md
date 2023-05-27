@@ -7,6 +7,7 @@ identifier:
 - scheme: DOI
   text: "doi:10.234234.234/33"
 lang: en-GB
+poetry-lines: 8
 publications:
 - accepted: 2022-10-12
   notes: foo bar baz

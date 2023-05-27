@@ -2,6 +2,7 @@
 author:
 - An Author
 docversion: reproducible
+finished: false
 identifier:
 - scheme: DOI
   text: "doi:10.234234.234/33"

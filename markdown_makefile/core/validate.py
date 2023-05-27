@@ -66,6 +66,11 @@ def assert_is_string(j: Dict[str, Any], msg: str) -> None:
         fail_metadata(msg)
 
 
+def assert_is_bool(j: Dict[str, Any], msg: str) -> None:
+    if j["t"] != "MetaBool":
+        fail_metadata(msg)
+
+
 def assert_no_conflicts(key: str, keys: FrozenSet[str], not_allowed: FrozenSet[str]) -> None:
     if key in keys and len(keys & not_allowed) > 0:
         fail_metadata(
@@ -130,12 +135,20 @@ def validate_notes(j: Dict[str, Any]) -> None:
     assert_is_string(notes, "'notes' must be a string")
 
 
+def validate_finished(j: Dict[str, Any]) -> None:
+    if "meta" not in j or "finished" not in j["meta"]:
+        return
+    finished = j["meta"]["finished"]
+    assert_is_bool(finished, "'finished' must be a bool")
+
+
 def validate() -> None:
     raw = sys.stdin.read()
     j = json.loads(raw)
     validate_text(j)
     validate_publications(j)
     validate_notes(j)
+    validate_finished(j)
     sys.stdout.write(raw)
 
 

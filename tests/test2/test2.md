@@ -14,6 +14,7 @@ publications:
   - "http://example.com"
   paid: £10
   notes: foo bar baz
+finished: false
 ---
 
 This is some text before a section. It shouldn't be indented. Each section should start on a new page (but subsections shouldn't).

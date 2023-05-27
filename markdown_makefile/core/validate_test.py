@@ -20,6 +20,7 @@ publications:
   - "http://example.com"
   notes: foo bar
 notes: baz quux
+finished: true
 ---
 
 “Foo” ‘bar’
@@ -445,6 +446,18 @@ publications:
 ---
 notes:
 - foo
+---
+""",
+            )
+
+        # Wrong type (should be bool)
+        with self.assertRaises(ValueError):
+            markdown_makefile.utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+finished: foo
 ---
 """,
             )

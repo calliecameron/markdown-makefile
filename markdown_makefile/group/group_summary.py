@@ -3,49 +3,77 @@ import argparse
 import csv
 import json
 import sys
-from abc import ABC
+from abc import ABC, abstractmethod
 import tabulate
 from dateparser.date import DateDataParser
 from dateparser.search import search_dates
 from markdown_makefile.utils.publications import Publications
 
 
+TARGET = "target"
+TITLE = "title"
+RAW_DATE = "raw date"
+DATE = "date"
+WORDCOUNT = "wordcount"
+POETRY_LINES = "poetry lines"
+FINISHED = "finished"
+PUBLICATION = "publication"
+VERSION = "version"
+STATUS = "status"
+
+
 class Sorter(ABC):
-    def __init__(self, reverse: bool, key: str) -> None:
+    def __init__(self, reverse: bool) -> None:
         super().__init__()
+        self._reverse = reverse
+
+    @abstractmethod
+    def key(self, elem: Dict[str, Any]) -> Any:
+        raise NotImplementedError
+
+    def sort(self, data: List[Dict[str, Any]]) -> None:
+        data.sort(key=self.key, reverse=self._reverse)
+
+
+class SimpleSorter(Sorter):
+    def __init__(self, reverse: bool, key: str) -> None:
+        super().__init__(reverse)
         self._reverse = reverse
         self._key = key
 
-    def sort(self, data: List[Dict[str, Any]]) -> None:
-        data.sort(key=lambda elem: elem[self._key], reverse=self._reverse)  # type: ignore
+    def key(self, elem: Dict[str, Any]) -> Any:
+        return elem[self._key]
 
 
-class Target(Sorter):
+class TargetSorter(SimpleSorter):
     def __init__(self, reverse: bool) -> None:
-        super().__init__(reverse, "target")
+        super().__init__(reverse, TARGET)
 
 
-class Date(Sorter):
+class DateSorter(Sorter):
     def __init__(self, reverse: bool) -> None:
-        super().__init__(not reverse, "date")
+        super().__init__(not reverse)
+
+    def key(self, elem: Dict[str, Any]) -> Any:
+        return ", ".join(sorted([d.strip() for d in elem[DATE].split(",")], reverse=self._reverse))
 
 
-class Wordcount(Sorter):
+class WordcountSorter(SimpleSorter):
     def __init__(self, reverse: bool) -> None:
-        super().__init__(not reverse, "wordcount")
+        super().__init__(not reverse, WORDCOUNT)
 
 
-class PoetryLines(Sorter):
+class PoetryLinesSorter(SimpleSorter):
     def __init__(self, reverse: bool) -> None:
-        super().__init__(not reverse, "poetry lines")
+        super().__init__(not reverse, POETRY_LINES)
 
 
-class Finished(Sorter):
+class FinishedSorter(SimpleSorter):
     def __init__(self, reverse: bool) -> None:
-        super().__init__(not reverse, "finished")
+        super().__init__(not reverse, FINISHED)
 
 
-def parse_date(date: str, reverse: bool) -> str:
+def parse_date(date: str) -> str:
     settings = {"DATE_ORDER": "DMY", "PARSERS": ["custom-formats", "absolute-time"]}
     parser = DateDataParser(["en"], ["en-GB"], settings=settings)  # type: ignore
 
@@ -60,7 +88,7 @@ def parse_date(date: str, reverse: bool) -> str:
             elif data.period == "day":
                 out.add(data.date_obj.strftime("%Y/%m/%d"))
 
-    return ", ".join(sorted(out, reverse=not reverse))
+    return ", ".join(sorted(out))
 
 
 def sanitise(s: str) -> str:
@@ -79,30 +107,34 @@ def main() -> None:
     sorters.add_argument(
         "--target",
         action="store_const",
-        const=Target,
+        const=TargetSorter,
         dest="sorter",
-        default=Target,
+        default=TargetSorter,
         help="sort by target",
     )
     sorters.add_argument(
-        "--date", action="store_const", const=Date, dest="sorter", help="sort by date"
+        "--date", action="store_const", const=DateSorter, dest="sorter", help="sort by date"
     )
     sorters.add_argument(
         "--wordcount",
         action="store_const",
-        const=Wordcount,
+        const=WordcountSorter,
         dest="sorter",
         help="sort by wordcount",
     )
     sorters.add_argument(
         "--poetry_lines",
         action="store_const",
-        const=PoetryLines,
+        const=PoetryLinesSorter,
         dest="sorter",
         help="sort by poetry lines",
     )
     sorters.add_argument(
-        "--finished", action="store_const", const=Finished, dest="sorter", help="sort by finished"
+        "--finished",
+        action="store_const",
+        const=FinishedSorter,
+        dest="sorter",
+        help="sort by finished",
     )
     args = parser.parse_args()
 
@@ -120,18 +152,16 @@ def main() -> None:
 
                 data.append(
                     {
-                        "target": target,
-                        "title": sanitise(j["title"]) if "title" in j else "",
-                        "raw date": sanitise(j["date"]) if "date" in j else "",
-                        "date": sanitise(parse_date(j["date"], args.reverse))
-                        if "date" in j
-                        else "",
-                        "wordcount": int(j["wordcount"]),
-                        "poetry lines": int(j["poetry-lines"]),
-                        "finished": "yes" if "finished" in j and j["finished"] else "no",
-                        "publication": publication,
-                        "version": j["docversion"],
-                        "status": "DIRTY" if "dirty" in j["docversion"] else "ok",
+                        TARGET: target,
+                        TITLE: sanitise(j["title"]) if "title" in j else "",
+                        RAW_DATE: sanitise(j["date"]) if "date" in j else "",
+                        DATE: sanitise(parse_date(j["date"])) if "date" in j else "",
+                        WORDCOUNT: int(j["wordcount"]),
+                        POETRY_LINES: int(j["poetry-lines"]),
+                        FINISHED: "yes" if "finished" in j and j["finished"] else "no",
+                        PUBLICATION: publication,
+                        VERSION: j["docversion"],
+                        STATUS: "DIRTY" if "dirty" in j["docversion"] else "ok",
                     }
                 )
 
@@ -141,16 +171,16 @@ def main() -> None:
         out = csv.DictWriter(
             sys.stdout,
             [
-                "target",
-                "title",
-                "raw date",
-                "date",
-                "wordcount",
-                "poetry lines",
-                "finished",
-                "publication",
-                "version",
-                "status",
+                TARGET,
+                TITLE,
+                RAW_DATE,
+                DATE,
+                WORDCOUNT,
+                POETRY_LINES,
+                FINISHED,
+                PUBLICATION,
+                VERSION,
+                STATUS,
             ],
         )
         out.writeheader()

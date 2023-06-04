@@ -8,6 +8,7 @@ load("//markdown_makefile/formats/ebook:ebook.bzl", _md_epub = "md_epub", _md_mo
 load("//markdown_makefile/formats/word:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
 load("//markdown_makefile/collection:collection.bzl", _md_collection_src = "md_collection_src")
 load("//markdown_makefile/group:group.bzl", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
+load("//markdown_makefile/dynamic_group:dynamic_group.bzl", _md_dynamic_group = "md_dynamic_group")
 load("//markdown_makefile/git:git_repo.bzl", _md_git_repo = "md_git_repo")
 load("//markdown_makefile/workspace:workspace.bzl", _md_workspace = "md_workspace")
 
@@ -354,5 +355,6 @@ def md_group(name, deps):
         visibility = ["//visibility:private"],
     )
 
+md_dynamic_group = _md_dynamic_group
 md_git_repo = _md_git_repo
 md_workspace = _md_workspace

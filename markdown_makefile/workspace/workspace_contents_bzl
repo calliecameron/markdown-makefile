@@ -1,6 +1,0 @@
-"""Auto-generated bzl file."""
-
-_WORKSPACE_CONTENTS = []
-
-def workspace_contents():
-    return _WORKSPACE_CONTENTS

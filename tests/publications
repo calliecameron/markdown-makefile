@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -eu
+
+THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "${THIS_DIR}"
+
+"${THIS_DIR}/.dynamic_group_contents/update"
+
+bazel run .dynamic_group_contents:contents_publications

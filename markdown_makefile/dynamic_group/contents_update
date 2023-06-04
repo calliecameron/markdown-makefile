@@ -3,18 +3,18 @@
 set -eu
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "${THIS_DIR}" || exit 1
+cd "${THIS_DIR}/.."
 
 TMPFILE="$(mktemp)"
 
-bazel query 'kind(md_library, //...)' | LC_ALL=C sort >"${TMPFILE}"
+bazel query 'kind(md_library, ...)' | LC_ALL=C sort >"${TMPFILE}"
 
-OUTFILE='.workspace_contents/workspace_contents.bzl'
+OUTFILE='.dynamic_group_contents/contents.bzl'
 
 cat >"${OUTFILE}" <<EOF
 """Auto-generated bzl file."""
 
-_WORKSPACE_CONTENTS = [
+_CONTENTS = [
 EOF
 
 while read -r line; do
@@ -24,10 +24,8 @@ done <"${TMPFILE}"
 cat >>"${OUTFILE}" <<EOF
 ]
 
-def workspace_contents():
-    return _WORKSPACE_CONTENTS
+def contents():
+    return _CONTENTS
 EOF
 
 rm "${TMPFILE}"
-
-bazel run //.workspace_contents:workspace_contents_publications

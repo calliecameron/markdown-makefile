@@ -1,4 +1,4 @@
-load("//:build_defs.bzl", "md_group")
+load("//:build_defs.bzl", "md_dynamic_group", "md_group")
 load("//markdown_makefile/shell:shell.bzl", "sh_source")
 
 sh_source(
@@ -16,3 +16,5 @@ md_group(
         "//tests/test4",
     ],
 )
+
+md_dynamic_group()

@@ -1,6 +1,6 @@
 """Auto-generated bzl file."""
 
-_WORKSPACE_CONTENTS = [
+_CONTENTS = [
     "//tests/test1:test1",
     "//tests/test2:test2",
     "//tests/test3:include1",
@@ -11,5 +11,5 @@ _WORKSPACE_CONTENTS = [
     "//tests/test5:test5",
 ]
 
-def workspace_contents():
-    return _WORKSPACE_CONTENTS
+def contents():
+    return _CONTENTS

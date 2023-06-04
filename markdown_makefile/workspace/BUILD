@@ -3,8 +3,6 @@ load("//markdown_makefile/python:python.bzl", "py_source")
 
 exports_files(
     [
-        "workspace_contents_build",
-        "workspace_contents_bzl",
         "bazelversion",
         "bazelrc",
     ],
@@ -49,10 +47,6 @@ sh_test(
     args = [
         "$(rootpath workspace_update.sh)",
         "$(rootpath workspace_status)",
-        "$(rootpath workspace_contents_build)",
-        "$(rootpath workspace_contents_bzl)",
-        "$(rootpath workspace_summary)",
-        "$(rootpath workspace_publications)",
         "$(rootpath workspace_git_update)",
         "$(rootpath bazelversion)",
         "$(rootpath bazelrc)",
@@ -60,12 +54,8 @@ sh_test(
     data = [
         "bazelrc",
         "bazelversion",
-        "workspace_contents_build",
-        "workspace_contents_bzl",
         "workspace_git_update",
-        "workspace_publications",
         "workspace_status",
-        "workspace_summary",
         "workspace_update.sh",
     ],
 )
@@ -79,17 +69,5 @@ sh_source(
 sh_source(
     name = "workspace_git_update",
     src = "workspace_git_update",
-    visibility = ["//visibility:public"],
-)
-
-sh_source(
-    name = "workspace_publications",
-    src = "workspace_publications",
-    visibility = ["//visibility:public"],
-)
-
-sh_source(
-    name = "workspace_summary",
-    src = "workspace_summary",
     visibility = ["//visibility:public"],
 )

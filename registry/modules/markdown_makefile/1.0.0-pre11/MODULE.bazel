@@ -2,16 +2,16 @@
 
 module(
     name = "markdown_makefile",
-    version = "1.0.0-pre7",
+    version = "1.0.0-pre11",
 )
 
 bazel_dep(
     name = "bazel_skylib",
-    version = "1.4.1",
+    version = "1.4.2",
 )
 bazel_dep(
     name = "rules_python",
-    version = "0.21.0",
+    version = "0.22.0",
 )
 bazel_dep(
     name = "pandoc",
@@ -34,7 +34,7 @@ bazel_dep(
     version = "6.1.0",
 )
 
-pip = use_extension("@rules_python//python:extensions.bzl", "pip")
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
     name = "pip",
     requirements_lock = "//:requirements_lock.txt",

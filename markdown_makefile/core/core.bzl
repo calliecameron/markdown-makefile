@@ -95,12 +95,46 @@ def _md_library_impl(ctx):
         progress_message = "%{label}: preprocessing markdown",
     )
 
+    lint_input = ctx.actions.declare_file(ctx.label.name + "_lint_input.md")
+    ctx.actions.run(
+        outputs = [lint_input],
+        inputs = [
+            ctx.file.src,
+        ],
+        executable = ctx.attr._lint_input[DefaultInfo].files_to_run,
+        arguments = [
+            ctx.file.src.path,
+            lint_input.path,
+        ],
+        progress_message = "%{label}: generating input for linting",
+    )
+
+    linted = ctx.actions.declare_file(ctx.label.name + "_linted.txt")
+    ctx.actions.run(
+        outputs = [linted],
+        inputs = [
+            lint_input,
+            ctx.file._pymarkdown_config,
+        ],
+        executable = ctx.attr._lint[DefaultInfo].files_to_run,
+        arguments = [
+            linted.path,
+            "--strict-config",
+            "--config",
+            ctx.file._pymarkdown_config.path,
+            "scan",
+            lint_input.path,
+        ],
+        progress_message = "%{label}: linting markdown",
+    )
+
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.json")
     intermediate_metadata = ctx.actions.declare_file(ctx.label.name + "_intermediate_metadata.json")
     ctx.actions.run(
         outputs = [intermediate, intermediate_metadata],
         inputs = [
             preprocessed,
+            linted,
             base_metadata,
             ctx.file._include,
             ctx.file._starts_with_text,
@@ -257,11 +291,21 @@ md_library = rule(
         "_base_metadata": attr.label(
             default = "//markdown_makefile/core:base_metadata",
         ),
+        "_lint_input": attr.label(
+            default = "//markdown_makefile/core:lint_input",
+        ),
+        "_lint": attr.label(
+            default = "//markdown_makefile/core:lint",
+        ),
         "_preprocess": attr.label(
             default = "//markdown_makefile/core:preprocess",
         ),
         "_validate": attr.label(
             default = "//markdown_makefile/core:validate",
+        ),
+        "_pymarkdown_config": attr.label(
+            allow_single_file = True,
+            default = "//:pymarkdown.json",
         ),
         "_include": attr.label(
             allow_single_file = True,

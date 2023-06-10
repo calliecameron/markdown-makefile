@@ -51,7 +51,7 @@ After this line there should be stars.
 
 * * *
 
-This is a new paragraph after the stars. This text is <span style="font-variant:small-caps;">Small Caps</span>. Here is a pound sign (£), a euro sign (€), and three letters with accents: ëóû.
+This is a new paragraph after the stars. This text is [Small Caps]{.smallcaps}. Here is a pound sign (£), a euro sign (€), and three letters with accents: ëóû.
 
 # This is a second section
 

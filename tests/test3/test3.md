@@ -27,7 +27,7 @@ Text after simple include.
 
 ## Subsection
 
-This is a new paragraph. This text is <span style="font-variant:small-caps;">Small Caps</span>.
+This is a new paragraph. This text is [Small Caps]{.smallcaps}.
 
 # This is a second section
 

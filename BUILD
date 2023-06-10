@@ -29,3 +29,10 @@ exports_files(
     ],
     visibility = ["//:__subpackages__"],
 )
+
+exports_files(
+    [
+        "pymarkdown.json",
+    ],
+    visibility = ["//visibility:public"],
+)

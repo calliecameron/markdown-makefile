@@ -1,5 +1,6 @@
 load("//markdown_makefile/python:python.bzl", "py_binary", "py_test")
 load("//markdown_makefile/shell:shell.bzl", "sh_binary")
+load("@pip//:requirements.bzl", "requirement")
 
 exports_files(
     [
@@ -65,6 +66,29 @@ py_test(
         ":base_metadata",
         "//markdown_makefile/utils:test_utils",
     ],
+)
+
+py_binary(
+    name = "lint_input",
+    srcs = ["lint_input.py"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "lint_input_test",
+    srcs = ["lint_input_test.py"],
+    args = ["$(rootpath :lint_input)"],
+    data = [":lint_input"],
+    deps = [
+        "//markdown_makefile/utils:test_utils",
+    ],
+)
+
+py_binary(
+    name = "lint",
+    srcs = ["lint.py"],
+    visibility = ["//visibility:public"],
+    deps = [requirement("pymarkdownlnt")],
 )
 
 py_binary(

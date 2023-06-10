@@ -51,6 +51,11 @@ class TargetSorter(SimpleSorter):
         super().__init__(reverse, TARGET)
 
 
+class TitleSorter(SimpleSorter):
+    def __init__(self, reverse: bool) -> None:
+        super().__init__(reverse, TITLE)
+
+
 class DateSorter(Sorter):
     def __init__(self, reverse: bool) -> None:
         super().__init__(not reverse)
@@ -72,6 +77,21 @@ class PoetryLinesSorter(SimpleSorter):
 class FinishedSorter(SimpleSorter):
     def __init__(self, reverse: bool) -> None:
         super().__init__(not reverse, FINISHED)
+
+
+class PublicationSorter(SimpleSorter):
+    def __init__(self, reverse: bool) -> None:
+        super().__init__(reverse, PUBLICATION)
+
+
+class VersionSorter(SimpleSorter):
+    def __init__(self, reverse: bool) -> None:
+        super().__init__(reverse, VERSION)
+
+
+class StatusSorter(SimpleSorter):
+    def __init__(self, reverse: bool) -> None:
+        super().__init__(reverse, STATUS)
 
 
 def parse_date(date: str) -> str:
@@ -114,6 +134,13 @@ def main() -> None:
         help="sort by target",
     )
     sorters.add_argument(
+        "--title",
+        action="store_const",
+        const=TitleSorter,
+        dest="sorter",
+        help="sort by title",
+    )
+    sorters.add_argument(
         "--date", action="store_const", const=DateSorter, dest="sorter", help="sort by date"
     )
     sorters.add_argument(
@@ -136,6 +163,27 @@ def main() -> None:
         const=FinishedSorter,
         dest="sorter",
         help="sort by finished",
+    )
+    sorters.add_argument(
+        "--publication",
+        action="store_const",
+        const=PublicationSorter,
+        dest="sorter",
+        help="sort by publication",
+    )
+    sorters.add_argument(
+        "--version",
+        action="store_const",
+        const=VersionSorter,
+        dest="sorter",
+        help="sort by version",
+    )
+    sorters.add_argument(
+        "--status",
+        action="store_const",
+        const=StatusSorter,
+        dest="sorter",
+        help="sort by status",
     )
     args = parser.parse_args()
 

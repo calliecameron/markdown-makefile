@@ -37,7 +37,7 @@ def parse_author(metadata: Dict[str, Any]) -> str:
     author = metadata[AUTHOR]
     if isinstance(author, str):
         return author
-    if isinstance(author, list) and author and all([isinstance(a, str) for a in author]):
+    if isinstance(author, list) and author and all(isinstance(a, str) for a in author):
         return cast(str, author[0])
     raise ValueError(
         "metadata item '%s' must be a non-empty list of string or a string; got %s"

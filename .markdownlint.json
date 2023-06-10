@@ -13,6 +13,7 @@
     "MD035": {
         "style": "* * *"
     },
+    "MD036": false,
     "MD041": false,
     "MD045": false,
     "MD046": {

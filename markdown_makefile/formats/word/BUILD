@@ -20,13 +20,14 @@ py_binary(
     name = "ms_metadata",
     srcs = ["ms_metadata.py"],
     visibility = ["//visibility:public"],
+    deps = ["//markdown_makefile/utils:metadata"],
 )
 
 py_test(
     name = "ms_metadata_test",
     srcs = ["ms_metadata_test.py"],
-    args = ["$(rootpath ms_metadata.py)"],
-    data = ["ms_metadata.py"],
+    args = ["$(rootpath :ms_metadata)"],
+    data = [":ms_metadata"],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
 

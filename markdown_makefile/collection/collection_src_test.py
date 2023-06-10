@@ -101,7 +101,7 @@ class TestCollectionSrc(unittest.TestCase):
                     "bar",
                     {
                         "title": "Bar",
-                        "author": ["Baz"],
+                        "author": "Baz",
                         "date": "3 January",
                     },
                 ),

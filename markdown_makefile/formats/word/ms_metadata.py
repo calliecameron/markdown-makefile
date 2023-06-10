@@ -1,5 +1,6 @@
 import argparse
 import json
+from markdown_makefile.utils.metadata import parse_author
 
 
 def main() -> None:
@@ -16,9 +17,8 @@ def main() -> None:
     else:
         title = "[Untitled]"
 
-    if "author" in metadata:
-        author = metadata["author"][0]
-    else:
+    author = parse_author(metadata)
+    if not author:
         author = "[Unknown]"
 
     out = {

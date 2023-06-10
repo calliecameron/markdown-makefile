@@ -50,7 +50,7 @@ class TestMsMetadata(unittest.TestCase):
 
     def test_ms_metadata_no_title(self) -> None:
         self.assertEqual(
-            self.run_ms_metadata({"author": ["An Author"]}),
+            self.run_ms_metadata({"author": "An Author"}),
             """{
     "author_lastname": "Author",
     "contact_address": "`\\\\n`{=tex}",

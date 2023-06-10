@@ -22,6 +22,18 @@ py_test(
 )
 
 py_library(
+    name = "metadata",
+    srcs = ["metadata.py"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "metadata_test",
+    srcs = ["metadata_test.py"],
+    deps = [":metadata"],
+)
+
+py_library(
     name = "publications",
     srcs = ["publications.py"],
     visibility = ["//visibility:public"],

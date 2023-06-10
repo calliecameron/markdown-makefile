@@ -7,6 +7,18 @@ NOTES = "notes"
 FINISHED = "finished"
 PUBLICATIONS = "publications"
 
+DOCVERSION = "docversion"
+IDENTIFIER = "identifier"
+INCREMENT_INCLUDED_HEADERS = "increment-included-headers"
+LANG = "lang"
+METADATA_OUT_FILE = "metadata-out-file"
+POETRY_LINES = "poetry-lines"
+REPO = "repo"
+SOURCE_MD5 = "source-md5"
+SUBJECT = "subject"
+WORDCOUNT = "wordcount"
+
+
 USER_KEYS = frozenset(
     [
         TITLE,
@@ -15,21 +27,6 @@ USER_KEYS = frozenset(
         NOTES,
         FINISHED,
         PUBLICATIONS,
-    ]
-)
-
-KNOWN_KEYS = USER_KEYS | frozenset(
-    [
-        # Keys added by the author
-        # Keys added during processing
-        "docversion",
-        "identifier",
-        "increment-included-headers",
-        "lang",
-        "metadata-out-file",
-        "repo",
-        "source-md5",
-        "subject",
     ]
 )
 

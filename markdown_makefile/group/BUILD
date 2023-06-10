@@ -9,6 +9,7 @@ py_binary(
     deps = [
         requirement("tabulate"),
         requirement("dateparser"),
+        "//markdown_makefile/utils:metadata",
         "//markdown_makefile/utils:publications",
     ],
 )
@@ -39,7 +40,10 @@ py_binary(
     name = "group_publications",
     srcs = ["group_publications.py"],
     visibility = ["//visibility:public"],
-    deps = ["//markdown_makefile/utils:publications"],
+    deps = [
+        "//markdown_makefile/utils:metadata",
+        "//markdown_makefile/utils:publications",
+    ],
 )
 
 py_test(

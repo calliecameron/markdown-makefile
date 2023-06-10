@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 import tabulate
 from dateparser.date import DateDataParser
 from dateparser.search import search_dates
+from markdown_makefile.utils import metadata
 from markdown_makefile.utils.publications import Publications
 
 
@@ -143,8 +144,8 @@ def main() -> None:
         for target, j in json.load(f).items():
             if not args.filter or args.filter in target:
                 publication = ""
-                if "publications" in j and j["publications"]:
-                    ps = Publications.from_json(j["publications"])
+                if metadata.PUBLICATIONS in j and j[metadata.PUBLICATIONS]:
+                    ps = Publications.from_json(j[metadata.PUBLICATIONS])
                     if ps.active:
                         publication = ps.highest_active_state
                     else:
@@ -153,15 +154,17 @@ def main() -> None:
                 data.append(
                     {
                         TARGET: target,
-                        TITLE: sanitise(j["title"]) if "title" in j else "",
-                        RAW_DATE: sanitise(j["date"]) if "date" in j else "",
-                        DATE: sanitise(parse_date(j["date"])) if "date" in j else "",
-                        WORDCOUNT: int(j["wordcount"]),
-                        POETRY_LINES: int(j["poetry-lines"]),
-                        FINISHED: "yes" if "finished" in j and j["finished"] else "no",
+                        TITLE: sanitise(j.get(metadata.TITLE, "")),
+                        RAW_DATE: sanitise(j.get(metadata.DATE, "")),
+                        DATE: sanitise(parse_date(j[metadata.DATE])) if metadata.DATE in j else "",
+                        WORDCOUNT: int(j[metadata.WORDCOUNT]),
+                        POETRY_LINES: int(j[metadata.POETRY_LINES]),
+                        FINISHED: "yes"
+                        if metadata.FINISHED in j and j[metadata.FINISHED]
+                        else "no",
                         PUBLICATION: publication,
-                        VERSION: j["docversion"],
-                        STATUS: "DIRTY" if "dirty" in j["docversion"] else "ok",
+                        VERSION: j[metadata.DOCVERSION],
+                        STATUS: "DIRTY" if "dirty" in j[metadata.DOCVERSION] else "ok",
                     }
                 )
 

@@ -1,6 +1,6 @@
 import argparse
 import json
-from markdown_makefile.utils.metadata import parse_author
+from markdown_makefile.utils.metadata import AUTHOR, TITLE, parse_author
 
 
 def main() -> None:
@@ -12,8 +12,8 @@ def main() -> None:
     with open(args.infile, encoding="utf-8") as f:
         metadata = json.load(f)
 
-    if "title" in metadata:
-        title = metadata["title"]
+    if TITLE in metadata:
+        title = metadata[TITLE]
     else:
         title = "[Untitled]"
 
@@ -31,10 +31,10 @@ def main() -> None:
         "contact_email": "`\\n`{=tex}",
     }
 
-    if "title" not in metadata:
-        out["title"] = title
-    if "author" not in metadata:
-        out["author"] = [author]
+    if TITLE not in metadata:
+        out[TITLE] = title
+    if AUTHOR not in metadata:
+        out[AUTHOR] = [author]
 
     with open(args.outfile, "w", encoding="utf-8") as f:
         json.dump(out, f, sort_keys=True, indent=4)

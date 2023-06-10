@@ -2,6 +2,7 @@ from typing import Any, Dict, List
 import argparse
 import html
 import json
+from markdown_makefile.utils.metadata import NOTES, PUBLICATIONS, TITLE, WORDCOUNT
 from markdown_makefile.utils.publications import (
     Publication,
     Publications,
@@ -37,9 +38,9 @@ def generate_row(
     for p in data.publications:
         ps[p.venue] = p
 
-    title = raw.get("title", "")
-    wordcount = raw.get("wordcount", "")
-    notes = raw.get("notes", "")
+    title = raw.get(TITLE, "")
+    wordcount = raw.get(WORDCOUNT, "")
+    notes = raw.get(NOTES, "")
 
     class_attr = ""
     if data.active:
@@ -103,7 +104,7 @@ def generate_table(data: Dict[str, Publications], raw: Dict[str, Any]) -> List[s
 def generate_details(raw: Dict[str, Any]) -> List[str]:
     out = ["<h2>Details</h2>"]
     for target in sorted(raw):
-        if "publications" in raw[target] and raw[target]["publications"]:
+        if PUBLICATIONS in raw[target] and raw[target][PUBLICATIONS]:
             out += [
                 '<h3 id="%s">%s</h3>' % (html.escape(target), html.escape(target, quote=False)),
                 "<code><pre>%s</pre></code>"
@@ -154,9 +155,7 @@ def main() -> None:
     with open(args.metadata_file, encoding="utf-8") as f:
         j = json.load(f)
 
-    data = {
-        k: Publications.from_json(v["publications"]) for k, v in j.items() if "publications" in v
-    }
+    data = {k: Publications.from_json(v[PUBLICATIONS]) for k, v in j.items() if PUBLICATIONS in v}
 
     out = [
         "<!doctype html>",

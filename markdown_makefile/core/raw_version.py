@@ -1,6 +1,7 @@
 import argparse
 import json
 import markdown_makefile.utils.bazel_package
+from markdown_makefile.utils.metadata import DOCVERSION, REPO
 
 
 def main() -> None:
@@ -32,8 +33,8 @@ def main() -> None:
     with open(args.outfile, mode="w", encoding="utf-8") as f:
         json.dump(
             {
-                "docversion": version,
-                "repo": repo,
+                DOCVERSION: version,
+                REPO: repo,
             },
             f,
             sort_keys=True,

@@ -35,17 +35,17 @@ py_binary(
     name = "raw_version",
     srcs = ["raw_version.py"],
     visibility = ["//visibility:public"],
-    deps = ["//markdown_makefile/utils:bazel_package"],
+    deps = [
+        "//markdown_makefile/utils:bazel_package",
+        "//markdown_makefile/utils:metadata",
+    ],
 )
 
 py_test(
     name = "raw_version_test",
     srcs = ["raw_version_test.py"],
-    args = ["$(rootpath raw_version.py)"],
-    data = [
-        "raw_version.py",
-        "//markdown_makefile/utils:bazel_package",
-    ],
+    args = ["$(rootpath :raw_version)"],
+    data = [":raw_version"],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
 
@@ -53,13 +53,14 @@ py_binary(
     name = "base_metadata",
     srcs = ["base_metadata.py"],
     visibility = ["//visibility:public"],
+    deps = ["//markdown_makefile/utils:metadata"],
 )
 
 py_test(
     name = "base_metadata_test",
     srcs = ["base_metadata_test.py"],
-    args = ["$(rootpath base_metadata.py)"],
-    data = ["base_metadata.py"],
+    args = ["$(rootpath :base_metadata)"],
+    data = [":base_metadata"],
     deps = [
         ":base_metadata",
         "//markdown_makefile/utils:test_utils",
@@ -88,7 +89,10 @@ py_binary(
     name = "validate",
     srcs = ["validate.py"],
     visibility = ["//visibility:public"],
-    deps = ["//markdown_makefile/utils:publications"],
+    deps = [
+        "//markdown_makefile/utils:metadata",
+        "//markdown_makefile/utils:publications",
+    ],
 )
 
 py_test(

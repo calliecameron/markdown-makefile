@@ -1,6 +1,6 @@
 import argparse
 import json
-from markdown_makefile.utils.metadata import parse_author
+from markdown_makefile.utils.metadata import DATE, TITLE, parse_author
 
 
 def main() -> None:
@@ -28,10 +28,10 @@ def main() -> None:
 
     for target in args.dep:
         j = metadata[target]
-        output += [f'# {j["title"]}', ""]
+        output += [f"# {j[TITLE]}", ""]
         author = parse_author(j)
         print_author = author != args.author
-        print_date = "date" in j and j["date"]
+        print_date = DATE in j and j[DATE]
         tagline = []
         if print_author:
             tagline.append(author)

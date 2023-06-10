@@ -2,6 +2,14 @@ from typing import Dict
 import argparse
 import hashlib
 import json
+from markdown_makefile.utils.metadata import (
+    DOCVERSION,
+    INCREMENT_INCLUDED_HEADERS,
+    LANG,
+    REPO,
+    SOURCE_MD5,
+    SUBJECT,
+)
 
 
 class Version:
@@ -12,13 +20,13 @@ class Version:
 
     def to_dict(self) -> Dict[str, str]:
         return {
-            "docversion": self.version,
-            "repo": self.repo,
+            DOCVERSION: self.version,
+            REPO: self.repo,
         }
 
     @staticmethod
     def from_dict(d: Dict[str, str]) -> "Version":
-        return Version(d["docversion"], d["repo"])
+        return Version(d[DOCVERSION], d[REPO])
 
 
 def get_version(
@@ -63,14 +71,14 @@ def get_version(
 
 def get_metadata(version: str, repo: str, increment_included_headers: bool) -> Dict[str, str]:
     out = {
-        "docversion": version,
-        "subject": f"Version: {version}",
-        "lang": "en-GB",
-        "repo": repo,
-        "source-md5": hashlib.md5(version.encode("utf-8")).hexdigest(),
+        DOCVERSION: version,
+        SUBJECT: f"Version: {version}",
+        LANG: "en-GB",
+        REPO: repo,
+        SOURCE_MD5: hashlib.md5(version.encode("utf-8")).hexdigest(),
     }
     if increment_included_headers:
-        out["increment-included-headers"] = "t"
+        out[INCREMENT_INCLUDED_HEADERS] = "t"
     return out
 
 

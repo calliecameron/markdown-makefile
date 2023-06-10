@@ -1,34 +1,36 @@
-from typing import cast, Any, Dict, List, NoReturn, Optional
 import json
 import sys
+from typing import Any, Dict, List, NoReturn, Optional, cast
+from markdown_makefile.utils.metadata import (
+    AUTHOR,
+    DATE,
+    DOCVERSION,
+    FINISHED,
+    IDENTIFIER,
+    INCREMENT_INCLUDED_HEADERS,
+    LANG,
+    METADATA_OUT_FILE,
+    NOTES,
+    PUBLICATIONS,
+    REPO,
+    SOURCE_MD5,
+    SUBJECT,
+    TITLE,
+    USER_KEYS,
+)
 from markdown_makefile.utils.publications import Publications
 
-
-TITLE = "title"
-AUTHOR = "author"
-DATE = "date"
-NOTES = "notes"
-FINISHED = "finished"
-PUBLICATIONS = "publications"
-
-KNOWN_KEYS = frozenset(
+KNOWN_KEYS = USER_KEYS | frozenset(
     [
-        # Keys added by the author
-        TITLE,
-        AUTHOR,
-        DATE,
-        NOTES,
-        FINISHED,
-        PUBLICATIONS,
         # Keys added during processing
-        "docversion",
-        "identifier",
-        "increment-included-headers",
-        "lang",
-        "metadata-out-file",
-        "repo",
-        "source-md5",
-        "subject",
+        DOCVERSION,
+        IDENTIFIER,
+        INCREMENT_INCLUDED_HEADERS,
+        LANG,
+        METADATA_OUT_FILE,
+        REPO,
+        SOURCE_MD5,
+        SUBJECT,
     ]
 )
 

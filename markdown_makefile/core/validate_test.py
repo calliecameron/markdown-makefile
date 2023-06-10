@@ -26,10 +26,31 @@ finished: true
 “Foo” ‘bar’
 """
 
+GOOD2 = """---
+title: “Hello” ‘world’
+author: Foo's name
+date: 10 June 2023
+publications:
+- venue: Foo
+  submitted: 2022-12-01
+  accepted: 2022-12-02
+  published: 2022-12-03
+  paid: £10
+  urls:
+  - "http://example.com"
+  notes: foo bar
+notes: baz quux
+finished: true
+---
+
+“Foo” ‘bar’
+"""
+
 
 class TestValidate(unittest.TestCase):
     def test_validate_succeeds(self) -> None:
         markdown_makefile.utils.test_utils.pandoc_filter(PANDOC, FILTER, GOOD)
+        markdown_makefile.utils.test_utils.pandoc_filter(PANDOC, FILTER, GOOD2)
 
     def test_validate_fails(self) -> None:
         with self.assertRaises(ValueError):
@@ -41,6 +62,68 @@ class TestValidate(unittest.TestCase):
             markdown_makefile.utils.test_utils.pandoc_filter(PANDOC, FILTER, "'")
         with self.assertRaises(ValueError):
             markdown_makefile.utils.test_utils.pandoc_filter(PANDOC, FILTER, '"')
+
+        # Unknown key
+        with self.assertRaises(ValueError):
+            markdown_makefile.utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+foo: bar
+---
+        """,
+            )
+
+        # Wrong type (should be string)
+        with self.assertRaises(ValueError):
+            markdown_makefile.utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+title:
+- foo
+---
+        """,
+            )
+
+        # Wrong type (should be list of string or string)
+        with self.assertRaises(ValueError):
+            markdown_makefile.utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+author:
+- true
+---
+        """,
+            )
+
+        # Wrong type (should be list of string or string)
+        with self.assertRaises(ValueError):
+            markdown_makefile.utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+author: true
+---
+        """,
+            )
+
+        # Wrong type (should be string)
+        with self.assertRaises(ValueError):
+            markdown_makefile.utils.test_utils.pandoc_filter(
+                PANDOC,
+                FILTER,
+                """
+---
+date: true
+---
+        """,
+            )
 
         # Wrong type (should be list)
         with self.assertRaises(ValueError):

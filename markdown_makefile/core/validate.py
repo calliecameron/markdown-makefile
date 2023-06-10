@@ -1,7 +1,48 @@
-from typing import cast, Any, Dict, FrozenSet, List, NoReturn
+from typing import cast, Any, Dict, List, NoReturn, Optional
 import json
 import sys
 from markdown_makefile.utils.publications import Publications
+
+
+TITLE = "title"
+AUTHOR = "author"
+DATE = "date"
+NOTES = "notes"
+FINISHED = "finished"
+PUBLICATIONS = "publications"
+
+KNOWN_KEYS = frozenset(
+    [
+        # Keys added by the author
+        TITLE,
+        AUTHOR,
+        DATE,
+        NOTES,
+        FINISHED,
+        PUBLICATIONS,
+        # Keys added during processing
+        "docversion",
+        "identifier",
+        "increment-included-headers",
+        "lang",
+        "metadata-out-file",
+        "repo",
+        "source-md5",
+        "subject",
+    ]
+)
+
+META_BOOL = "MetaBool"
+META_INLINES = "MetaInlines"
+META_LIST = "MetaList"
+META_DICT = "MetaMap"
+
+META_TYPE_NAMES = {
+    META_BOOL: "bool",
+    META_INLINES: "string",
+    META_LIST: "list",
+    META_DICT: "dict",
+}
 
 
 def fail(msg: str) -> NoReturn:
@@ -51,44 +92,76 @@ def validate_text(j: Dict[str, Any]) -> None:
         walk_dict(j["meta"]["title"])
 
 
-def assert_is_list(j: Dict[str, Any], msg: str) -> None:
-    if j["t"] != "MetaList":
+def assert_is_type(j: Dict[str, Any], meta_type: str, msg: str) -> None:
+    if j["t"] != meta_type:
         fail_metadata(msg)
+
+
+def assert_is_list(j: Dict[str, Any], msg: str) -> None:
+    assert_is_type(j, META_LIST, msg)
 
 
 def assert_is_dict(j: Dict[str, Any], msg: str) -> None:
-    if j["t"] != "MetaMap":
-        fail_metadata(msg)
+    assert_is_type(j, META_DICT, msg)
 
 
 def assert_is_string(j: Dict[str, Any], msg: str) -> None:
-    if j["t"] != "MetaInlines":
-        fail_metadata(msg)
+    assert_is_type(j, META_INLINES, msg)
 
 
 def assert_is_bool(j: Dict[str, Any], msg: str) -> None:
-    if j["t"] != "MetaBool":
-        fail_metadata(msg)
+    assert_is_type(j, META_BOOL, msg)
 
 
-def assert_no_conflicts(key: str, keys: FrozenSet[str], not_allowed: FrozenSet[str]) -> None:
-    if key in keys and len(keys & not_allowed) > 0:
-        fail_metadata(
-            "when '%s' is in a publication item, %s cannot also be specified" % (key, not_allowed)
-        )
+def assert_meta_item_is_type(
+    j: Dict[str, Any], key: str, meta_type: str
+) -> Optional[Dict[str, Any]]:
+    if "meta" not in j or key not in j["meta"]:
+        return None
+    item = j["meta"][key]
+    assert_is_type(
+        item,
+        meta_type,
+        "metadata item '%s' must be a %s" % (key, META_TYPE_NAMES[meta_type]),
+    )
+    return cast(Dict[str, Any], item)
+
+
+def assert_meta_item_is_list(j: Dict[str, Any], key: str) -> Optional[Dict[str, Any]]:
+    return assert_meta_item_is_type(j, key, META_LIST)
+
+
+def assert_meta_item_is_dict(j: Dict[str, Any], key: str) -> Optional[Dict[str, Any]]:
+    return assert_meta_item_is_type(j, key, META_DICT)
+
+
+def assert_meta_item_is_string(j: Dict[str, Any], key: str) -> Optional[Dict[str, Any]]:
+    return assert_meta_item_is_type(j, key, META_INLINES)
+
+
+def assert_meta_item_is_bool(j: Dict[str, Any], key: str) -> Optional[Dict[str, Any]]:
+    return assert_meta_item_is_type(j, key, META_BOOL)
+
+
+def validate_keys(j: Dict[str, Any]) -> None:
+    if "meta" not in j:
+        return
+    unknown_keys = frozenset(j["meta"].keys()) - KNOWN_KEYS
+    if unknown_keys:
+        fail("unknown metadata keys: " + ", ".join(sorted(unknown_keys)))
 
 
 def validate_publications(j: Dict[str, Any]) -> None:
-    if "meta" not in j or "publications" not in j["meta"]:
+    ps_raw = assert_meta_item_is_list(j, PUBLICATIONS)
+    if not ps_raw:
         return
-    ps_raw = j["meta"]["publications"]
 
     def dict_to_json(elem: Dict[str, Any]) -> Dict[str, Any]:
         out = {}  # type: Dict[str, Any]
         for k, e in elem["c"].items():
-            if e["t"] == "MetaList":
+            if e["t"] == META_LIST:
                 out[k] = list_to_json(e)
-            elif e["t"] == "MetaInlines":
+            elif e["t"] == META_INLINES:
                 out[k] = inlines_to_json(e)
             else:
                 fail_metadata(
@@ -100,9 +173,9 @@ def validate_publications(j: Dict[str, Any]) -> None:
     def list_to_json(elem: Dict[str, Any]) -> List[Any]:
         out = []  # type: List[Any]
         for e in elem["c"]:
-            if e["t"] == "MetaList":
+            if e["t"] == META_LIST:
                 out.append(list_to_json(e))
-            elif e["t"] == "MetaInlines":
+            elif e["t"] == META_INLINES:
                 out.append(inlines_to_json(e))
             else:
                 fail_metadata(
@@ -116,7 +189,6 @@ def validate_publications(j: Dict[str, Any]) -> None:
             return cast(str, elem["c"][0]["c"])
         return str(elem["c"])
 
-    assert_is_list(ps_raw, "'publications' must be a list")
     ps = []
     for p in ps_raw["c"]:
         assert_is_dict(p, "item in 'publications' must be a dict")
@@ -128,27 +200,32 @@ def validate_publications(j: Dict[str, Any]) -> None:
         fail_metadata("failed to parse publications: %s" % str(e))
 
 
-def validate_notes(j: Dict[str, Any]) -> None:
-    if "meta" not in j or "notes" not in j["meta"]:
+def validate_author(j: Dict[str, Any]) -> None:
+    if "meta" not in j or AUTHOR not in j["meta"]:
         return
-    notes = j["meta"]["notes"]
-    assert_is_string(notes, "'notes' must be a string")
 
+    author = j["meta"][AUTHOR]
+    msg = "metadata item 'author' must be a list of strings or a string"
 
-def validate_finished(j: Dict[str, Any]) -> None:
-    if "meta" not in j or "finished" not in j["meta"]:
-        return
-    finished = j["meta"]["finished"]
-    assert_is_bool(finished, "'finished' must be a bool")
+    if author["t"] not in (META_LIST, META_INLINES):
+        fail(msg)
+
+    if author["t"] == META_LIST:
+        for a in author["c"]:
+            assert_is_string(a, msg)
 
 
 def validate() -> None:
     raw = sys.stdin.read()
     j = json.loads(raw)
     validate_text(j)
+    validate_keys(j)
+    assert_meta_item_is_string(j, TITLE)
+    validate_author(j)
+    assert_meta_item_is_string(j, DATE)
+    assert_meta_item_is_string(j, NOTES)
+    assert_meta_item_is_bool(j, FINISHED)
     validate_publications(j)
-    validate_notes(j)
-    validate_finished(j)
     sys.stdout.write(raw)
 
 

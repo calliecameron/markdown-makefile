@@ -38,11 +38,13 @@ MD_FILE="${SOURCE_DIR}/${BASENAME}.md"
 GIT_NAME="$(git config user.name || true)"
 
 if [ ! -f "${MD_FILE}" ]; then
-    echo "% ${BASENAME}" >"${MD_FILE}"
+    echo '---' >"${MD_FILE}"
+    echo "title: ${BASENAME}" >>"${MD_FILE}"
 
     if [ -n "${GIT_NAME}" ]; then
-        echo "% ${GIT_NAME}" >>"${MD_FILE}"
+        echo "author: ${GIT_NAME}" >>"${MD_FILE}"
     fi
+    echo '---' >>"${MD_FILE}"
 fi
 
 IS_GIT_REPO="$(is-git-repo "${SOURCE_DIR}")"

@@ -1,8 +1,7 @@
-% Title
-% The Author
-% 4 January 2022
-
 ---
+title: Title
+author: The Author
+date: 4 January 2022
 publications:
 - venue: Quux
   submitted: 2022-10-10

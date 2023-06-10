@@ -72,8 +72,11 @@ class TestCollectionSrc(unittest.TestCase):
 
         self.assertEqual(
             out,
-            """% The Title
-% The Author
+            """---
+author:
+- The Author
+title: The Title
+---
 
 # Foo
 
@@ -118,9 +121,12 @@ class TestCollectionSrc(unittest.TestCase):
 
         self.assertEqual(
             out,
-            """% The Title
-% The Author
-% 1 January
+            """---
+author:
+- The Author
+date: 1 January
+title: The Title
+---
 
 # Foo
 

@@ -21,7 +21,7 @@ SCRIPT="${1}"
     mkdir b
     mkdir b/a
     mkdir b/b
-    echo '% Foo' >b/b/b.md
+    printf '%s' '---\ntitle: Foo\n---\n' >b/b/b.md
     (
         cd b
         git init .
@@ -44,7 +44,7 @@ BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}/a" BUILD_WORKING_DIRECTORY="${TEST_TMP
 test -d "${TEST_TMPDIR}/a/a/.git"
 grep 'md_git_repo' "${TEST_TMPDIR}/a/a/BUILD" >/dev/null
 grep 'md_document' "${TEST_TMPDIR}/a/a/BUILD" >/dev/null
-grep '% a' "${TEST_TMPDIR}/a/a/a.md" >/dev/null
+grep 'title: a' "${TEST_TMPDIR}/a/a/a.md" >/dev/null
 # Same package again; fail
 BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}/a" BUILD_WORKING_DIRECTORY="${TEST_TMPDIR}/a/a" "${SCRIPT}" && exit 1
 
@@ -56,7 +56,7 @@ test -d "${TEST_TMPDIR}/b/.git"
 test ! -d "${TEST_TMPDIR}/b/a/.git"
 grep 'md_git_repo' "${TEST_TMPDIR}/b/a/BUILD" >/dev/null && exit 1
 grep 'md_document' "${TEST_TMPDIR}/b/a/BUILD" >/dev/null
-grep '% a' "${TEST_TMPDIR}/b/a/a.md" >/dev/null
+grep 'title: a' "${TEST_TMPDIR}/b/a/a.md" >/dev/null
 # Same package again; fail
 BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}/b" BUILD_WORKING_DIRECTORY="${TEST_TMPDIR}/b/a" "${SCRIPT}" && exit 1
 # Package that already has an md file; success, already in git, don't overwrite md
@@ -65,7 +65,7 @@ test -d "${TEST_TMPDIR}/b/.git"
 test ! -d "${TEST_TMPDIR}/b/b/.git"
 grep 'md_git_repo' "${TEST_TMPDIR}/b/b/BUILD" >/dev/null && exit 1
 grep 'md_document' "${TEST_TMPDIR}/b/b/BUILD" >/dev/null
-grep '% Foo' "${TEST_TMPDIR}/b/b/b.md" >/dev/null
+grep 'title: Foo' "${TEST_TMPDIR}/b/b/b.md" >/dev/null
 # Same package again; fail
 BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}/b" BUILD_WORKING_DIRECTORY="${TEST_TMPDIR}/b/b" "${SCRIPT}" && exit 1
 
@@ -76,7 +76,7 @@ BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}/c" BUILD_WORKING_DIRECTORY="${TEST_TMP
 test -d "${TEST_TMPDIR}/c/a/.git"
 grep 'md_git_repo' "${TEST_TMPDIR}/c/a/BUILD" >/dev/null
 grep 'md_document' "${TEST_TMPDIR}/c/a/BUILD" >/dev/null
-grep '% a' "${TEST_TMPDIR}/c/a/a.md" >/dev/null
+grep 'title: a' "${TEST_TMPDIR}/c/a/a.md" >/dev/null
 # Same package again; fail
 BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}/c" BUILD_WORKING_DIRECTORY="${TEST_TMPDIR}/c/a" "${SCRIPT}" && exit 1
 

@@ -1,6 +1,7 @@
 import argparse
 import json
-from markdown_makefile.utils.metadata import DATE, TITLE, parse_author
+import yaml
+from markdown_makefile.utils.metadata import AUTHOR, DATE, TITLE, parse_author
 
 
 def main() -> None:
@@ -15,12 +16,13 @@ def main() -> None:
 
     main_author = args.author
 
-    output = [
-        f"% {args.title}",
-        f"% {main_author}",
-    ]
+    main_metadata = {TITLE: args.title, AUTHOR: [main_author]}
     if args.date:
-        output.append(f"% {args.date}")
+        main_metadata[DATE] = args.date
+
+    output = ["---"]
+    output += yaml.dump(main_metadata).strip().split("\n")
+    output.append("---")
     output.append("")
 
     with open(args.metadata_file, encoding="utf-8") as f:

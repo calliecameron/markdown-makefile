@@ -121,7 +121,7 @@ def _md_library_impl(ctx):
             "--lua-filter=" + ctx.file._cleanup.path,
             "--metadata-file=" + base_metadata.path,
             "--metadata=metadata-out-file:" + intermediate_metadata.path,
-            "--from=markdown+smart",
+            "--from=markdown+smart-pandoc_title_block",
             "--to=json",
             "--strip-comments",
             "--fail-if-warnings",

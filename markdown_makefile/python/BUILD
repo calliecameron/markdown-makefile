@@ -1,19 +1,32 @@
-load(":python.bzl", "py_source")
+load("//markdown_makefile/shell:shell.bzl", "sh_source")
+load("@pip//:requirements.bzl", "entry_point")
 
-py_source(
-    name = "black_test",
-    src = "black_test.py",
+sh_source(
+    name = "stub",
+    src = "stub.sh",
     visibility = ["//visibility:public"],
 )
 
-py_source(
-    name = "flake8_test",
-    src = "flake8_test.py",
+alias(
+    name = "black",
+    actual = entry_point("black"),
     visibility = ["//visibility:public"],
 )
 
-py_source(
-    name = "mypy_test",
-    src = "mypy_test.py",
+alias(
+    name = "flake8",
+    actual = entry_point("flake8"),
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "mypy",
+    actual = entry_point("mypy"),
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "pylint",
+    actual = entry_point("pylint"),
     visibility = ["//visibility:public"],
 )

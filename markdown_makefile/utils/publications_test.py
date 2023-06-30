@@ -419,7 +419,7 @@ class TestPublications(unittest.TestCase):
 
         self.assertEqual(len(ps.publications), 2)
         self.assertTrue(ps.active)
-        self.assertEquals(ps.highest_active_state, "published")
+        self.assertEqual(ps.highest_active_state, "published")
 
         p = ps.publications[0]
         self.assertEqual(p.venue, "Book")

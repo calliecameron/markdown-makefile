@@ -26,6 +26,7 @@ exports_files(
         ".flake8",
         "mypy.ini",
         "pyproject.toml",
+        "pylintrc",
     ],
     visibility = ["//:__subpackages__"],
 )

@@ -1,5 +1,6 @@
 [MASTER]
 ignore-patterns=.*.pyi
+persistent=no
 
 [MESSAGES CONTROL]
 disable=invalid-name,
@@ -11,7 +12,8 @@ disable=invalid-name,
         too-many-arguments,
         too-many-statements,
         too-many-branches,
-        consider-using-f-string
+        consider-using-f-string,
+        unknown-option-value
 
 enable=unused-argument
 
@@ -20,3 +22,4 @@ dummy-variables-rgx=_.*
 
 [REPORTS]
 output-format=parseable
+score=no

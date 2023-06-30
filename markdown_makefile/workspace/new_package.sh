@@ -44,6 +44,7 @@ if [ ! -f "${MD_FILE}" ]; then
     if [ -n "${GIT_NAME}" ]; then
         echo "author: ${GIT_NAME}" >>"${MD_FILE}"
     fi
+    echo 'finished: false' >>"${MD_FILE}"
     echo '---' >>"${MD_FILE}"
 fi
 

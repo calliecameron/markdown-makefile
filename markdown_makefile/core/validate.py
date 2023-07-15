@@ -160,7 +160,7 @@ def validate_publications(j: Dict[str, Any]) -> None:
         return
 
     def dict_to_json(elem: Dict[str, Any]) -> Dict[str, Any]:
-        out = {}  # type: Dict[str, Any]
+        out: Dict[str, Any] = {}
         for k, e in elem["c"].items():
             if e["t"] == META_LIST:
                 out[k] = list_to_json(e)
@@ -174,7 +174,7 @@ def validate_publications(j: Dict[str, Any]) -> None:
         return out
 
     def list_to_json(elem: Dict[str, Any]) -> List[Any]:
-        out = []  # type: List[Any]
+        out: List[Any] = []
         for e in elem["c"]:
             if e["t"] == META_LIST:
                 out.append(list_to_json(e))

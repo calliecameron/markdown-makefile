@@ -188,7 +188,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    data = []  # type: List[Dict[str, Any]]
+    data: List[Dict[str, Any]] = []
     with open(args.in_file, encoding="utf-8") as f:
         for target, j in json.load(f).items():
             if not args.filter or args.filter in target:

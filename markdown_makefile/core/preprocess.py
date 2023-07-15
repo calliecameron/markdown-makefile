@@ -1,7 +1,7 @@
 import argparse
 import re
 import sys
-from typing import Dict, FrozenSet, List, Optional, Set, Tuple  # noqa: F401
+from typing import Dict, FrozenSet, List, Optional, Set, Tuple
 
 import markdown_makefile.utils.bazel_package
 
@@ -93,7 +93,7 @@ def preprocess(
     problems = []
     used_deps = set()
     declared_deps = frozenset(deps)
-    used_images = set()  # type: Set[str]
+    used_images: Set[str] = set()
     declared_images = frozenset(images)
 
     for row in range(len(data)):

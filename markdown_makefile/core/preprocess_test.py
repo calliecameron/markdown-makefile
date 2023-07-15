@@ -1,12 +1,12 @@
-from typing import List, Tuple
 import os
 import os.path
 import subprocess
 import sys
 import unittest
+from typing import List, Tuple
+
 import markdown_makefile.core.preprocess
 import markdown_makefile.utils.test_utils
-
 
 SCRIPT = ""
 

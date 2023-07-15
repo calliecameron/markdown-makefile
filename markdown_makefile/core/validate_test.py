@@ -1,7 +1,7 @@
 import sys
 import unittest
-import markdown_makefile.utils.test_utils
 
+import markdown_makefile.utils.test_utils
 
 PANDOC = ""
 FILTER = ""

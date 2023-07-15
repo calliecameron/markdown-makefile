@@ -1,5 +1,5 @@
-from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 import datetime
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 _VENUE = "venue"
 _PAID = "paid"

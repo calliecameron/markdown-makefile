@@ -1,4 +1,5 @@
 import sys
+
 from pymarkdown.main import PyMarkdownLint  # type: ignore
 
 out_file = sys.argv[1]

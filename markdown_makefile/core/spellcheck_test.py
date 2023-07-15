@@ -1,11 +1,11 @@
-from typing import List
 import os
 import os.path
 import subprocess
 import sys
 import unittest
-import markdown_makefile.utils.test_utils
+from typing import List
 
+import markdown_makefile.utils.test_utils
 
 SCRIPT = ""
 

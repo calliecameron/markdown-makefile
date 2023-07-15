@@ -106,3 +106,18 @@ def _py_lint(name, **kwargs):
             "//markdown_makefile/python:black",
         ] + srcs + deps,
     )
+
+    native.sh_test(
+        name = name + "_isort_test",
+        srcs = ["//markdown_makefile/python:stub.sh"],
+        args = [
+            "$(rootpath //markdown_makefile/python:isort)",
+            "--settings-file",
+            "$(rootpath //:pyproject.toml)",
+            "--check",
+        ] + ["$(location %s)" % src for src in srcs],
+        data = [
+            "//:pyproject.toml",
+            "//markdown_makefile/python:isort",
+        ] + srcs + deps,
+    )

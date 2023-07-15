@@ -1,5 +1,6 @@
 import argparse
 import json
+
 import markdown_makefile.utils.bazel_package
 from markdown_makefile.utils.metadata import DOCVERSION, REPO
 

@@ -1,7 +1,8 @@
-from typing import Dict, FrozenSet, List, Optional, Set, Tuple  # noqa: F401
 import argparse
 import re
 import sys
+from typing import Dict, FrozenSet, List, Optional, Set, Tuple  # noqa: F401
+
 import markdown_makefile.utils.bazel_package
 
 # pylint: disable=consider-using-enumerate

@@ -1,10 +1,11 @@
-from typing import Any, Dict
 import json
 import os
 import os.path
 import subprocess
 import sys
 import unittest
+from typing import Any, Dict
+
 import markdown_makefile.utils.test_utils
 
 # pylint: disable=line-too-long

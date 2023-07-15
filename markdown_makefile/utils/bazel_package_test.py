@@ -1,4 +1,5 @@
 import unittest
+
 import markdown_makefile.utils.bazel_package
 
 # pylint: disable=protected-access

@@ -1,7 +1,8 @@
-from typing import Dict
 import argparse
 import hashlib
 import json
+from typing import Dict
+
 from markdown_makefile.utils.metadata import (
     DOCVERSION,
     INCREMENT_INCLUDED_HEADERS,

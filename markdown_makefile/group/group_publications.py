@@ -1,18 +1,19 @@
-from typing import Any, Dict, List
 import argparse
 import html
 import json
+from typing import Any, Dict, List
+
 from markdown_makefile.utils.metadata import NOTES, PUBLICATIONS, TITLE, WORDCOUNT
 from markdown_makefile.utils.publications import (
+    ABANDONED,
+    ACCEPTED,
+    PUBLISHED,
+    REJECTED,
+    SELF_PUBLISHED,
+    SUBMITTED,
+    WITHDRAWN,
     Publication,
     Publications,
-    SUBMITTED,
-    ACCEPTED,
-    REJECTED,
-    WITHDRAWN,
-    ABANDONED,
-    SELF_PUBLISHED,
-    PUBLISHED,
 )
 
 

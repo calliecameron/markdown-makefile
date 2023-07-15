@@ -1,8 +1,8 @@
-from typing import cast, Any, Dict, List, Optional
 import json
 import os
 import subprocess
 import sys
+from typing import Any, Dict, List, Optional, cast
 
 
 def _pandoc(

@@ -3,6 +3,7 @@ import os.path
 import subprocess
 import sys
 import unittest
+
 import markdown_makefile.utils.test_utils
 
 SCRIPT = ""

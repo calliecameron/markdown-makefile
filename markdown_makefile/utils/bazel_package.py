@@ -1,7 +1,7 @@
-from typing import Tuple
 import re
 import string
 import unicodedata
+from typing import Tuple
 
 
 def _normalised_char_name(char: str) -> str:

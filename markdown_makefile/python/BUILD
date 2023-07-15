@@ -14,6 +14,12 @@ alias(
 )
 
 alias(
+    name = "isort",
+    actual = entry_point("isort"),
+    visibility = ["//visibility:public"],
+)
+
+alias(
     name = "flake8",
     actual = entry_point("flake8"),
     visibility = ["//visibility:public"],

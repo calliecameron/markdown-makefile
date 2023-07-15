@@ -1,12 +1,12 @@
-from typing import Dict, List
 import json
 import os
 import os.path
 import subprocess
 import sys
 import unittest
-import markdown_makefile.utils.test_utils
+from typing import Dict, List
 
+import markdown_makefile.utils.test_utils
 
 SCRIPT = ""
 

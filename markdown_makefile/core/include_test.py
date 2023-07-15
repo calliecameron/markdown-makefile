@@ -3,6 +3,7 @@ import os
 import os.path
 import sys
 import unittest
+
 import markdown_makefile.utils.test_utils
 
 PANDOC = ""

@@ -1,5 +1,6 @@
 import argparse
 import json
+
 from markdown_makefile.utils.metadata import AUTHOR, TITLE, parse_author
 
 

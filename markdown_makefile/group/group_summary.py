@@ -1,15 +1,16 @@
-from typing import Any, Dict, List
 import argparse
 import csv
 import json
 import sys
 from abc import ABC, abstractmethod
+from typing import Any, Dict, List
+
 import tabulate
 from dateparser.date import DateDataParser
 from dateparser.search import search_dates
+
 from markdown_makefile.utils import metadata
 from markdown_makefile.utils.publications import Publications
-
 
 TARGET = "target"
 TITLE = "title"

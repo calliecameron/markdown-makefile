@@ -1,6 +1,7 @@
 import json
 import sys
 from typing import Any, Dict, List, NoReturn, Optional, cast
+
 from markdown_makefile.utils.metadata import (
     AUTHOR,
     DATE,

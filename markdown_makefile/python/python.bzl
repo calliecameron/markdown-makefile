@@ -55,13 +55,13 @@ def _py_lint(name, **kwargs):
         srcs = ["//markdown_makefile/python:stub.sh"],
         args = [
             "$(rootpath //markdown_makefile/python:mypy)",
-            "--config-file=$(rootpath //:mypy.ini)",
+            "--config-file=$(rootpath //:pyproject.toml)",
             "--strict",
             "--explicit-package-bases",
             "--scripts-are-modules",
         ] + ["$(location %s)" % src for src in srcs],
         data = [
-            "//:mypy.ini",
+            "//:pyproject.toml",
             "//markdown_makefile/python:mypy",
         ] + srcs + deps,
     )
@@ -71,10 +71,10 @@ def _py_lint(name, **kwargs):
         srcs = ["//markdown_makefile/python:stub.sh"],
         args = [
             "$(rootpath //markdown_makefile/python:pylint)",
-            "--rcfile=$(rootpath //:pylintrc)",
+            "--rcfile=$(rootpath //:pyproject.toml)",
         ] + ["$(location %s)" % src for src in srcs],
         data = [
-            "//:pylintrc",
+            "//:pyproject.toml",
             "//markdown_makefile/python:pylint",
         ] + srcs + deps,
     )

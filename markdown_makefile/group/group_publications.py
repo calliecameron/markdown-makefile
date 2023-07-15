@@ -1,7 +1,8 @@
 import argparse
 import html
 import json
-from typing import Any, Dict, List
+from collections.abc import Mapping, Sequence
+from typing import Any
 
 from markdown_makefile.utils.metadata import NOTES, PUBLICATIONS, TITLE, WORDCOUNT
 from markdown_makefile.utils.publications import (
@@ -17,7 +18,7 @@ from markdown_makefile.utils.publications import (
 )
 
 
-def generate_header(venues: List[str]) -> List[str]:
+def generate_header(venues: Sequence[str]) -> list[str]:
     out = [
         "<thead>",
         "<tr>",
@@ -33,8 +34,8 @@ def generate_header(venues: List[str]) -> List[str]:
 
 
 def generate_row(
-    target: str, data: Publications, venues: List[str], raw: Dict[str, Any]
-) -> List[str]:
+    target: str, data: Publications, venues: Sequence[str], raw: Mapping[str, Any]
+) -> list[str]:
     ps = {}
     for p in data.publications:
         ps[p.venue] = p
@@ -83,7 +84,7 @@ def generate_cell(target: str, p: Publication) -> str:
     )
 
 
-def generate_table(data: Dict[str, Publications], raw: Dict[str, Any]) -> List[str]:
+def generate_table(data: Mapping[str, Publications], raw: Mapping[str, Any]) -> list[str]:
     out = ["<table>"]
 
     venue_set = set()
@@ -102,7 +103,7 @@ def generate_table(data: Dict[str, Publications], raw: Dict[str, Any]) -> List[s
     return out
 
 
-def generate_details(raw: Dict[str, Any]) -> List[str]:
+def generate_details(raw: Mapping[str, Any]) -> list[str]:
     out = ["<h2>Details</h2>"]
     for target in sorted(raw):
         if PUBLICATIONS in raw[target] and raw[target][PUBLICATIONS]:
@@ -114,7 +115,7 @@ def generate_details(raw: Dict[str, Any]) -> List[str]:
     return out
 
 
-def generate_head() -> List[str]:
+def generate_head() -> list[str]:
     return [
         "<head>",
         '<meta charset="utf-8">',
@@ -136,7 +137,7 @@ def generate_head() -> List[str]:
     ]
 
 
-def generate_body(data: Dict[str, Publications], raw: Dict[str, Any]) -> List[str]:
+def generate_body(data: Mapping[str, Publications], raw: Mapping[str, Any]) -> list[str]:
     out = [
         "<body>",
         "<h1>Publications</h1>",

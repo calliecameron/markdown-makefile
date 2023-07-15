@@ -3,7 +3,7 @@ import os.path
 import subprocess
 import sys
 import unittest
-from typing import List, Tuple
+from collections.abc import Sequence
 
 import markdown_makefile.core.preprocess
 import markdown_makefile.utils.test_utils
@@ -213,8 +213,8 @@ class TestPreprocess(unittest.TestCase):
         self,
         content: str,
         current_package: str,
-        deps: List[Tuple[str, str]],
-        images: List[Tuple[str, str]],
+        deps: Sequence[tuple[str, str]],
+        images: Sequence[tuple[str, str]],
     ) -> str:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
 

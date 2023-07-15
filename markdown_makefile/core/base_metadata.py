@@ -1,7 +1,7 @@
 import argparse
 import hashlib
 import json
-from typing import Dict
+from collections.abc import Mapping
 
 from markdown_makefile.utils.metadata import (
     DOCVERSION,
@@ -19,19 +19,19 @@ class Version:
         self.version = version
         self.repo = repo
 
-    def to_dict(self) -> Dict[str, str]:
+    def to_dict(self) -> dict[str, str]:
         return {
             DOCVERSION: self.version,
             REPO: self.repo,
         }
 
     @staticmethod
-    def from_dict(d: Dict[str, str]) -> "Version":
+    def from_dict(d: Mapping[str, str]) -> "Version":
         return Version(d[DOCVERSION], d[REPO])
 
 
 def get_version(
-    raw_version: Version, dep_versions: Dict[str, Version], version_override: str
+    raw_version: Version, dep_versions: Mapping[str, Version], version_override: str
 ) -> Version:
     dirty_deps = []
     unversioned_deps = []
@@ -70,7 +70,7 @@ def get_version(
     return version
 
 
-def get_metadata(version: str, repo: str, increment_included_headers: bool) -> Dict[str, str]:
+def get_metadata(version: str, repo: str, increment_included_headers: bool) -> dict[str, str]:
     out = {
         DOCVERSION: version,
         SUBJECT: f"Version: {version}",

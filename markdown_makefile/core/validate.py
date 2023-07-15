@@ -1,6 +1,7 @@
 import json
 import sys
-from typing import Any, Dict, List, NoReturn, Optional, cast
+from collections.abc import Mapping, Sequence
+from typing import Any, NoReturn, Optional, cast
 
 from markdown_makefile.utils.metadata import (
     AUTHOR,
@@ -69,7 +70,7 @@ def validate_str(s: str) -> None:
         )
 
 
-def walk_dict(ast: Dict[str, Any]) -> None:
+def walk_dict(ast: Mapping[str, Any]) -> None:
     if "t" in ast and ast["t"] == "Str":
         validate_str(ast["c"])
         return
@@ -80,7 +81,7 @@ def walk_dict(ast: Dict[str, Any]) -> None:
             walk_dict(v)
 
 
-def walk_list(ast: List[Any]) -> None:
+def walk_list(ast: Sequence[Any]) -> None:
     for v in ast:
         if isinstance(v, list):
             walk_list(v)
@@ -88,37 +89,37 @@ def walk_list(ast: List[Any]) -> None:
             walk_dict(v)
 
 
-def validate_text(j: Dict[str, Any]) -> None:
+def validate_text(j: Mapping[str, Any]) -> None:
     if "blocks" in j:
         walk_list(j["blocks"])
     if "meta" in j and "title" in j["meta"]:
         walk_dict(j["meta"]["title"])
 
 
-def assert_is_type(j: Dict[str, Any], meta_type: str, msg: str) -> None:
+def assert_is_type(j: Mapping[str, Any], meta_type: str, msg: str) -> None:
     if j["t"] != meta_type:
         fail_metadata(msg)
 
 
-def assert_is_list(j: Dict[str, Any], msg: str) -> None:
+def assert_is_list(j: Mapping[str, Any], msg: str) -> None:
     assert_is_type(j, META_LIST, msg)
 
 
-def assert_is_dict(j: Dict[str, Any], msg: str) -> None:
+def assert_is_dict(j: Mapping[str, Any], msg: str) -> None:
     assert_is_type(j, META_DICT, msg)
 
 
-def assert_is_string(j: Dict[str, Any], msg: str) -> None:
+def assert_is_string(j: Mapping[str, Any], msg: str) -> None:
     assert_is_type(j, META_INLINES, msg)
 
 
-def assert_is_bool(j: Dict[str, Any], msg: str) -> None:
+def assert_is_bool(j: Mapping[str, Any], msg: str) -> None:
     assert_is_type(j, META_BOOL, msg)
 
 
 def assert_meta_item_is_type(
-    j: Dict[str, Any], key: str, meta_type: str
-) -> Optional[Dict[str, Any]]:
+    j: Mapping[str, Any], key: str, meta_type: str
+) -> Optional[dict[str, Any]]:
     if "meta" not in j or key not in j["meta"]:
         return None
     item = j["meta"][key]
@@ -127,26 +128,26 @@ def assert_meta_item_is_type(
         meta_type,
         "metadata item '%s' must be a %s" % (key, META_TYPE_NAMES[meta_type]),
     )
-    return cast(Dict[str, Any], item)
+    return cast(dict[str, Any], item)
 
 
-def assert_meta_item_is_list(j: Dict[str, Any], key: str) -> Optional[Dict[str, Any]]:
+def assert_meta_item_is_list(j: Mapping[str, Any], key: str) -> Optional[dict[str, Any]]:
     return assert_meta_item_is_type(j, key, META_LIST)
 
 
-def assert_meta_item_is_dict(j: Dict[str, Any], key: str) -> Optional[Dict[str, Any]]:
+def assert_meta_item_is_dict(j: Mapping[str, Any], key: str) -> Optional[dict[str, Any]]:
     return assert_meta_item_is_type(j, key, META_DICT)
 
 
-def assert_meta_item_is_string(j: Dict[str, Any], key: str) -> Optional[Dict[str, Any]]:
+def assert_meta_item_is_string(j: Mapping[str, Any], key: str) -> Optional[dict[str, Any]]:
     return assert_meta_item_is_type(j, key, META_INLINES)
 
 
-def assert_meta_item_is_bool(j: Dict[str, Any], key: str) -> Optional[Dict[str, Any]]:
+def assert_meta_item_is_bool(j: Mapping[str, Any], key: str) -> Optional[dict[str, Any]]:
     return assert_meta_item_is_type(j, key, META_BOOL)
 
 
-def validate_keys(j: Dict[str, Any]) -> None:
+def validate_keys(j: Mapping[str, Any]) -> None:
     if "meta" not in j:
         return
     unknown_keys = frozenset(j["meta"].keys()) - KNOWN_KEYS
@@ -154,13 +155,13 @@ def validate_keys(j: Dict[str, Any]) -> None:
         fail("unknown metadata keys: " + ", ".join(sorted(unknown_keys)))
 
 
-def validate_publications(j: Dict[str, Any]) -> None:
+def validate_publications(j: Mapping[str, Any]) -> None:
     ps_raw = assert_meta_item_is_list(j, PUBLICATIONS)
     if not ps_raw:
         return
 
-    def dict_to_json(elem: Dict[str, Any]) -> Dict[str, Any]:
-        out: Dict[str, Any] = {}
+    def dict_to_json(elem: Mapping[str, Any]) -> dict[str, Any]:
+        out: dict[str, Any] = {}
         for k, e in elem["c"].items():
             if e["t"] == META_LIST:
                 out[k] = list_to_json(e)
@@ -173,8 +174,8 @@ def validate_publications(j: Dict[str, Any]) -> None:
                 )
         return out
 
-    def list_to_json(elem: Dict[str, Any]) -> List[Any]:
-        out: List[Any] = []
+    def list_to_json(elem: Mapping[str, Any]) -> list[Any]:
+        out: list[Any] = []
         for e in elem["c"]:
             if e["t"] == META_LIST:
                 out.append(list_to_json(e))
@@ -187,7 +188,7 @@ def validate_publications(j: Dict[str, Any]) -> None:
                 )
         return out
 
-    def inlines_to_json(elem: Dict[str, Any]) -> str:
+    def inlines_to_json(elem: Mapping[str, Any]) -> str:
         if len(elem["c"]) == 1 and elem["c"][0]["t"] == "Str":
             return cast(str, elem["c"][0]["c"])
         return str(elem["c"])
@@ -203,7 +204,7 @@ def validate_publications(j: Dict[str, Any]) -> None:
         fail_metadata("failed to parse publications: %s" % str(e))
 
 
-def validate_author(j: Dict[str, Any]) -> None:
+def validate_author(j: Mapping[str, Any]) -> None:
     if "meta" not in j or AUTHOR not in j["meta"]:
         return
 

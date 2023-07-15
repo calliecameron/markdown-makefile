@@ -3,7 +3,8 @@ import csv
 import json
 import sys
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from collections.abc import Mapping
+from typing import Any
 
 import tabulate
 from dateparser.date import DateDataParser
@@ -30,10 +31,10 @@ class Sorter(ABC):
         self._reverse = reverse
 
     @abstractmethod
-    def key(self, elem: Dict[str, Any]) -> Any:
+    def key(self, elem: Mapping[str, Any]) -> Any:
         raise NotImplementedError
 
-    def sort(self, data: List[Dict[str, Any]]) -> None:
+    def sort(self, data: list[Mapping[str, Any]]) -> None:
         data.sort(key=self.key, reverse=self._reverse)
 
 
@@ -43,7 +44,7 @@ class SimpleSorter(Sorter):
         self._reverse = reverse
         self._key = key
 
-    def key(self, elem: Dict[str, Any]) -> Any:
+    def key(self, elem: Mapping[str, Any]) -> Any:
         return elem[self._key]
 
 
@@ -61,7 +62,7 @@ class DateSorter(Sorter):
     def __init__(self, reverse: bool) -> None:
         super().__init__(not reverse)
 
-    def key(self, elem: Dict[str, Any]) -> Any:
+    def key(self, elem: Mapping[str, Any]) -> Any:
         return ", ".join(sorted([d.strip() for d in elem[DATE].split(",")], reverse=self._reverse))
 
 
@@ -188,7 +189,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    data: List[Dict[str, Any]] = []
+    data: list[dict[str, Any]] = []
     with open(args.in_file, encoding="utf-8") as f:
         for target, j in json.load(f).items():
             if not args.filter or args.filter in target:

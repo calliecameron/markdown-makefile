@@ -2,12 +2,13 @@ import json
 import os
 import subprocess
 import sys
-from typing import Any, Dict, List, Optional, cast
+from collections.abc import Sequence
+from typing import Any, Optional, cast
 
 
 def _pandoc(
-    pandoc: str, filter_arg: str, filter_filename: str, stdin: str, extra_args: List[str]
-) -> Dict[str, Any]:
+    pandoc: str, filter_arg: str, filter_filename: str, stdin: str, extra_args: Sequence[str]
+) -> dict[str, Any]:
     sys.stderr.write(f"Running pandoc filter '{filter_filename}' on input {stdin}\n")
     try:
         output = subprocess.run(
@@ -17,7 +18,7 @@ def _pandoc(
                 "--to=json",
                 f"{filter_arg}={filter_filename}",
             ]
-            + extra_args,
+            + list(extra_args),
             input=stdin,
             capture_output=True,
             check=True,
@@ -28,18 +29,18 @@ def _pandoc(
     j = json.loads(output.stdout)
     sys.stderr.write(f"Pandoc AST: {j}\n")
     sys.stderr.write(f"Pandoc stderr: {output.stderr}\n")
-    return cast(Dict[str, Any], j)
+    return cast(dict[str, Any], j)
 
 
 def pandoc_lua_filter(
-    pandoc: str, filter_filename: str, stdin: str, extra_args: Optional[List[str]] = None
-) -> Dict[str, Any]:
+    pandoc: str, filter_filename: str, stdin: str, extra_args: Optional[Sequence[str]] = None
+) -> dict[str, Any]:
     return _pandoc(pandoc, "--lua-filter", filter_filename, stdin, extra_args or [])
 
 
 def pandoc_filter(
-    pandoc: str, filter_filename: str, stdin: str, extra_args: Optional[List[str]] = None
-) -> Dict[str, Any]:
+    pandoc: str, filter_filename: str, stdin: str, extra_args: Optional[Sequence[str]] = None
+) -> dict[str, Any]:
     return _pandoc(pandoc, "--filter", filter_filename, stdin, extra_args or [])
 
 

@@ -1,4 +1,5 @@
-from typing import Any, Dict, cast
+from collections.abc import Mapping
+from typing import Any, cast
 
 TITLE = "title"
 AUTHOR = "author"
@@ -31,7 +32,7 @@ USER_KEYS = frozenset(
 )
 
 
-def parse_author(metadata: Dict[str, Any]) -> str:
+def parse_author(metadata: Mapping[str, Any]) -> str:
     if AUTHOR not in metadata:
         return ""
     author = metadata[AUTHOR]

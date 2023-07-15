@@ -4,7 +4,7 @@ import os.path
 import subprocess
 import sys
 import unittest
-from typing import List
+from collections.abc import Sequence
 
 import markdown_makefile.utils.test_utils
 
@@ -56,14 +56,14 @@ DATA = {
 class TestSummary(unittest.TestCase):
     maxDiff = None
 
-    def run_script(self, args: List[str]) -> str:
+    def run_script(self, args: Sequence[str]) -> str:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
         filename = os.path.join(test_tmpdir, "in.json")
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(DATA, f)
 
         return subprocess.run(
-            [sys.executable, SCRIPT, filename] + args,
+            [sys.executable, SCRIPT, filename] + list(args),
             check=True,
             capture_output=True,
             encoding="utf-8",

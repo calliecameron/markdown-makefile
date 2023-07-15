@@ -9,7 +9,8 @@ import re
 import string
 import subprocess
 import unicodedata
-from typing import Iterator, List, NamedTuple, Optional, Tuple
+from collections.abc import Iterator
+from typing import NamedTuple, Optional
 
 
 def normalised_char_name(char: str) -> str:
@@ -117,7 +118,7 @@ def get_git_commit(path: str) -> Optional[GitCommit]:
     return GitCommit(repo_path, commit, dirty, timestamp)
 
 
-def find_packages(root: str) -> List[str]:
+def find_packages(root: str) -> list[str]:
     packages = []
     for dirpath, _, filenames in os.walk(root):
         if "BUILD" in filenames:
@@ -128,7 +129,7 @@ def find_packages(root: str) -> List[str]:
     return sorted(packages)
 
 
-def get_package_data(root: str) -> List[Tuple[str, str]]:
+def get_package_data(root: str) -> list[tuple[str, str]]:
     out = []
     for path in find_packages(root):
         commit = get_git_commit(path)

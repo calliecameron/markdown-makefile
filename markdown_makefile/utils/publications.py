@@ -1,5 +1,6 @@
 import datetime
-from typing import Any, Dict, List, NamedTuple, Optional, Tuple
+from collections.abc import Mapping, Sequence
+from typing import Any, NamedTuple, Optional
 
 _VENUE = "venue"
 _PAID = "paid"
@@ -113,7 +114,7 @@ class Dates:
         return self._published.date
 
     @property
-    def dates(self) -> Tuple[Date, ...]:
+    def dates(self) -> tuple[Date, ...]:
         return tuple(d for d in self._all_dates() if d.date)
 
     @property
@@ -124,33 +125,33 @@ class Dates:
     def active(self) -> bool:
         return not any(d.date for d in self._bad_end_dates())
 
-    def _bad_end_dates(self) -> List[Date]:
+    def _bad_end_dates(self) -> list[Date]:
         return [
             self._abandoned,
             self._withdrawn,
             self._rejected,
         ]
 
-    def _good_end_dates(self) -> List[Date]:
+    def _good_end_dates(self) -> list[Date]:
         return [
             self._self_published,
             self._published,
         ]
 
-    def _end_dates(self) -> List[Date]:
+    def _end_dates(self) -> list[Date]:
         return self._bad_end_dates() + self._good_end_dates()
 
-    def _intermediate_dates(self) -> List[Date]:
+    def _intermediate_dates(self) -> list[Date]:
         return [
             self._submitted,
             self._accepted,
         ]
 
-    def _all_dates(self) -> List[Date]:
+    def _all_dates(self) -> list[Date]:
         return self._intermediate_dates() + self._end_dates()
 
     @staticmethod
-    def from_json(j: Dict[str, str]) -> "Dates":
+    def from_json(j: Mapping[str, str]) -> "Dates":
         out = {}
         for k, v in j.items():
             if k not in _DATE_KEYS:
@@ -166,7 +167,9 @@ class Dates:
 
 
 class Publication:
-    def __init__(self, venue: str, dates: Dates, urls: List[str], notes: str, paid: str) -> None:
+    def __init__(
+        self, venue: str, dates: Dates, urls: Sequence[str], notes: str, paid: str
+    ) -> None:
         super().__init__()
 
         if not venue:
@@ -187,7 +190,7 @@ class Publication:
         return self._dates
 
     @property
-    def urls(self) -> Tuple[str, ...]:
+    def urls(self) -> tuple[str, ...]:
         return self._urls
 
     @property
@@ -199,7 +202,7 @@ class Publication:
         return self._paid
 
     @staticmethod
-    def from_json(j: Dict[str, Any]) -> "Publication":
+    def from_json(j: Mapping[str, Any]) -> "Publication":
         def assert_str(k: str, v: Any) -> None:
             if not isinstance(v, str):
                 raise ValueError("Value of key '%s' must be a string; got '%s'" % (k, str(type(v))))
@@ -243,14 +246,14 @@ class Publication:
 
 
 class Publications:
-    def __init__(self, publications: List[Publication]) -> None:
+    def __init__(self, publications: Sequence[Publication]) -> None:
         super().__init__()
         if not publications:
             raise ValueError("No publications specified")
         self._publications = tuple(publications)
 
     @property
-    def publications(self) -> Tuple[Publication, ...]:
+    def publications(self) -> tuple[Publication, ...]:
         return self._publications
 
     @property
@@ -270,5 +273,5 @@ class Publications:
         return ""
 
     @staticmethod
-    def from_json(j: List[Dict[str, Any]]) -> "Publications":
+    def from_json(j: Sequence[Mapping[str, Any]]) -> "Publications":
         return Publications([Publication.from_json(p) for p in j])

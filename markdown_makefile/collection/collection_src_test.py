@@ -4,7 +4,8 @@ import os.path
 import subprocess
 import sys
 import unittest
-from typing import Any, Dict, List, Tuple
+from collections.abc import Mapping, Sequence
+from typing import Any
 
 import markdown_makefile.utils.test_utils
 
@@ -12,7 +13,7 @@ SCRIPT = ""
 
 
 class TestCollectionSrc(unittest.TestCase):
-    def dump_file(self, filename: str, content: Dict[str, Any]) -> None:
+    def dump_file(self, filename: str, content: Mapping[str, Any]) -> None:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)
 
@@ -21,7 +22,7 @@ class TestCollectionSrc(unittest.TestCase):
             return f.read()
 
     def run_script(
-        self, title: str, author: str, date: str, metadata: List[Tuple[str, Dict[str, Any]]]
+        self, title: str, author: str, date: str, metadata: Sequence[tuple[str, Mapping[str, Any]]]
     ) -> str:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
 

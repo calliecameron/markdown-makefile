@@ -4,7 +4,8 @@ import os.path
 import subprocess
 import sys
 import unittest
-from typing import Any, Dict
+from collections.abc import Mapping
+from typing import Any
 
 import markdown_makefile.utils.test_utils
 
@@ -12,7 +13,7 @@ SCRIPT = ""
 
 
 class TestMsMetadata(unittest.TestCase):
-    def run_ms_metadata(self, metadata: Dict[str, Any]) -> str:
+    def run_ms_metadata(self, metadata: Mapping[str, Any]) -> str:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
 
         in_file = os.path.join(test_tmpdir, "in.json")

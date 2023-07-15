@@ -4,7 +4,8 @@ import os.path
 import subprocess
 import sys
 import unittest
-from typing import Any, Dict
+from collections.abc import Mapping
+from typing import Any
 
 import markdown_makefile.utils.test_utils
 
@@ -14,7 +15,7 @@ SCRIPT = ""
 
 
 class TestPublications(unittest.TestCase):
-    def dump_file(self, filename: str, content: Dict[str, Any]) -> None:
+    def dump_file(self, filename: str, content: Mapping[str, Any]) -> None:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)
 

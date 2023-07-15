@@ -1,7 +1,6 @@
 import re
 import string
 import unicodedata
-from typing import Tuple
 
 
 def _normalised_char_name(char: str) -> str:
@@ -65,7 +64,7 @@ def _validate_target(target: str) -> None:
         raise ValueError(f"Targets must not contain current-directory references '.': {target}")
 
 
-def canonicalise_label(label: str, current_package: str) -> Tuple[str, str]:
+def canonicalise_label(label: str, current_package: str) -> tuple[str, str]:
     if not label and not current_package:
         raise ValueError("Label or current package must be specified")
 

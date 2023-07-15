@@ -1,7 +1,8 @@
 import argparse
 import re
 import sys
-from typing import Dict, FrozenSet, List, Optional, Set, Tuple
+from collections.abc import Mapping, MutableSequence, Set
+from typing import Optional
 
 import markdown_makefile.utils.bazel_package
 
@@ -24,8 +25,8 @@ ELLIPSIS_MSG = "Literal ellipses must be replaced with '...'"
 
 
 def process_include(
-    line: str, deps: Dict[str, str], current_package: str
-) -> Tuple[str, Optional[str], Optional[str]]:
+    line: str, deps: Mapping[str, str], current_package: str
+) -> tuple[str, Optional[str], Optional[str]]:
     if not line.startswith(INCLUDE):
         return line, None, None
     raw_label = line[len(INCLUDE) :]
@@ -45,8 +46,8 @@ def process_include(
 
 
 def process_images(
-    line: str, images: Dict[str, str], current_package: str
-) -> Tuple[str, FrozenSet[str], List[Tuple[int, str]]]:
+    line: str, images: Mapping[str, str], current_package: str
+) -> tuple[str, frozenset[str], list[tuple[int, str]]]:
     original_line = line
     problems = []
     labels = set()
@@ -72,7 +73,7 @@ def process_images(
     return line, frozenset(labels), []
 
 
-def check_strict_deps(used: FrozenSet[str], declared: FrozenSet[str], name: str) -> Optional[str]:
+def check_strict_deps(used: Set[str], declared: Set[str], name: str) -> Optional[str]:
     if used != declared:
         used_only = used - declared
         declared_only = declared - used
@@ -88,8 +89,11 @@ def check_strict_deps(used: FrozenSet[str], declared: FrozenSet[str], name: str)
 
 
 def preprocess(
-    data: List[str], deps: Dict[str, str], images: Dict[str, str], current_package: str
-) -> List[Tuple[int, int, str]]:
+    data: MutableSequence[str],
+    deps: Mapping[str, str],
+    images: Mapping[str, str],
+    current_package: str,
+) -> list[tuple[int, int, str]]:
     problems = []
     used_deps = set()
     declared_deps = frozenset(deps)

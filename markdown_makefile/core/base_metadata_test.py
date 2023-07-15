@@ -4,7 +4,8 @@ import os.path
 import subprocess
 import sys
 import unittest
-from typing import Any, Dict, List
+from collections.abc import Mapping, Sequence
+from typing import Any
 
 import markdown_makefile.core.base_metadata
 import markdown_makefile.utils.test_utils
@@ -113,7 +114,7 @@ class TestBaseMetadata(unittest.TestCase):
             },
         )
 
-    def dump_file(self, filename: str, content: Dict[str, Any]) -> None:
+    def dump_file(self, filename: str, content: Mapping[str, Any]) -> None:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)
 
@@ -122,7 +123,10 @@ class TestBaseMetadata(unittest.TestCase):
             return f.read()
 
     def run_script(
-        self, raw_version: Dict[str, str], deps_metadata: Dict[str, Dict[str, str]], args: List[str]
+        self,
+        raw_version: Mapping[str, str],
+        deps_metadata: Mapping[str, Mapping[str, str]],
+        args: Sequence[str],
     ) -> str:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
 
@@ -142,7 +146,7 @@ class TestBaseMetadata(unittest.TestCase):
                 deps_metadata_file,
                 metadata_out_file,
             ]
-            + args,
+            + list(args),
             check=True,
         )
 

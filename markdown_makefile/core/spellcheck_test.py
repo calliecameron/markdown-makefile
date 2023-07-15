@@ -3,7 +3,7 @@ import os.path
 import subprocess
 import sys
 import unittest
-from typing import List
+from collections.abc import Sequence
 
 import markdown_makefile.utils.test_utils
 
@@ -16,7 +16,7 @@ Test text baz shouldn’t fail
 
 
 class TestWriteDictionary(unittest.TestCase):
-    def run_spellcheck(self, doc: str, dictionary: List[str]) -> str:
+    def run_spellcheck(self, doc: str, dictionary: Sequence[str]) -> str:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
 
         in_file = os.path.join(test_tmpdir, "in.md")

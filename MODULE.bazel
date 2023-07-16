@@ -31,7 +31,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "buildifier_prebuilt",
-    version = "6.1.0",
+    version = "6.1.2",
 )
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")

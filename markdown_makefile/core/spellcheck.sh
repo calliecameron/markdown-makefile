@@ -25,7 +25,7 @@ fi
 OUTPUT="$(
     perl -pe 's/(\W)‘/$1/g;s/’(\W)/$1/g;s/^‘//;s/’$//;' <"${IN_FILE}" |
         HOME="${PWD}" LC_ALL='en_GB.UTF-8' hunspell -d en_GB -p "${DICT_FILE}" -l |
-        LC_ALL=C sort |
+        LC_ALL=C sort --ignore-case |
         uniq
 )"
 

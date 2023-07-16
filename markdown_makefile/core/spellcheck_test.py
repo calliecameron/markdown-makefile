@@ -11,7 +11,7 @@ SCRIPT = ""
 
 DOC = """The Title
 
-Test text baz shouldn’t fail
+Test text baz Quux shouldn’t fail
 """
 
 
@@ -36,6 +36,7 @@ class TestWriteDictionary(unittest.TestCase):
                 in_file,
                 out_file,
             ],
+            stderr=subprocess.PIPE,
             check=True,
         )
 
@@ -43,11 +44,22 @@ class TestWriteDictionary(unittest.TestCase):
             return f.read()
 
     def test_spellcheck(self) -> None:
-        self.assertEqual(self.run_spellcheck(DOC, ["baz"]), "OK\n")
+        self.assertEqual(self.run_spellcheck(DOC, ["baz", "Quux"]), "OK\n")
 
     def test_spellcheck_fails(self) -> None:
-        with self.assertRaises(subprocess.CalledProcessError):
+        try:
             self.run_spellcheck(DOC, [])
+            self.fail()
+        except subprocess.CalledProcessError as e:
+            self.assertEqual(
+                e.stderr.decode("utf-8"),
+                """ERROR: found misspelled words; correct them or add them to the dictionary:
+
+baz
+Quux
+
+""",
+            )
 
 
 if __name__ == "__main__":

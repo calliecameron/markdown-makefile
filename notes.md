@@ -16,7 +16,16 @@ md_document(
 )
 ```
 
+```shell
+# Validate foo.md
+$ bazel test :foo_test
+# Validate bar.md and generate a pdf
+$ bazel build :bar_pdf
+```
+
 The rules connect many existing tools: pandoc, calibre, unoconv, hunspell...
+
+See below for detailed usage.
 
 ## Limitations
 
@@ -60,7 +69,16 @@ If your package is at the root of a git repo:
 
 If your package is at the root of the workspace:
 
+## Validation
+
+By design, a file with spelling mistakes or lint warnings won't build. Just like
+a program with detectable errors shouldn't compile, neither should a document.
+
 ### Spellchecking
+
+Spellchecking uses the hunspell dictionary for the configured language. You can
+also add custom dictionaries. All words in the custom dictionary are considered
+correct.
 
 ### Lint
 
@@ -76,5 +94,6 @@ If your package is at the root of the workspace:
 
 I'm a writer as well as a programmer, and I want to use the same tools
 (markdown, git) when writing as when coding. This project started off as a
-simple makefile wrapping pandoc, and has gradually grown into something much
-bigger.
+simple makefile wrapping pandoc, and gradually grew as my needs changed. The
+makefile version was messy, slow and hard to maintain, and, since I use bazel at work,
+rewriting in bazel was the obvious solution.

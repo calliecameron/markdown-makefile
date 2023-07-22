@@ -1,8 +1,9 @@
 import argparse
 import csv
+import functools
 import json
+import re
 import sys
-from abc import ABC, abstractmethod
 from collections.abc import Mapping
 from typing import Any
 
@@ -24,76 +25,48 @@ PUBLICATION = "publication"
 VERSION = "version"
 STATUS = "status"
 
+COLUMNS = (
+    TARGET,
+    TITLE,
+    RAW_DATE,
+    DATE,
+    WORDCOUNT,
+    POETRY_LINES,
+    FINISHED,
+    PUBLICATION,
+    VERSION,
+    STATUS,
+)
 
-class Sorter(ABC):
-    def __init__(self, reverse: bool) -> None:
+
+class Filter:
+    def __init__(self, field: str, regex: str) -> None:
         super().__init__()
-        self._reverse = reverse
+        self._field = field
+        self._regex = regex
 
-    @abstractmethod
+    def match(self, data: Mapping[str, Any]) -> bool:
+        return re.search(self._regex, str(data[self._field])) is not None
+
+
+class Sorter:
+    def __init__(self, field: str, reverse: bool) -> None:
+        super().__init__()
+        self._field = field
+        if field in (DATE, WORDCOUNT, POETRY_LINES, FINISHED):
+            self._reverse = not reverse
+        else:
+            self._reverse = reverse
+
     def key(self, elem: Mapping[str, Any]) -> Any:
-        raise NotImplementedError
+        if self._field == DATE:
+            return ", ".join(
+                sorted([d.strip() for d in elem[self._field].split(",")], reverse=self._reverse)
+            )
+        return elem[self._field]
 
     def sort(self, data: list[Mapping[str, Any]]) -> None:
         data.sort(key=self.key, reverse=self._reverse)
-
-
-class SimpleSorter(Sorter):
-    def __init__(self, reverse: bool, key: str) -> None:
-        super().__init__(reverse)
-        self._reverse = reverse
-        self._key = key
-
-    def key(self, elem: Mapping[str, Any]) -> Any:
-        return elem[self._key]
-
-
-class TargetSorter(SimpleSorter):
-    def __init__(self, reverse: bool) -> None:
-        super().__init__(reverse, TARGET)
-
-
-class TitleSorter(SimpleSorter):
-    def __init__(self, reverse: bool) -> None:
-        super().__init__(reverse, TITLE)
-
-
-class DateSorter(Sorter):
-    def __init__(self, reverse: bool) -> None:
-        super().__init__(not reverse)
-
-    def key(self, elem: Mapping[str, Any]) -> Any:
-        return ", ".join(sorted([d.strip() for d in elem[DATE].split(",")], reverse=self._reverse))
-
-
-class WordcountSorter(SimpleSorter):
-    def __init__(self, reverse: bool) -> None:
-        super().__init__(not reverse, WORDCOUNT)
-
-
-class PoetryLinesSorter(SimpleSorter):
-    def __init__(self, reverse: bool) -> None:
-        super().__init__(not reverse, POETRY_LINES)
-
-
-class FinishedSorter(SimpleSorter):
-    def __init__(self, reverse: bool) -> None:
-        super().__init__(not reverse, FINISHED)
-
-
-class PublicationSorter(SimpleSorter):
-    def __init__(self, reverse: bool) -> None:
-        super().__init__(reverse, PUBLICATION)
-
-
-class VersionSorter(SimpleSorter):
-    def __init__(self, reverse: bool) -> None:
-        super().__init__(reverse, VERSION)
-
-
-class StatusSorter(SimpleSorter):
-    def __init__(self, reverse: bool) -> None:
-        super().__init__(reverse, STATUS)
 
 
 def parse_date(date: str) -> str:
@@ -118,123 +91,95 @@ def sanitise(s: str) -> str:
     return s.replace("\n", "\\n")
 
 
-def main() -> None:
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Summarise the contents of the group")
     parser.add_argument("in_file")
-    parser.add_argument("--filter", help="include only entries whose target contains this string")
     parser.add_argument(
         "--raw", action="store_true", help="output CSV instead of a human-readable table"
     )
     parser.add_argument("--reverse", action="store_true", help="reverse sorting direction")
+
+    filter_msg = (
+        "To be displayed, a row must match any include and no excludes; by default all "
+        "rows are displayed"
+    )
+    includes = parser.add_argument_group("includes", filter_msg)
+    excludes = parser.add_argument_group("excludes", filter_msg)
     sorters = parser.add_mutually_exclusive_group()
-    sorters.add_argument(
-        "--target",
-        action="store_const",
-        const=TargetSorter,
-        dest="sorter",
-        default=TargetSorter,
-        help="sort by target",
-    )
-    sorters.add_argument(
-        "--title",
-        action="store_const",
-        const=TitleSorter,
-        dest="sorter",
-        help="sort by title",
-    )
-    sorters.add_argument(
-        "--date", action="store_const", const=DateSorter, dest="sorter", help="sort by date"
-    )
-    sorters.add_argument(
-        "--wordcount",
-        action="store_const",
-        const=WordcountSorter,
-        dest="sorter",
-        help="sort by wordcount",
-    )
-    sorters.add_argument(
-        "--poetry_lines",
-        action="store_const",
-        const=PoetryLinesSorter,
-        dest="sorter",
-        help="sort by poetry lines",
-    )
-    sorters.add_argument(
-        "--finished",
-        action="store_const",
-        const=FinishedSorter,
-        dest="sorter",
-        help="sort by finished",
-    )
-    sorters.add_argument(
-        "--publication",
-        action="store_const",
-        const=PublicationSorter,
-        dest="sorter",
-        help="sort by publication",
-    )
-    sorters.add_argument(
-        "--version",
-        action="store_const",
-        const=VersionSorter,
-        dest="sorter",
-        help="sort by version",
-    )
-    sorters.add_argument(
-        "--status",
-        action="store_const",
-        const=StatusSorter,
-        dest="sorter",
-        help="sort by status",
-    )
-    args = parser.parse_args()
+
+    for field in COLUMNS:
+        name = field.replace(" ", "-")
+        includes.add_argument(
+            "--include-" + name,
+            action="append",
+            type=functools.partial(Filter, field),
+            dest="includes",
+            metavar="regex",
+            help="include rows matching regex on " + field,
+        )
+        excludes.add_argument(
+            "--exclude-" + name,
+            action="append",
+            type=functools.partial(Filter, field),
+            dest="excludes",
+            metavar="regex",
+            help="exclude rows matching regex on " + field,
+        )
+        sorters.add_argument(
+            "--sort-" + name,
+            action="store_const",
+            const=functools.partial(Sorter, field),
+            dest="sorter",
+            default=functools.partial(Sorter, field) if field == TARGET else None,
+            help="sort by " + field,
+        )
+    return parser.parse_args()
+
+
+def should_include(row: Mapping[str, Any], args: argparse.Namespace) -> bool:
+    if any(f.match(row) for f in args.excludes or []):
+        return False
+    if not args.includes:
+        return True
+    return any(f.match(row) for f in args.includes)
+
+
+def main() -> None:
+    args = parse_args()
 
     data: list[dict[str, Any]] = []
     with open(args.in_file, encoding="utf-8") as f:
         for target, j in json.load(f).items():
-            if not args.filter or args.filter in target:
-                publication = ""
-                if metadata.PUBLICATIONS in j and j[metadata.PUBLICATIONS]:
-                    ps = Publications.from_json(j[metadata.PUBLICATIONS])
-                    if ps.active:
-                        publication = ps.highest_active_state
-                    else:
-                        publication = "attempted"
+            publication = ""
+            if metadata.PUBLICATIONS in j and j[metadata.PUBLICATIONS]:
+                ps = Publications.from_json(j[metadata.PUBLICATIONS])
+                if ps.active:
+                    publication = ps.highest_active_state
+                else:
+                    publication = "attempted"
 
-                data.append(
-                    {
-                        TARGET: target,
-                        TITLE: sanitise(j.get(metadata.TITLE, "")),
-                        RAW_DATE: sanitise(j.get(metadata.DATE, "")),
-                        DATE: sanitise(parse_date(j[metadata.DATE])) if metadata.DATE in j else "",
-                        WORDCOUNT: int(j[metadata.WORDCOUNT]),
-                        POETRY_LINES: int(j[metadata.POETRY_LINES]),
-                        FINISHED: "yes"
-                        if metadata.FINISHED in j and j[metadata.FINISHED]
-                        else "no",
-                        PUBLICATION: publication,
-                        VERSION: j[metadata.DOCVERSION],
-                        STATUS: "DIRTY" if "dirty" in j[metadata.DOCVERSION] else "ok",
-                    }
-                )
+            row = {
+                TARGET: target,
+                TITLE: sanitise(j.get(metadata.TITLE, "")),
+                RAW_DATE: sanitise(j.get(metadata.DATE, "")),
+                DATE: sanitise(parse_date(j[metadata.DATE])) if metadata.DATE in j else "",
+                WORDCOUNT: int(j[metadata.WORDCOUNT]),
+                POETRY_LINES: int(j[metadata.POETRY_LINES]),
+                FINISHED: "yes" if metadata.FINISHED in j and j[metadata.FINISHED] else "no",
+                PUBLICATION: publication,
+                VERSION: j[metadata.DOCVERSION],
+                STATUS: "DIRTY" if "dirty" in j[metadata.DOCVERSION] else "ok",
+            }
+
+            if should_include(row, args):
+                data.append(row)
 
     args.sorter(args.reverse).sort(data)
 
     if args.raw:
         out = csv.DictWriter(
             sys.stdout,
-            [
-                TARGET,
-                TITLE,
-                RAW_DATE,
-                DATE,
-                WORDCOUNT,
-                POETRY_LINES,
-                FINISHED,
-                PUBLICATION,
-                VERSION,
-                STATUS,
-            ],
+            COLUMNS,
         )
         out.writeheader()
         out.writerows(data)

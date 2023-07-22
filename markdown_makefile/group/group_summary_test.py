@@ -92,7 +92,7 @@ test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,att
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--filter", "test1"]),
+            self.run_script(["--raw", "--include-target", "test1"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
@@ -100,7 +100,21 @@ test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--target"]),
+            self.run_script(["--raw", "--exclude-target", "test1"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--include-target", "test1", "--exclude-title", "ba.*"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--sort-target"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
@@ -109,7 +123,7 @@ test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,att
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--target", "--reverse"]),
+            self.run_script(["--raw", "--sort-target", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
@@ -118,7 +132,7 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--title"]),
+            self.run_script(["--raw", "--sort-title"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
@@ -127,7 +141,7 @@ test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--title", "--reverse"]),
+            self.run_script(["--raw", "--sort-title", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
@@ -136,34 +150,7 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--date"]),
-            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
-test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-""",
-        )
-
-        self.assertEqual(
-            self.run_script(["--raw", "--date", "--reverse"]),
-            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
-test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-""",
-        )
-
-        self.assertEqual(
-            self.run_script(["--raw", "--wordcount"]),
-            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
-test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-""",
-        )
-
-        self.assertEqual(
-            self.run_script(["--raw", "--wordcount", "--reverse"]),
+            self.run_script(["--raw", "--sort-raw-date"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
@@ -172,7 +159,7 @@ test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,att
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--poetry_lines"]),
+            self.run_script(["--raw", "--sort-raw-date", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
@@ -181,25 +168,16 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--poetry_lines", "--reverse"]),
+            self.run_script(["--raw", "--sort-date"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--finished"]),
-            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
-""",
-        )
-
-        self.assertEqual(
-            self.run_script(["--raw", "--finished", "--reverse"]),
+            self.run_script(["--raw", "--sort-date", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
@@ -208,43 +186,16 @@ test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--publication"]),
+            self.run_script(["--raw", "--sort-wordcount"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-""",
-        )
-
-        self.assertEqual(
-            self.run_script(["--raw", "--publication", "--reverse"]),
-            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--version"]),
-            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
-test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-""",
-        )
-
-        self.assertEqual(
-            self.run_script(["--raw", "--version", "--reverse"]),
-            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
-test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-""",
-        )
-
-        self.assertEqual(
-            self.run_script(["--raw", "--status"]),
+            self.run_script(["--raw", "--sort-wordcount", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
@@ -253,7 +204,88 @@ test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,att
         )
 
         self.assertEqual(
-            self.run_script(["--raw", "--status", "--reverse"]),
+            self.run_script(["--raw", "--sort-poetry-lines"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--sort-poetry-lines", "--reverse"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--sort-finished"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
+test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--sort-finished", "--reverse"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
+test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--sort-publication"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
+test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--sort-publication", "--reverse"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--sort-version"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--sort-version", "--reverse"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
+test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--sort-status"]),
+            """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
+test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
+test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
+test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+""",
+        )
+
+        self.assertEqual(
+            self.run_script(["--raw", "--sort-status", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok

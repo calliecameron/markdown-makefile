@@ -36,7 +36,7 @@ DATA = {
         "docversion": "quux, dirty",
     },
     "test2:baz": {
-        "title": "Baz",
+        "title": "baz",
         "date": "from August 2020 to 1 March 2023",
         "wordcount": "20",
         "poetry-lines": "5",
@@ -77,7 +77,7 @@ class TestSummary(unittest.TestCase):
 |-----------|----------|----------------------------------|---------------------|-------------|----------------|------------|---------------|-------------|----------|
 | test1:bar | Bar\\nbaz |                                  |                     |           5 |              0 | no         |               | quux, dirty | DIRTY    |
 | test1:foo | Foo      | 2022                             | 2022                |          10 |              3 | yes        | published     | bar         | ok       |
-| test2:baz | Baz      | from August 2020 to 1 March 2023 | 2020/08, 2023/03/01 |          20 |              5 | no         | attempted     | baz         | ok       |
+| test2:baz | baz      | from August 2020 to 1 March 2023 | 2020/08, 2023/03/01 |          20 |              5 | no         | attempted     | baz         | ok       |
 """.lstrip(),  # noqa: E501
         )
 
@@ -87,7 +87,7 @@ class TestSummary(unittest.TestCase):
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 """,
         )
 
@@ -102,7 +102,7 @@ test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
         self.assertEqual(
             self.run_script(["--raw", "--exclude-target", "test1"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 """,
         )
 
@@ -118,14 +118,14 @@ test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 """,
         )
 
         self.assertEqual(
             self.run_script(["--raw", "--sort-target", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
@@ -135,7 +135,7 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
             self.run_script(["--raw", "--sort-title"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 """,
         )
@@ -144,7 +144,7 @@ test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
             self.run_script(["--raw", "--sort-title", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
         )
@@ -154,14 +154,14 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 """,
         )
 
         self.assertEqual(
             self.run_script(["--raw", "--sort-raw-date", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
@@ -171,7 +171,7 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
             self.run_script(["--raw", "--sort-date"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 """,
         )
@@ -179,7 +179,7 @@ test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
         self.assertEqual(
             self.run_script(["--raw", "--sort-date", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
@@ -190,14 +190,14 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 """,
         )
 
         self.assertEqual(
             self.run_script(["--raw", "--sort-wordcount", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
@@ -208,14 +208,14 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 """,
         )
 
         self.assertEqual(
             self.run_script(["--raw", "--sort-poetry-lines", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
@@ -225,7 +225,7 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
             self.run_script(["--raw", "--sort-finished"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 """,
         )
@@ -235,7 +235,7 @@ test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 """,
         )
 
@@ -243,7 +243,7 @@ test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,att
             self.run_script(["--raw", "--sort-publication"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 """,
         )
@@ -252,7 +252,7 @@ test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
             self.run_script(["--raw", "--sort-publication", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
         )
@@ -261,7 +261,7 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
             self.run_script(["--raw", "--sort-version"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
         )
@@ -270,7 +270,7 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
             self.run_script(["--raw", "--sort-version", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
 """,
         )
@@ -280,7 +280,7 @@ test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 """,
         )
 
@@ -288,7 +288,7 @@ test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,att
             self.run_script(["--raw", "--sort-status", "--reverse"]),
             """target,title,raw date,date,wordcount,poetry lines,finished,publication,version,status
 test1:foo,Foo,2022,2022,10,3,yes,published,bar,ok
-test2:baz,Baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
+test2:baz,baz,from August 2020 to 1 March 2023,"2020/08, 2023/03/01",20,5,no,attempted,baz,ok
 test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 """,
         )

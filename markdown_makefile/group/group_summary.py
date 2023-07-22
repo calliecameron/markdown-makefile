@@ -60,6 +60,8 @@ class Sorter:
             return ", ".join(
                 sorted([d.strip() for d in elem[self._field].split(",")], reverse=self._reverse)
             )
+        if isinstance(elem[self._field], str):
+            return elem[self._field].lower()
         return elem[self._field]
 
     def sort(self, data: list[Mapping[str, Any]]) -> None:

@@ -53,10 +53,7 @@ class Sorter:
     def __init__(self, field: str, reverse: bool) -> None:
         super().__init__()
         self._field = field
-        if field in (DATE, WORDCOUNT, POETRY_LINES, FINISHED):
-            self._reverse = not reverse
-        else:
-            self._reverse = reverse
+        self._reverse = reverse
 
     def key(self, elem: Mapping[str, Any]) -> Any:
         if self._field == DATE:

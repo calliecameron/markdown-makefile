@@ -1,5 +1,5 @@
-load("//markdown_makefile/python:python.bzl", "py_binary", "py_test")
 load("@pip//:requirements.bzl", "requirement")
+load("//markdown_makefile/python:python.bzl", "py_binary", "py_test")
 
 exports_files(
     [
@@ -12,6 +12,7 @@ exports_files(
 py_binary(
     name = "collection_src",
     srcs = ["collection_src.py"],
+    type_stub_deps = [requirement("types-PyYAML")],
     visibility = ["//visibility:public"],
     deps = [
         requirement("PyYAML"),

@@ -1,10 +1,14 @@
+load("@pip//:requirements.bzl", "requirement")
 load("//markdown_makefile/python:python.bzl", "py_binary", "py_test")
 load("//markdown_makefile/shell:shell.bzl", "sh_binary")
-load("@pip//:requirements.bzl", "requirement")
 
 py_binary(
     name = "group_summary",
     srcs = ["group_summary.py"],
+    type_stub_deps = [
+        requirement("types-tabulate"),
+        requirement("types-dateparser"),
+    ],
     visibility = ["//visibility:public"],
     deps = [
         requirement("tabulate"),

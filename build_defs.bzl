@@ -1,15 +1,15 @@
 """Public API of the module."""
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-load("//markdown_makefile/core:core.bzl", _md_group = "md_group", _md_library = "md_library")
-load("//markdown_makefile/formats:misc.bzl", _md_html = "md_html", _md_md = "md_md", _md_txt = "md_txt")
-load("//markdown_makefile/formats/latex:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
-load("//markdown_makefile/formats/ebook:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
-load("//markdown_makefile/formats/word:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
 load("//markdown_makefile/collection:collection.bzl", _md_collection_src = "md_collection_src")
-load("//markdown_makefile/group:group.bzl", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
+load("//markdown_makefile/core:core.bzl", _md_group = "md_group", _md_library = "md_library")
 load("//markdown_makefile/dynamic_group:dynamic_group.bzl", _md_dynamic_group = "md_dynamic_group")
+load("//markdown_makefile/formats:misc.bzl", _md_html = "md_html", _md_md = "md_md", _md_txt = "md_txt")
+load("//markdown_makefile/formats/ebook:ebook.bzl", _md_epub = "md_epub", _md_mobi = "md_mobi")
+load("//markdown_makefile/formats/latex:latex.bzl", _md_pdf = "md_pdf", _md_tex = "md_tex", _md_tex_intermediate = "md_tex_intermediate")
+load("//markdown_makefile/formats/word:word.bzl", _md_doc = "md_doc", _md_docx = "md_docx", _md_ms_docx = "md_ms_docx", _md_odt = "md_odt")
 load("//markdown_makefile/git:git_repo.bzl", _md_git_repo = "md_git_repo")
+load("//markdown_makefile/group:group.bzl", _md_group_publications = "md_group_publications", _md_group_summary = "md_group_summary")
 load("//markdown_makefile/workspace:workspace.bzl", _md_workspace = "md_workspace")
 
 _FORMATS = [
@@ -239,7 +239,7 @@ def md_document(
         name = name + "_save_sh",
         outs = [name + "_save.sh"],
         cmd = "$(location @markdown_makefile//markdown_makefile/formats:write_save_script) $@ %s" % native.package_name(),
-        exec_tools = ["@markdown_makefile//markdown_makefile/formats:write_save_script"],
+        tools = ["@markdown_makefile//markdown_makefile/formats:write_save_script"],
         visibility = ["//visibility:private"],
     )
 

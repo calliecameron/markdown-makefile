@@ -57,3 +57,18 @@ def _sh_lint(name, **kwargs):
             "//markdown_makefile/shell:shellcheck",
         ] + srcs,
     )
+
+    native.sh_test(
+        name = name + "_shfmt_test",
+        srcs = ["//markdown_makefile/utils:stub.sh"],
+        args = [
+            "$(rootpath //markdown_makefile/shell:shfmt)",
+            "-l",
+            "-d",
+            "-i",
+            "4",
+        ] + ["$(location %s)" % src for src in srcs],
+        data = [
+            "//markdown_makefile/shell:shfmt",
+        ] + srcs,
+    )

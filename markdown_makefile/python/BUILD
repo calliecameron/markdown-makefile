@@ -1,11 +1,4 @@
 load("//markdown_makefile/python:python.bzl", "py_source")
-load("//markdown_makefile/shell:shell.bzl", "sh_source")
-
-sh_source(
-    name = "stub",
-    src = "stub.sh",
-    visibility = ["//visibility:public"],
-)
 
 py_source(
     name = "mypy_stub",

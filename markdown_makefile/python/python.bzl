@@ -74,7 +74,7 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
 
     native.sh_test(
         name = name + "_ruff_lint_test",
-        srcs = ["//markdown_makefile/python:stub.sh"],
+        srcs = ["//markdown_makefile/utils:stub.sh"],
         args = [
             "$(rootpath //markdown_makefile/python:ruff)",
             "check",
@@ -88,7 +88,7 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
 
     native.sh_test(
         name = name + "_ruff_format_test",
-        srcs = ["//markdown_makefile/python:stub.sh"],
+        srcs = ["//markdown_makefile/utils:stub.sh"],
         args = [
             "$(rootpath //markdown_makefile/python:ruff)",
             "format",

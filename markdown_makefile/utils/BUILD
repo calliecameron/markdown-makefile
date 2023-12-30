@@ -1,6 +1,12 @@
-load("//markdown_makefile/python:python.bzl", "py_binary", "py_library", "py_test")
-load("//markdown_makefile/shell:shell.bzl", "sh_binary")
 load("@pip//:requirements.bzl", "requirement")
+load("//markdown_makefile/python:python.bzl", "py_binary", "py_library", "py_test")
+load("//markdown_makefile/shell:shell.bzl", "sh_binary", "sh_source")
+
+sh_source(
+    name = "stub",
+    src = "stub.sh",
+    visibility = ["//visibility:public"],
+)
 
 py_library(
     name = "test_utils",

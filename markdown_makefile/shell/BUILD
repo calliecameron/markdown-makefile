@@ -10,3 +10,9 @@ sh_source(
 shellcheck_binary(
     name = "shellcheck",
 )
+
+alias(
+    name = "shfmt",
+    actual = "@shfmt_linux_x86_64//file:shfmt",
+    visibility = ["//visibility:public"],
+)

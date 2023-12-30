@@ -1,0 +1,3 @@
+load("@aspect_rules_lint//lint:shellcheck.bzl", "fetch_shellcheck")
+
+fetch_shellcheck()

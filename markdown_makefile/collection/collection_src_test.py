@@ -22,7 +22,11 @@ class TestCollectionSrc(unittest.TestCase):
             return f.read()
 
     def run_script(
-        self, title: str, author: str, date: str, metadata: Sequence[tuple[str, Mapping[str, Any]]]
+        self,
+        title: str,
+        author: str,
+        date: str,
+        metadata: Sequence[tuple[str, Mapping[str, Any]]],
     ) -> str:
         test_tmpdir = markdown_makefile.utils.test_utils.tmpdir()
 
@@ -41,9 +45,7 @@ class TestCollectionSrc(unittest.TestCase):
             [
                 sys.executable,
                 SCRIPT,
-            ]
-            + dep_args
-            + [
+                *dep_args,
                 title,
                 author,
                 date,
@@ -149,7 +151,7 @@ title: The Title
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2:  # noqa: PLR2004
         raise ValueError("Not enough args")
     SCRIPT = sys.argv[1]
     del sys.argv[1]

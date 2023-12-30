@@ -2,13 +2,14 @@ import unittest
 
 import markdown_makefile.utils.bazel_package
 
-# pylint: disable=protected-access
+# ruff: noqa: SLF001
 
 
 class TestBazelPackage(unittest.TestCase):
     def test_normalised_char_name(self) -> None:
         self.assertEqual(
-            markdown_makefile.utils.bazel_package._normalised_char_name("/"), "SOLIDUS"
+            markdown_makefile.utils.bazel_package._normalised_char_name("/"),
+            "SOLIDUS",
         )
         with self.assertRaises(ValueError):
             markdown_makefile.utils.bazel_package._normalised_char_name("ab")
@@ -24,7 +25,8 @@ class TestBazelPackage(unittest.TestCase):
 
     def test_version_key(self) -> None:
         self.assertEqual(
-            markdown_makefile.utils.bazel_package.version_key("foo"), "STABLE_VERSION_foo"
+            markdown_makefile.utils.bazel_package.version_key("foo"),
+            "STABLE_VERSION_foo",
         )
         self.assertEqual(markdown_makefile.utils.bazel_package.version_key(""), "STABLE_VERSION_")
 
@@ -50,7 +52,7 @@ class TestBazelPackage(unittest.TestCase):
         markdown_makefile.utils.bazel_package._validate_target("")
         markdown_makefile.utils.bazel_package._validate_target("a")
         markdown_makefile.utils.bazel_package._validate_target(
-            "abc/DEF123%-@^_\"#$&'(*-+,;<=>?[]{|}~/.a"
+            "abc/DEF123%-@^_\"#$&'(*-+,;<=>?[]{|}~/.a",
         )
 
         with self.assertRaises(ValueError):
@@ -91,35 +93,44 @@ class TestBazelPackage(unittest.TestCase):
             markdown_makefile.utils.bazel_package.canonicalise_label("!", "a")
 
         self.assertEqual(
-            markdown_makefile.utils.bazel_package.canonicalise_label("//a", "z"), ("a", "a")
+            markdown_makefile.utils.bazel_package.canonicalise_label("//a", "z"),
+            ("a", "a"),
         )
         self.assertEqual(
-            markdown_makefile.utils.bazel_package.canonicalise_label("//a/b", "z"), ("a/b", "b")
+            markdown_makefile.utils.bazel_package.canonicalise_label("//a/b", "z"),
+            ("a/b", "b"),
         )
         self.assertEqual(
-            markdown_makefile.utils.bazel_package.canonicalise_label("//a:", "z"), ("a", "a")
+            markdown_makefile.utils.bazel_package.canonicalise_label("//a:", "z"),
+            ("a", "a"),
         )
         self.assertEqual(
-            markdown_makefile.utils.bazel_package.canonicalise_label("//a:b", "z"), ("a", "b")
+            markdown_makefile.utils.bazel_package.canonicalise_label("//a:b", "z"),
+            ("a", "b"),
         )
         self.assertEqual(
             markdown_makefile.utils.bazel_package.canonicalise_label("//a/b:c/d", "z"),
             ("a/b", "c/d"),
         )
         self.assertEqual(
-            markdown_makefile.utils.bazel_package.canonicalise_label("//:a", "z"), ("", "a")
+            markdown_makefile.utils.bazel_package.canonicalise_label("//:a", "z"),
+            ("", "a"),
         )
         self.assertEqual(
-            markdown_makefile.utils.bazel_package.canonicalise_label("//:a/b", "z"), ("", "a/b")
+            markdown_makefile.utils.bazel_package.canonicalise_label("//:a/b", "z"),
+            ("", "a/b"),
         )
         self.assertEqual(
-            markdown_makefile.utils.bazel_package.canonicalise_label(":a/b", "z"), ("z", "a/b")
+            markdown_makefile.utils.bazel_package.canonicalise_label(":a/b", "z"),
+            ("z", "a/b"),
         )
         self.assertEqual(
-            markdown_makefile.utils.bazel_package.canonicalise_label("a/b", "z"), ("z", "a/b")
+            markdown_makefile.utils.bazel_package.canonicalise_label("a/b", "z"),
+            ("z", "a/b"),
         )
         self.assertEqual(
-            markdown_makefile.utils.bazel_package.canonicalise_label("a", ""), ("", "a")
+            markdown_makefile.utils.bazel_package.canonicalise_label("a", ""),
+            ("", "a"),
         )
 
 

@@ -38,7 +38,7 @@ xdg-open "${FILE_TO_OPEN}"
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2:  # noqa: PLR2004
         raise ValueError("Not enough args")
     SCRIPT = sys.argv[1]
     del sys.argv[1]

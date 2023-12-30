@@ -31,7 +31,9 @@ class Version:
 
 
 def get_version(
-    raw_version: Version, dep_versions: Mapping[str, Version], version_override: str
+    raw_version: Version,
+    dep_versions: Mapping[str, Version],
+    version_override: str,
 ) -> Version:
     dirty_deps = []
     unversioned_deps = []

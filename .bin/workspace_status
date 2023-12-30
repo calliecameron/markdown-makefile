@@ -10,7 +10,7 @@ import string
 import subprocess
 import unicodedata
 from collections.abc import Iterator
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 
 
 def normalised_char_name(char: str) -> str:
@@ -64,7 +64,7 @@ class GitCommit(NamedTuple):
         return f'{self.commit}{"-dirty" if self.dirty else ""}, {timestamp}'
 
 
-def get_git_commit(path: str) -> Optional[GitCommit]:
+def get_git_commit(path: str) -> GitCommit | None:
     with chdir(path):
         try:
             repo_path = os.path.abspath(
@@ -73,7 +73,7 @@ def get_git_commit(path: str) -> Optional[GitCommit]:
                     capture_output=True,
                     encoding="utf-8",
                     check=True,
-                ).stdout.strip()
+                ).stdout.strip(),
             )
         except subprocess.CalledProcessError:
             # Not a git repo
@@ -97,7 +97,7 @@ def get_git_commit(path: str) -> Optional[GitCommit]:
                     capture_output=True,
                     encoding="utf-8",
                     check=True,
-                ).stdout.strip()
+                ).stdout.strip(),
             )
 
             status = subprocess.run(

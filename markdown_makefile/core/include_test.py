@@ -53,7 +53,9 @@ class TestInclude(unittest.TestCase):
             json.dump(doc1, f)
 
         doc2 = markdown_makefile.utils.test_utils.pandoc_lua_filter(
-            PANDOC, FILTER, DOC2 % doc1_file
+            PANDOC,
+            FILTER,
+            DOC2 % doc1_file,
         )
         self.assertEqual(
             doc2,
@@ -70,7 +72,9 @@ class TestInclude(unittest.TestCase):
         )
 
         doc2_inc = markdown_makefile.utils.test_utils.pandoc_lua_filter(
-            PANDOC, FILTER, DOC2_INC % doc1_file
+            PANDOC,
+            FILTER,
+            DOC2_INC % doc1_file,
         )
         self.assertEqual(
             doc2_inc,
@@ -95,7 +99,7 @@ class TestInclude(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 3:  # noqa: PLR2004
         raise ValueError("Not enough args")
     PANDOC = sys.argv[1]
     del sys.argv[1]

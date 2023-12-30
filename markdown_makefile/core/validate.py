@@ -1,7 +1,7 @@
 import json
 import sys
 from collections.abc import Mapping, Sequence
-from typing import Any, NoReturn, Optional, cast
+from typing import Any, NoReturn, cast
 
 from markdown_makefile.utils.metadata import (
     AUTHOR,
@@ -33,7 +33,7 @@ KNOWN_KEYS = USER_KEYS | frozenset(
         REPO,
         SOURCE_MD5,
         SUBJECT,
-    ]
+    ],
 )
 
 META_BOOL = "MetaBool"
@@ -64,9 +64,9 @@ def validate_str(s: str) -> None:
             (
                 "markdown parsing failed: '%s'\n\n"
                 "Found quotes that weren't converted to smart quotes. Replace them with "
-                "backslash-escaped literal curly quotes (“ ” ‘ ’).\n"
+                "backslash-escaped literal curly quotes (“ ” ‘ ’).\n"  # noqa: RUF001
             )
-            % s
+            % s,
         )
 
 
@@ -118,32 +118,34 @@ def assert_is_bool(j: Mapping[str, Any], msg: str) -> None:
 
 
 def assert_meta_item_is_type(
-    j: Mapping[str, Any], key: str, meta_type: str
-) -> Optional[dict[str, Any]]:
+    j: Mapping[str, Any],
+    key: str,
+    meta_type: str,
+) -> dict[str, Any] | None:
     if "meta" not in j or key not in j["meta"]:
         return None
     item = j["meta"][key]
     assert_is_type(
         item,
         meta_type,
-        "metadata item '%s' must be a %s" % (key, META_TYPE_NAMES[meta_type]),
+        f"metadata item '{key}' must be a {META_TYPE_NAMES[meta_type]}",
     )
     return cast(dict[str, Any], item)
 
 
-def assert_meta_item_is_list(j: Mapping[str, Any], key: str) -> Optional[dict[str, Any]]:
+def assert_meta_item_is_list(j: Mapping[str, Any], key: str) -> dict[str, Any] | None:
     return assert_meta_item_is_type(j, key, META_LIST)
 
 
-def assert_meta_item_is_dict(j: Mapping[str, Any], key: str) -> Optional[dict[str, Any]]:
+def assert_meta_item_is_dict(j: Mapping[str, Any], key: str) -> dict[str, Any] | None:
     return assert_meta_item_is_type(j, key, META_DICT)
 
 
-def assert_meta_item_is_string(j: Mapping[str, Any], key: str) -> Optional[dict[str, Any]]:
+def assert_meta_item_is_string(j: Mapping[str, Any], key: str) -> dict[str, Any] | None:
     return assert_meta_item_is_type(j, key, META_INLINES)
 
 
-def assert_meta_item_is_bool(j: Mapping[str, Any], key: str) -> Optional[dict[str, Any]]:
+def assert_meta_item_is_bool(j: Mapping[str, Any], key: str) -> dict[str, Any] | None:
     return assert_meta_item_is_type(j, key, META_BOOL)
 
 
@@ -169,8 +171,7 @@ def validate_publications(j: Mapping[str, Any]) -> None:
                 out[k] = inlines_to_json(e)
             else:
                 fail_metadata(
-                    "failed to parse publications: unknown type %s in dict. %s"
-                    % (e["t"], str(ps_raw))
+                    f"failed to parse publications: unknown type {e['t']} in dict. {ps_raw}",
                 )
         return out
 
@@ -183,8 +184,7 @@ def validate_publications(j: Mapping[str, Any]) -> None:
                 out.append(inlines_to_json(e))
             else:
                 fail_metadata(
-                    "failed to parse publications: unknown type %s in list. %s"
-                    % (e["t"], str(ps_raw))
+                    f"failed to parse publications: unknown type {e['t']} in list. {ps_raw}",
                 )
         return out
 

@@ -13,10 +13,7 @@ def main() -> None:
     with open(args.infile, encoding="utf-8") as f:
         metadata = json.load(f)
 
-    if TITLE in metadata:
-        title = metadata[TITLE]
-    else:
-        title = "[Untitled]"
+    title = metadata[TITLE] if TITLE in metadata else "[Untitled]"
 
     author = parse_author(metadata)
     if not author:

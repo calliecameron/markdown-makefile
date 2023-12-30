@@ -28,7 +28,7 @@ USER_KEYS = frozenset(
         NOTES,
         FINISHED,
         PUBLICATIONS,
-    ]
+    ],
 )
 
 
@@ -41,6 +41,5 @@ def parse_author(metadata: Mapping[str, Any]) -> str:
     if isinstance(author, list) and author and all(isinstance(a, str) for a in author):
         return cast(str, author[0])
     raise ValueError(
-        "metadata item '%s' must be a non-empty list of string or a string; got %s"
-        % (AUTHOR, str(author))
+        f"metadata item '{AUTHOR}' must be a non-empty list of string or a string; got {author}",
     )

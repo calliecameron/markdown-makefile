@@ -16,7 +16,7 @@ SCRIPT = ""
 class TestBaseMetadata(unittest.TestCase):
     def test_version(self) -> None:
         v = markdown_makefile.core.base_metadata.Version.from_dict(
-            {"docversion": "1", "repo": "foo"}
+            {"docversion": "1", "repo": "foo"},
         )
         self.assertEqual(v.version, "1")
         self.assertEqual(v.repo, "foo")
@@ -31,24 +31,31 @@ class TestBaseMetadata(unittest.TestCase):
         unversioned_same_repo = markdown_makefile.core.base_metadata.Version("unversioned", "foo")
 
         self.assertEqual(
-            markdown_makefile.core.base_metadata.get_version(base, {}, "").version, "1"
+            markdown_makefile.core.base_metadata.get_version(base, {}, "").version,
+            "1",
         )
         self.assertEqual(markdown_makefile.core.base_metadata.get_version(base, {}, "").repo, "foo")
         self.assertEqual(
-            markdown_makefile.core.base_metadata.get_version(base, {"a": clean}, "").version, "1"
+            markdown_makefile.core.base_metadata.get_version(base, {"a": clean}, "").version,
+            "1",
         )
         self.assertEqual(
-            markdown_makefile.core.base_metadata.get_version(base, {"a": clean}, "").repo, "foo"
+            markdown_makefile.core.base_metadata.get_version(base, {"a": clean}, "").repo,
+            "foo",
         )
         self.assertEqual(
             markdown_makefile.core.base_metadata.get_version(
-                base, {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo}, ""
+                base,
+                {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo},
+                "",
             ).version,
             "1, dirty deps, unversioned deps",
         )
         self.assertEqual(
             markdown_makefile.core.base_metadata.get_version(
-                base, {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo}, ""
+                base,
+                {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo},
+                "",
             ).repo,
             "foo",
         )
@@ -62,11 +69,14 @@ class TestBaseMetadata(unittest.TestCase):
             "OVERRIDE",
         )
         self.assertEqual(
-            markdown_makefile.core.base_metadata.get_version(base, {}, "OVERRIDE").repo, "foo"
+            markdown_makefile.core.base_metadata.get_version(base, {}, "OVERRIDE").repo,
+            "foo",
         )
         self.assertEqual(
             markdown_makefile.core.base_metadata.get_version(
-                base, {"a": clean}, "OVERRIDE"
+                base,
+                {"a": clean},
+                "OVERRIDE",
             ).version,
             "OVERRIDE",
         )
@@ -76,13 +86,17 @@ class TestBaseMetadata(unittest.TestCase):
         )
         self.assertEqual(
             markdown_makefile.core.base_metadata.get_version(
-                base, {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo}, "OVERRIDE"
+                base,
+                {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo},
+                "OVERRIDE",
             ).version,
             "OVERRIDE",
         )
         self.assertEqual(
             markdown_makefile.core.base_metadata.get_version(
-                base, {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo}, "OVERRIDE"
+                base,
+                {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo},
+                "OVERRIDE",
             ).repo,
             "foo",
         )
@@ -145,8 +159,8 @@ class TestBaseMetadata(unittest.TestCase):
                 raw_version_file,
                 deps_metadata_file,
                 metadata_out_file,
-            ]
-            + list(args),
+                *args,
+            ],
             check=True,
         )
 
@@ -154,7 +168,9 @@ class TestBaseMetadata(unittest.TestCase):
 
     def test_main_simple(self) -> None:
         metadata_out = self.run_script(
-            {"docversion": "foo", "repo": "bar", "pandoc_version": "1"}, {}, []
+            {"docversion": "foo", "repo": "bar", "pandoc_version": "1"},
+            {},
+            [],
         )
 
         self.assertEqual(
@@ -225,7 +241,7 @@ class TestBaseMetadata(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2:  # noqa: PLR2004
         raise ValueError("Not enough args")
     SCRIPT = sys.argv[1]
     del sys.argv[1]

@@ -19,22 +19,24 @@ from markdown_makefile.utils.publications import (
 
 
 def generate_header(venues: Sequence[str]) -> list[str]:
-    out = [
+    return [
         "<thead>",
         "<tr>",
         '<th title="Target">Target</th>',
         '<th title="Title">Title</th>',
         '<th title="Wordcount">Wordcount</th>',
         '<th style="border-right: 3px solid" title="Notes">Notes</th>',
+        *[f'<th title="{html.escape(v)}">{html.escape(v, quote=False)}</th>' for v in venues],
+        "</tr>",
+        "</thead>",
     ]
-    for v in venues:
-        out.append('<th title="%s">%s</th>' % (html.escape(v), html.escape(v, quote=False)))
-    out += ["</tr>", "</thead>"]
-    return out
 
 
 def generate_row(
-    target: str, data: Publications, venues: Sequence[str], raw: Mapping[str, Any]
+    target: str,
+    data: Publications,
+    venues: Sequence[str],
+    raw: Mapping[str, Any],
 ) -> list[str]:
     ps = {}
     for p in data.publications:
@@ -50,16 +52,12 @@ def generate_row(
 
     out = [
         "<tr>",
-        '<td class="%s" title="%s"><a href="#%s">%s</a></td>'
-        % (class_attr, html.escape(target), html.escape(target), html.escape(target, quote=False)),
-        '<td title="%s">%s</td>' % (html.escape(title), html.escape(title, quote=False)),
-        '<td title="%s">%s</td>'
-        % (
-            html.escape(wordcount),
-            html.escape(wordcount, quote=False),
-        ),
-        '<td style="border-right: 3px solid" title="%s">%s</td>'
-        % (html.escape(notes), html.escape(notes, quote=False)),
+        f'<td class="{class_attr}" title="{html.escape(target)}">'
+        f'<a href="#{html.escape(target)}">{html.escape(target, quote=False)}</a></td>',
+        f'<td title="{html.escape(title)}">{html.escape(title, quote=False)}</td>',
+        f'<td title="{html.escape(wordcount)}">{html.escape(wordcount, quote=False)}</td>',
+        f'<td style="border-right: 3px solid" title="{html.escape(notes)}">'
+        f"{html.escape(notes, quote=False)}</td>",
     ]
 
     for v in sorted(venues):
@@ -73,14 +71,11 @@ def generate_row(
 
 
 def generate_cell(target: str, p: Publication) -> str:
-    content = []
-    for date in p.dates.dates:
-        content.append(date.date_str() + " " + date.state.capitalize())
-    return '<td class="%s" title="%s"><a href="#%s">%s</a></td>' % (
-        p.dates.latest.state,
-        html.escape(target + ", " + p.venue),
-        html.escape(target),
-        "<br>".join([html.escape(c, quote=False) for c in content]),
+    content = [date.date_str() + " " + date.state.capitalize() for date in p.dates.dates]
+    return (
+        f'<td class="{p.dates.latest.state}" title="{html.escape(target + ", " + p.venue)}">'
+        f'<a href="#{html.escape(target)}">'
+        f'{"<br>".join([html.escape(c, quote=False) for c in content])}</a></td>'
     )
 
 
@@ -88,7 +83,7 @@ def generate_table(data: Mapping[str, Publications], raw: Mapping[str, Any]) -> 
     out = ["<table>"]
 
     venue_set = set()
-    for target, ps in data.items():
+    for ps in data.values():
         for p in ps.publications:
             venue_set.add(p.venue)
     venues = sorted(venue_set)
@@ -108,7 +103,7 @@ def generate_details(raw: Mapping[str, Any]) -> list[str]:
     for target in sorted(raw):
         if PUBLICATIONS in raw[target] and raw[target][PUBLICATIONS]:
             out += [
-                '<h3 id="%s">%s</h3>' % (html.escape(target), html.escape(target, quote=False)),
+                f'<h3 id="{html.escape(target)}">{html.escape(target, quote=False)}</h3>',
                 "<code><pre>%s</pre></code>"
                 % html.escape(json.dumps(raw[target], sort_keys=True, indent=4), quote=False),
             ]

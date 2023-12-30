@@ -8,8 +8,6 @@ from collections.abc import Sequence
 
 import markdown_makefile.utils.test_utils
 
-# pylint: disable=line-too-long
-
 SCRIPT = ""
 
 DATA = {
@@ -63,7 +61,7 @@ class TestSummary(unittest.TestCase):
             json.dump(DATA, f)
 
         return subprocess.run(
-            [sys.executable, SCRIPT, filename] + list(args),
+            [sys.executable, SCRIPT, filename, *args],
             check=True,
             capture_output=True,
             encoding="utf-8",
@@ -295,7 +293,7 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2:  # noqa: PLR2004
         raise ValueError("Not enough args")
     SCRIPT = sys.argv[1]
     del sys.argv[1]

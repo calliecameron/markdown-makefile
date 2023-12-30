@@ -8,7 +8,9 @@ def main() -> None:
     args = parser.parse_args()
 
     with open(args.in_file, encoding="utf-8") as in_file, open(
-        args.out_file, mode="w", encoding="utf-8"
+        args.out_file,
+        mode="w",
+        encoding="utf-8",
     ) as out_file:
         first_line = True
         in_front_matter = False

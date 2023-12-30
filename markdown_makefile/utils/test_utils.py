@@ -3,11 +3,15 @@ import os
 import subprocess
 import sys
 from collections.abc import Sequence
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 
 def _pandoc(
-    pandoc: str, filter_arg: str, filter_filename: str, stdin: str, extra_args: Sequence[str]
+    pandoc: str,
+    filter_arg: str,
+    filter_filename: str,
+    stdin: str,
+    extra_args: Sequence[str],
 ) -> dict[str, Any]:
     sys.stderr.write(f"Running pandoc filter '{filter_filename}' on input {stdin}\n")
     try:
@@ -17,8 +21,8 @@ def _pandoc(
                 "--from=markdown-smart",
                 "--to=json",
                 f"{filter_arg}={filter_filename}",
-            ]
-            + list(extra_args),
+                *extra_args,
+            ],
             input=stdin,
             capture_output=True,
             check=True,
@@ -33,13 +37,19 @@ def _pandoc(
 
 
 def pandoc_lua_filter(
-    pandoc: str, filter_filename: str, stdin: str, extra_args: Optional[Sequence[str]] = None
+    pandoc: str,
+    filter_filename: str,
+    stdin: str,
+    extra_args: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     return _pandoc(pandoc, "--lua-filter", filter_filename, stdin, extra_args or [])
 
 
 def pandoc_filter(
-    pandoc: str, filter_filename: str, stdin: str, extra_args: Optional[Sequence[str]] = None
+    pandoc: str,
+    filter_filename: str,
+    stdin: str,
+    extra_args: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     return _pandoc(pandoc, "--filter", filter_filename, stdin, extra_args or [])
 

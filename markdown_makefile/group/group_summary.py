@@ -55,10 +55,10 @@ class Sorter:
         self._field = field
         self._reverse = reverse
 
-    def key(self, elem: Mapping[str, Any]) -> Any:
+    def key(self, elem: Mapping[str, Any]) -> Any:  # noqa: ANN401
         if self._field == DATE:
             return ", ".join(
-                sorted([d.strip() for d in elem[self._field].split(",")], reverse=self._reverse)
+                sorted([d.strip() for d in elem[self._field].split(",")], reverse=self._reverse),
             )
         if isinstance(elem[self._field], str):
             return elem[self._field].lower()
@@ -70,7 +70,7 @@ class Sorter:
 
 def parse_date(date: str) -> str:
     settings = {"DATE_ORDER": "DMY", "PARSERS": ["custom-formats", "absolute-time"]}
-    parser = DateDataParser(["en"], ["en-GB"], settings=settings)  # type: ignore
+    parser = DateDataParser(["en"], ["en-GB"], settings=settings)  # type: ignore[arg-type]
 
     out = set()
     for text, _ in search_dates(date, languages=["en"], settings=settings) or []:
@@ -94,7 +94,9 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Summarise the contents of the group")
     parser.add_argument("in_file")
     parser.add_argument(
-        "--raw", action="store_true", help="output CSV instead of a human-readable table"
+        "--raw",
+        action="store_true",
+        help="output CSV instead of a human-readable table",
     )
     parser.add_argument("--reverse", action="store_true", help="reverse sorting direction")
 
@@ -152,10 +154,7 @@ def main() -> None:
             publication = ""
             if metadata.PUBLICATIONS in j and j[metadata.PUBLICATIONS]:
                 ps = Publications.from_json(j[metadata.PUBLICATIONS])
-                if ps.active:
-                    publication = ps.highest_active_state
-                else:
-                    publication = "attempted"
+                publication = ps.highest_active_state if ps.active else "attempted"
 
             row = {
                 TARGET: target,

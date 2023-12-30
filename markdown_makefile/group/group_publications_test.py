@@ -9,8 +9,6 @@ from typing import Any
 
 import markdown_makefile.utils.test_utils
 
-# pylint: disable=line-too-long
-
 SCRIPT = ""
 
 
@@ -163,7 +161,7 @@ a:visited { color: black; }
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2:  # noqa: PLR2004
         raise ValueError("Not enough args")
     SCRIPT = sys.argv[1]
     del sys.argv[1]

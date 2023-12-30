@@ -1,6 +1,6 @@
 import sys
 
-from pymarkdown.main import PyMarkdownLint  # type: ignore
+from pymarkdown.main import PyMarkdownLint  # type: ignore[import-untyped]
 
 out_file = sys.argv[1]
 del sys.argv[1]

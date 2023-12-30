@@ -8,7 +8,8 @@ class TestMetadata(unittest.TestCase):
         self.assertEqual(markdown_makefile.utils.metadata.parse_author({}), "")
         self.assertEqual(markdown_makefile.utils.metadata.parse_author({"author": "Foo"}), "Foo")
         self.assertEqual(
-            markdown_makefile.utils.metadata.parse_author({"author": ["Foo", "Bar"]}), "Foo"
+            markdown_makefile.utils.metadata.parse_author({"author": ["Foo", "Bar"]}),
+            "Foo",
         )
 
         with self.assertRaises(ValueError):

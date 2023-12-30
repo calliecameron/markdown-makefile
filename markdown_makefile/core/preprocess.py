@@ -2,14 +2,11 @@ import argparse
 import re
 import sys
 from collections.abc import Mapping, MutableSequence, Set
-from typing import Optional
 
 import markdown_makefile.utils.bazel_package
 
-# pylint: disable=consider-using-enumerate
-
 INCLUDE = "!include"
-CURLY_QUOTES = "“”‘’"
+CURLY_QUOTES = "“”‘’"  # noqa: RUF001
 INCLUDE_MSG = (
     "Incorrectly-formatted include. Must be '!include <md_library label>' where label "
     "is in deps, e.g. '!include //foo:bar'. %s"
@@ -25,8 +22,10 @@ ELLIPSIS_MSG = "Literal ellipses must be replaced with '...'"
 
 
 def process_include(
-    line: str, deps: Mapping[str, str], current_package: str
-) -> tuple[str, Optional[str], Optional[str]]:
+    line: str,
+    deps: Mapping[str, str],
+    current_package: str,
+) -> tuple[str, str | None, str | None]:
     if not line.startswith(INCLUDE):
         return line, None, None
     raw_label = line[len(INCLUDE) :]
@@ -35,7 +34,8 @@ def process_include(
     raw_label = raw_label.lstrip(" ")
     try:
         package, target = markdown_makefile.utils.bazel_package.canonicalise_label(
-            raw_label, current_package
+            raw_label,
+            current_package,
         )
         label = package + ":" + target
         if label in deps:
@@ -46,7 +46,9 @@ def process_include(
 
 
 def process_images(
-    line: str, images: Mapping[str, str], current_package: str
+    line: str,
+    images: Mapping[str, str],
+    current_package: str,
 ) -> tuple[str, frozenset[str], list[tuple[int, str]]]:
     original_line = line
     problems = []
@@ -56,7 +58,8 @@ def process_images(
         raw_label = match.group(1)
         try:
             package, target = markdown_makefile.utils.bazel_package.canonicalise_label(
-                raw_label, current_package
+                raw_label,
+                current_package,
             )
             label = package + ":" + target
             labels.add(label)
@@ -73,7 +76,7 @@ def process_images(
     return line, frozenset(labels), []
 
 
-def check_strict_deps(used: Set[str], declared: Set[str], name: str) -> Optional[str]:
+def check_strict_deps(used: Set[str], declared: Set[str], name: str) -> str | None:
     if used != declared:
         used_only = used - declared
         declared_only = declared - used
@@ -119,11 +122,10 @@ def preprocess(
             problems += [(row, col, problem) for col, problem in line_problems]
 
             for col in range(len(line)):
-                if line[col] in CURLY_QUOTES:
-                    if col == 0 or line[col - 1] != "\\":
-                        problems.append((row, col, CURLY_QUOTE_MSG))
+                if line[col] in CURLY_QUOTES and (col == 0 or line[col - 1] != "\\"):
+                    problems.append((row, col, CURLY_QUOTE_MSG))
 
-            col = line.find("–")
+            col = line.find("–")  # noqa: RUF001
             if col != -1:
                 problems.append((row, col, EN_DASH_MSG))
 

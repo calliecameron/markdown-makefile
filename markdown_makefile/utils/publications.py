@@ -1,6 +1,6 @@
 import datetime
 from collections.abc import Mapping, Sequence
-from typing import Any, NamedTuple, Optional
+from typing import Any, NamedTuple
 
 _VENUE = "venue"
 _PAID = "paid"
@@ -15,8 +15,8 @@ REJECTED = "rejected"
 SELF_PUBLISHED = "self-published"
 PUBLISHED = "published"
 
-# Later states must come later in the list
-_DATE_KEYS = [
+# Later states must come later in the sequence
+_DATE_KEYS = (
     # Intermediate
     SUBMITTED,
     ACCEPTED,
@@ -27,14 +27,14 @@ _DATE_KEYS = [
     # Good end states
     SELF_PUBLISHED,
     PUBLISHED,
-]
+)
 
-_KEYS = frozenset(_DATE_KEYS + [_VENUE, _PAID, _NOTES, _URLS])
+_KEYS = frozenset([*_DATE_KEYS, _VENUE, _PAID, _NOTES, _URLS])
 
 
 class Date(NamedTuple):
     state: str
-    date: Optional[datetime.date]
+    date: datetime.date | None
 
     def date_str(self) -> str:
         if self.date:
@@ -45,13 +45,13 @@ class Date(NamedTuple):
 class Dates:
     def __init__(
         self,
-        submitted: Optional[datetime.date] = None,
-        accepted: Optional[datetime.date] = None,
-        abandoned: Optional[datetime.date] = None,
-        withdrawn: Optional[datetime.date] = None,
-        rejected: Optional[datetime.date] = None,
-        self_published: Optional[datetime.date] = None,
-        published: Optional[datetime.date] = None,
+        submitted: datetime.date | None = None,
+        accepted: datetime.date | None = None,
+        abandoned: datetime.date | None = None,
+        withdrawn: datetime.date | None = None,
+        rejected: datetime.date | None = None,
+        self_published: datetime.date | None = None,
+        published: datetime.date | None = None,
     ) -> None:
         super().__init__()
 
@@ -86,31 +86,31 @@ class Dates:
             raise ValueError("Dates must be in increasing order")
 
     @property
-    def submitted(self) -> Optional[datetime.date]:
+    def submitted(self) -> datetime.date | None:
         return self._submitted.date
 
     @property
-    def accepted(self) -> Optional[datetime.date]:
+    def accepted(self) -> datetime.date | None:
         return self._accepted.date
 
     @property
-    def abandoned(self) -> Optional[datetime.date]:
+    def abandoned(self) -> datetime.date | None:
         return self._abandoned.date
 
     @property
-    def withdrawn(self) -> Optional[datetime.date]:
+    def withdrawn(self) -> datetime.date | None:
         return self._withdrawn.date
 
     @property
-    def rejected(self) -> Optional[datetime.date]:
+    def rejected(self) -> datetime.date | None:
         return self._rejected.date
 
     @property
-    def self_published(self) -> Optional[datetime.date]:
+    def self_published(self) -> datetime.date | None:
         return self._self_published.date
 
     @property
-    def published(self) -> Optional[datetime.date]:
+    def published(self) -> datetime.date | None:
         return self._published.date
 
     @property
@@ -161,14 +161,19 @@ class Dates:
                 out[k.replace("-", "_")] = d
             except ValueError as e:
                 raise ValueError(
-                    "Value of key '%s' must be a date in YYYY-MM-DD format; got '%s'" % (k, v)
+                    f"Value of key '{k}' must be a date in YYYY-MM-DD format; got '{v}'",
                 ) from e
         return Dates(**out)
 
 
 class Publication:
     def __init__(
-        self, venue: str, dates: Dates, urls: Sequence[str], notes: str, paid: str
+        self,
+        venue: str,
+        dates: Dates,
+        urls: Sequence[str],
+        notes: str,
+        paid: str,
     ) -> None:
         super().__init__()
 
@@ -203,9 +208,9 @@ class Publication:
 
     @staticmethod
     def from_json(j: Mapping[str, Any]) -> "Publication":
-        def assert_str(k: str, v: Any) -> None:
+        def assert_str(k: str, v: Any) -> None:  # noqa: ANN401
             if not isinstance(v, str):
-                raise ValueError("Value of key '%s' must be a string; got '%s'" % (k, str(type(v))))
+                raise ValueError(f"Value of key '{k}' must be a string; got '{type(v)}'")
 
         unknown_keys = frozenset(j.keys()) - _KEYS
         if unknown_keys:
@@ -232,9 +237,7 @@ class Publication:
                 paid = v
             elif k == _URLS:
                 if not isinstance(v, list):
-                    raise ValueError(
-                        "Value of key '%s' must be a list; got '%s'" % (k, str(type(v)))
-                    )
+                    raise ValueError(f"Value of key '{k}' must be a list; got '{type(v)}'")
                 for url in v:
                     if not isinstance(url, str):
                         raise ValueError("URLs must be strings; got '%s'" % str(type(url)))

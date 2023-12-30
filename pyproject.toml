@@ -1,2 +1,24 @@
 [tool.ruff]
 line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN101",
+    "C90",
+    "D",
+    "EM",
+    "FBT",
+    "INP",
+    "PLR0912",
+    "PLR0913",
+    "PLR0915",
+    "PT",
+    "PTH",
+    "PYI025",
+    "S",
+    "T20",
+    "TRY003",
+    "TRY004",
+]

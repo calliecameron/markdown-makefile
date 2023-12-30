@@ -16,7 +16,7 @@ class TestSpellcheckFilter(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 3:  # noqa: PLR2004
         raise ValueError("Not enough args")
     PANDOC = sys.argv[1]
     del sys.argv[1]

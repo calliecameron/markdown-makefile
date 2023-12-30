@@ -21,7 +21,7 @@ An image ![foo](%s) goes here.
 \\“Lots \\”of \\‘quotes\\’.
 
 Some -- dashes---
-"""
+"""  # noqa: RUF001
 
 
 class TestPreprocess(unittest.TestCase):
@@ -124,7 +124,8 @@ class TestPreprocess(unittest.TestCase):
             "foo",
         )
         self.assertEqual(
-            line, "Foo ![bar](foo/bar.jpg) bar ![quux](baz/quux/quux.png) baz ![bar](foo/bar.jpg)"
+            line,
+            "Foo ![bar](foo/bar.jpg) bar ![quux](baz/quux/quux.png) baz ![bar](foo/bar.jpg)",
         )
         self.assertEqual(used, frozenset(["foo:bar", "baz/quux:quux"]))
         self.assertEqual(problems, [])
@@ -155,29 +156,37 @@ class TestPreprocess(unittest.TestCase):
         # OK
         self.assertIsNone(
             markdown_makefile.core.preprocess.check_strict_deps(
-                frozenset(["a", "b"]), frozenset(["a", "b"]), "foo"
-            )
+                frozenset(["a", "b"]),
+                frozenset(["a", "b"]),
+                "foo",
+            ),
         )
 
         # Used but not declared
         self.assertIsNotNone(
             markdown_makefile.core.preprocess.check_strict_deps(
-                frozenset(["a", "b"]), frozenset(["a"]), "foo"
-            )
+                frozenset(["a", "b"]),
+                frozenset(["a"]),
+                "foo",
+            ),
         )
 
         # Declared but not used
         self.assertIsNotNone(
             markdown_makefile.core.preprocess.check_strict_deps(
-                frozenset(["a"]), frozenset(["a", "b"]), "foo"
-            )
+                frozenset(["a"]),
+                frozenset(["a", "b"]),
+                "foo",
+            ),
         )
 
         # Both
         self.assertIsNotNone(
             markdown_makefile.core.preprocess.check_strict_deps(
-                frozenset(["a", "c"]), frozenset(["a", "d"]), "foo"
-            )
+                frozenset(["a", "c"]),
+                frozenset(["a", "d"]),
+                "foo",
+            ),
         )
 
     def test_preprocess(self) -> None:
@@ -203,9 +212,9 @@ class TestPreprocess(unittest.TestCase):
 
         self.assertNotEqual(markdown_makefile.core.preprocess.preprocess(["“"], {}, {}, "a"), [])
         self.assertNotEqual(markdown_makefile.core.preprocess.preprocess(["”"], {}, {}, "a"), [])
-        self.assertNotEqual(markdown_makefile.core.preprocess.preprocess(["‘"], {}, {}, "a"), [])
-        self.assertNotEqual(markdown_makefile.core.preprocess.preprocess(["’"], {}, {}, "a"), [])
-        self.assertNotEqual(markdown_makefile.core.preprocess.preprocess(["–"], {}, {}, "a"), [])
+        self.assertNotEqual(markdown_makefile.core.preprocess.preprocess(["‘"], {}, {}, "a"), [])  # noqa: RUF001
+        self.assertNotEqual(markdown_makefile.core.preprocess.preprocess(["’"], {}, {}, "a"), [])  # noqa: RUF001
+        self.assertNotEqual(markdown_makefile.core.preprocess.preprocess(["–"], {}, {}, "a"), [])  # noqa: RUF001
         self.assertNotEqual(markdown_makefile.core.preprocess.preprocess(["—"], {}, {}, "a"), [])
         self.assertNotEqual(markdown_makefile.core.preprocess.preprocess(["…"], {}, {}, "a"), [])
 
@@ -239,9 +248,9 @@ class TestPreprocess(unittest.TestCase):
                 in_file,
                 out_file,
                 current_package,
-            ]
-            + dep_args
-            + image_args,
+                *dep_args,
+                *image_args,
+            ],
             check=True,
         )
 
@@ -272,7 +281,7 @@ class TestPreprocess(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2:  # noqa: PLR2004
         raise ValueError("Not enough args")
     SCRIPT = sys.argv[1]
     del sys.argv[1]

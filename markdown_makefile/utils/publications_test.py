@@ -34,7 +34,8 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.self_published)
         self.assertIsNone(d.published)
         self.assertEqual(
-            d.dates, (("submitted", date(2023, 5, 16)), ("accepted", date(2023, 5, 17)))
+            d.dates,
+            (("submitted", date(2023, 5, 16)), ("accepted", date(2023, 5, 17))),
         )
         self.assertEqual(d.latest, ("accepted", date(2023, 5, 17)))
         self.assertTrue(d.active)
@@ -49,7 +50,8 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.self_published)
         self.assertIsNone(d.published)
         self.assertEqual(
-            d.dates, (("submitted", date(2023, 5, 16)), ("rejected", date(2023, 5, 17)))
+            d.dates,
+            (("submitted", date(2023, 5, 16)), ("rejected", date(2023, 5, 17))),
         )
         self.assertEqual(d.latest, ("rejected", date(2023, 5, 17)))
         self.assertFalse(d.active)
@@ -64,7 +66,8 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.self_published)
         self.assertIsNone(d.published)
         self.assertEqual(
-            d.dates, (("submitted", date(2023, 5, 16)), ("withdrawn", date(2023, 5, 17)))
+            d.dates,
+            (("submitted", date(2023, 5, 16)), ("withdrawn", date(2023, 5, 17))),
         )
         self.assertEqual(d.latest, ("withdrawn", date(2023, 5, 17)))
         self.assertFalse(d.active)
@@ -79,7 +82,8 @@ class TestDates(unittest.TestCase):
         self.assertIsNone(d.self_published)
         self.assertIsNone(d.published)
         self.assertEqual(
-            d.dates, (("submitted", date(2023, 5, 16)), ("abandoned", date(2023, 5, 17)))
+            d.dates,
+            (("submitted", date(2023, 5, 16)), ("abandoned", date(2023, 5, 17))),
         )
         self.assertEqual(d.latest, ("abandoned", date(2023, 5, 17)))
         self.assertFalse(d.active)
@@ -99,7 +103,9 @@ class TestDates(unittest.TestCase):
 
     def test_good_published(self) -> None:
         d = Dates(
-            submitted=date(2023, 5, 16), accepted=date(2023, 5, 17), published=date(2023, 5, 18)
+            submitted=date(2023, 5, 16),
+            accepted=date(2023, 5, 17),
+            published=date(2023, 5, 18),
         )
         self.assertEqual(d.submitted, date(2023, 5, 16))
         self.assertEqual(d.accepted, date(2023, 5, 17))
@@ -146,7 +152,9 @@ class TestDates(unittest.TestCase):
     def test_bad_wrong_order(self) -> None:
         with self.assertRaises(ValueError):
             Dates(
-                submitted=date(2023, 5, 16), accepted=date(2023, 5, 16), published=date(2023, 5, 15)
+                submitted=date(2023, 5, 16),
+                accepted=date(2023, 5, 16),
+                published=date(2023, 5, 15),
             )
 
     def test_from_json_good(self) -> None:
@@ -155,7 +163,7 @@ class TestDates(unittest.TestCase):
                 "submitted": "2023-05-16",
                 "accepted": "2023-05-17",
                 "published": "2023-05-18",
-            }
+            },
         )
         self.assertEqual(d.submitted, date(2023, 5, 16))
         self.assertEqual(d.accepted, date(2023, 5, 17))
@@ -179,7 +187,7 @@ class TestDates(unittest.TestCase):
         d = Dates.from_json(
             {
                 "self-published": "2023-05-18",
-            }
+            },
         )
         self.assertIsNone(d.submitted)
         self.assertIsNone(d.accepted)
@@ -203,7 +211,7 @@ class TestDates(unittest.TestCase):
                     "submitted": "2023-05-16",
                     "accepted": "2023/05/16",
                     "published": "2023-05-18",
-                }
+                },
             )
 
 
@@ -212,7 +220,9 @@ class TestPublication(unittest.TestCase):
         p = Publication(
             "Book",
             Dates(
-                submitted=date(2023, 5, 16), accepted=date(2023, 5, 17), published=date(2023, 5, 18)
+                submitted=date(2023, 5, 16),
+                accepted=date(2023, 5, 17),
+                published=date(2023, 5, 18),
             ),
             ["foo", "bar"],
             "baz",
@@ -255,7 +265,7 @@ class TestPublication(unittest.TestCase):
                 "urls": ["foo", "bar"],
                 "notes": "baz",
                 "paid": "quux",
-            }
+            },
         )
         self.assertEqual(p.venue, "Book")
         d = p.dates
@@ -275,7 +285,7 @@ class TestPublication(unittest.TestCase):
             {
                 "venue": "Book",
                 "submitted": "2023-05-16",
-            }
+            },
         )
         self.assertEqual(p.venue, "Book")
         d = p.dates
@@ -302,7 +312,7 @@ class TestPublication(unittest.TestCase):
                     "notes": "baz",
                     "paid": "quux",
                     "foo": "bar",
-                }
+                },
             )
 
     def test_from_json_bad_date_type(self) -> None:
@@ -316,7 +326,7 @@ class TestPublication(unittest.TestCase):
                     "urls": ["foo", "bar"],
                     "notes": "baz",
                     "paid": "quux",
-                }
+                },
             )
 
     def test_from_json_bad_venue_type(self) -> None:
@@ -330,7 +340,7 @@ class TestPublication(unittest.TestCase):
                     "urls": ["foo", "bar"],
                     "notes": "baz",
                     "paid": "quux",
-                }
+                },
             )
 
     def test_from_json_bad_notes_type(self) -> None:
@@ -344,7 +354,7 @@ class TestPublication(unittest.TestCase):
                     "urls": ["foo", "bar"],
                     "notes": 2,
                     "paid": "quux",
-                }
+                },
             )
 
     def test_from_json_bad_paid_type(self) -> None:
@@ -358,7 +368,7 @@ class TestPublication(unittest.TestCase):
                     "urls": ["foo", "bar"],
                     "notes": "baz",
                     "paid": 2,
-                }
+                },
             )
 
     def test_from_json_bad_urls_type(self) -> None:
@@ -372,7 +382,7 @@ class TestPublication(unittest.TestCase):
                     "urls": 2,
                     "notes": "baz",
                     "paid": "quux",
-                }
+                },
             )
 
     def test_from_json_bad_url_type(self) -> None:
@@ -386,7 +396,7 @@ class TestPublication(unittest.TestCase):
                     "urls": ["foo", 2],
                     "notes": "baz",
                     "paid": "quux",
-                }
+                },
             )
 
 
@@ -415,7 +425,7 @@ class TestPublications(unittest.TestCase):
                     "baz2",
                     "quux2",
                 ),
-            ]
+            ],
         )
 
         self.assertEqual(len(ps.publications), 2)
@@ -473,7 +483,7 @@ class TestPublications(unittest.TestCase):
                     "baz2",
                     "quux2",
                 ),
-            ]
+            ],
         )
 
         self.assertEqual(len(ps.publications), 2)
@@ -533,7 +543,7 @@ class TestPublications(unittest.TestCase):
                     "notes": "baz2",
                     "paid": "quux2",
                 },
-            ]
+            ],
         )
 
         self.assertEqual(len(ps.publications), 2)

@@ -1,4 +1,3 @@
-load("@python_versions//3.10:defs.bzl", "py_console_script_binary")
 load("//markdown_makefile/python:python.bzl", "py_source")
 load("//markdown_makefile/shell:shell.bzl", "sh_source")
 
@@ -14,27 +13,8 @@ py_source(
     visibility = ["//visibility:public"],
 )
 
-py_console_script_binary(
-    name = "black",
-    pkg = "@pip//black:pkg",
+alias(
+    name = "ruff",
+    actual = "@ruff_x86_64-unknown-linux-gnu//:ruff",
     visibility = ["//visibility:public"],
 )
-
-py_console_script_binary(
-    name = "isort",
-    pkg = "@pip//isort:pkg",
-    visibility = ["//visibility:public"],
-)
-
-py_console_script_binary(
-    name = "flake8",
-    pkg = "@pip//flake8:pkg",
-    visibility = ["//visibility:public"],
-)
-
-# Temporarily broken
-# alias(
-#     name = "pylint",
-#     actual = entry_point("pylint"),
-#     visibility = ["//visibility:public"],
-# )

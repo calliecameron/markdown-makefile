@@ -23,7 +23,6 @@ buildifier_test(
 
 exports_files(
     [
-        ".flake8",
         "pyproject.toml",
     ],
     visibility = ["//:__subpackages__"],

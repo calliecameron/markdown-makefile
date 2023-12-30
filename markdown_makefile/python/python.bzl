@@ -72,59 +72,31 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
         ] + srcs,
     )
 
-    # Temporarily broken
-    # native.sh_test(
-    #     name = name + "_pylint_test",
-    #     srcs = ["//markdown_makefile/python:stub.sh"],
-    #     args = [
-    #         "$(rootpath //markdown_makefile/python:pylint)",
-    #         "--rcfile=$(rootpath //:pyproject.toml)",
-    #     ] + ["$(location %s)" % src for src in srcs],
-    #     data = [
-    #         "//:pyproject.toml",
-    #         "//markdown_makefile/python:pylint",
-    #     ] + srcs + deps,
-    # )
-
     native.sh_test(
-        name = name + "_flake8_test",
+        name = name + "_ruff_lint_test",
         srcs = ["//markdown_makefile/python:stub.sh"],
         args = [
-            "$(rootpath //markdown_makefile/python:flake8)",
-            "--config=$(rootpath //:.flake8)",
+            "$(rootpath //markdown_makefile/python:ruff)",
+            "check",
+            "--config=$(rootpath //:pyproject.toml)",
         ] + ["$(location %s)" % src for src in srcs],
         data = [
-            "//:.flake8",
-            "//markdown_makefile/python:flake8",
+            "//:pyproject.toml",
+            "//markdown_makefile/python:ruff",
         ] + srcs + deps,
     )
 
     native.sh_test(
-        name = name + "_black_test",
+        name = name + "_ruff_format_test",
         srcs = ["//markdown_makefile/python:stub.sh"],
         args = [
-            "$(rootpath //markdown_makefile/python:black)",
-            "--config",
-            "$(rootpath //:pyproject.toml)",
-            "--check",
+            "$(rootpath //markdown_makefile/python:ruff)",
+            "format",
+            "--config=$(rootpath //:pyproject.toml)",
+            "--diff",
         ] + ["$(location %s)" % src for src in srcs],
         data = [
             "//:pyproject.toml",
-            "//markdown_makefile/python:black",
-        ] + srcs + deps,
-    )
-
-    native.sh_test(
-        name = name + "_isort_test",
-        srcs = ["//markdown_makefile/python:stub.sh"],
-        args = [
-            "$(rootpath //markdown_makefile/python:isort)",
-            "--settings-file",
-            "$(rootpath //:pyproject.toml)",
-            "--check",
-        ] + ["$(location %s)" % src for src in srcs],
-        data = [
-            "//:pyproject.toml",
-            "//markdown_makefile/python:isort",
+            "//markdown_makefile/python:ruff",
         ] + srcs + deps,
     )

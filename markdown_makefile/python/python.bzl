@@ -1,7 +1,8 @@
 """Python rules."""
 
 load("@pip//:requirements.bzl", "requirement")
-load("@rules_python//python:defs.bzl", _py_binary = "py_binary", _py_library = "py_library", _py_test = "py_test")
+load("@python_versions//3.10:defs.bzl", _py_binary = "py_binary", _py_test = "py_test")
+load("@rules_python//python:defs.bzl", _py_library = "py_library")
 
 def py_library(name, type_stub_deps = None, **kwargs):
     _py_lint(

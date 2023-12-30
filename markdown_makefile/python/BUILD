@@ -1,4 +1,4 @@
-load("@pip_310//:requirements.bzl", "entry_point")
+load("@python_versions//3.10:defs.bzl", "py_console_script_binary")
 load("//markdown_makefile/python:python.bzl", "py_source")
 load("//markdown_makefile/shell:shell.bzl", "sh_source")
 
@@ -14,21 +14,21 @@ py_source(
     visibility = ["//visibility:public"],
 )
 
-alias(
+py_console_script_binary(
     name = "black",
-    actual = entry_point("black"),
+    pkg = "@pip//black:pkg",
     visibility = ["//visibility:public"],
 )
 
-alias(
+py_console_script_binary(
     name = "isort",
-    actual = entry_point("isort"),
+    pkg = "@pip//isort:pkg",
     visibility = ["//visibility:public"],
 )
 
-alias(
+py_console_script_binary(
     name = "flake8",
-    actual = entry_point("flake8"),
+    pkg = "@pip//flake8:pkg",
     visibility = ["//visibility:public"],
 )
 

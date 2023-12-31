@@ -27,3 +27,9 @@ alias(
     actual = ":_shellcheck",
     visibility = ["//:__subpackages__"],
 )
+
+alias(
+    name = "shfmt",
+    actual = "@shfmt_linux_x86_64//file:shfmt",
+    visibility = ["//:__subpackages__"],
+)

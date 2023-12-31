@@ -62,13 +62,13 @@ def _sh_lint(name, **kwargs):
         name = name + "_shfmt_test",
         srcs = ["//markdown_makefile/utils:stub.sh"],
         args = [
-            "$(rootpath //markdown_makefile/shell:shfmt)",
+            "$(rootpath //tools:shfmt)",
             "-l",
             "-d",
             "-i",
             "4",
         ] + ["$(location %s)" % src for src in srcs],
         data = [
-            "//markdown_makefile/shell:shfmt",
+            "//tools:shfmt",
         ] + srcs,
     )

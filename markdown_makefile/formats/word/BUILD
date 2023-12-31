@@ -35,13 +35,13 @@ sh_test(
     name = "ms_docx_filter_test",
     srcs = ["ms_docx_filter_test.sh"],
     args = [
-        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath //tools:pandoc)",
         "$(rootpath ms_docx_filter.lua)",
         "$(rootpath reference.docx)",
     ],
     data = [
         "ms_docx_filter.lua",
         "reference.docx",
-        "@pandoc",
+        "//tools:pandoc",
     ],
 )

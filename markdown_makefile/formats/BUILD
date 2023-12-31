@@ -60,12 +60,12 @@ py_test(
     name = "add_title_test",
     srcs = ["add_title_test.py"],
     args = [
-        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath //tools:pandoc)",
         "$(rootpath add_title.lua)",
     ],
     data = [
         "add_title.lua",
-        "@pandoc",
+        "//tools:pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )

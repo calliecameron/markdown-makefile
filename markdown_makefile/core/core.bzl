@@ -283,7 +283,7 @@ md_library = rule(
             doc = "Label of the output metadata file.",
         ),
         "_pandoc": attr.label(
-            default = "@pandoc//:pandoc",
+            default = "//tools:pandoc",
         ),
         "_raw_version": attr.label(
             default = "//markdown_makefile/core:raw_version",

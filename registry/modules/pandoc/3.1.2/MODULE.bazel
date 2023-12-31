@@ -1,4 +1,0 @@
-module(
-    name = "pandoc",
-    version = "3.1.2",
-)

@@ -9,5 +9,5 @@ sh_binary(
         "resources/**",
         "translations/**",
     ]),
-    visibility = ["//visibility:public"],
+    visibility = ["@markdown_makefile//tools:__pkg__"],
 )

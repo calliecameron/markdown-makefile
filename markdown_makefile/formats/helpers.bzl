@@ -24,7 +24,7 @@ def timestamp_override(ctx):
 
 def pandoc_bin():
     return attr.label(
-        default = "@pandoc//:pandoc",
+        default = "//tools:pandoc",
     )
 
 def pandoc_script():

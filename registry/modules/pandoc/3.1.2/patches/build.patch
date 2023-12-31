@@ -1,8 +1,0 @@
---- /dev/null
-+++ BUILD
-@@ -0,0 +1,5 @@
-+sh_binary(
-+    name = "pandoc",
-+    srcs = ["bin/pandoc"],
-+    visibility = ["//visibility:public"],
-+)

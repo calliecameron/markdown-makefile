@@ -1,6 +1,6 @@
+load("@pip//:requirements.bzl", "requirement")
 load("//markdown_makefile/python:python.bzl", "py_binary", "py_test")
 load("//markdown_makefile/shell:shell.bzl", "sh_binary")
-load("@pip//:requirements.bzl", "requirement")
 
 exports_files(
     [
@@ -123,12 +123,12 @@ py_test(
     name = "validate_test",
     srcs = ["validate_test.py"],
     args = [
-        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath //tools:pandoc)",
         "$(rootpath validate)",
     ],
     data = [
         ":validate",
-        "@pandoc",
+        "//tools:pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
@@ -137,12 +137,12 @@ py_test(
     name = "include_test",
     srcs = ["include_test.py"],
     args = [
-        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath //tools:pandoc)",
         "$(rootpath include.lua)",
     ],
     data = [
         "include.lua",
-        "@pandoc",
+        "//tools:pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
@@ -151,12 +151,12 @@ py_test(
     name = "starts_with_text_test",
     srcs = ["starts_with_text_test.py"],
     args = [
-        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath //tools:pandoc)",
         "$(rootpath starts_with_text.lua)",
     ],
     data = [
         "starts_with_text.lua",
-        "@pandoc",
+        "//tools:pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
@@ -165,12 +165,12 @@ py_test(
     name = "wordcount_test",
     srcs = ["wordcount_test.py"],
     args = [
-        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath //tools:pandoc)",
         "$(rootpath wordcount.lua)",
     ],
     data = [
         "wordcount.lua",
-        "@pandoc",
+        "//tools:pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
@@ -179,12 +179,12 @@ py_test(
     name = "poetry_lines_test",
     srcs = ["poetry_lines_test.py"],
     args = [
-        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath //tools:pandoc)",
         "$(rootpath poetry_lines.lua)",
     ],
     data = [
         "poetry_lines.lua",
-        "@pandoc",
+        "//tools:pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
@@ -193,12 +193,12 @@ py_test(
     name = "write_metadata_test",
     srcs = ["write_metadata_test.py"],
     args = [
-        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath //tools:pandoc)",
         "$(rootpath write_metadata.lua)",
     ],
     data = [
         "write_metadata.lua",
-        "@pandoc",
+        "//tools:pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
@@ -207,12 +207,12 @@ py_test(
     name = "cleanup_test",
     srcs = ["cleanup_test.py"],
     args = [
-        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath //tools:pandoc)",
         "$(rootpath cleanup.lua)",
     ],
     data = [
         "cleanup.lua",
-        "@pandoc",
+        "//tools:pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )
@@ -235,12 +235,12 @@ py_test(
     name = "spellcheck_filter_test",
     srcs = ["spellcheck_filter_test.py"],
     args = [
-        "$(rootpath @pandoc//:pandoc)",
+        "$(rootpath //tools:pandoc)",
         "$(rootpath spellcheck_filter.lua)",
     ],
     data = [
         "spellcheck_filter.lua",
-        "@pandoc",
+        "//tools:pandoc",
     ],
     deps = ["//markdown_makefile/utils:test_utils"],
 )

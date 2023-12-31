@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "e04f288c67392e095659a74633a9eef83dff338f72b6a669021f1cb9579dda88",
+  "moduleFileHash": "b781ac732c5b4eaf8260693efec86a421f454010333c1e8a2b4cf16d1e1b3633",
   "flags": {
     "cmdRegistries": [
       "file:///%workspace%/registry",
@@ -19,7 +19,7 @@
   "moduleDepGraph": {
     "<root>": {
       "name": "markdown_makefile",
-      "version": "1.0.0-pre14",
+      "version": "0.15.0",
       "key": "<root>",
       "repoName": "markdown_makefile",
       "executionPlatformsToRegister": [],

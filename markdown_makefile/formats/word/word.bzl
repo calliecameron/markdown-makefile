@@ -219,7 +219,7 @@ md_ms_docx = rule(
             default = "//markdown_makefile/formats/word:ms_metadata",
         ),
         "_md2short": attr.label(
-            default = "@prosegrinder_pandoc_templates//:md2short",
+            default = "//tools:md2short",
         ),
         "_filter": attr.label(
             allow_single_file = True,

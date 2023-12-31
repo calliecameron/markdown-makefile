@@ -14,10 +14,6 @@ bazel_dep(
     version = "0.27.1",
 )
 bazel_dep(
-    name = "prosegrinder_pandoc_templates",
-    version = "0.4.0.3",
-)
-bazel_dep(
     name = "buildifier_prebuilt",
     version = "6.4.0",
 )
@@ -49,3 +45,6 @@ use_repo(calibre, "calibre")
 
 pandoc = use_extension("//tools:pandoc.bzl", "pandoc")
 use_repo(pandoc, "pandoc")
+
+prosegrinder_pandoc_templates = use_extension("//tools:prosegrinder_pandoc_templates.bzl", "prosegrinder_pandoc_templates")
+use_repo(prosegrinder_pandoc_templates, "prosegrinder_pandoc_templates")

@@ -5,6 +5,12 @@ alias(
 )
 
 alias(
+    name = "md2short",
+    actual = "@prosegrinder_pandoc_templates//:md2short",
+    visibility = ["//:__subpackages__"],
+)
+
+alias(
     name = "pandoc",
     actual = "@pandoc//:pandoc",
     visibility = ["//:__subpackages__"],

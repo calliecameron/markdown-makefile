@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "a1bb9fcb5818f82d535ae834747c19fe46ef24a219d373dd5aec7629777aeb2b",
+  "moduleFileHash": "e04f288c67392e095659a74633a9eef83dff338f72b6a669021f1cb9579dda88",
   "flags": {
     "cmdRegistries": [
       "file:///%workspace%/registry",
@@ -31,7 +31,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 33,
+            "line": 29,
             "column": 23
           },
           "imports": {
@@ -47,7 +47,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 34,
+                "line": 30,
                 "column": 17
               }
             }
@@ -61,7 +61,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 39,
+            "line": 35,
             "column": 20
           },
           "imports": {
@@ -79,7 +79,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 40,
+                "line": 36,
                 "column": 10
               }
             }
@@ -93,7 +93,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 47,
+            "line": 43,
             "column": 24
           },
           "imports": {
@@ -110,11 +110,28 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 50,
+            "line": 46,
             "column": 23
           },
           "imports": {
             "pandoc": "pandoc"
+          },
+          "devImports": [],
+          "tags": [],
+          "hasDevUseExtension": false,
+          "hasNonDevUseExtension": true
+        },
+        {
+          "extensionBzlFile": "@markdown_makefile//tools:prosegrinder_pandoc_templates.bzl",
+          "extensionName": "prosegrinder_pandoc_templates",
+          "usingModule": "<root>",
+          "location": {
+            "file": "@@//:MODULE.bazel",
+            "line": 49,
+            "column": 46
+          },
+          "imports": {
+            "prosegrinder_pandoc_templates": "prosegrinder_pandoc_templates"
           },
           "devImports": [],
           "tags": [],
@@ -125,7 +142,6 @@
       "deps": {
         "bazel_skylib": "bazel_skylib@1.5.0",
         "rules_python": "rules_python@0.27.1",
-        "prosegrinder_pandoc_templates": "prosegrinder_pandoc_templates@0.4.0.3",
         "buildifier_prebuilt": "buildifier_prebuilt@6.4.0",
         "aspect_rules_lint": "aspect_rules_lint@0.7.0",
         "platforms": "platforms@0.0.8",
@@ -272,36 +288,6 @@
             "https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main/modules/rules_python/0.27.1/patches/module_dot_bazel_version.patch": "sha256-Ier7Gb4zhbS273tClCov24gNYdheo4FdegZwaHBrQy0="
           },
           "remote_patch_strip": 1
-        }
-      }
-    },
-    "prosegrinder_pandoc_templates@0.4.0.3": {
-      "name": "prosegrinder_pandoc_templates",
-      "version": "0.4.0.3",
-      "key": "prosegrinder_pandoc_templates@0.4.0.3",
-      "repoName": "prosegrinder_pandoc_templates",
-      "executionPlatformsToRegister": [],
-      "toolchainsToRegister": [],
-      "extensionUsages": [],
-      "deps": {
-        "bazel_tools": "bazel_tools@_",
-        "local_config_platform": "local_config_platform@_"
-      },
-      "repoSpec": {
-        "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
-        "ruleClassName": "http_archive",
-        "attributes": {
-          "name": "prosegrinder_pandoc_templates~0.4.0.3",
-          "urls": [
-            "https://github.com/prosegrinder/pandoc-templates/archive/71d6e9e47ec142a763fff1398b468ba1a008ced0.zip"
-          ],
-          "integrity": "sha384-5bA51hdpW/Ww8vPLjx6OI8w2FExALX1UY/csTj24ObkxwNLqRBrF8eD9QahJiLOq",
-          "strip_prefix": "pandoc-templates-71d6e9e47ec142a763fff1398b468ba1a008ced0",
-          "remote_patches": {
-            "file:///%workspace%/registry/modules/prosegrinder_pandoc_templates/0.4.0.3/patches/build.patch": "sha384-uZBcRaobmqmH0q4f2Yl2HCKdRKgp/h6FDmpWvv2TJdQfMrh4ujEmBiLK+ouXjIOK",
-            "file:///%workspace%/registry/modules/prosegrinder_pandoc_templates/0.4.0.3/patches/md2short_dot_sh.patch": "sha384-jv/FoSjS9yqJUtDawNe0vEEl8rHt9CimpfXtRSN//tuA8Iww0Mvb597S+tBg00D8"
-          },
-          "remote_patch_strip": 0
         }
       }
     },
@@ -1601,6 +1587,29 @@
               "url": "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz",
               "sha256": "4e1c607f7e4e9243fa1e1f5b208cd4f1d3f6fd055d5d8c39ba0cdc38644e1c35",
               "strip_prefix": "pandoc-3.1.2"
+            }
+          }
+        }
+      }
+    },
+    "//tools:prosegrinder_pandoc_templates.bzl%prosegrinder_pandoc_templates": {
+      "general": {
+        "bzlTransitiveDigest": "oDD2V+rQ14T9uzdfuU1YOf6yzcPqUClX+l5DMY/NYMc=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "prosegrinder_pandoc_templates": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "_main~prosegrinder_pandoc_templates~prosegrinder_pandoc_templates",
+              "build_file": "@@//tools:prosegrinder_pandoc_templates.build",
+              "url": "https://github.com/prosegrinder/pandoc-templates/archive/71d6e9e47ec142a763fff1398b468ba1a008ced0.zip",
+              "sha256": "7978b6122ecf7c751c2f1a54f0fcb500f2fa982cc400653a6d77fe88489471f8",
+              "strip_prefix": "pandoc-templates-71d6e9e47ec142a763fff1398b468ba1a008ced0",
+              "patches": [
+                "@@//tools:md2short.sh.patch"
+              ]
             }
           }
         }

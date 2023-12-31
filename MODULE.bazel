@@ -22,10 +22,6 @@ bazel_dep(
     version = "0.4.0.3",
 )
 bazel_dep(
-    name = "calibre",
-    version = "6.15.1",
-)
-bazel_dep(
     name = "buildifier_prebuilt",
     version = "6.4.0",
 )
@@ -51,3 +47,6 @@ pip.parse(
     requirements_lock = "//:requirements_lock.txt",
 )
 use_repo(pip, "pip")
+
+calibre = use_extension("//tools:calibre.bzl", "calibre")
+use_repo(calibre, "calibre")

@@ -98,7 +98,7 @@ md_mobi = rule(
             default = "//markdown_makefile/formats/ebook:ebook_convert",
         ),
         "_ebook_convert_bin": attr.label(
-            default = "@calibre//:ebook_convert",
+            default = "//tools:ebook_convert",
         ),
         "_write_open_script": write_open_script(),
     },

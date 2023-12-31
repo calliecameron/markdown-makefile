@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "774075be2c144efbe5138ffac41a787d2079b679b5ed03f5abd5f5d430c197d4",
+  "moduleFileHash": "096bd90972471c5bbf0e63ecde79fa9ae23892bd2daee2b005655709479cf6d2",
   "flags": {
     "cmdRegistries": [
       "file:///%workspace%/registry",
@@ -31,7 +31,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 41,
+            "line": 37,
             "column": 23
           },
           "imports": {
@@ -47,7 +47,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 42,
+                "line": 38,
                 "column": 17
               }
             }
@@ -61,7 +61,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 47,
+            "line": 43,
             "column": 20
           },
           "imports": {
@@ -79,11 +79,28 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 48,
+                "line": 44,
                 "column": 10
               }
             }
           ],
+          "hasDevUseExtension": false,
+          "hasNonDevUseExtension": true
+        },
+        {
+          "extensionBzlFile": "@markdown_makefile//tools:calibre.bzl",
+          "extensionName": "calibre",
+          "usingModule": "<root>",
+          "location": {
+            "file": "@@//:MODULE.bazel",
+            "line": 51,
+            "column": 24
+          },
+          "imports": {
+            "calibre": "calibre"
+          },
+          "devImports": [],
+          "tags": [],
           "hasDevUseExtension": false,
           "hasNonDevUseExtension": true
         }
@@ -93,7 +110,6 @@
         "rules_python": "rules_python@0.27.1",
         "pandoc": "pandoc@3.1.2",
         "prosegrinder_pandoc_templates": "prosegrinder_pandoc_templates@0.4.0.3",
-        "calibre": "calibre@6.15.1",
         "buildifier_prebuilt": "buildifier_prebuilt@6.4.0",
         "aspect_rules_lint": "aspect_rules_lint@0.7.0",
         "platforms": "platforms@0.0.8",
@@ -297,35 +313,6 @@
           "remote_patches": {
             "file:///%workspace%/registry/modules/prosegrinder_pandoc_templates/0.4.0.3/patches/build.patch": "sha384-uZBcRaobmqmH0q4f2Yl2HCKdRKgp/h6FDmpWvv2TJdQfMrh4ujEmBiLK+ouXjIOK",
             "file:///%workspace%/registry/modules/prosegrinder_pandoc_templates/0.4.0.3/patches/md2short_dot_sh.patch": "sha384-jv/FoSjS9yqJUtDawNe0vEEl8rHt9CimpfXtRSN//tuA8Iww0Mvb597S+tBg00D8"
-          },
-          "remote_patch_strip": 0
-        }
-      }
-    },
-    "calibre@6.15.1": {
-      "name": "calibre",
-      "version": "6.15.1",
-      "key": "calibre@6.15.1",
-      "repoName": "calibre",
-      "executionPlatformsToRegister": [],
-      "toolchainsToRegister": [],
-      "extensionUsages": [],
-      "deps": {
-        "bazel_tools": "bazel_tools@_",
-        "local_config_platform": "local_config_platform@_"
-      },
-      "repoSpec": {
-        "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
-        "ruleClassName": "http_archive",
-        "attributes": {
-          "name": "calibre~6.15.1",
-          "urls": [
-            "https://download.calibre-ebook.com/6.15.1/calibre-6.15.1-x86_64.txz"
-          ],
-          "integrity": "sha384-K0P/FXjZoccr48Qd02Q55AgL/ZJiLbC86Tfcqwc1dQ7OJZIdnekFPZ/Kqiv6Ems8",
-          "strip_prefix": "",
-          "remote_patches": {
-            "file:///%workspace%/registry/modules/calibre/6.15.1/patches/build.patch": "sha384-DVVMv5jbVZ5qld9HYlpwk66PriUIfHXIEoHa1UCJGG3UpV4zHcS0xIuXZSOXDXZP"
           },
           "remote_patch_strip": 0
         }
@@ -1593,6 +1580,25 @@
     }
   },
   "moduleExtensions": {
+    "//tools:calibre.bzl%calibre": {
+      "general": {
+        "bzlTransitiveDigest": "G2JPUoZlHyBxXp/PdkzZnk6FhWNCZYd/A14CbRIVdy8=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "calibre": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "_main~calibre~calibre",
+              "build_file": "@@//tools:calibre.build",
+              "url": "https://download.calibre-ebook.com/6.15.1/calibre-6.15.1-x86_64.txz",
+              "sha256": "1c1b1ae0649395593dadd1b39e2cc6552c99b10f1ca175eb594756bd9284c077"
+            }
+          }
+        }
+      }
+    },
     "@@apple_support~1.5.0//crosstool:setup.bzl%apple_cc_configure_extension": {
       "general": {
         "bzlTransitiveDigest": "pMLFCYaRPkgXPQ8vtuNkMfiHfPmRBy6QJfnid4sWfv0=",

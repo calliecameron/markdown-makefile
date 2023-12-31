@@ -1,0 +1,13 @@
+sh_binary(
+    name = "ebook_convert",
+    srcs = ["ebook-convert"],
+    data = glob([
+        "bin/**",
+        "lib/**",
+        "libexec/**",
+        "plugins/**",
+        "resources/**",
+        "translations/**",
+    ]),
+    visibility = ["//visibility:public"],
+)

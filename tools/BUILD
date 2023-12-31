@@ -1,3 +1,5 @@
+load("@aspect_rules_lint//lint:shellcheck.bzl", "shellcheck_binary")
+
 alias(
     name = "ebook_convert",
     actual = "@calibre//:ebook_convert",
@@ -13,5 +15,15 @@ alias(
 alias(
     name = "pandoc",
     actual = "@pandoc//:pandoc",
+    visibility = ["//:__subpackages__"],
+)
+
+shellcheck_binary(
+    name = "_shellcheck",
+)
+
+alias(
+    name = "shellcheck",
+    actual = ":_shellcheck",
     visibility = ["//:__subpackages__"],
 )

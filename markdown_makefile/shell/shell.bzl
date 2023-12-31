@@ -51,10 +51,10 @@ def _sh_lint(name, **kwargs):
         name = name + "_shellcheck_test",
         srcs = ["//markdown_makefile/shell:shellcheck_test.sh"],
         args = [
-            "$(rootpath //markdown_makefile/shell:shellcheck)",
+            "$(rootpath //tools:shellcheck)",
         ] + ["$(location %s)" % src for src in srcs],
         data = [
-            "//markdown_makefile/shell:shellcheck",
+            "//tools:shellcheck",
         ] + srcs,
     )
 

@@ -1,0 +1,50 @@
+"""Module definition for markdown_makefile."""
+
+module(
+    name = "markdown_makefile",
+    version = "0.15.0",
+)
+
+bazel_dep(
+    name = "bazel_skylib",
+    version = "1.5.0",
+)
+bazel_dep(
+    name = "rules_python",
+    version = "0.27.1",
+)
+bazel_dep(
+    name = "buildifier_prebuilt",
+    version = "6.4.0",
+)
+bazel_dep(
+    name = "aspect_rules_lint",
+    version = "0.7.0",
+)
+bazel_dep(
+    name = "platforms",
+    version = "0.0.8",
+)
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.10",
+)
+use_repo(python, "python_versions")
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "pip",
+    python_version = "3.10",
+    requirements_lock = "//:requirements_lock.txt",
+)
+use_repo(pip, "pip")
+
+calibre = use_extension("//tools:calibre.bzl", "calibre")
+use_repo(calibre, "calibre")
+
+pandoc = use_extension("//tools:pandoc.bzl", "pandoc")
+use_repo(pandoc, "pandoc")
+
+prosegrinder_pandoc_templates = use_extension("//tools:prosegrinder_pandoc_templates.bzl", "prosegrinder_pandoc_templates")
+use_repo(prosegrinder_pandoc_templates, "prosegrinder_pandoc_templates")

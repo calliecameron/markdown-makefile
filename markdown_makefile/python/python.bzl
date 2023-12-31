@@ -76,13 +76,13 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
         name = name + "_ruff_lint_test",
         srcs = ["//markdown_makefile/utils:stub.sh"],
         args = [
-            "$(rootpath //markdown_makefile/python:ruff)",
+            "$(rootpath //tools:ruff)",
             "check",
             "--config=$(rootpath //:pyproject.toml)",
         ] + ["$(location %s)" % src for src in srcs],
         data = [
             "//:pyproject.toml",
-            "//markdown_makefile/python:ruff",
+            "//tools:ruff",
         ] + srcs + deps,
     )
 
@@ -90,13 +90,13 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
         name = name + "_ruff_format_test",
         srcs = ["//markdown_makefile/utils:stub.sh"],
         args = [
-            "$(rootpath //markdown_makefile/python:ruff)",
+            "$(rootpath //tools:ruff)",
             "format",
             "--config=$(rootpath //:pyproject.toml)",
             "--diff",
         ] + ["$(location %s)" % src for src in srcs],
         data = [
             "//:pyproject.toml",
-            "//markdown_makefile/python:ruff",
+            "//tools:ruff",
         ] + srcs + deps,
     )

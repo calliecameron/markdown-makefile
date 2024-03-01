@@ -152,7 +152,7 @@ def main() -> None:
     with open(args.in_file, encoding="utf-8") as f:
         for target, j in json.load(f).items():
             publication = ""
-            if metadata.PUBLICATIONS in j and j[metadata.PUBLICATIONS]:
+            if j.get(metadata.PUBLICATIONS):
                 ps = Publications.from_json(j[metadata.PUBLICATIONS])
                 publication = ps.highest_active_state if ps.active else "attempted"
 
@@ -163,7 +163,7 @@ def main() -> None:
                 DATE: sanitise(parse_date(j[metadata.DATE])) if metadata.DATE in j else "",
                 WORDCOUNT: int(j[metadata.WORDCOUNT]),
                 POETRY_LINES: int(j[metadata.POETRY_LINES]),
-                FINISHED: "yes" if metadata.FINISHED in j and j[metadata.FINISHED] else "no",
+                FINISHED: "yes" if j.get(metadata.FINISHED) else "no",
                 PUBLICATION: publication,
                 VERSION: j[metadata.DOCVERSION],
                 STATUS: "DIRTY" if "dirty" in j[metadata.DOCVERSION] else "ok",

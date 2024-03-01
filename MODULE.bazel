@@ -11,7 +11,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_python",
-    version = "0.27.1",
+    version = "0.31.0",
 )
 bazel_dep(
     name = "buildifier_prebuilt",
@@ -19,7 +19,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "aspect_rules_lint",
-    version = "0.7.0",
+    version = "0.12.0",
 )
 bazel_dep(
     name = "platforms",

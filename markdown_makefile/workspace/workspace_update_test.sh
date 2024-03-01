@@ -18,23 +18,20 @@ BAZELVERSION="${4}"
 test -z "${5:-}" && usage
 BAZELRC="${5}"
 
-REGISTRY='foo'
-
 BUILD_WORKSPACE_DIRECTORY="${TEST_TMPDIR}" "${SCRIPT}" \
     "${WORKSPACE_STATUS}" \
     "${WORKSPACE_GIT_UPDATE}" \
     "${BAZELVERSION}" \
-    "${BAZELRC}" \
-    "${REGISTRY}"
-
-TMP_BAZELRC="${TEST_TMPDIR}/tmp_bazelrc"
-sed "s|@@@@@|${REGISTRY}|g" <"${BAZELRC}" >"${TMP_BAZELRC}"
+    "${BAZELRC}"
 
 diff "${WORKSPACE_STATUS}" "${TEST_TMPDIR}/.bin/workspace_status"
 [ "$(stat -c '%a' "${TEST_TMPDIR}/.bin/workspace_status")" = '700' ]
+
 diff "${WORKSPACE_GIT_UPDATE}" "${TEST_TMPDIR}/workspace_git_update"
 [ "$(stat -c '%a' "${TEST_TMPDIR}/workspace_git_update")" = '700' ]
+
 diff "${BAZELVERSION}" "${TEST_TMPDIR}/.bazelversion"
 [ "$(stat -c '%a' "${TEST_TMPDIR}/.bazelversion")" = '600' ]
-diff "${TMP_BAZELRC}" "${TEST_TMPDIR}/.bazelrc"
-[ "$(stat -c '%a' "${TEST_TMPDIR}/.bazelversion")" = '600' ]
+
+diff "${BAZELRC}" "${TEST_TMPDIR}/.bazelrc"
+[ "$(stat -c '%a' "${TEST_TMPDIR}/.bazelrc")" = '600' ]

@@ -2,17 +2,12 @@
 
 load("//markdown_makefile/dynamic_group:dynamic_group.bzl", "md_dynamic_group")
 
-_DEFAULT_REGISTRY = "https://raw.githubusercontent.com/calliecameron/markdown-makefile/master/registry"
-
-def md_workspace(registry_override = None, name = None):  # buildifier: disable=unused-variable
+def md_workspace(name = None):  # buildifier: disable=unused-variable
     """Workspace setup.
 
     Args:
-        registry_override: bazel registry to use
         name: unused
     """
-
-    registry = registry_override or _DEFAULT_REGISTRY
 
     native.sh_binary(
         name = "new",
@@ -34,7 +29,6 @@ def md_workspace(registry_override = None, name = None):  # buildifier: disable=
             "$(rootpath @markdown_makefile//markdown_makefile/workspace:workspace_git_update)",
             "$(rootpath @markdown_makefile//markdown_makefile/workspace:bazelversion)",
             "$(rootpath @markdown_makefile//markdown_makefile/workspace:bazelrc)",
-            registry,
         ],
         visibility = ["//visibility:private"],
     )
@@ -61,7 +55,6 @@ def md_workspace(registry_override = None, name = None):  # buildifier: disable=
             "$(rootpath workspace_git_update)",
             "$(rootpath .bazelversion)",
             "$(rootpath .bazelrc)",
-            registry,
         ],
         visibility = ["//visibility:private"],
     )

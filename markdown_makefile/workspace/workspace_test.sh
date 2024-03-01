@@ -3,7 +3,7 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") workspace_status workspace_git_update bazelversion bazelrc local_workspace_status local_bazelversion local_bazelrc registry"
+    echo "Usage: $(basename "${0}") workspace_status workspace_git_update bazelversion bazelrc local_workspace_status local_bazelversion local_bazelrc"
     exit 1
 }
 
@@ -23,8 +23,6 @@ test -z "${7:-}" && usage
 LOCAL_BAZELVERSION="${7}"
 test -z "${8:-}" && usage
 LOCAL_BAZELRC="${8}"
-test -z "${9:-}" && usage
-REGISTRY="${9}"
 
 DIFF=''
 
@@ -43,13 +41,10 @@ function diff_file() {
     echo
 }
 
-TMP_BAZELRC="${TEST_TMPDIR}/tmp_bazelrc"
-sed "s|@@@@@|${REGISTRY}|g" <"${BAZELRC}" >"${TMP_BAZELRC}"
-
 diff_file "${WORKSPACE_STATUS}" "${LOCAL_WORKSPACE_STATUS}" '700'
 diff_file "${WORKSPACE_GIT_UPDATE}" "${LOCAL_WORKSPACE_GIT_UPDATE}" '700'
 diff_file "${BAZELVERSION}" "${LOCAL_BAZELVERSION}" '600'
-diff_file "${TMP_BAZELRC}" "${LOCAL_BAZELRC}" '600'
+diff_file "${BAZELRC}" "${LOCAL_BAZELRC}" '600'
 
 if [ -n "${DIFF}" ]; then
     echo "Found diff; 'bazel run :workspace_update' to fix"

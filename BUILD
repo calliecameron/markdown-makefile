@@ -9,9 +9,7 @@ compile_pip_requirements(
     tags = ["requires-network"],
 )
 
-md_workspace(
-    registry_override = "file:///%workspace%/registry",
-)
+md_workspace()
 
 md_git_repo()
 

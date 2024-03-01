@@ -3,7 +3,7 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") workspace_status workspace_git_update bazelversion bazelrc registry"
+    echo "Usage: $(basename "${0}") workspace_status workspace_git_update bazelversion bazelrc"
     exit 1
 }
 
@@ -15,8 +15,6 @@ test -z "${3:-}" && usage
 BAZELVERSION="${3}"
 test -z "${4:-}" && usage
 BAZELRC="${4}"
-test -z "${5:-}" && usage
-REGISTRY="${5}"
 
 SOURCE_DIR="${BUILD_WORKSPACE_DIRECTORY}"
 BIN_DIR="${SOURCE_DIR}/.bin"
@@ -32,5 +30,5 @@ chmod u=rwx,go= "${SOURCE_DIR}/workspace_git_update"
 cp "${BAZELVERSION}" "${SOURCE_DIR}/.bazelversion"
 chmod u=rw,go= "${SOURCE_DIR}/.bazelversion"
 
-sed "s|@@@@@|${REGISTRY}|g" <"${BAZELRC}" >"${SOURCE_DIR}/.bazelrc"
+cp "${BAZELRC}" "${SOURCE_DIR}/.bazelrc"
 chmod u=rw,go= "${SOURCE_DIR}/.bazelrc"

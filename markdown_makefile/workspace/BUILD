@@ -1,5 +1,5 @@
-load("//markdown_makefile/shell:shell.bzl", "sh_source", "sh_test")
 load("//markdown_makefile/python:python.bzl", "py_source")
+load("//markdown_makefile/shell:shell.bzl", "sh_source", "sh_test")
 
 exports_files(
     [

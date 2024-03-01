@@ -12,6 +12,8 @@ odt, docx, doc, and docx in
 
 1. Install system dependencies (assuming Ubuntu 20.04):
 
+    TODO: update dependencies for Ubuntu 22.04
+
     ```shell
     sudo apt-get install -y catdoc git gcc hunspell hunspell-en-gb libegl1 \
         libopengl0 libxkbcommon0 poppler-utils python3-pip \
@@ -26,14 +28,13 @@ odt, docx, doc, and docx in
     build "--workspace_status_command=/bin/bash -c 'if [ -x ./.bin/workspace_status ]; then ./.bin/workspace_status; fi'"
     build --sandbox_default_allow_network=false
     test --build_tests_only
-    common --enable_bzlmod --registry=https://raw.githubusercontent.com/calliecameron/markdown-makefile/master/registry --registry=https://raw.githubusercontent.com/bazelbuild/bazel-central-registry/main
     try-import %workspace%/.bazelrc.user
     ```
 
     `.bazelversion`:
 
     ```text
-    6.0.0
+    7.0.0
     ```
 
     `WORKSPACE`:
@@ -52,7 +53,16 @@ odt, docx, doc, and docx in
 
     bazel_dep(
         name = "markdown_makefile",
-        version = "<VERSION>",
+        # Set this to the latest tag on github
+        version = ...,
+    )
+
+    archive_override(
+        module_name = "markdown_makefile",
+        # Set these from the latest tag on github
+        urls = ...
+        integrity = ...
+        strip_prefix = ...
     )
     ```
 
@@ -78,14 +88,14 @@ odt, docx, doc, and docx in
 
     ```shell
     bazel run :git_update
-    bazel run :git_test
+    bazel test :git_test
     ```
 
 ## Usage
 
 Example BUILD file:
 
-```build
+```text
 load("@markdown_makefile//:build_defs.bzl", "md_document")
 
 md_document(

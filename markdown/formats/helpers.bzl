@@ -1,13 +1,13 @@
 """Helpers for output formats."""
 
-load("//markdown/core:defs.bzl", "MdLibraryInfo")
+load("//markdown/core:defs.bzl", "MdFileInfo")
 
 def expand_locations(ctx, lib, args):
-    data = lib[MdLibraryInfo].data.to_list()
+    data = lib[MdFileInfo].data.to_list()
     return [ctx.expand_location(arg, targets = data) for arg in args]
 
 def doc_for_ext(ext):
-    return "md_" + ext + " generates " + ext + " output from an md_library."
+    return "md_" + ext + " generates " + ext + " output from an md_file."
 
 def default_info_for_ext(ctx, output, script):
     return DefaultInfo(
@@ -72,7 +72,7 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
         inputs: action inputs.
         args: extra action args.
         env: environment variables to pass to pandoc.
-        lib: something that provides MdLibraryInfo.
+        lib: something that provides MdFileInfo.
         output: the output file.
         progress_message: message to display when running the action.
     """
@@ -80,13 +80,13 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
         progress_message = "generating " + ext + " output"
     progress_message = "%{label}: " + progress_message
     data_inputs = []
-    for target in lib[MdLibraryInfo].data.to_list():
+    for target in lib[MdFileInfo].data.to_list():
         data_inputs += target.files.to_list()
 
     ctx.actions.run(
         outputs = [output],
         inputs = [
-            lib[MdLibraryInfo].output,
+            lib[MdFileInfo].output,
             ctx.attr._pandoc_bin.files_to_run.executable,
         ] + data_inputs + inputs,
         executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
@@ -97,7 +97,7 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
             "--fail-if-warnings",
             "--output=" + output.path,
         ] + args + [
-            lib[MdLibraryInfo].output.path,
+            lib[MdFileInfo].output.path,
         ],
         env = env,
         progress_message = progress_message,
@@ -121,8 +121,8 @@ def simple_pandoc_output_rule(impl, ext):
         doc = doc_for_ext(ext),
         attrs = {
             "lib": attr.label(
-                providers = [MdLibraryInfo],
-                doc = "An md_library target.",
+                providers = [MdFileInfo],
+                doc = "An md_file target.",
             ),
             "extra_pandoc_flags": attr.string_list(
                 doc = "Extra flags to pass to pandoc",

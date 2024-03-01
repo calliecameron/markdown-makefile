@@ -1,12 +1,12 @@
-load("//markdown:defs.bzl", "md_document", "md_library")
+load("//markdown:defs.bzl", "md_document", "md_file")
 load("//tests:test.bzl", "diff_test")
 
-md_library(
+md_file(
     name = "include1",
     deps = [":include2"],
 )
 
-md_library(
+md_file(
     name = "include2",
 )
 

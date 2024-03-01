@@ -1,6 +1,6 @@
 """Rules for ebook outputs."""
 
-load("//markdown/core:defs.bzl", "MdLibraryInfo")
+load("//markdown/core:defs.bzl", "MdFileInfo")
 load(
     "//markdown/formats:helpers.bzl",
     "add_title_arg",
@@ -49,7 +49,7 @@ def _md_epub_impl(ctx):
     return [
         default_info_for_ext(ctx, output, script),
         MdEpubInfo(output = output),
-        ctx.attr.lib[MdLibraryInfo],
+        ctx.attr.lib[MdFileInfo],
     ]
 
 md_epub = rule(
@@ -58,8 +58,8 @@ md_epub = rule(
     doc = doc_for_ext("epub"),
     attrs = {
         "lib": attr.label(
-            providers = [MdLibraryInfo],
-            doc = "An md_library target.",
+            providers = [MdFileInfo],
+            doc = "An md_file target.",
         ),
         "extra_pandoc_flags": attr.string_list(
             doc = "Extra flags to pass to pandoc",
@@ -105,7 +105,7 @@ md_mobi = rule(
     doc = doc_for_ext("mobi"),
     attrs = {
         "epub": attr.label(
-            providers = [MdLibraryInfo, MdEpubInfo],
+            providers = [MdFileInfo, MdEpubInfo],
             doc = "An md_epub target.",
         ),
         "out": attr.output(),

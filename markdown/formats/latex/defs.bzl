@@ -1,6 +1,6 @@
 """Rules for latex-based outputs."""
 
-load("//markdown/core:defs.bzl", "MdLibraryInfo")
+load("//markdown/core:defs.bzl", "MdFileInfo")
 load(
     "//markdown/formats:helpers.bzl",
     "doc_for_ext",
@@ -57,7 +57,7 @@ def _md_tex_intermediate_impl(ctx):
     return [
         DefaultInfo(files = depset([header, before])),
         MdTexIntermediateInfo(header = header, before = before),
-        ctx.attr.lib[MdLibraryInfo],
+        ctx.attr.lib[MdFileInfo],
     ]
 
 md_tex_intermediate = rule(
@@ -65,8 +65,8 @@ md_tex_intermediate = rule(
     doc = "md_tex_intermediate generates intermediate files for latex-based outputs",
     attrs = {
         "lib": attr.label(
-            providers = [MdLibraryInfo],
-            doc = "An md_library target.",
+            providers = [MdFileInfo],
+            doc = "An md_file target.",
         ),
         "extra_pandoc_flags": attr.string_list(
             doc = "Extra flags to pass to pandoc",
@@ -113,7 +113,7 @@ def _tex_output_rule(impl, ext):
         doc = doc_for_ext(ext),
         attrs = {
             "intermediate": attr.label(
-                providers = [MdLibraryInfo, MdTexIntermediateInfo],
+                providers = [MdFileInfo, MdTexIntermediateInfo],
                 doc = "An md_tex_intermediate target.",
             ),
             "extra_pandoc_flags": attr.string_list(

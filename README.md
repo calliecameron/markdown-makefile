@@ -120,5 +120,5 @@ Include a file with:
 !include $LABEL
 ```
 
-in markdown, where '$LABEL' is the label of an md_library or md_document target
+in markdown, where '$LABEL' is the label of an md_file or md_document target
 in this target's 'deps'.

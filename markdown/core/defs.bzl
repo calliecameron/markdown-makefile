@@ -8,7 +8,7 @@ MdGroupInfo = provider(
     },
 )
 
-MdLibraryInfo = provider(
+MdFileInfo = provider(
     "Info for a markdown library.",
     fields = {
         "name": "The name of the document",
@@ -27,10 +27,10 @@ def _md_group_impl(ctx):
     metadata = ctx.actions.declare_file(ctx.label.name + "_metadata.json")
     metadata_args = []
     for dep in ctx.attr.deps:
-        metadata_args += ["--metadata_file", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].metadata.path]
+        metadata_args += ["--metadata_file", dep.label.package + ":" + dep.label.name, dep[MdFileInfo].metadata.path]
     ctx.actions.run(
         outputs = [metadata],
-        inputs = [dep[MdLibraryInfo].metadata for dep in ctx.attr.deps],
+        inputs = [dep[MdFileInfo].metadata for dep in ctx.attr.deps],
         executable = ctx.attr._combine_metadata[DefaultInfo].files_to_run,
         arguments = metadata_args + [metadata.path],
         progress_message = "%{label}: combining deps metadata",
@@ -43,12 +43,12 @@ def _md_group_impl(ctx):
 
 md_group = rule(
     implementation = _md_group_impl,
-    doc = "md_group is a group of md_library targets.",
+    doc = "md_group is a group of md_file targets.",
     attrs = {
         "deps": attr.label_list(
             allow_empty = True,
-            providers = [DefaultInfo, MdLibraryInfo],
-            doc = "md_library targets to include in the group.",
+            providers = [DefaultInfo, MdFileInfo],
+            doc = "md_file targets to include in the group.",
         ),
         "_combine_metadata": attr.label(
             default = "//markdown/core:combine_metadata",
@@ -56,7 +56,7 @@ md_group = rule(
     },
 )
 
-def _md_library_impl(ctx):
+def _md_file_impl(ctx):
     raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
     ctx.actions.run(
         outputs = [raw_version],
@@ -83,7 +83,7 @@ def _md_library_impl(ctx):
     preprocessed = ctx.actions.declare_file(ctx.label.name + "_preprocessed.md")
     dep_args = []
     for dep in ctx.attr.deps[MdGroupInfo].deps:
-        dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdLibraryInfo].output.path]
+        dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdFileInfo].output.path]
     image_args = []
     for image in ctx.attr.images:
         image_args += ["--image", image.label.package + ":" + image.label.name, image[DefaultInfo].files.to_list()[0].path]
@@ -142,7 +142,7 @@ def _md_library_impl(ctx):
             ctx.file._poetry_lines,
             ctx.file._write_metadata,
             ctx.file._cleanup,
-        ] + [dep[MdLibraryInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
+        ] + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
         executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         tools = [ctx.attr._validate[DefaultInfo].files_to_run],
         arguments = [
@@ -174,11 +174,11 @@ def _md_library_impl(ctx):
             dict_args += [f.path for f in d.files.to_list()]
         ctx.actions.run(
             outputs = [dictionary],
-            inputs = dict_inputs + [dep[MdLibraryInfo].dictionary for dep in ctx.attr.deps[MdGroupInfo].deps],
+            inputs = dict_inputs + [dep[MdFileInfo].dictionary for dep in ctx.attr.deps[MdGroupInfo].deps],
             executable = ctx.attr._write_dictionary[DefaultInfo].files_to_run,
             arguments = [dictionary.path] +
                         dict_args +
-                        [dep[MdLibraryInfo].dictionary.path for dep in ctx.attr.deps[MdGroupInfo].deps],
+                        [dep[MdFileInfo].dictionary.path for dep in ctx.attr.deps[MdGroupInfo].deps],
             progress_message = "%{label}: generating dictionary",
         )
     else:
@@ -237,16 +237,16 @@ def _md_library_impl(ctx):
 
     data = depset(
         ctx.attr.data + ctx.attr.images,
-        transitive = [dep[MdLibraryInfo].data for dep in ctx.attr.deps[MdGroupInfo].deps],
+        transitive = [dep[MdFileInfo].data for dep in ctx.attr.deps[MdGroupInfo].deps],
     )
     return [
         DefaultInfo(files = depset([output, metadata, dictionary])),
-        MdLibraryInfo(name = ctx.label.name, output = output, metadata = metadata, dictionary = dictionary, data = data),
+        MdFileInfo(name = ctx.label.name, output = output, metadata = metadata, dictionary = dictionary, data = data),
     ]
 
-md_library = rule(
-    implementation = _md_library_impl,
-    doc = "md_library compiles and validates a single markdown file.",
+md_file = rule(
+    implementation = _md_file_impl,
+    doc = "md_file compiles and validates a single markdown file.",
     attrs = {
         "src": attr.label(
             allow_single_file = [".md"],
@@ -254,7 +254,7 @@ md_library = rule(
         ),
         "deps": attr.label(
             providers = [MdGroupInfo],
-            doc = "Other md_library targets used in !include statements in src.",
+            doc = "Other md_file targets used in !include statements in src.",
         ),
         "dictionaries": attr.label_list(
             allow_empty = True,

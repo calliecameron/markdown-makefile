@@ -8,7 +8,7 @@ import markdown.utils.bazel_package
 INCLUDE = "!include"
 CURLY_QUOTES = "“”‘’"  # noqa: RUF001
 INCLUDE_MSG = (
-    "Incorrectly-formatted include. Must be '!include <md_library label>' where label "
+    "Incorrectly-formatted include. Must be '!include <md_file label>' where label "
     "is in deps, e.g. '!include //foo:bar'. %s"
 )
 IMAGE_MSG = (

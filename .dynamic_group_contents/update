@@ -7,7 +7,7 @@ cd "${THIS_DIR}/.."
 
 TMPFILE="$(mktemp)"
 
-bazel query 'kind(md_library, ...)' | LC_ALL=C sort >"${TMPFILE}"
+bazel query 'kind(md_file, ...)' | LC_ALL=C sort >"${TMPFILE}"
 
 OUTFILE='.dynamic_group_contents/contents.bzl'
 

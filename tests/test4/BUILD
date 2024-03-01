@@ -1,4 +1,4 @@
-load("//markdown:defs.bzl", "md_collection", "md_library")
+load("//markdown:defs.bzl", "md_collection", "md_file")
 load("//tests:test.bzl", "diff_test")
 
 md_collection(
@@ -22,7 +22,7 @@ diff_test(
     target = "test4",
 )
 
-md_library(
+md_file(
     name = "test4a",
     version_override = "reproducible",
 )

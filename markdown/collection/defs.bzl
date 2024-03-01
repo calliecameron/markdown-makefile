@@ -27,7 +27,7 @@ def _md_collection_src_impl(ctx):
 
 md_collection_src = rule(
     implementation = _md_collection_src_impl,
-    doc = "md_collection_src collects md_library targets into a single doc.",
+    doc = "md_collection_src collects md_file targets into a single doc.",
     attrs = {
         "title": attr.string(
             mandatory = True,
@@ -38,7 +38,7 @@ md_collection_src = rule(
         "date": attr.string(),
         "deps": attr.label(
             providers = [MdGroupInfo],
-            doc = "md_library targets to include in the collection.",
+            doc = "md_file targets to include in the collection.",
         ),
         "_collection_src": attr.label(
             default = "//markdown/collection:collection_src",

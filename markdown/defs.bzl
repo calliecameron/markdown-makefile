@@ -7,8 +7,8 @@ load(
 )
 load(
     "//markdown/core:defs.bzl",
+    _md_file = "md_file",
     _md_group = "md_group",
-    _md_library = "md_library",
 )
 load(
     "//markdown/dynamic_group:defs.bzl",
@@ -60,7 +60,7 @@ _FORMATS = [
 def _output(name, ext):
     return "output/%s.%s" % (name, ext)
 
-def md_library(
+def md_file(
         name,
         src = None,
         deps = None,
@@ -69,12 +69,12 @@ def md_library(
         images = None,
         increment_included_headers = False,
         version_override = ""):
-    """md_library represents a markdown source file.
+    """md_file represents a markdown source file.
 
     Args:
         name: the name of the library.
         src: the source file, if different from <name>.md.
-        deps: other md_library targets used in !include statements in src.
+        deps: other md_file targets used in !include statements in src.
         extra_dictionaries: extra dictionaries for spellchecking.
         data: data dependencies.
         images: image dependencies.
@@ -96,7 +96,7 @@ def md_library(
         deps = deps,
     )
 
-    _md_library(
+    _md_file(
         name = name,
         src = src,
         deps = name + "_deps",
@@ -133,7 +133,7 @@ def md_document(
     Args:
         name: the name of the document.
         src: the source file, if different from <name>.md.
-        deps: other md_library targets used in !include statements in src.
+        deps: other md_file targets used in !include statements in src.
         extra_dictionaries: extra dictionaries for spellchecking.
         data: data dependencies.
         images: image dependencies.
@@ -147,7 +147,7 @@ def md_document(
             the computed value. Should only be used for testing.
         timestamp_override: set the build timestamp to this value, rather than
             the current value. Should only be used for testing.
-        existing_lib: use an existing md_library rather than creating one; if
+        existing_lib: use an existing md_file rather than creating one; if
             set, most other args must not be set.
         main_document: whether this is the main document in the package; creates
             some convenience aliases.
@@ -157,7 +157,7 @@ def md_document(
             native.fail("Other args must not be set when existing_lib is set")
         lib = existing_lib
     else:
-        md_library(
+        md_file(
             name = name,
             src = src,
             deps = deps,
@@ -321,7 +321,7 @@ def md_collection(
         title: the title of the collection.
         author: the author of the collection.
         date: the date of the collection.
-        deps: md_library targets to include in the collection.
+        deps: md_file targets to include in the collection.
         extra_metadata: a metadata file to include.
         version_override: set the document version to this value, rather than
             the computed value. Should only be used for testing.
@@ -362,11 +362,11 @@ def md_collection(
     )
 
 def md_group(name, deps):
-    """md_group is a group of md_library targets.
+    """md_group is a group of md_file targets.
 
     Args:
         name: the name of the group.
-        deps: md_library targets to include in the group.
+        deps: md_file targets to include in the group.
     """
     _md_group(
         name = name,

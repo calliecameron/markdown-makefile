@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "6324ca3e4dc70875b495084ea1e981b4a5d84a78ff8376fb5ab09696e449d272",
+  "moduleFileHash": "d685338a91a37bd6321961efa954b7731ec8f430f067487a1a57f6d3a1ab35cf",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -87,7 +87,7 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//tools:calibre.bzl",
+          "extensionBzlFile": "@markdown_makefile//markdown/external:calibre.bzl",
           "extensionName": "calibre",
           "usingModule": "<root>",
           "location": {
@@ -104,7 +104,7 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//tools:pandoc.bzl",
+          "extensionBzlFile": "@markdown_makefile//markdown/external:pandoc.bzl",
           "extensionName": "pandoc",
           "usingModule": "<root>",
           "location": {
@@ -121,7 +121,7 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//tools:prosegrinder_pandoc_templates.bzl",
+          "extensionBzlFile": "@markdown_makefile//markdown/external:prosegrinder_pandoc_templates.bzl",
           "extensionName": "prosegrinder_pandoc_templates",
           "usingModule": "<root>",
           "location": {
@@ -1810,9 +1810,9 @@
     }
   },
   "moduleExtensions": {
-    "//tools:calibre.bzl%calibre": {
+    "//markdown/external:calibre.bzl%calibre": {
       "general": {
-        "bzlTransitiveDigest": "f2SXXMFac3aiAN7zam0l7WPQ4q+Pma7W05YYxxdhQG0=",
+        "bzlTransitiveDigest": "oerG1jKIu4Atk6Vj5Aj5ERYZkg8TOH83jmcZN246hgY=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -1821,7 +1821,7 @@
             "ruleClassName": "http_archive",
             "attributes": {
               "name": "_main~calibre~calibre",
-              "build_file": "@@//tools:calibre.build",
+              "build_file": "@@//markdown/external:calibre.build",
               "url": "https://download.calibre-ebook.com/6.15.1/calibre-6.15.1-x86_64.txz",
               "sha256": "1c1b1ae0649395593dadd1b39e2cc6552c99b10f1ca175eb594756bd9284c077"
             }
@@ -1836,9 +1836,9 @@
         ]
       }
     },
-    "//tools:pandoc.bzl%pandoc": {
+    "//markdown/external:pandoc.bzl%pandoc": {
       "general": {
-        "bzlTransitiveDigest": "GiVvHCOxGx5nv1jjt8i1YE+TE0/YaRDjLeFw/zZWqLs=",
+        "bzlTransitiveDigest": "NQv21HT2wbL1DKAgUXrau5AiypR82mRdc6Iw3BdFieo=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -1847,7 +1847,7 @@
             "ruleClassName": "http_archive",
             "attributes": {
               "name": "_main~pandoc~pandoc",
-              "build_file": "@@//tools:pandoc.build",
+              "build_file": "@@//markdown/external:pandoc.build",
               "url": "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz",
               "sha256": "4e1c607f7e4e9243fa1e1f5b208cd4f1d3f6fd055d5d8c39ba0cdc38644e1c35",
               "strip_prefix": "pandoc-3.1.2"
@@ -1863,9 +1863,9 @@
         ]
       }
     },
-    "//tools:prosegrinder_pandoc_templates.bzl%prosegrinder_pandoc_templates": {
+    "//markdown/external:prosegrinder_pandoc_templates.bzl%prosegrinder_pandoc_templates": {
       "general": {
-        "bzlTransitiveDigest": "YKOf7D5nEWkE4UJ2lCZXysB/95fE86yH4wWWWG46dcg=",
+        "bzlTransitiveDigest": "smXJAWEwDXH1jGDDzYJKvPFoQCR+pV3JVyZi4iBNiEY=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -1874,12 +1874,12 @@
             "ruleClassName": "http_archive",
             "attributes": {
               "name": "_main~prosegrinder_pandoc_templates~prosegrinder_pandoc_templates",
-              "build_file": "@@//tools:prosegrinder_pandoc_templates.build",
+              "build_file": "@@//markdown/external:prosegrinder_pandoc_templates.build",
               "url": "https://github.com/prosegrinder/pandoc-templates/archive/71d6e9e47ec142a763fff1398b468ba1a008ced0.zip",
               "sha256": "7978b6122ecf7c751c2f1a54f0fcb500f2fa982cc400653a6d77fe88489471f8",
               "strip_prefix": "pandoc-templates-71d6e9e47ec142a763fff1398b468ba1a008ced0",
               "patches": [
-                "@@//tools:md2short.sh.patch"
+                "@@//markdown/external:md2short.sh.patch"
               ]
             }
           }

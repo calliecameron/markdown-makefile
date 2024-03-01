@@ -1,5 +1,5 @@
-load("//:build_defs.bzl", "md_dynamic_group", "md_group")
-load("//markdown_makefile/shell:shell.bzl", "sh_source")
+load("//markdown:defs.bzl", "md_dynamic_group", "md_group")
+load("//markdown/support/shell:defs.bzl", "sh_source")
 
 sh_source(
     name = "diff_test",

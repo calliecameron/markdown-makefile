@@ -1,9 +1,0 @@
-sh_binary(
-    name = "md2short",
-    srcs = ["bin/md2short.sh"],
-    data = glob([
-        "filters/**",
-        "shunn/**",
-    ]),
-    visibility = ["@markdown_makefile//tools:__pkg__"],
-)

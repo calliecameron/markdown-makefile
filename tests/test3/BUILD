@@ -1,4 +1,4 @@
-load("//:build_defs.bzl", "md_document", "md_library")
+load("//markdown:defs.bzl", "md_document", "md_library")
 load("//tests:test.bzl", "diff_test")
 
 md_library(

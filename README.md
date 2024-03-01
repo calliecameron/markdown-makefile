@@ -69,7 +69,7 @@ odt, docx, doc, and docx in
     `BUILD`:
 
     ```text
-    load("@markdown_makefile//:build_defs.bzl", "md_workspace")
+    load("@markdown_makefile//markdown:defs.bzl", "md_workspace")
 
     md_workspace()
     ```
@@ -96,7 +96,7 @@ odt, docx, doc, and docx in
 Example BUILD file:
 
 ```text
-load("@markdown_makefile//:build_defs.bzl", "md_document")
+load("@markdown_makefile//markdown:defs.bzl", "md_document")
 
 md_document(
     name = "foo",

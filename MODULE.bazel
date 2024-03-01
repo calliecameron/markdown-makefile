@@ -40,11 +40,11 @@ pip.parse(
 )
 use_repo(pip, "pip")
 
-calibre = use_extension("//tools:calibre.bzl", "calibre")
+calibre = use_extension("//markdown/external:calibre.bzl", "calibre")
 use_repo(calibre, "calibre")
 
-pandoc = use_extension("//tools:pandoc.bzl", "pandoc")
+pandoc = use_extension("//markdown/external:pandoc.bzl", "pandoc")
 use_repo(pandoc, "pandoc")
 
-prosegrinder_pandoc_templates = use_extension("//tools:prosegrinder_pandoc_templates.bzl", "prosegrinder_pandoc_templates")
+prosegrinder_pandoc_templates = use_extension("//markdown/external:prosegrinder_pandoc_templates.bzl", "prosegrinder_pandoc_templates")
 use_repo(prosegrinder_pandoc_templates, "prosegrinder_pandoc_templates")

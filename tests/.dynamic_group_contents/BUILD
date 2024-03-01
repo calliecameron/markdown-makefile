@@ -1,6 +1,6 @@
 """Auto-generated build file."""
 
-load("@markdown_makefile//:build_defs.bzl", "md_group")
+load("@markdown_makefile//markdown:defs.bzl", "md_group")
 load("contents.bzl", "contents")
 
 exports_files(

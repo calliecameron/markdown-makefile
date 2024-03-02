@@ -44,37 +44,6 @@ sh_test(
 )
 
 sh_source(
-    name = "workspace_update",
-    src = "workspace_update.sh",
-    visibility = ["//visibility:public"],
-)
-
-sh_test(
-    name = "workspace_update_test",
-    srcs = ["workspace_update_test.sh"],
-    args = [
-        "$(rootpath workspace_update.sh)",
-        "$(rootpath workspace_status)",
-        "$(rootpath workspace_git_update)",
-        "$(rootpath bazelversion)",
-        "$(rootpath bazelrc)",
-    ],
-    data = [
-        "bazelrc",
-        "bazelversion",
-        "workspace_git_update",
-        "workspace_status",
-        "workspace_update.sh",
-    ],
-)
-
-sh_source(
-    name = "workspace_test",
-    src = "workspace_test.sh",
-    visibility = ["//visibility:public"],
-)
-
-sh_source(
     name = "workspace_git_update",
     src = "workspace_git_update",
     visibility = ["//visibility:public"],

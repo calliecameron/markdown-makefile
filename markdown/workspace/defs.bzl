@@ -1,6 +1,7 @@
 """Workspace macros."""
 
 load("//markdown/dynamic_group:defs.bzl", "md_dynamic_group")
+load("//markdown/utils:defs.bzl", "required_files")
 
 def md_workspace(name = None):  # buildifier: disable=unused-variable
     """Workspace setup.
@@ -15,48 +16,30 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
         visibility = ["//visibility:private"],
     )
 
-    native.sh_binary(
-        name = "workspace_update",
-        srcs = ["@markdown_makefile//markdown/workspace:workspace_update.sh"],
-        data = [
-            "@markdown_makefile//markdown/workspace:workspace_status",
-            "@markdown_makefile//markdown/workspace:workspace_git_update",
-            "@markdown_makefile//markdown/workspace:bazelversion",
-            "@markdown_makefile//markdown/workspace:bazelrc",
+    required_files(
+        name = "workspace",
+        files = [
+            (
+                "@markdown_makefile//markdown/workspace:workspace_status",
+                ".bin/workspace_status",
+                "700",
+            ),
+            (
+                "@markdown_makefile//markdown/workspace:workspace_git_update",
+                "workspace_git_update",
+                "700",
+            ),
+            (
+                "@markdown_makefile//markdown/workspace:bazelversion",
+                ".bazelversion",
+                "600",
+            ),
+            (
+                "@markdown_makefile//markdown/workspace:bazelrc",
+                ".bazelrc",
+                "600",
+            ),
         ],
-        args = [
-            "$(rootpath @markdown_makefile//markdown/workspace:workspace_status)",
-            "$(rootpath @markdown_makefile//markdown/workspace:workspace_git_update)",
-            "$(rootpath @markdown_makefile//markdown/workspace:bazelversion)",
-            "$(rootpath @markdown_makefile//markdown/workspace:bazelrc)",
-        ],
-        visibility = ["//visibility:private"],
-    )
-
-    native.sh_test(
-        name = "workspace_test",
-        srcs = ["@markdown_makefile//markdown/workspace:workspace_test.sh"],
-        data = [
-            "@markdown_makefile//markdown/workspace:workspace_status",
-            "@markdown_makefile//markdown/workspace:workspace_git_update",
-            "@markdown_makefile//markdown/workspace:bazelversion",
-            "@markdown_makefile//markdown/workspace:bazelrc",
-            ".bin/workspace_status",
-            "workspace_git_update",
-            ".bazelversion",
-            ".bazelrc",
-        ],
-        args = [
-            "$(rootpath @markdown_makefile//markdown/workspace:workspace_status)",
-            "$(rootpath @markdown_makefile//markdown/workspace:workspace_git_update)",
-            "$(rootpath @markdown_makefile//markdown/workspace:bazelversion)",
-            "$(rootpath @markdown_makefile//markdown/workspace:bazelrc)",
-            "$(rootpath .bin/workspace_status)",
-            "$(rootpath workspace_git_update)",
-            "$(rootpath .bazelversion)",
-            "$(rootpath .bazelrc)",
-        ],
-        visibility = ["//visibility:private"],
     )
 
     md_dynamic_group()

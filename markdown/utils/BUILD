@@ -1,6 +1,13 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@pip//:requirements.bzl", "requirement")
 load("//markdown/support/python:defs.bzl", "py_binary", "py_library", "py_test")
-load("//markdown/support/shell:defs.bzl", "sh_binary")
+load("//markdown/support/shell:defs.bzl", "sh_binary", "sh_source", "sh_test")
+
+bzl_library(
+    name = "defs_bzl",
+    srcs = ["defs.bzl"],
+    visibility = ["//markdown:__subpackages__"],
+)
 
 py_library(
     name = "test_utils",
@@ -76,4 +83,30 @@ sh_binary(
     name = "zipdump",
     srcs = ["zipdump.sh"],
     visibility = ["//:__subpackages__"],
+)
+
+sh_source(
+    name = "required_files_test",
+    src = "required_files_test.sh",
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "required_files_test_test",
+    srcs = ["required_files_test_test.sh"],
+    args = ["$(rootpath required_files_test.sh)"],
+    data = ["required_files_test.sh"],
+)
+
+sh_source(
+    name = "required_files_update",
+    src = "required_files_update.sh",
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "required_files_update_test",
+    srcs = ["required_files_update_test.sh"],
+    args = ["$(rootpath required_files_update.sh)"],
+    data = ["required_files_update.sh"],
 )

@@ -7,6 +7,12 @@ sh_source(
     visibility = ["__subpackages__"],
 )
 
+sh_source(
+    name = "extra_precommit",
+    src = "extra_precommit.sh",
+    visibility = ["//:__pkg__"],
+)
+
 md_group(
     name = "tests",
     deps = [

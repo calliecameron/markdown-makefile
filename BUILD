@@ -11,7 +11,9 @@ compile_pip_requirements(
 
 md_workspace()
 
-md_git_repo()
+md_git_repo(
+    extra_precommit = "//tests:extra_precommit.sh",
+)
 
 buildifier_test(
     name = "buildifier_test",

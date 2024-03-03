@@ -1,43 +1,39 @@
 """Git repo macros."""
 
-def md_git_repo(name = None):  # buildifier: disable=unused-variable
-    common_args = [
-        "$(rootpath @markdown_makefile//markdown/git:default_gitattributes)",
-        "$(rootpath @markdown_makefile//markdown/git:default_gitconfig)",
-        "$(rootpath @markdown_makefile//markdown/git:default_gitignore)",
-        "$(rootpath @markdown_makefile//markdown/git:precommit)",
-    ]
-    common_data = [
-        "@markdown_makefile//markdown/git:default_gitattributes",
-        "@markdown_makefile//markdown/git:default_gitconfig",
-        "@markdown_makefile//markdown/git:default_gitignore",
-        "@markdown_makefile//markdown/git:precommit",
-    ]
+load("//markdown/utils:defs.bzl", "required_files")
 
+def md_git_repo(name = None):  # buildifier: disable=unused-variable
     native.sh_binary(
-        name = "git_update",
-        srcs = ["@markdown_makefile//markdown/git:git_update.sh"],
-        data = common_data,
-        args = common_args + [native.package_name()],
+        name = "git_test_extra",
+        srcs = ["@markdown_makefile//markdown/git:git_test_extra.sh"],
+        data = native.glob([".git/config"]),
         visibility = ["//visibility:private"],
     )
 
-    native.sh_test(
-        name = "git_test",
-        srcs = ["@markdown_makefile//markdown/git:git_test.sh"],
-        data = common_data + [
-            ".gitattributes",
-            ".gitconfig",
-            ".gitignore",
-            ".git/config",
-            ".git/hooks/pre-commit",
+    required_files(
+        name = "git",
+        copy = [
+            (
+                "@markdown_makefile//markdown/git:default_gitattributes",
+                ".gitattributes",
+                "600",
+            ),
+            (
+                "@markdown_makefile//markdown/git:default_gitconfig",
+                ".gitconfig",
+                "600",
+            ),
+            (
+                "@markdown_makefile//markdown/git:default_gitignore",
+                ".gitignore",
+                "600",
+            ),
+            (
+                "@markdown_makefile//markdown/git:precommit",
+                ".git/hooks/pre-commit",
+                "700",
+            ),
         ],
-        args = common_args + [
-            "$(rootpath .gitattributes)",
-            "$(rootpath .gitconfig)",
-            "$(rootpath .gitignore)",
-            "$(rootpath .git/config)",
-            "$(rootpath .git/hooks/pre-commit)",
-        ],
-        visibility = ["//visibility:private"],
+        extra_check = ":git_test_extra",
+        extra_update = "@markdown_makefile//markdown/git:git_update_extra",
     )

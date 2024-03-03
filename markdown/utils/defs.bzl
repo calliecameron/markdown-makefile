@@ -27,7 +27,9 @@ def _required_files_update(name, copy, create, extra_update):
     )
 
 def _required_files_test(name, check, check_mode_only, extra_check):
-    args = ["//%s:%s_update" % (native.package_name(), name)]
+    # without the inner quotes, sh_binary will discard this instead of passing
+    # an empty arg
+    args = [native.package_name() or "''", "//%s:%s_update" % (native.package_name(), name)]
     data = []
 
     for src, dst, dst_mode in check:
@@ -51,7 +53,7 @@ def _required_files_test(name, check, check_mode_only, extra_check):
             data.append(dst)
 
     if extra_check:
-        args.append("$(rootpath %s)" % extra_check)
+        args += ["--extra_check", "$(rootpath %s)" % extra_check]
         data.append(extra_check)
 
     native.sh_test(

@@ -1,10 +1,11 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("//markdown/support/shell:defs.bzl", "sh_source", "sh_test")
+load("//markdown/support/shell:defs.bzl", "sh_binary", "sh_source", "sh_test")
 
 bzl_library(
     name = "defs_bzl",
     srcs = ["defs.bzl"],
     visibility = ["//markdown:__pkg__"],
+    deps = ["//markdown/utils:defs_bzl"],
 )
 
 exports_files(
@@ -22,33 +23,36 @@ sh_source(
     visibility = ["//visibility:public"],
 )
 
-sh_source(
-    name = "git_update",
-    src = "git_update.sh",
-    visibility = ["//visibility:public"],
-)
-
-sh_source(
-    name = "git_test",
-    src = "git_test.sh",
+sh_binary(
+    name = "git_update_extra",
+    srcs = ["git_update_extra.sh"],
     visibility = ["//visibility:public"],
 )
 
 sh_test(
-    name = "git_update_test",
-    srcs = ["git_update_test.sh"],
+    name = "git_update_extra_test",
+    srcs = ["git_update_extra_test.sh"],
     args = [
-        "$(rootpath git_update.sh)",
-        "$(rootpath default_gitattributes)",
-        "$(rootpath default_gitconfig)",
-        "$(rootpath default_gitignore)",
-        "$(rootpath precommit)",
+        "$(rootpath :git_update_extra)",
     ],
     data = [
-        "default_gitattributes",
-        "default_gitconfig",
-        "default_gitignore",
-        "git_update.sh",
-        "precommit",
+        ":git_update_extra",
+    ],
+)
+
+sh_source(
+    name = "git_test_extra",
+    src = "git_test_extra.sh",
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "git_test_extra_test",
+    srcs = ["git_test_extra_test.sh"],
+    args = [
+        "$(rootpath git_test_extra.sh)",
+    ],
+    data = [
+        "git_test_extra.sh",
     ],
 )

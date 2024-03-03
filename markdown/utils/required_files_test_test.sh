@@ -39,59 +39,60 @@ chmod u=rwx,go= "${TEST_TMPDIR}/failure"
 
 # Bad args
 "${SCRIPT}" && exit 1
-"${SCRIPT}" "${UPDATER}" && exit 1
-"${SCRIPT}" "${UPDATER}" 'foo' && exit 1
-"${SCRIPT}" "${UPDATER}" '--foo' && exit 1
+"${SCRIPT}" '' && exit 1
+"${SCRIPT}" '' "${UPDATER}" && exit 1
+"${SCRIPT}" '' "${UPDATER}" 'foo' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--foo' && exit 1
 
-"${SCRIPT}" "${UPDATER}" '--check' && exit 1
-"${SCRIPT}" "${UPDATER}" '--check' "${TEST_TMPDIR}/a" && exit 1
-"${SCRIPT}" "${UPDATER}" '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/a2" && exit 1
-"${SCRIPT}" "${UPDATER}" '--check' "${TEST_TMPDIR}/c" "${TEST_TMPDIR}/a2" '600' && exit 1
-"${SCRIPT}" "${UPDATER}" '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/c" '600' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check' "${TEST_TMPDIR}/a" && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/a2" && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check' "${TEST_TMPDIR}/c" "${TEST_TMPDIR}/a2" '600' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/c" '600' && exit 1
 
-"${SCRIPT}" "${UPDATER}" '--check_mode_only' && exit 1
-"${SCRIPT}" "${UPDATER}" '--check_mode_only' "${TEST_TMPDIR}/a" && exit 1
-"${SCRIPT}" "${UPDATER}" '--check_mode_only' "${TEST_TMPDIR}/c" '600' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check_mode_only' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check_mode_only' "${TEST_TMPDIR}/a" && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check_mode_only' "${TEST_TMPDIR}/c" '600' && exit 1
 
-"${SCRIPT}" "${UPDATER}" '--missing_file' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--missing_file' && exit 1
 
-"${SCRIPT}" "${UPDATER}" '--extra_check' && exit 1
-"${SCRIPT}" "${UPDATER}" '--extra_check' "${TEST_TMPDIR}/c" && exit 1
-"${SCRIPT}" "${UPDATER}" '--extra_check' "${TEST_TMPDIR}/a" && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--extra_check' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--extra_check' "${TEST_TMPDIR}/c" && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--extra_check' "${TEST_TMPDIR}/a" && exit 1
 
 # check
 # Same
-"${SCRIPT}" "${UPDATER}" '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/a2" '600'
+"${SCRIPT}" '' "${UPDATER}" '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/a2" '600'
 # Contents differ
-"${SCRIPT}" "${UPDATER}" '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/b" '600' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/b" '600' && exit 1
 # Mode differs
-"${SCRIPT}" "${UPDATER}" '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/a_wrong_mode" '600' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/a_wrong_mode" '600' && exit 1
 
 # check_mode_only
 # OK
-"${SCRIPT}" "${UPDATER}" '--check_mode_only' "${TEST_TMPDIR}/a" '600'
+"${SCRIPT}" '' "${UPDATER}" '--check_mode_only' "${TEST_TMPDIR}/a" '600'
 # Mode differs
-"${SCRIPT}" "${UPDATER}" '--check_mode_only' "${TEST_TMPDIR}/a_wrong_mode" '600' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--check_mode_only' "${TEST_TMPDIR}/a_wrong_mode" '600' && exit 1
 
 # missing_file
-"${SCRIPT}" "${UPDATER}" '--missing_file' 'a' && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--missing_file' 'a' && exit 1
 
 # extra_check
 # Success
-"${SCRIPT}" "${UPDATER}" '--extra_check' "${TEST_TMPDIR}/success"
+"${SCRIPT}" '' "${UPDATER}" '--extra_check' "${TEST_TMPDIR}/success"
 # Failure
-"${SCRIPT}" "${UPDATER}" '--extra_check' "${TEST_TMPDIR}/failure" && exit 1
+"${SCRIPT}" '' "${UPDATER}" '--extra_check' "${TEST_TMPDIR}/failure" && exit 1
 
 # Everything
 # Success
-"${SCRIPT}" "${UPDATER}" \
+"${SCRIPT}" '' "${UPDATER}" \
     '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/a2" '600' \
     '--check' "${TEST_TMPDIR}/b" "${TEST_TMPDIR}/b2" '600' \
     '--check_mode_only' "${TEST_TMPDIR}/a" '600' \
     '--check_mode_only' "${TEST_TMPDIR}/a_wrong_mode" '700' \
     '--extra_check' "${TEST_TMPDIR}/success"
 # Failure
-"${SCRIPT}" "${UPDATER}" \
+"${SCRIPT}" '' "${UPDATER}" \
     '--check' "${TEST_TMPDIR}/a" "${TEST_TMPDIR}/a2" '600' \
     '--check' "${TEST_TMPDIR}/b" "${TEST_TMPDIR}/b2" '600' \
     '--check_mode_only' "${TEST_TMPDIR}/a" '600' \

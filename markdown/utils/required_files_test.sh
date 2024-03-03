@@ -4,7 +4,7 @@ set -eu
 
 function usage() {
     cat <<EOF
-Usage: $(basename "${0}") updater file_specs...
+Usage: $(basename "${0}") package updater file_specs...
 
 Valid file_specs:
     --check src dst_abs_path dst_mode
@@ -19,9 +19,10 @@ EOF
     exit 1
 }
 
-test -z "${1:-}" && usage
-UPDATER="${1}"
-shift
+PACKAGE="${1:-}" # Package will be empty in the root package.
+test -z "${2:-}" && usage
+UPDATER="${2}"
+shift 2
 
 if [ -z "${1:-}" ]; then
     echo 'No files specified'
@@ -66,7 +67,7 @@ function missing_file() {
 
 function extra_check() {
     echo "Running ${1}"
-    if ! "${SCRIPT}"; then
+    if ! PACKAGE="${PACKAGE}" "${SCRIPT}"; then
         echo 'Failed'
         DIFF='t'
     else

@@ -1,12 +1,21 @@
 """Utils macros."""
 
-def _required_files_update(name, files):
+def _required_files_update(name, copy, create, extra_update):
     # without the inner quotes, sh_binary will discard this instead of passing
     # an empty arg
     args = [native.package_name() or "''"]
     data = []
-    for src, dst, dst_mode in files:
-        args += ["$(rootpath %s)" % src, dst, dst_mode]
+
+    if extra_update:
+        args += ["--extra_script", "$(rootpath %s)" % extra_update]
+        data.append(extra_update)
+
+    for src, dst, dst_mode in copy:
+        args += ["--copy", "$(rootpath %s)" % src, dst, dst_mode]
+        data.append(src)
+
+    for src, dst, dst_mode in create:
+        args += ["--create", "$(rootpath %s)" % src, dst, dst_mode]
         data.append(src)
 
     native.sh_binary(
@@ -17,25 +26,33 @@ def _required_files_update(name, files):
         visibility = ["//visibility:private"],
     )
 
-def _required_files_test(name, files):
+def _required_files_test(name, check, check_mode_only, extra_check):
     args = ["//%s:%s_update" % (native.package_name(), name)]
     data = []
-    for src, dst, dst_mode in files:
-        args.append("$(rootpath %s)" % src)
-        data.append(src)
 
+    for src, dst, dst_mode in check:
         dsts = native.glob([dst])
         if not dsts:
-            # without the inner quotes, sh_test will discard this instead of
-            # passing an empty arg
-            args.append("''")
-        elif len(dsts) == 1:
-            args.append("$(rootpath %s)" % dst)
-            data.append(dst)
-        else:
+            args += ["--missing_file", dst]
+        elif len(dsts) != 1:
             fail("found multiple files matching", dst)
+        else:
+            args += ["--check", "$(rootpath %s)" % src, "$(rootpath %s)" % dst, dst_mode]
+            data += [src, dst]
 
-        args.append(dst_mode)
+    for _, dst, dst_mode in check_mode_only:
+        dsts = native.glob([dst])
+        if not dsts:
+            args += ["--missing_file", dst]
+        elif len(dsts) != 1:
+            fail("found multiple files matching", dst)
+        else:
+            args += ["--check_mode_only", "$(rootpath %s)" % dst, dst_mode]
+            data.append(dst)
+
+    if extra_check:
+        args.append("$(rootpath %s)" % extra_check)
+        data.append(extra_check)
 
     native.sh_test(
         name = name + "_test",
@@ -45,7 +62,7 @@ def _required_files_test(name, files):
         visibility = ["//visibility:private"],
     )
 
-def required_files(name, files):
+def required_files(name, copy = None, create = None, extra_check = None, extra_update = None):
     """A set of files that must exist in the source tree with specific contents.
 
     Creates a test to check that the files are correct, and a binary to update
@@ -53,16 +70,32 @@ def required_files(name, files):
 
     Args:
         name: name of the set of files.
-        files: list of (src, dst, dst_mode) tuples of the files; dst is relative
-            to the package.
+        copy: list of (src, dst, dst_mode) tuples of files to copy; dst is
+            relative to the package.
+        create: list of (src, dst, dst_mode) tuples of files to create; dst is
+            relative to the package.
+        extra_check: extra script to run in the test
+        extra_update: extra script to run in the update
     """
+    copy = copy or []
+    create = create or []
 
-    if not files:
+    if not copy and not create:
         fail("no files specified")
 
-    for f in files:
+    for f in copy + create:
         if len(f) != 3:
-            fail("each entry in files must be a tuple (src, dst, dst_mode); got", f)
+            fail("each entry in copy and create must be a tuple (src, dst, dst_mode); got", f)
 
-    _required_files_update(name, files)
-    _required_files_test(name, files)
+    _required_files_update(
+        name = name,
+        copy = copy,
+        create = create,
+        extra_update = extra_update,
+    )
+    _required_files_test(
+        name = name,
+        check = copy,
+        check_mode_only = create,
+        extra_check = extra_check,
+    )

@@ -18,7 +18,7 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
 
     required_files(
         name = "workspace",
-        files = [
+        copy = [
             (
                 "@markdown_makefile//markdown/workspace:workspace_status",
                 ".bin/workspace_status",

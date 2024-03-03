@@ -10,6 +10,9 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
         name: unused
     """
 
+    if native.package_name():
+        fail("md_workspace may only be used in the workspace root")
+
     native.sh_binary(
         name = "new",
         srcs = ["@markdown_makefile//markdown/workspace:new_package.sh"],

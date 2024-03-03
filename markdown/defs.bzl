@@ -11,10 +11,6 @@ load(
     _md_group = "md_group",
 )
 load(
-    "//markdown/dynamic_group:defs.bzl",
-    _md_dynamic_group = "md_dynamic_group",
-)
-load(
     "//markdown/formats:defs.bzl",
     _md_doc = "md_doc",
     _md_docx = "md_docx",
@@ -37,6 +33,10 @@ load(
     "//markdown/group:defs.bzl",
     _md_group_publications = "md_group_publications",
     _md_group_summary = "md_group_summary",
+)
+load(
+    "//markdown/summary:defs.bzl",
+    _md_summary = "md_summary",
 )
 load(
     "//markdown/workspace:defs.bzl",
@@ -386,6 +386,6 @@ def md_group(name, deps):
         visibility = ["//visibility:private"],
     )
 
-md_dynamic_group = _md_dynamic_group
+md_summary = _md_summary
 md_git_repo = _md_git_repo
 md_workspace = _md_workspace

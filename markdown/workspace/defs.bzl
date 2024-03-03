@@ -1,6 +1,6 @@
 """Workspace macros."""
 
-load("//markdown/dynamic_group:defs.bzl", "md_dynamic_group")
+load("//markdown/summary:defs.bzl", "md_summary")
 load("//markdown/utils:defs.bzl", "required_files")
 
 def md_workspace(name = None):  # buildifier: disable=unused-variable
@@ -45,4 +45,4 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
         ],
     )
 
-    md_dynamic_group()
+    md_summary()

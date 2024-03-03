@@ -7,10 +7,10 @@ bzl_library(
     deps = [
         "//markdown/collection:defs_bzl",
         "//markdown/core:defs_bzl",
-        "//markdown/dynamic_group:defs_bzl",
         "//markdown/formats:defs_bzl",
         "//markdown/git:defs_bzl",
         "//markdown/group:defs_bzl",
+        "//markdown/summary:defs_bzl",
         "//markdown/workspace:defs_bzl",
     ],
 )

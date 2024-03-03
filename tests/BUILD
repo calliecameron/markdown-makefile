@@ -1,4 +1,4 @@
-load("//markdown:defs.bzl", "md_dynamic_group", "md_group")
+load("//markdown:defs.bzl", "md_group", "md_summary")
 load("//markdown/support/shell:defs.bzl", "sh_source")
 
 sh_source(
@@ -17,4 +17,4 @@ md_group(
     ],
 )
 
-md_dynamic_group()
+md_summary()

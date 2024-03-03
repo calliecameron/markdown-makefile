@@ -6,7 +6,7 @@ bzl_library(
     name = "defs_bzl",
     srcs = ["defs.bzl"],
     visibility = ["//markdown:__pkg__"],
-    deps = ["//markdown/dynamic_group:defs_bzl"],
+    deps = ["//markdown/summary:defs_bzl"],
 )
 
 exports_files(

@@ -1,3 +1,14 @@
 #!/bin/bash
 
+set -eu
+
 bazel test --build_tests_only ...:all
+
+THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+EXTRA_PRECOMMIT="${THIS_DIR}/markdown_extra_precommit"
+
+if [ -x "${EXTRA_PRECOMMIT}" ]; then
+    "${EXTRA_PRECOMMIT}"
+fi
+
+exit 0

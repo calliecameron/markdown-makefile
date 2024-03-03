@@ -24,7 +24,7 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
         copy = [
             (
                 "@markdown_makefile//markdown/workspace:workspace_status",
-                ".bin/workspace_status",
+                ".markdown_workspace/workspace_status",
                 "700",
             ),
             (

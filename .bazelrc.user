@@ -1,0 +1,2 @@
+build --deleted_packages=tests/other_workspace,tests/other_workspace/.markdown_summary,tests/other_workspace/test2,tests/other_workspace/test3,tests/other_workspace/test3/.markdown_summary,tests/other_workspace/test4
+build --deleted_packages=tests/other_workspace,tests/other_workspace/.markdown_summary,tests/other_workspace/test2,tests/other_workspace/test3,tests/other_workspace/test3/.markdown_summary,tests/other_workspace/test4

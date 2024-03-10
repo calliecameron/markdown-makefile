@@ -1,0 +1,4 @@
+tests/other_workspace/bazel-bin
+tests/other_workspace/bazel-other_workspace
+tests/other_workspace/bazel-out
+tests/other_workspace/bazel-testlogs

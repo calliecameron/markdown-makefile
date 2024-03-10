@@ -1,0 +1,15 @@
+"""Module definition for other_workspace."""
+
+module(
+    name = "other_workspace",
+    version = "0.0.0",
+)
+
+bazel_dep(
+    name = "markdown_makefile",
+    version = "0.16.0",
+)
+local_path_override(
+    module_name = "markdown_makefile",
+    path = "../..",
+)

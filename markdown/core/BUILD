@@ -8,16 +8,16 @@ bzl_library(
 )
 
 py_binary(
-    name = "combine_metadata",
-    srcs = ["combine_metadata.py"],
+    name = "combine_deps_metadata",
+    srcs = ["combine_deps_metadata.py"],
     visibility = ["//visibility:public"],
 )
 
 py_test(
-    name = "combine_metadata_test",
-    srcs = ["combine_metadata_test.py"],
-    args = ["$(rootpath :combine_metadata)"],
-    data = [":combine_metadata"],
+    name = "combine_deps_metadata_test",
+    srcs = ["combine_deps_metadata_test.py"],
+    args = ["$(rootpath :combine_deps_metadata)"],
+    data = [":combine_deps_metadata"],
     deps = ["//markdown/utils:test_utils"],
 )
 
@@ -36,30 +36,6 @@ py_test(
         ":preprocess",
         "//markdown/utils:test_utils",
     ],
-)
-
-py_binary(
-    name = "validate",
-    srcs = ["validate.py"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//markdown/utils:metadata",
-        "//markdown/utils:publications",
-    ],
-)
-
-py_test(
-    name = "validate_test",
-    srcs = ["validate_test.py"],
-    args = [
-        "$(rootpath //markdown/external:pandoc)",
-        "$(rootpath :validate)",
-    ],
-    data = [
-        ":validate",
-        "//markdown/external:pandoc",
-    ],
-    deps = ["//markdown/utils:test_utils"],
 )
 
 py_binary(

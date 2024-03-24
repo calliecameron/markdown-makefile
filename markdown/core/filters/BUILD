@@ -12,6 +12,30 @@ exports_files(
     visibility = ["//visibility:public"],
 )
 
+py_binary(
+    name = "validate",
+    srcs = ["validate.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//markdown/utils:metadata",
+        "//markdown/utils:publications",
+    ],
+)
+
+py_test(
+    name = "validate_test",
+    srcs = ["validate_test.py"],
+    args = [
+        "$(rootpath //markdown/external:pandoc)",
+        "$(rootpath :validate)",
+    ],
+    data = [
+        ":validate",
+        "//markdown/external:pandoc",
+    ],
+    deps = ["//markdown/utils:test_utils"],
+)
+
 py_test(
     name = "include_test",
     srcs = ["include_test.py"],

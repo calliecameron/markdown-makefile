@@ -31,7 +31,7 @@ def _md_group_impl(ctx):
     ctx.actions.run(
         outputs = [metadata],
         inputs = [dep[MdFileInfo].metadata for dep in ctx.attr.deps],
-        executable = ctx.attr._combine_metadata[DefaultInfo].files_to_run,
+        executable = ctx.attr._combine_deps_metadata[DefaultInfo].files_to_run,
         arguments = metadata_args + [metadata.path],
         progress_message = "%{label}: combining deps metadata",
     )
@@ -50,8 +50,8 @@ md_group = rule(
             providers = [DefaultInfo, MdFileInfo],
             doc = "md_file targets to include in the group.",
         ),
-        "_combine_metadata": attr.label(
-            default = "//markdown/core:combine_metadata",
+        "_combine_deps_metadata": attr.label(
+            default = "//markdown/core:combine_deps_metadata",
         ),
     },
 )
@@ -334,6 +334,10 @@ md_file = rule(
         "_standard_lint": attr.label(
             default = "//markdown/core/lint:standard_lint",
         ),
+        "_pymarkdown_config": attr.label(
+            allow_single_file = True,
+            default = "//:pymarkdown.json",
+        ),
         "_custom_lint": attr.label(
             default = "//markdown/core/lint:custom_lint",
         ),
@@ -341,11 +345,7 @@ md_file = rule(
             default = "//markdown/core:preprocess",
         ),
         "_validate": attr.label(
-            default = "//markdown/core:validate",
-        ),
-        "_pymarkdown_config": attr.label(
-            allow_single_file = True,
-            default = "//:pymarkdown.json",
+            default = "//markdown/core/filters:validate",
         ),
         "_include": attr.label(
             allow_single_file = True,

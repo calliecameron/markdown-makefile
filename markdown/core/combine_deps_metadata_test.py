@@ -11,7 +11,7 @@ import markdown.utils.test_utils
 SCRIPT = ""
 
 
-class TestCombineMetadata(unittest.TestCase):
+class TestCombineDepsMetadata(unittest.TestCase):
     def dump_file(self, filename: str, content: Mapping[str, str]) -> None:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)

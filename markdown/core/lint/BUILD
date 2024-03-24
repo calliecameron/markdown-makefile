@@ -21,3 +21,19 @@ py_binary(
     visibility = ["//visibility:public"],
     deps = [requirement("pymarkdownlnt")],
 )
+
+py_binary(
+    name = "custom_lint",
+    srcs = ["custom_lint.py"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "custom_lint_test",
+    srcs = ["custom_lint_test.py"],
+    args = ["$(rootpath :custom_lint)"],
+    deps = [
+        ":custom_lint",
+        "//markdown/utils:test_utils",
+    ],
+)

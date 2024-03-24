@@ -90,7 +90,21 @@ def _lint(ctx):
         progress_message = "%{label}: linting markdown with standard linter",
     )
 
-    return [standard_lint_ok]
+    custom_lint_ok = ctx.actions.declare_file(ctx.label.name + "_custom_lint_ok.txt")
+    ctx.actions.run(
+        outputs = [custom_lint_ok],
+        inputs = [
+            ctx.file.src,
+        ],
+        executable = ctx.attr._custom_lint[DefaultInfo].files_to_run,
+        arguments = [
+            ctx.file.src.path,
+            custom_lint_ok.path,
+        ],
+        progress_message = "%{label}: linting markdown with custom linter",
+    )
+
+    return [standard_lint_ok, custom_lint_ok]
 
 def _spellcheck(ctx, intermediate):
     dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
@@ -305,6 +319,9 @@ md_file = rule(
         ),
         "_standard_lint": attr.label(
             default = "//markdown/core/lint:standard_lint",
+        ),
+        "_custom_lint": attr.label(
+            default = "//markdown/core/lint:custom_lint",
         ),
         "_preprocess": attr.label(
             default = "//markdown/core:preprocess",

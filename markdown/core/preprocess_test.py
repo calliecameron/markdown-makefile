@@ -17,11 +17,7 @@ GOOD = """Foo bar.
 !include %s
 
 An image ![foo](%s) goes here.
-
-\\“Lots \\”of \\‘quotes\\’.
-
-Some -- dashes---
-"""  # noqa: RUF001
+"""
 
 
 class TestPreprocess(unittest.TestCase):
@@ -210,14 +206,6 @@ class TestPreprocess(unittest.TestCase):
         self.assertEqual(len(problems), 4)
         self.assertEqual("\n".join(data), GOOD % ("foo/bar.json", "//blah:yay", "//baz:quux"))
 
-        self.assertNotEqual(markdown.core.preprocess.preprocess(["“"], {}, {}, "a"), [])
-        self.assertNotEqual(markdown.core.preprocess.preprocess(["”"], {}, {}, "a"), [])
-        self.assertNotEqual(markdown.core.preprocess.preprocess(["‘"], {}, {}, "a"), [])  # noqa: RUF001
-        self.assertNotEqual(markdown.core.preprocess.preprocess(["’"], {}, {}, "a"), [])  # noqa: RUF001
-        self.assertNotEqual(markdown.core.preprocess.preprocess(["–"], {}, {}, "a"), [])  # noqa: RUF001
-        self.assertNotEqual(markdown.core.preprocess.preprocess(["—"], {}, {}, "a"), [])
-        self.assertNotEqual(markdown.core.preprocess.preprocess(["…"], {}, {}, "a"), [])
-
     def run_script(
         self,
         content: str,
@@ -277,7 +265,7 @@ class TestPreprocess(unittest.TestCase):
 
     def test_main_fails(self) -> None:
         with self.assertRaises(subprocess.CalledProcessError):
-            self.run_script("“", "a", [], [])
+            self.run_script("!include", "a", [], [])
 
 
 if __name__ == "__main__":

@@ -6,7 +6,6 @@ from collections.abc import Mapping, MutableSequence, Set
 import markdown.utils.bazel_package
 
 INCLUDE = "!include"
-CURLY_QUOTES = "“”‘’"  # noqa: RUF001
 INCLUDE_MSG = (
     "Incorrectly-formatted include. Must be '!include <md_file label>' where label "
     "is in deps, e.g. '!include //foo:bar'. %s"
@@ -15,10 +14,6 @@ IMAGE_MSG = (
     "Incorrectly-formatted image. Must be '![<text>](<label>)' where label is in "
     "'images', e.g. '![foo](//foo:bar)'. %s"
 )
-CURLY_QUOTE_MSG = "Literal curly quotes must be backslash-escaped."
-EN_DASH_MSG = "Literal en-dashes must be replaced with '--'"
-EM_DASH_MSG = "Literal em-dashes must be replaced with '---'"
-ELLIPSIS_MSG = "Literal ellipses must be replaced with '...'"
 
 
 def process_include(
@@ -120,22 +115,6 @@ def preprocess(
             line, line_images_used, line_problems = process_images(line, images, current_package)
             used_images |= line_images_used
             problems += [(row, col, problem) for col, problem in line_problems]
-
-            for col in range(len(line)):
-                if line[col] in CURLY_QUOTES and (col == 0 or line[col - 1] != "\\"):
-                    problems.append((row, col, CURLY_QUOTE_MSG))
-
-            col = line.find("–")  # noqa: RUF001
-            if col != -1:
-                problems.append((row, col, EN_DASH_MSG))
-
-            col = line.find("—")
-            if col != -1:
-                problems.append((row, col, EM_DASH_MSG))
-
-            col = line.find("…")
-            if col != -1:
-                problems.append((row, col, ELLIPSIS_MSG))
 
         finally:
             data[row] = line

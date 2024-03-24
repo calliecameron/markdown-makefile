@@ -106,7 +106,7 @@ def _lint(ctx):
 
     return [standard_lint_ok, custom_lint_ok]
 
-def _spellcheck(ctx, intermediate):
+def _spellcheck(ctx, compiled):
     dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
     if ctx.attr.dictionaries or ctx.attr.deps[MdGroupInfo].deps:
         dict_inputs = []
@@ -133,7 +133,7 @@ def _spellcheck(ctx, intermediate):
     ctx.actions.run(
         outputs = [spellcheck_input],
         inputs = [
-            intermediate,
+            compiled,
             ctx.file._spellcheck_input_template,
             ctx.file._spellcheck_filter,
         ],
@@ -145,7 +145,7 @@ def _spellcheck(ctx, intermediate):
             "--template=" + ctx.file._spellcheck_input_template.path,
             "--fail-if-warnings",
             "--output=" + spellcheck_input.path,
-            intermediate.path,
+            compiled.path,
         ],
         progress_message = "%{label}: generating input for spellchecking",
     )
@@ -185,7 +185,7 @@ def _md_file_impl(ctx):
         progress_message = "%{label}: generating base metadata",
     )
 
-    preprocessed = ctx.actions.declare_file(ctx.label.name + "_preprocessed.md")
+    preprocessed = ctx.actions.declare_file(ctx.label.name + "_stage1_preprocessed.md")
     dep_args = []
     for dep in ctx.attr.deps[MdGroupInfo].deps:
         dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdFileInfo].output.path]
@@ -202,10 +202,10 @@ def _md_file_impl(ctx):
 
     lint_ok = _lint(ctx)
 
-    intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.json")
-    intermediate_metadata = ctx.actions.declare_file(ctx.label.name + "_intermediate_metadata.json")
+    compiled = ctx.actions.declare_file(ctx.label.name + "_stage2_compiled.json")
+    compiled_metadata = ctx.actions.declare_file(ctx.label.name + "_stage2_compiled_metadata.json")
     ctx.actions.run(
-        outputs = [intermediate, intermediate_metadata],
+        outputs = [compiled, compiled_metadata],
         inputs = [
             preprocessed,
             base_metadata,
@@ -227,34 +227,34 @@ def _md_file_impl(ctx):
             "--lua-filter=" + ctx.file._write_metadata.path,
             "--lua-filter=" + ctx.file._cleanup.path,
             "--metadata-file=" + base_metadata.path,
-            "--metadata=metadata-out-file:" + intermediate_metadata.path,
+            "--metadata=metadata-out-file:" + compiled_metadata.path,
             "--from=markdown+smart-pandoc_title_block",
             "--to=json",
             "--strip-comments",
             "--fail-if-warnings",
-            "--output=" + intermediate.path,
+            "--output=" + compiled.path,
             preprocessed.path,
         ],
         progress_message = "%{label}: compiling markdown",
     )
 
-    dictionary, spellcheck_ok = _spellcheck(ctx, intermediate)
+    dictionary, spellcheck_ok = _spellcheck(ctx, compiled)
 
     output = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.run(
         outputs = [output],
-        inputs = [intermediate, spellcheck_ok],
+        inputs = [compiled, spellcheck_ok],
         executable = "cp",
-        arguments = [intermediate.path, output.path],
+        arguments = [compiled.path, output.path],
         progress_message = "%{label}: generating output",
     )
 
     metadata = ctx.outputs.metadata_out
     ctx.actions.run(
         outputs = [metadata],
-        inputs = [output, intermediate_metadata],
+        inputs = [output, compiled_metadata],
         executable = "cp",
-        arguments = [intermediate_metadata.path, metadata.path],
+        arguments = [compiled_metadata.path, metadata.path],
         progress_message = "%{label}: generating metadata",
     )
 

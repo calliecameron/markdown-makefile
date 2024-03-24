@@ -16,7 +16,7 @@ alias(
     name = "pandoc",
     actual = "@pandoc//:pandoc",
     visibility = [
-        "//markdown/core:__pkg__",
+        "//markdown/core:__subpackages__",
         "//markdown/formats:__subpackages__",
     ],
 )

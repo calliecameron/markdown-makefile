@@ -1,15 +1,15 @@
 """Markdown rules."""
 
 MdGroupInfo = provider(
-    "Info for a group of markdown libraries.",
+    "Info for a group of markdown files.",
     fields = {
-        "deps": "The libraries in the group",
-        "metadata": "Metadata of all libraries in the group, as json",
+        "deps": "The files in the group",
+        "metadata": "Metadata of all files in the group, as json",
     },
 )
 
 MdFileInfo = provider(
-    "Info for a markdown library.",
+    "Info for a markdown file.",
     fields = {
         "name": "The name of the document",
         "output": "Compiled document, as json",
@@ -56,6 +56,97 @@ md_group = rule(
     },
 )
 
+def _lint(ctx):
+    lint_input = ctx.actions.declare_file(ctx.label.name + "_lint_input.md")
+    ctx.actions.run(
+        outputs = [lint_input],
+        inputs = [
+            ctx.file.src,
+        ],
+        executable = ctx.attr._gen_lint_input[DefaultInfo].files_to_run,
+        arguments = [
+            ctx.file.src.path,
+            lint_input.path,
+        ],
+        progress_message = "%{label}: generating input for linting",
+    )
+
+    lint_ok = ctx.actions.declare_file(ctx.label.name + "_lint_ok.txt")
+    ctx.actions.run(
+        outputs = [lint_ok],
+        inputs = [
+            lint_input,
+            ctx.file._pymarkdown_config,
+        ],
+        executable = ctx.attr._lint[DefaultInfo].files_to_run,
+        arguments = [
+            lint_ok.path,
+            "--strict-config",
+            "--config",
+            ctx.file._pymarkdown_config.path,
+            "scan",
+            lint_input.path,
+        ],
+        progress_message = "%{label}: linting markdown",
+    )
+
+    return lint_ok
+
+def _spellcheck(ctx, intermediate):
+    dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
+    if ctx.attr.dictionaries or ctx.attr.deps[MdGroupInfo].deps:
+        dict_inputs = []
+        dict_args = []
+        for d in ctx.attr.dictionaries:
+            dict_inputs += d.files.to_list()
+            dict_args += [f.path for f in d.files.to_list()]
+        ctx.actions.run(
+            outputs = [dictionary],
+            inputs = dict_inputs + [dep[MdFileInfo].dictionary for dep in ctx.attr.deps[MdGroupInfo].deps],
+            executable = ctx.attr._gen_dictionary[DefaultInfo].files_to_run,
+            arguments = [dictionary.path] +
+                        dict_args +
+                        [dep[MdFileInfo].dictionary.path for dep in ctx.attr.deps[MdGroupInfo].deps],
+            progress_message = "%{label}: generating dictionary",
+        )
+    else:
+        ctx.actions.write(
+            output = dictionary,
+            content = "",
+        )
+
+    spellcheck_input = ctx.actions.declare_file(ctx.label.name + "_spellcheck_input.md")
+    ctx.actions.run(
+        outputs = [spellcheck_input],
+        inputs = [
+            intermediate,
+            ctx.file._spellcheck_input_template,
+            ctx.file._spellcheck_filter,
+        ],
+        executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
+        arguments = [
+            "--lua-filter=" + ctx.file._spellcheck_filter.path,
+            "--from=json",
+            "--to=markdown-smart",
+            "--template=" + ctx.file._spellcheck_input_template.path,
+            "--fail-if-warnings",
+            "--output=" + spellcheck_input.path,
+            intermediate.path,
+        ],
+        progress_message = "%{label}: generating input for spellchecking",
+    )
+
+    spellcheck_ok = ctx.actions.declare_file(ctx.label.name + "_spellcheck_ok.txt")
+    ctx.actions.run(
+        outputs = [spellcheck_ok],
+        inputs = [dictionary, spellcheck_input],
+        executable = ctx.attr._spellcheck[DefaultInfo].files_to_run,
+        arguments = [dictionary.path, spellcheck_input.path, spellcheck_ok.path],
+        progress_message = "%{label}: spellchecking",
+    )
+
+    return dictionary, spellcheck_ok
+
 def _md_file_impl(ctx):
     raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
     ctx.actions.run(
@@ -95,38 +186,7 @@ def _md_file_impl(ctx):
         progress_message = "%{label}: preprocessing markdown",
     )
 
-    lint_input = ctx.actions.declare_file(ctx.label.name + "_lint_input.md")
-    ctx.actions.run(
-        outputs = [lint_input],
-        inputs = [
-            ctx.file.src,
-        ],
-        executable = ctx.attr._lint_input[DefaultInfo].files_to_run,
-        arguments = [
-            ctx.file.src.path,
-            lint_input.path,
-        ],
-        progress_message = "%{label}: generating input for linting",
-    )
-
-    linted = ctx.actions.declare_file(ctx.label.name + "_linted.txt")
-    ctx.actions.run(
-        outputs = [linted],
-        inputs = [
-            lint_input,
-            ctx.file._pymarkdown_config,
-        ],
-        executable = ctx.attr._lint[DefaultInfo].files_to_run,
-        arguments = [
-            linted.path,
-            "--strict-config",
-            "--config",
-            ctx.file._pymarkdown_config.path,
-            "scan",
-            lint_input.path,
-        ],
-        progress_message = "%{label}: linting markdown",
-    )
+    lint_ok = _lint(ctx)
 
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.json")
     intermediate_metadata = ctx.actions.declare_file(ctx.label.name + "_intermediate_metadata.json")
@@ -134,7 +194,7 @@ def _md_file_impl(ctx):
         outputs = [intermediate, intermediate_metadata],
         inputs = [
             preprocessed,
-            linted,
+            lint_ok,
             base_metadata,
             ctx.file._include,
             ctx.file._starts_with_text,
@@ -165,62 +225,12 @@ def _md_file_impl(ctx):
         progress_message = "%{label}: compiling markdown",
     )
 
-    dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
-    if ctx.attr.dictionaries or ctx.attr.deps[MdGroupInfo].deps:
-        dict_inputs = []
-        dict_args = []
-        for d in ctx.attr.dictionaries:
-            dict_inputs += d.files.to_list()
-            dict_args += [f.path for f in d.files.to_list()]
-        ctx.actions.run(
-            outputs = [dictionary],
-            inputs = dict_inputs + [dep[MdFileInfo].dictionary for dep in ctx.attr.deps[MdGroupInfo].deps],
-            executable = ctx.attr._write_dictionary[DefaultInfo].files_to_run,
-            arguments = [dictionary.path] +
-                        dict_args +
-                        [dep[MdFileInfo].dictionary.path for dep in ctx.attr.deps[MdGroupInfo].deps],
-            progress_message = "%{label}: generating dictionary",
-        )
-    else:
-        ctx.actions.write(
-            output = dictionary,
-            content = "",
-        )
-
-    spellcheck_input = ctx.actions.declare_file(ctx.label.name + "_spellcheck_input.md")
-    ctx.actions.run(
-        outputs = [spellcheck_input],
-        inputs = [
-            intermediate,
-            ctx.file._spellcheck_input_template,
-            ctx.file._spellcheck_filter,
-        ],
-        executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
-        arguments = [
-            "--lua-filter=" + ctx.file._spellcheck_filter.path,
-            "--from=json",
-            "--to=markdown-smart",
-            "--template=" + ctx.file._spellcheck_input_template.path,
-            "--fail-if-warnings",
-            "--output=" + spellcheck_input.path,
-            intermediate.path,
-        ],
-        progress_message = "%{label}: generating input for spellchecking",
-    )
-
-    spellchecked = ctx.actions.declare_file(ctx.label.name + "_spellchecked.txt")
-    ctx.actions.run(
-        outputs = [spellchecked],
-        inputs = [dictionary, spellcheck_input],
-        executable = ctx.attr._spellcheck[DefaultInfo].files_to_run,
-        arguments = [dictionary.path, spellcheck_input.path, spellchecked.path],
-        progress_message = "%{label}: spellchecking",
-    )
+    dictionary, spellcheck_ok = _spellcheck(ctx, intermediate)
 
     output = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.run(
         outputs = [output],
-        inputs = [intermediate, spellchecked],
+        inputs = [intermediate, spellcheck_ok],
         executable = "cp",
         arguments = [intermediate.path, output.path],
         progress_message = "%{label}: generating output",
@@ -291,11 +301,11 @@ md_file = rule(
         "_base_metadata": attr.label(
             default = "//markdown/core:base_metadata",
         ),
-        "_lint_input": attr.label(
-            default = "//markdown/core:lint_input",
+        "_gen_lint_input": attr.label(
+            default = "//markdown/core/lint:gen_lint_input",
         ),
         "_lint": attr.label(
-            default = "//markdown/core:lint",
+            default = "//markdown/core/lint:lint",
         ),
         "_preprocess": attr.label(
             default = "//markdown/core:preprocess",
@@ -309,41 +319,41 @@ md_file = rule(
         ),
         "_include": attr.label(
             allow_single_file = True,
-            default = "//markdown/core:include.lua",
+            default = "//markdown/core/filters:include.lua",
         ),
         "_starts_with_text": attr.label(
             allow_single_file = True,
-            default = "//markdown/core:starts_with_text.lua",
+            default = "//markdown/core/filters:starts_with_text.lua",
         ),
         "_wordcount": attr.label(
             allow_single_file = True,
-            default = "//markdown/core:wordcount.lua",
+            default = "//markdown/core/filters:wordcount.lua",
         ),
         "_poetry_lines": attr.label(
             allow_single_file = True,
-            default = "//markdown/core:poetry_lines.lua",
+            default = "//markdown/core/filters:poetry_lines.lua",
         ),
         "_write_metadata": attr.label(
             allow_single_file = True,
-            default = "//markdown/core:write_metadata.lua",
+            default = "//markdown/core/filters:write_metadata.lua",
         ),
         "_cleanup": attr.label(
             allow_single_file = True,
-            default = "//markdown/core:cleanup.lua",
+            default = "//markdown/core/filters:cleanup.lua",
         ),
-        "_write_dictionary": attr.label(
-            default = "//markdown/core:write_dictionary",
+        "_gen_dictionary": attr.label(
+            default = "//markdown/core/spelling:gen_dictionary",
         ),
         "_spellcheck_input_template": attr.label(
             allow_single_file = True,
-            default = "//markdown/core:spellcheck_input_template.md",
+            default = "//markdown/core/spelling:spellcheck_input_template.md",
         ),
         "_spellcheck_filter": attr.label(
             allow_single_file = True,
-            default = "//markdown/core:spellcheck_filter.lua",
+            default = "//markdown/core/spelling:spellcheck_filter.lua",
         ),
         "_spellcheck": attr.label(
-            default = "//markdown/core:spellcheck",
+            default = "//markdown/core/spelling:spellcheck",
         ),
     },
 )

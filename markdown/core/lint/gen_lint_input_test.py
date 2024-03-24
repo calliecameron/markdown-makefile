@@ -9,7 +9,7 @@ import markdown.utils.test_utils
 SCRIPT = ""
 
 
-class TestLintInput(unittest.TestCase):
+class TestGenLintInput(unittest.TestCase):
     def run_script(
         self,
         content: str,

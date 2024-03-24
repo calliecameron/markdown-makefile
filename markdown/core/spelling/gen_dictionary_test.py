@@ -9,8 +9,8 @@ import markdown.utils.test_utils
 SCRIPT = ""
 
 
-class TestWriteDictionary(unittest.TestCase):
-    def test_write_dictionary(self) -> None:
+class TestGenDictionary(unittest.TestCase):
+    def test_gen_dictionary(self) -> None:
         test_tmpdir = markdown.utils.test_utils.tmpdir()
 
         in_file_1 = os.path.join(test_tmpdir, "in1.dic")

@@ -57,40 +57,40 @@ md_group = rule(
 )
 
 def _lint(ctx):
-    lint_input = ctx.actions.declare_file(ctx.label.name + "_lint_input.md")
+    standard_lint_input = ctx.actions.declare_file(ctx.label.name + "_standard_lint_input.md")
     ctx.actions.run(
-        outputs = [lint_input],
+        outputs = [standard_lint_input],
         inputs = [
             ctx.file.src,
         ],
-        executable = ctx.attr._gen_lint_input[DefaultInfo].files_to_run,
+        executable = ctx.attr._gen_standard_lint_input[DefaultInfo].files_to_run,
         arguments = [
             ctx.file.src.path,
-            lint_input.path,
+            standard_lint_input.path,
         ],
-        progress_message = "%{label}: generating input for linting",
+        progress_message = "%{label}: generating input for standard linter",
     )
 
-    lint_ok = ctx.actions.declare_file(ctx.label.name + "_lint_ok.txt")
+    standard_lint_ok = ctx.actions.declare_file(ctx.label.name + "_standard_lint_ok.txt")
     ctx.actions.run(
-        outputs = [lint_ok],
+        outputs = [standard_lint_ok],
         inputs = [
-            lint_input,
+            standard_lint_input,
             ctx.file._pymarkdown_config,
         ],
-        executable = ctx.attr._lint[DefaultInfo].files_to_run,
+        executable = ctx.attr._standard_lint[DefaultInfo].files_to_run,
         arguments = [
-            lint_ok.path,
+            standard_lint_ok.path,
             "--strict-config",
             "--config",
             ctx.file._pymarkdown_config.path,
             "scan",
-            lint_input.path,
+            standard_lint_input.path,
         ],
-        progress_message = "%{label}: linting markdown",
+        progress_message = "%{label}: linting markdown with standard linter",
     )
 
-    return lint_ok
+    return [standard_lint_ok]
 
 def _spellcheck(ctx, intermediate):
     dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
@@ -194,7 +194,6 @@ def _md_file_impl(ctx):
         outputs = [intermediate, intermediate_metadata],
         inputs = [
             preprocessed,
-            lint_ok,
             base_metadata,
             ctx.file._include,
             ctx.file._starts_with_text,
@@ -202,7 +201,7 @@ def _md_file_impl(ctx):
             ctx.file._poetry_lines,
             ctx.file._write_metadata,
             ctx.file._cleanup,
-        ] + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
+        ] + lint_ok + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
         executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         tools = [ctx.attr._validate[DefaultInfo].files_to_run],
         arguments = [
@@ -301,11 +300,11 @@ md_file = rule(
         "_base_metadata": attr.label(
             default = "//markdown/core:base_metadata",
         ),
-        "_gen_lint_input": attr.label(
-            default = "//markdown/core/lint:gen_lint_input",
+        "_gen_standard_lint_input": attr.label(
+            default = "//markdown/core/lint:gen_standard_lint_input",
         ),
-        "_lint": attr.label(
-            default = "//markdown/core/lint:lint",
+        "_standard_lint": attr.label(
+            default = "//markdown/core/lint:standard_lint",
         ),
         "_preprocess": attr.label(
             default = "//markdown/core:preprocess",

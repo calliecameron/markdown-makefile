@@ -28,11 +28,6 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
                 "700",
             ),
             (
-                "@markdown_makefile//markdown/workspace:workspace_git_update",
-                "workspace_git_update",
-                "700",
-            ),
-            (
                 "@markdown_makefile//markdown/workspace:bazelversion",
                 ".bazelversion",
                 "600",

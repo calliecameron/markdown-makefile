@@ -42,9 +42,3 @@ sh_test(
     args = ["$(rootpath workspace_status)"],
     data = ["workspace_status"],
 )
-
-sh_source(
-    name = "workspace_git_update",
-    src = "workspace_git_update",
-    visibility = ["//visibility:public"],
-)

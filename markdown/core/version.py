@@ -5,8 +5,6 @@ from collections.abc import Mapping
 
 from markdown.utils.metadata import (
     DOCVERSION,
-    INCREMENT_INCLUDED_HEADERS,
-    LANG,
     REPO,
     SOURCE_MD5,
     SUBJECT,
@@ -72,17 +70,13 @@ def get_version(
     return version
 
 
-def get_metadata(version: str, repo: str, increment_included_headers: bool) -> dict[str, str]:
-    out = {
+def get_metadata(version: str, repo: str) -> dict[str, str]:
+    return {
         DOCVERSION: version,
         SUBJECT: f"Version: {version}",
-        LANG: "en-GB",
         REPO: repo,
         SOURCE_MD5: hashlib.md5(version.encode("utf-8")).hexdigest(),
     }
-    if increment_included_headers:
-        out[INCREMENT_INCLUDED_HEADERS] = "t"
-    return out
 
 
 def main() -> None:
@@ -90,7 +84,6 @@ def main() -> None:
     parser.add_argument("raw_version_file")
     parser.add_argument("deps_metadata_file")
     parser.add_argument("metadata_out_file")
-    parser.add_argument("--increment_included_headers", action="store_true")
     parser.add_argument("--version_override", default="")
     args = parser.parse_args()
 
@@ -103,7 +96,7 @@ def main() -> None:
             dep_versions[target] = Version.from_dict(metadata)
 
     version = get_version(raw_version, dep_versions, args.version_override)
-    metadata = get_metadata(version.version, version.repo, args.increment_included_headers)
+    metadata = get_metadata(version.version, version.repo)
 
     with open(args.metadata_out_file, mode="w", encoding="utf-8") as f:
         json.dump(metadata, f, sort_keys=True, indent=4)

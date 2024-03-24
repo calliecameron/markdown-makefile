@@ -22,41 +22,6 @@ py_test(
 )
 
 py_binary(
-    name = "raw_version",
-    srcs = ["raw_version.py"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//markdown/utils:bazel_package",
-        "//markdown/utils:metadata",
-    ],
-)
-
-py_test(
-    name = "raw_version_test",
-    srcs = ["raw_version_test.py"],
-    args = ["$(rootpath :raw_version)"],
-    data = [":raw_version"],
-    deps = ["//markdown/utils:test_utils"],
-)
-
-py_binary(
-    name = "base_metadata",
-    srcs = ["base_metadata.py"],
-    visibility = ["//visibility:public"],
-    deps = ["//markdown/utils:metadata"],
-)
-
-py_test(
-    name = "base_metadata_test",
-    srcs = ["base_metadata_test.py"],
-    args = ["$(rootpath :base_metadata)"],
-    deps = [
-        ":base_metadata",
-        "//markdown/utils:test_utils",
-    ],
-)
-
-py_binary(
     name = "preprocess",
     srcs = ["preprocess.py"],
     visibility = ["//visibility:public"],
@@ -95,4 +60,39 @@ py_test(
         "//markdown/external:pandoc",
     ],
     deps = ["//markdown/utils:test_utils"],
+)
+
+py_binary(
+    name = "raw_version",
+    srcs = ["raw_version.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//markdown/utils:bazel_package",
+        "//markdown/utils:metadata",
+    ],
+)
+
+py_test(
+    name = "raw_version_test",
+    srcs = ["raw_version_test.py"],
+    args = ["$(rootpath :raw_version)"],
+    data = [":raw_version"],
+    deps = ["//markdown/utils:test_utils"],
+)
+
+py_binary(
+    name = "version",
+    srcs = ["version.py"],
+    visibility = ["//visibility:public"],
+    deps = ["//markdown/utils:metadata"],
+)
+
+py_test(
+    name = "version_test",
+    srcs = ["version_test.py"],
+    args = ["$(rootpath :version)"],
+    deps = [
+        ":version",
+        "//markdown/utils:test_utils",
+    ],
 )

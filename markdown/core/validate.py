@@ -6,17 +6,12 @@ from typing import Any, NoReturn, cast
 from markdown.utils.metadata import (
     AUTHOR,
     DATE,
-    DOCVERSION,
     FINISHED,
     IDENTIFIER,
     INCREMENT_INCLUDED_HEADERS,
     LANG,
-    METADATA_OUT_FILE,
     NOTES,
     PUBLICATIONS,
-    REPO,
-    SOURCE_MD5,
-    SUBJECT,
     TITLE,
     USER_KEYS,
 )
@@ -25,14 +20,9 @@ from markdown.utils.publications import Publications
 KNOWN_KEYS = USER_KEYS | frozenset(
     [
         # Keys added during processing
-        DOCVERSION,
         IDENTIFIER,
         INCREMENT_INCLUDED_HEADERS,
         LANG,
-        METADATA_OUT_FILE,
-        REPO,
-        SOURCE_MD5,
-        SUBJECT,
     ],
 )
 

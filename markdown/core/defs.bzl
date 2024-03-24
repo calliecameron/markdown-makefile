@@ -162,29 +162,6 @@ def _spellcheck(ctx, compiled):
     return dictionary, spellcheck_ok
 
 def _md_file_impl(ctx):
-    raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
-    ctx.actions.run(
-        outputs = [raw_version],
-        inputs = [ctx.info_file],
-        executable = ctx.attr._raw_version[DefaultInfo].files_to_run,
-        arguments = [ctx.info_file.path, raw_version.path, ctx.label.package],
-        progress_message = "%{label}: computing version",
-    )
-
-    base_metadata = ctx.actions.declare_file(ctx.label.name + "_base_metadata.json")
-    extra_args = []
-    if ctx.attr.increment_included_headers:
-        extra_args.append("--increment_included_headers")
-    if ctx.attr.version_override:
-        extra_args += ["--version_override", ctx.attr.version_override]
-    ctx.actions.run(
-        outputs = [base_metadata],
-        inputs = [raw_version, ctx.attr.deps[MdGroupInfo].metadata],
-        executable = ctx.attr._base_metadata[DefaultInfo].files_to_run,
-        arguments = extra_args + [raw_version.path, ctx.attr.deps[MdGroupInfo].metadata.path, base_metadata.path],
-        progress_message = "%{label}: generating base metadata",
-    )
-
     preprocessed = ctx.actions.declare_file(ctx.label.name + "_stage1_preprocessed.md")
     dep_args = []
     for dep in ctx.attr.deps[MdGroupInfo].deps:
@@ -203,18 +180,17 @@ def _md_file_impl(ctx):
     lint_ok = _lint(ctx)
 
     compiled = ctx.actions.declare_file(ctx.label.name + "_stage2_compiled.json")
-    compiled_metadata = ctx.actions.declare_file(ctx.label.name + "_stage2_compiled_metadata.json")
+    extra_args = []
+    if ctx.attr.increment_included_headers:
+        extra_args.append("--metadata=increment-included-headers:t")
     ctx.actions.run(
-        outputs = [compiled, compiled_metadata],
+        outputs = [compiled],
         inputs = [
             preprocessed,
-            base_metadata,
             ctx.file._include,
             ctx.file._starts_with_text,
             ctx.file._wordcount,
             ctx.file._poetry_lines,
-            ctx.file._write_metadata,
-            ctx.file._cleanup,
         ] + lint_ok + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
         executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
         tools = [ctx.attr._validate[DefaultInfo].files_to_run],
@@ -224,15 +200,13 @@ def _md_file_impl(ctx):
             "--lua-filter=" + ctx.file._starts_with_text.path,
             "--lua-filter=" + ctx.file._wordcount.path,
             "--lua-filter=" + ctx.file._poetry_lines.path,
-            "--lua-filter=" + ctx.file._write_metadata.path,
-            "--lua-filter=" + ctx.file._cleanup.path,
-            "--metadata-file=" + base_metadata.path,
-            "--metadata=metadata-out-file:" + compiled_metadata.path,
+            "--metadata=lang:en-GB",
             "--from=markdown+smart-pandoc_title_block",
             "--to=json",
             "--strip-comments",
             "--fail-if-warnings",
             "--output=" + compiled.path,
+        ] + extra_args + [
             preprocessed.path,
         ],
         progress_message = "%{label}: compiling markdown",
@@ -240,21 +214,67 @@ def _md_file_impl(ctx):
 
     dictionary, spellcheck_ok = _spellcheck(ctx, compiled)
 
+    raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
+    ctx.actions.run(
+        outputs = [raw_version],
+        inputs = [ctx.info_file],
+        executable = ctx.attr._raw_version[DefaultInfo].files_to_run,
+        arguments = [ctx.info_file.path, raw_version.path, ctx.label.package],
+        progress_message = "%{label}: computing raw version",
+    )
+
+    version = ctx.actions.declare_file(ctx.label.name + "_version.json")
+    extra_args = []
+    if ctx.attr.version_override:
+        extra_args += ["--version_override", ctx.attr.version_override]
+    ctx.actions.run(
+        outputs = [version],
+        inputs = [raw_version, ctx.attr.deps[MdGroupInfo].metadata],
+        executable = ctx.attr._version[DefaultInfo].files_to_run,
+        arguments = extra_args + [raw_version.path, ctx.attr.deps[MdGroupInfo].metadata.path, version.path],
+        progress_message = "%{label}: computing version",
+    )
+
+    versioned = ctx.actions.declare_file(ctx.label.name + "_stage3_versioned.json")
+    versioned_metadata = ctx.actions.declare_file(ctx.label.name + "_stage3_versioned_metadata.json")
+    ctx.actions.run(
+        outputs = [versioned, versioned_metadata],
+        inputs = [
+            compiled,
+            version,
+            ctx.file._write_metadata,
+            ctx.file._cleanup,
+        ],
+        executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
+        arguments = [
+            "--lua-filter=" + ctx.file._write_metadata.path,
+            "--lua-filter=" + ctx.file._cleanup.path,
+            "--metadata-file=" + version.path,
+            "--metadata=metadata-out-file:" + versioned_metadata.path,
+            "--from=json",
+            "--to=json",
+            "--fail-if-warnings",
+            "--output=" + versioned.path,
+            compiled.path,
+        ],
+        progress_message = "%{label}: adding version information",
+    )
+
     output = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.run(
         outputs = [output],
-        inputs = [compiled, spellcheck_ok],
+        inputs = [versioned, spellcheck_ok],
         executable = "cp",
-        arguments = [compiled.path, output.path],
+        arguments = [versioned.path, output.path],
         progress_message = "%{label}: generating output",
     )
 
     metadata = ctx.outputs.metadata_out
     ctx.actions.run(
         outputs = [metadata],
-        inputs = [output, compiled_metadata],
+        inputs = [output, versioned_metadata],
         executable = "cp",
-        arguments = [compiled_metadata.path, metadata.path],
+        arguments = [versioned_metadata.path, metadata.path],
         progress_message = "%{label}: generating metadata",
     )
 
@@ -308,12 +328,6 @@ md_file = rule(
         "_pandoc": attr.label(
             default = "//markdown/external:pandoc",
         ),
-        "_raw_version": attr.label(
-            default = "//markdown/core:raw_version",
-        ),
-        "_base_metadata": attr.label(
-            default = "//markdown/core:base_metadata",
-        ),
         "_gen_standard_lint_input": attr.label(
             default = "//markdown/core/lint:gen_standard_lint_input",
         ),
@@ -349,14 +363,6 @@ md_file = rule(
             allow_single_file = True,
             default = "//markdown/core/filters:poetry_lines.lua",
         ),
-        "_write_metadata": attr.label(
-            allow_single_file = True,
-            default = "//markdown/core/filters:write_metadata.lua",
-        ),
-        "_cleanup": attr.label(
-            allow_single_file = True,
-            default = "//markdown/core/filters:cleanup.lua",
-        ),
         "_gen_dictionary": attr.label(
             default = "//markdown/core/spelling:gen_dictionary",
         ),
@@ -370,6 +376,20 @@ md_file = rule(
         ),
         "_spellcheck": attr.label(
             default = "//markdown/core/spelling:spellcheck",
+        ),
+        "_raw_version": attr.label(
+            default = "//markdown/core:raw_version",
+        ),
+        "_version": attr.label(
+            default = "//markdown/core:version",
+        ),
+        "_write_metadata": attr.label(
+            allow_single_file = True,
+            default = "//markdown/core/filters:write_metadata.lua",
+        ),
+        "_cleanup": attr.label(
+            allow_single_file = True,
+            default = "//markdown/core/filters:cleanup.lua",
         ),
     },
 )

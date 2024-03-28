@@ -37,9 +37,9 @@ def _md_odt_impl(ctx):
     )
 
     output = ctx.outputs.out
-    zip_cleaner(ctx, intermediate, output, ctx.attr._zip_cleaner)
+    zip_cleaner(ctx, intermediate, output, ctx.executable._zip_cleaner)
 
-    script = open_script(ctx, "odt", output, ctx.attr._write_open_script)
+    script = open_script(ctx, "odt", output, ctx.executable._write_open_script)
 
     return [
         default_info_for_ext(ctx, output, script),
@@ -86,9 +86,9 @@ def _md_docx_impl(ctx):
     )
 
     output = ctx.outputs.out
-    zip_cleaner(ctx, intermediate, output, ctx.attr._zip_cleaner)
+    zip_cleaner(ctx, intermediate, output, ctx.executable._zip_cleaner)
 
-    script = open_script(ctx, "docx", output, ctx.attr._write_open_script)
+    script = open_script(ctx, "docx", output, ctx.executable._write_open_script)
 
     return [
         default_info_for_ext(ctx, output, script),
@@ -130,7 +130,7 @@ def _md_doc_impl(ctx):
     ctx.actions.run(
         outputs = [output],
         inputs = [ctx.attr.docx[MdDocxInfo].output],
-        executable = ctx.attr._unoconv[DefaultInfo].files_to_run,
+        executable = ctx.executable._unoconv,
         arguments = [
             "--format",
             "doc",
@@ -142,7 +142,7 @@ def _md_doc_impl(ctx):
         progress_message = "%{label}: generating doc output",
     )
 
-    script = open_script(ctx, "doc", output, ctx.attr._write_open_script)
+    script = open_script(ctx, "doc", output, ctx.executable._write_open_script)
 
     return [
         default_info_for_ext(ctx, output, script),
@@ -160,6 +160,8 @@ md_doc = rule(
         "out": attr.output(),
         "_unoconv": attr.label(
             default = "//markdown/formats/word:unoconv",
+            executable = True,
+            cfg = "exec",
         ),
         "_write_open_script": write_open_script(),
     },
@@ -170,7 +172,7 @@ def _md_ms_docx_impl(ctx):
     ctx.actions.run(
         outputs = [metadata],
         inputs = [ctx.attr.lib[MdFileInfo].metadata],
-        executable = ctx.attr._ms_metadata[DefaultInfo].files_to_run,
+        executable = ctx.executable._ms_metadata,
         arguments = [
             ctx.attr.lib[MdFileInfo].metadata.path,
             metadata.path,
@@ -180,7 +182,7 @@ def _md_ms_docx_impl(ctx):
 
     intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.docx")
     env = timestamp_override(ctx)
-    env["PANDOC"] = ctx.attr._pandoc_bin[DefaultInfo].files_to_run.executable.path
+    env["PANDOC"] = ctx.executable._pandoc_bin.path
     data_inputs = []
     for target in ctx.attr.lib[MdFileInfo].data.to_list():
         data_inputs += target.files.to_list()
@@ -190,9 +192,9 @@ def _md_ms_docx_impl(ctx):
             ctx.attr.lib[MdFileInfo].output,
             metadata,
             ctx.file._filter,
-            ctx.attr._pandoc_bin[DefaultInfo].files_to_run.executable,
+            ctx.executable._pandoc_bin,
         ],
-        executable = ctx.attr._md2short[DefaultInfo].files_to_run,
+        executable = ctx.executable._md2short,
         arguments = [
             "--overwrite",
             "--modern",
@@ -209,9 +211,9 @@ def _md_ms_docx_impl(ctx):
     )
 
     output = ctx.outputs.out
-    zip_cleaner(ctx, intermediate_docx, output, ctx.attr._zip_cleaner)
+    zip_cleaner(ctx, intermediate_docx, output, ctx.executable._zip_cleaner)
 
-    script = open_script(ctx, "ms.docx", output, ctx.attr._write_open_script)
+    script = open_script(ctx, "ms.docx", output, ctx.executable._write_open_script)
 
     return [
         default_info_for_ext(ctx, output, script),
@@ -230,9 +232,13 @@ md_ms_docx = rule(
         "timestamp_override": attr.string(),
         "_ms_metadata": attr.label(
             default = "//markdown/formats/word:ms_metadata",
+            executable = True,
+            cfg = "exec",
         ),
         "_md2short": attr.label(
             default = "//markdown/external:md2short",
+            executable = True,
+            cfg = "exec",
         ),
         "_filter": attr.label(
             allow_single_file = True,

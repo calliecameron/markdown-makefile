@@ -29,7 +29,7 @@ def _md_md_impl(ctx):
         ["--standalone", "--wrap=none"],
         {},
         ctx.attr.lib,
-        ctx.attr._write_open_script,
+        ctx.executable._write_open_script,
     )
 
 md_md = simple_pandoc_output_rule(_md_md_impl, "md")
@@ -43,7 +43,7 @@ def _md_txt_impl(ctx):
         ["--standalone", "--wrap=none"],
         {},
         ctx.attr.lib,
-        ctx.attr._write_open_script,
+        ctx.executable._write_open_script,
     )
 
 md_txt = simple_pandoc_output_rule(_md_txt_impl, "txt")
@@ -57,7 +57,7 @@ def _md_html_impl(ctx):
         ["--standalone", add_title_arg(ctx)],
         {},
         ctx.attr.lib,
-        ctx.attr._write_open_script,
+        ctx.executable._write_open_script,
     )
 
 md_html = simple_pandoc_output_rule(_md_html_impl, "html")

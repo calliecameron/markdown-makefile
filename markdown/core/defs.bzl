@@ -31,7 +31,7 @@ def _md_group_impl(ctx):
     ctx.actions.run(
         outputs = [metadata],
         inputs = [dep[MdFileInfo].metadata for dep in ctx.attr.deps],
-        executable = ctx.attr._combine_deps_metadata[DefaultInfo].files_to_run,
+        executable = ctx.executable._combine_deps_metadata,
         arguments = metadata_args + [metadata.path],
         progress_message = "%{label}: combining deps metadata",
     )
@@ -52,6 +52,8 @@ md_group = rule(
         ),
         "_combine_deps_metadata": attr.label(
             default = "//markdown/core:combine_deps_metadata",
+            executable = True,
+            cfg = "exec",
         ),
     },
 )
@@ -63,7 +65,7 @@ def _lint(ctx):
         inputs = [
             ctx.file.src,
         ],
-        executable = ctx.attr._gen_standard_lint_input[DefaultInfo].files_to_run,
+        executable = ctx.executable._gen_standard_lint_input,
         arguments = [
             ctx.file.src.path,
             standard_lint_input.path,
@@ -78,7 +80,7 @@ def _lint(ctx):
             standard_lint_input,
             ctx.file._pymarkdown_config,
         ],
-        executable = ctx.attr._standard_lint[DefaultInfo].files_to_run,
+        executable = ctx.executable._standard_lint,
         arguments = [
             standard_lint_ok.path,
             "--strict-config",
@@ -96,7 +98,7 @@ def _lint(ctx):
         inputs = [
             ctx.file.src,
         ],
-        executable = ctx.attr._custom_lint[DefaultInfo].files_to_run,
+        executable = ctx.executable._custom_lint,
         arguments = [
             ctx.file.src.path,
             custom_lint_ok.path,
@@ -117,7 +119,7 @@ def _spellcheck(ctx, compiled):
         ctx.actions.run(
             outputs = [dictionary],
             inputs = dict_inputs + [dep[MdFileInfo].dictionary for dep in ctx.attr.deps[MdGroupInfo].deps],
-            executable = ctx.attr._gen_dictionary[DefaultInfo].files_to_run,
+            executable = ctx.executable._gen_dictionary,
             arguments = [dictionary.path] +
                         dict_args +
                         [dep[MdFileInfo].dictionary.path for dep in ctx.attr.deps[MdGroupInfo].deps],
@@ -137,7 +139,7 @@ def _spellcheck(ctx, compiled):
             ctx.file._spellcheck_input_template,
             ctx.file._spellcheck_filter,
         ],
-        executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
+        executable = ctx.executable._pandoc,
         arguments = [
             "--lua-filter=" + ctx.file._spellcheck_filter.path,
             "--from=json",
@@ -154,7 +156,7 @@ def _spellcheck(ctx, compiled):
     ctx.actions.run(
         outputs = [spellcheck_ok],
         inputs = [dictionary, spellcheck_input],
-        executable = ctx.attr._spellcheck[DefaultInfo].files_to_run,
+        executable = ctx.executable._spellcheck,
         arguments = [dictionary.path, spellcheck_input.path, spellcheck_ok.path],
         progress_message = "%{label}: spellchecking",
     )
@@ -172,7 +174,7 @@ def _md_file_impl(ctx):
     ctx.actions.run(
         outputs = [preprocessed],
         inputs = [ctx.file.src],
-        executable = ctx.attr._preprocess[DefaultInfo].files_to_run,
+        executable = ctx.executable._preprocess,
         arguments = dep_args + image_args + [ctx.file.src.path, preprocessed.path, ctx.label.package],
         progress_message = "%{label}: preprocessing markdown",
     )
@@ -192,10 +194,10 @@ def _md_file_impl(ctx):
             ctx.file._wordcount,
             ctx.file._poetry_lines,
         ] + lint_ok + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
-        executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
-        tools = [ctx.attr._validate[DefaultInfo].files_to_run],
+        executable = ctx.executable._pandoc,
+        tools = [ctx.executable._validate],
         arguments = [
-            "--filter=" + ctx.attr._validate[DefaultInfo].files_to_run.executable.path,
+            "--filter=" + ctx.executable._validate.path,
             "--lua-filter=" + ctx.file._include.path,
             "--lua-filter=" + ctx.file._starts_with_text.path,
             "--lua-filter=" + ctx.file._wordcount.path,
@@ -218,7 +220,7 @@ def _md_file_impl(ctx):
     ctx.actions.run(
         outputs = [raw_version],
         inputs = [ctx.info_file],
-        executable = ctx.attr._raw_version[DefaultInfo].files_to_run,
+        executable = ctx.executable._raw_version,
         arguments = [ctx.info_file.path, raw_version.path, ctx.label.package],
         progress_message = "%{label}: computing raw version",
     )
@@ -230,7 +232,7 @@ def _md_file_impl(ctx):
     ctx.actions.run(
         outputs = [version],
         inputs = [raw_version, ctx.attr.deps[MdGroupInfo].metadata],
-        executable = ctx.attr._version[DefaultInfo].files_to_run,
+        executable = ctx.executable._version,
         arguments = extra_args + [raw_version.path, ctx.attr.deps[MdGroupInfo].metadata.path, version.path],
         progress_message = "%{label}: computing version",
     )
@@ -245,7 +247,7 @@ def _md_file_impl(ctx):
             ctx.file._write_metadata,
             ctx.file._cleanup,
         ],
-        executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
+        executable = ctx.executable._pandoc,
         arguments = [
             "--lua-filter=" + ctx.file._write_metadata.path,
             "--lua-filter=" + ctx.file._cleanup.path,
@@ -327,12 +329,18 @@ md_file = rule(
         ),
         "_pandoc": attr.label(
             default = "//markdown/external:pandoc",
+            executable = True,
+            cfg = "exec",
         ),
         "_gen_standard_lint_input": attr.label(
             default = "//markdown/core/lint:gen_standard_lint_input",
+            executable = True,
+            cfg = "exec",
         ),
         "_standard_lint": attr.label(
             default = "//markdown/core/lint:standard_lint",
+            executable = True,
+            cfg = "exec",
         ),
         "_pymarkdown_config": attr.label(
             allow_single_file = True,
@@ -340,12 +348,18 @@ md_file = rule(
         ),
         "_custom_lint": attr.label(
             default = "//markdown/core/lint:custom_lint",
+            executable = True,
+            cfg = "exec",
         ),
         "_preprocess": attr.label(
             default = "//markdown/core:preprocess",
+            executable = True,
+            cfg = "exec",
         ),
         "_validate": attr.label(
             default = "//markdown/core/filters:validate",
+            executable = True,
+            cfg = "exec",
         ),
         "_include": attr.label(
             allow_single_file = True,
@@ -365,6 +379,8 @@ md_file = rule(
         ),
         "_gen_dictionary": attr.label(
             default = "//markdown/core/spelling:gen_dictionary",
+            executable = True,
+            cfg = "exec",
         ),
         "_spellcheck_input_template": attr.label(
             allow_single_file = True,
@@ -376,12 +392,18 @@ md_file = rule(
         ),
         "_spellcheck": attr.label(
             default = "//markdown/core/spelling:spellcheck",
+            executable = True,
+            cfg = "exec",
         ),
         "_raw_version": attr.label(
             default = "//markdown/core:raw_version",
+            executable = True,
+            cfg = "exec",
         ),
         "_version": attr.label(
             default = "//markdown/core:version",
+            executable = True,
+            cfg = "exec",
         ),
         "_write_metadata": attr.label(
             allow_single_file = True,

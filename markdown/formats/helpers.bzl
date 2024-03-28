@@ -25,21 +25,29 @@ def timestamp_override(ctx):
 def pandoc_bin():
     return attr.label(
         default = "//markdown/external:pandoc",
+        executable = True,
+        cfg = "exec",
     )
 
 def pandoc_script():
     return attr.label(
         default = "//markdown/formats:pandoc",
+        executable = True,
+        cfg = "exec",
     )
 
 def write_open_script():
     return attr.label(
         default = "//markdown/formats:write_open_script",
+        executable = True,
+        cfg = "exec",
     )
 
 def zip_cleaner_script():
     return attr.label(
         default = "//markdown/formats:zip_cleaner",
+        executable = True,
+        cfg = "exec",
     )
 
 def open_script(ctx, ext, file, write_open_script):
@@ -47,7 +55,7 @@ def open_script(ctx, ext, file, write_open_script):
     ctx.actions.run(
         outputs = [script],
         inputs = [file],
-        executable = write_open_script[DefaultInfo].files_to_run,
+        executable = write_open_script,
         arguments = [ctx.workspace_name, file.short_path, script.path],
         progress_message = "%{label}: generating " + ext + " open script",
     )
@@ -87,11 +95,11 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
         outputs = [output],
         inputs = [
             lib[MdFileInfo].output,
-            ctx.attr._pandoc_bin.files_to_run.executable,
+            ctx.executable._pandoc_bin,
         ] + data_inputs + inputs,
-        executable = ctx.attr._pandoc[DefaultInfo].files_to_run,
+        executable = ctx.executable._pandoc,
         arguments = [
-            ctx.attr._pandoc_bin.files_to_run.executable.path,
+            ctx.executable._pandoc_bin.path,
             "--from=json",
             "--to=" + to_format,
             "--fail-if-warnings",
@@ -139,7 +147,7 @@ def zip_cleaner(ctx, in_file, out_file, script):
     ctx.actions.run(
         outputs = [out_file],
         inputs = [in_file],
-        executable = script[DefaultInfo].files_to_run,
+        executable = script,
         arguments = [
             in_file.path,
             out_file.path,

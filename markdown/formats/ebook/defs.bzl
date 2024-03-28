@@ -42,9 +42,9 @@ def _md_epub_impl(ctx):
     )
 
     output = ctx.outputs.out
-    zip_cleaner(ctx, intermediate, output, ctx.attr._zip_cleaner)
+    zip_cleaner(ctx, intermediate, output, ctx.executable._zip_cleaner)
 
-    script = open_script(ctx, "epub", output, ctx.attr._write_open_script)
+    script = open_script(ctx, "epub", output, ctx.executable._write_open_script)
 
     return [
         default_info_for_ext(ctx, output, script),
@@ -84,18 +84,18 @@ def _md_mobi_impl(ctx):
         outputs = [output],
         inputs = [
             ctx.attr.epub[MdEpubInfo].output,
-            ctx.attr._ebook_convert_bin.files_to_run.executable,
+            ctx.executable._ebook_convert_bin,
         ],
-        executable = ctx.attr._ebook_convert[DefaultInfo].files_to_run,
+        executable = ctx.executable._ebook_convert,
         arguments = [
-            ctx.attr._ebook_convert_bin.files_to_run.executable.path,
+            ctx.executable._ebook_convert_bin.path,
             ctx.attr.epub[MdEpubInfo].output.path,
             output.path,
         ],
         progress_message = "%{label}: generating mobi output",
     )
 
-    script = open_script(ctx, "mobi", output, ctx.attr._write_open_script)
+    script = open_script(ctx, "mobi", output, ctx.executable._write_open_script)
 
     return [default_info_for_ext(ctx, output, script)]
 
@@ -111,9 +111,13 @@ md_mobi = rule(
         "out": attr.output(),
         "_ebook_convert": attr.label(
             default = "//markdown/formats/ebook:ebook_convert",
+            executable = True,
+            cfg = "exec",
         ),
         "_ebook_convert_bin": attr.label(
             default = "//markdown/external:ebook_convert",
+            executable = True,
+            cfg = "exec",
         ),
         "_write_open_script": write_open_script(),
     },

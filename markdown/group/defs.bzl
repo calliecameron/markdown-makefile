@@ -6,11 +6,11 @@ def _md_group_summary_impl(ctx):
     script = ctx.actions.declare_file(ctx.label.name + ".sh")
     ctx.actions.run(
         outputs = [script],
-        executable = ctx.attr._write_group_summary_script[DefaultInfo].files_to_run,
+        executable = ctx.executable._write_group_summary_script,
         arguments = [
             ctx.workspace_name,
             ctx.attr.deps[MdGroupInfo].metadata.short_path,
-            ctx.attr._group_summary.files_to_run.executable.short_path,
+            ctx.executable._group_summary.short_path,
             script.path,
         ],
         progress_message = "%{label}: generating summary script",
@@ -38,9 +38,13 @@ md_group_summary = rule(
         ),
         "_group_summary": attr.label(
             default = "//markdown/group:group_summary",
+            executable = True,
+            cfg = "exec",
         ),
         "_write_group_summary_script": attr.label(
             default = "//markdown/group:write_group_summary_script",
+            executable = True,
+            cfg = "exec",
         ),
     },
 )
@@ -50,7 +54,7 @@ def _md_group_publications_impl(ctx):
     ctx.actions.run(
         outputs = [publications],
         inputs = [ctx.attr.deps[MdGroupInfo].metadata],
-        executable = ctx.attr._group_publications[DefaultInfo].files_to_run,
+        executable = ctx.executable._group_publications,
         arguments = [ctx.attr.deps[MdGroupInfo].metadata.path, publications.path],
         progress_message = "%{label}: generating publications",
     )
@@ -59,7 +63,7 @@ def _md_group_publications_impl(ctx):
     ctx.actions.run(
         outputs = [script],
         inputs = [publications],
-        executable = ctx.attr._write_group_publications_script[DefaultInfo].files_to_run,
+        executable = ctx.executable._write_group_publications_script,
         arguments = [ctx.workspace_name, publications.short_path, script.path],
         progress_message = "%{label}: generating publications script",
     )
@@ -83,9 +87,13 @@ md_group_publications = rule(
         ),
         "_group_publications": attr.label(
             default = "//markdown/group:group_publications",
+            executable = True,
+            cfg = "exec",
         ),
         "_write_group_publications_script": attr.label(
             default = "//markdown/group:write_group_publications_script",
+            executable = True,
+            cfg = "exec",
         ),
     },
 )

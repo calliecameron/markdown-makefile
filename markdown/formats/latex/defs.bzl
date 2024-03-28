@@ -103,7 +103,7 @@ def _tex_output_impl(ctx, ext, to, extra_args):
         ] + extra_args + _LATEX_VARS + expand_locations(ctx, ctx.attr.intermediate, ctx.attr.extra_pandoc_flags),
         timestamp_override(ctx),
         ctx.attr.intermediate,
-        ctx.attr._write_open_script,
+        ctx.executable._write_open_script,
     )
 
 def _tex_output_rule(impl, ext):

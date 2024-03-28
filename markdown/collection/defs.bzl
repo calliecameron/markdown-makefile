@@ -10,7 +10,7 @@ def _md_collection_src_impl(ctx):
     ctx.actions.run(
         outputs = [output],
         inputs = [ctx.attr.deps[MdGroupInfo].metadata],
-        executable = ctx.attr._collection_src[DefaultInfo].files_to_run,
+        executable = ctx.executable._collection_src,
         arguments = dep_args + [
             ctx.attr.title,
             ctx.attr.author,
@@ -42,6 +42,8 @@ md_collection_src = rule(
         ),
         "_collection_src": attr.label(
             default = "//markdown/collection:collection_src",
+            executable = True,
+            cfg = "exec",
         ),
     },
 )

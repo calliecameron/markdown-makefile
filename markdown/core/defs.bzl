@@ -164,6 +164,8 @@ def _spellcheck(ctx, compiled):
     return dictionary, spellcheck_ok
 
 def _md_file_impl(ctx):
+    lint_ok = _lint(ctx)
+
     preprocessed = ctx.actions.declare_file(ctx.label.name + "_stage1_preprocessed.md")
     dep_args = []
     for dep in ctx.attr.deps[MdGroupInfo].deps:
@@ -179,8 +181,6 @@ def _md_file_impl(ctx):
         progress_message = "%{label}: preprocessing markdown",
     )
 
-    lint_ok = _lint(ctx)
-
     compiled = ctx.actions.declare_file(ctx.label.name + "_stage2_compiled.json")
     extra_args = []
     if ctx.attr.increment_included_headers:
@@ -193,7 +193,7 @@ def _md_file_impl(ctx):
             ctx.file._starts_with_text,
             ctx.file._wordcount,
             ctx.file._poetry_lines,
-        ] + lint_ok + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
+        ] + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
         executable = ctx.executable._pandoc,
         tools = [ctx.executable._validate],
         arguments = [
@@ -265,7 +265,7 @@ def _md_file_impl(ctx):
     output = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.run(
         outputs = [output],
-        inputs = [versioned, spellcheck_ok],
+        inputs = [versioned, spellcheck_ok] + lint_ok,
         executable = "cp",
         arguments = [versioned.path, output.path],
         progress_message = "%{label}: generating output",

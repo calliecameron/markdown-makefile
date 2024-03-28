@@ -32,7 +32,7 @@ def main() -> None:
 
     for target in args.dep:
         j = metadata[target]
-        output += [f"# {j[TITLE]}", ""]
+        output += ["::: nospellcheck", "", f"# {j[TITLE]}"]
         author = parse_author(j)
         print_author = author != args.author
         print_date = DATE in j and j[DATE]
@@ -42,8 +42,8 @@ def main() -> None:
         if print_date:
             tagline.append(j["date"])
         if tagline:
-            output += ["### " + ", ".join(tagline), ""]
-        output += [f"!include //{target}", ""]
+            output += ["", "### " + ", ".join(tagline)]
+        output += ["", ":::", "", f"!include //{target}", ""]
 
     with open(args.out_file, "w", encoding="utf-8") as f:
         f.write("\n".join(output))

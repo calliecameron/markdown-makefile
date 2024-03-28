@@ -6,24 +6,23 @@ import markdown.utils.test_utils
 PANDOC = ""
 FILTER = ""
 
-DOC = """Foo ![image](bar.jpg) bar
-
-!include foobarbaz
-
-Another [foobarbaz]{.nospellcheck} [line]{.foo}
+DOC = """
+Test [foo]{.nospellcheck} [bar]{.foo} baz
 
 ::: {.nospellcheck}
-foobarbaz
+foo
 :::
 """
 
 
-class TestSpellcheckFilter(unittest.TestCase):
+class TestSpellcheckCleanup(unittest.TestCase):
     def test_cleanup(self) -> None:
         j = markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC)
-        self.assertEqual(len(j["blocks"]), 2)
-        self.assertEqual("", j["blocks"][0]["c"][2]["c"][2][0])
-        self.assertEqual("line", j["blocks"][1]["c"][3]["c"][1][0]["c"])
+        self.assertEqual(2, len(j["blocks"]))
+        self.assertEqual("foo", j["blocks"][0]["c"][2]["c"])
+        self.assertEqual("bar", j["blocks"][0]["c"][4]["c"][1][0]["c"])
+        self.assertEqual("baz", j["blocks"][0]["c"][6]["c"])
+        self.assertEqual("foo", j["blocks"][1]["c"][0]["c"])
 
 
 if __name__ == "__main__":

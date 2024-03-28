@@ -5,6 +5,7 @@ exports_files(
     [
         "spellcheck_input_template.md",
         "spellcheck_filter.lua",
+        "spellcheck_cleanup.lua",
     ],
     visibility = ["//visibility:public"],
 )
@@ -18,6 +19,20 @@ py_test(
     ],
     data = [
         "spellcheck_filter.lua",
+        "//markdown/external:pandoc",
+    ],
+    deps = ["//markdown/utils:test_utils"],
+)
+
+py_test(
+    name = "spellcheck_cleanup_test",
+    srcs = ["spellcheck_cleanup_test.py"],
+    args = [
+        "$(rootpath //markdown/external:pandoc)",
+        "$(rootpath spellcheck_cleanup.lua)",
+    ],
+    data = [
+        "spellcheck_cleanup.lua",
         "//markdown/external:pandoc",
     ],
     deps = ["//markdown/utils:test_utils"],

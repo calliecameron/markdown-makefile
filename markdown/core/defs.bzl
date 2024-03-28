@@ -1,5 +1,7 @@
 """Markdown rules."""
 
+_SRC_FORMAT = "markdown+smart-pandoc_title_block"
+
 MdGroupInfo = provider(
     "Info for a group of markdown files.",
     fields = {
@@ -14,7 +16,6 @@ MdFileInfo = provider(
         "name": "The name of the document",
         "output": "Compiled document, as json",
         "metadata": "Document metadata, as json",
-        "dictionary": "Dictionary used for spellchecking",
         "data": "Data deps of the document",
     },
 )
@@ -108,9 +109,9 @@ def _lint(ctx):
 
     return [standard_lint_ok, custom_lint_ok]
 
-def _spellcheck(ctx, compiled):
+def _spellcheck(ctx):
     dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
-    if ctx.attr.dictionaries or ctx.attr.deps[MdGroupInfo].deps:
+    if ctx.attr.dictionaries:
         dict_inputs = []
         dict_args = []
         for d in ctx.attr.dictionaries:
@@ -118,11 +119,10 @@ def _spellcheck(ctx, compiled):
             dict_args += [f.path for f in d.files.to_list()]
         ctx.actions.run(
             outputs = [dictionary],
-            inputs = dict_inputs + [dep[MdFileInfo].dictionary for dep in ctx.attr.deps[MdGroupInfo].deps],
+            inputs = dict_inputs,
             executable = ctx.executable._gen_dictionary,
             arguments = [dictionary.path] +
-                        dict_args +
-                        [dep[MdFileInfo].dictionary.path for dep in ctx.attr.deps[MdGroupInfo].deps],
+                        dict_args,
             progress_message = "%{label}: generating dictionary",
         )
     else:
@@ -135,19 +135,20 @@ def _spellcheck(ctx, compiled):
     ctx.actions.run(
         outputs = [spellcheck_input],
         inputs = [
-            compiled,
+            ctx.file.src,
             ctx.file._spellcheck_input_template,
             ctx.file._spellcheck_filter,
         ],
         executable = ctx.executable._pandoc,
         arguments = [
             "--lua-filter=" + ctx.file._spellcheck_filter.path,
-            "--from=json",
+            "--from=" + _SRC_FORMAT,
             "--to=markdown-smart",
             "--template=" + ctx.file._spellcheck_input_template.path,
+            "--strip-comments",
             "--fail-if-warnings",
             "--output=" + spellcheck_input.path,
-            compiled.path,
+            ctx.file.src.path,
         ],
         progress_message = "%{label}: generating input for spellchecking",
     )
@@ -161,10 +162,10 @@ def _spellcheck(ctx, compiled):
         progress_message = "%{label}: spellchecking",
     )
 
-    return dictionary, spellcheck_ok
+    return spellcheck_ok
 
 def _md_file_impl(ctx):
-    lint_ok = _lint(ctx)
+    lint_ok = _lint(ctx) + [_spellcheck(ctx)]
 
     preprocessed = ctx.actions.declare_file(ctx.label.name + "_stage1_preprocessed.md")
     dep_args = []
@@ -189,6 +190,7 @@ def _md_file_impl(ctx):
         outputs = [compiled],
         inputs = [
             preprocessed,
+            ctx.file._spellcheck_cleanup,
             ctx.file._include,
             ctx.file._starts_with_text,
             ctx.file._wordcount,
@@ -197,13 +199,14 @@ def _md_file_impl(ctx):
         executable = ctx.executable._pandoc,
         tools = [ctx.executable._validate],
         arguments = [
+            "--lua-filter=" + ctx.file._spellcheck_cleanup.path,
             "--filter=" + ctx.executable._validate.path,
             "--lua-filter=" + ctx.file._include.path,
             "--lua-filter=" + ctx.file._starts_with_text.path,
             "--lua-filter=" + ctx.file._wordcount.path,
             "--lua-filter=" + ctx.file._poetry_lines.path,
             "--metadata=lang:en-GB",
-            "--from=markdown+smart-pandoc_title_block",
+            "--from=" + _SRC_FORMAT,
             "--to=json",
             "--strip-comments",
             "--fail-if-warnings",
@@ -213,8 +216,6 @@ def _md_file_impl(ctx):
         ],
         progress_message = "%{label}: compiling markdown",
     )
-
-    dictionary, spellcheck_ok = _spellcheck(ctx, compiled)
 
     raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
     ctx.actions.run(
@@ -265,7 +266,7 @@ def _md_file_impl(ctx):
     output = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.run(
         outputs = [output],
-        inputs = [versioned, spellcheck_ok] + lint_ok,
+        inputs = [versioned] + lint_ok,
         executable = "cp",
         arguments = [versioned.path, output.path],
         progress_message = "%{label}: generating output",
@@ -285,8 +286,8 @@ def _md_file_impl(ctx):
         transitive = [dep[MdFileInfo].data for dep in ctx.attr.deps[MdGroupInfo].deps],
     )
     return [
-        DefaultInfo(files = depset([output, metadata, dictionary])),
-        MdFileInfo(name = ctx.label.name, output = output, metadata = metadata, dictionary = dictionary, data = data),
+        DefaultInfo(files = depset([output, metadata])),
+        MdFileInfo(name = ctx.label.name, output = output, metadata = metadata, data = data),
     ]
 
 md_file = rule(
@@ -351,10 +352,32 @@ md_file = rule(
             executable = True,
             cfg = "exec",
         ),
+        "_gen_dictionary": attr.label(
+            default = "//markdown/core/spelling:gen_dictionary",
+            executable = True,
+            cfg = "exec",
+        ),
+        "_spellcheck_input_template": attr.label(
+            allow_single_file = True,
+            default = "//markdown/core/spelling:spellcheck_input_template.md",
+        ),
+        "_spellcheck_filter": attr.label(
+            allow_single_file = True,
+            default = "//markdown/core/spelling:spellcheck_filter.lua",
+        ),
+        "_spellcheck": attr.label(
+            default = "//markdown/core/spelling:spellcheck",
+            executable = True,
+            cfg = "exec",
+        ),
         "_preprocess": attr.label(
             default = "//markdown/core:preprocess",
             executable = True,
             cfg = "exec",
+        ),
+        "_spellcheck_cleanup": attr.label(
+            allow_single_file = True,
+            default = "//markdown/core/spelling:spellcheck_cleanup.lua",
         ),
         "_validate": attr.label(
             default = "//markdown/core/filters:validate",
@@ -376,24 +399,6 @@ md_file = rule(
         "_poetry_lines": attr.label(
             allow_single_file = True,
             default = "//markdown/core/filters:poetry_lines.lua",
-        ),
-        "_gen_dictionary": attr.label(
-            default = "//markdown/core/spelling:gen_dictionary",
-            executable = True,
-            cfg = "exec",
-        ),
-        "_spellcheck_input_template": attr.label(
-            allow_single_file = True,
-            default = "//markdown/core/spelling:spellcheck_input_template.md",
-        ),
-        "_spellcheck_filter": attr.label(
-            allow_single_file = True,
-            default = "//markdown/core/spelling:spellcheck_filter.lua",
-        ),
-        "_spellcheck": attr.label(
-            default = "//markdown/core/spelling:spellcheck",
-            executable = True,
-            cfg = "exec",
         ),
         "_raw_version": attr.label(
             default = "//markdown/core:raw_version",

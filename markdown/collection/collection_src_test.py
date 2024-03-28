@@ -81,9 +81,13 @@ author:
 title: The Title
 ---
 
+::: nospellcheck
+
 # Foo
 
 ### Bar
+
+:::
 
 !include //foo
 """,
@@ -131,19 +135,31 @@ date: 1 January
 title: The Title
 ---
 
+::: nospellcheck
+
 # Foo
 
 ### 2 January
 
+:::
+
 !include //foo
+
+::: nospellcheck
 
 # Bar
 
 ### Baz, 3 January
 
+:::
+
 !include //bar
 
+::: nospellcheck
+
 # Baz
+
+:::
 
 !include //baz
 """,

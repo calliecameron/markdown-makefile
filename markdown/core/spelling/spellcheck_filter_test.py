@@ -43,7 +43,7 @@ Another [foobarbaz]{.nospellcheck} [line]{.foo}
 
 
 class TestSpellcheckFilter(unittest.TestCase):
-    def test_cleanup(self) -> None:
+    def test_filter(self) -> None:
         j = markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC)
 
         self.assertEqual(len(j["blocks"]), 10)
@@ -142,6 +142,51 @@ class TestSpellcheckFilter(unittest.TestCase):
                 {"t": "Str", "c": "line"},
             ],
         )
+
+    def test_filter_fails(self) -> None:
+        with self.assertRaises(ValueError):
+            markdown.utils.test_utils.pandoc_lua_filter(
+                PANDOC,
+                FILTER,
+                """``` {.nospellcheck}
+foo
+```""",
+            )
+
+        with self.assertRaises(ValueError):
+            markdown.utils.test_utils.pandoc_lua_filter(
+                PANDOC,
+                FILTER,
+                '![image](bar.jpg "An image"){.foo .nospellcheck width=50%}',
+            )
+
+        with self.assertRaises(ValueError):
+            markdown.utils.test_utils.pandoc_lua_filter(
+                PANDOC,
+                FILTER,
+                "# Foo {.nospellcheck}",
+            )
+
+        with self.assertRaises(ValueError):
+            markdown.utils.test_utils.pandoc_lua_filter(
+                PANDOC,
+                FILTER,
+                "`foo`{.nospellcheck}",
+            )
+
+        with self.assertRaises(ValueError):
+            markdown.utils.test_utils.pandoc_lua_filter(
+                PANDOC,
+                FILTER,
+                'Foo ![image](bar.jpg "An image"){.foo .nospellcheck width=50%} bar',
+            )
+
+        with self.assertRaises(ValueError):
+            markdown.utils.test_utils.pandoc_lua_filter(
+                PANDOC,
+                FILTER,
+                '[foo](http://example.com "bar"){.foo .nospellcheck}',
+            )
 
 
 if __name__ == "__main__":

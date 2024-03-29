@@ -11,7 +11,7 @@ INCLUDE_MSG = (
     "is in deps, e.g. '!include //foo:bar'. %s"
 )
 IMAGE_MSG = (
-    "Incorrectly-formatted image. Must be '![<text>](<label>)' where label is in "
+    "Incorrectly-formatted image. Must be '![<text>](<label>[ \"text\"])' where label is in "
     "'images', e.g. '![foo](//foo:bar)'. %s"
 )
 
@@ -50,7 +50,8 @@ def process_images(
     labels = set()
     replacements = {}
     for match in re.finditer(r"!\[[^\]]*\]\(([^\)]+)\)", line):
-        raw_label = match.group(1)
+        text = match.group(1)
+        raw_label, _, title = text.partition(" ")
         try:
             package, target = markdown.utils.bazel_package.canonicalise_label(
                 raw_label,
@@ -59,15 +60,16 @@ def process_images(
             label = package + ":" + target
             labels.add(label)
             if label in images:
-                replacements[raw_label] = images[label]
+                replacement = images[label] + ((" " + title) if title else "")
+                replacements[text] = replacement.replace("\\", r"\\")
             else:
                 problems.append((match.start(), IMAGE_MSG % label))
         except ValueError as e:
             problems.append((match.start(), IMAGE_MSG % e))
     if problems:
         return original_line, frozenset(labels), problems
-    for raw_label, replacement in sorted(replacements.items()):
-        line = re.sub(rf"!\[([^\]]*)\]\({re.escape(raw_label)}\)", rf"![\1]({replacement})", line)
+    for text, replacement in sorted(replacements.items()):
+        line = re.sub(rf"!\[([^\]]*)\]\({re.escape(text)}\)", rf"![\1]({replacement})", line)
     return line, frozenset(labels), []
 
 

@@ -1,5 +1,22 @@
-function Image(elem)
-    return pandoc.Image(elem.caption, '', elem.title, elem.attr)
+function CodeBlock(elem)
+    return {}
+end
+
+function Div(elem)
+    for _, class in ipairs(elem.classes) do
+        if class == "nospellcheck" then
+            return {}
+        end
+    end
+    return elem.content
+end
+
+function Figure(elem)
+    return pandoc.Figure(elem.content, elem.caption, {})
+end
+
+function Header(elem)
+    return pandoc.Header(elem.level, elem.content, {})
 end
 
 function Para(elem)
@@ -11,13 +28,23 @@ function Para(elem)
     return nil
 end
 
-function Div(elem)
-    for _, class in ipairs(elem.classes) do
-        if class == "nospellcheck" then
-            return {}
-        end
+function Code(elem)
+    return {}
+end
+
+function Image(elem)
+    return pandoc.Image(elem.caption, "", elem.title, {})
+end
+
+function Link(elem)
+    if pandoc.utils.stringify(elem.content) == elem.target then
+        return {}
     end
-    return nil
+    return pandoc.Link(elem.content, "", elem.title, {})
+end
+
+function SmallCaps(elem)
+    return elem.content
 end
 
 function Span(elem)
@@ -26,5 +53,5 @@ function Span(elem)
             return {}
         end
     end
-    return nil
+    return elem.content
 end

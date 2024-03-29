@@ -11,7 +11,7 @@ poetry-lines: 24
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"
 title: Test 4
-wordcount: 784
+wordcount: 835
 ---
 
 -   [The Title](#the-title){#toc-the-title}
@@ -97,7 +97,7 @@ This is a new paragraph after the stars. This text is [Small Caps]{.smallcaps}. 
 
 ## This is a second section
 
-![foo](tests/test2/image.png){width="50%"}
+![foo](tests/test2/image.png "bar"){.quux width="50%"}
 
 There is an image here.
 
@@ -105,7 +105,7 @@ And this is *even more italic text*.
 
 # The Title Is ‘Baz’
 
-### An Author, 23 February 2019
+### An Author, 23 February 2019 baz
 
 ## This is a section {#this-is-a-section}
 
@@ -162,9 +162,23 @@ Text after simple include.
 
 This is a new paragraph. This text is [Small Caps]{.smallcaps}.
 
-## This is a second section {#this-is-a-second-section}
+## This is a second section {#quux-not-spellchecked}
 
-And this is *even more italic text*.
+And this is *even more italic text*. Foo.
+
+``` python
+# Code blocks aren't spellchecked: quux
+```
+
+Inline code isn’t spellchecked: `quux`.
+
+::: quux
+`div` classes aren’t spellchecked.
+:::
+
+Anything in a nospellcheck div isn’t spellchecked: quux.
+
+Automatic links aren’t spellchecked: <http://quux.com>. Neither are the targets or attributes of inline links: [Foo](http://quux.com "Foo"){.quux}. Neither are [span classes]{.quux}. Anything in a nospellcheck span isn’t spellchecked.
 
 # Title
 

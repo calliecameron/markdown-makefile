@@ -1,7 +1,7 @@
 ---
 author:
 - An Author
-date: 23 February 2019
+date: 23 February 2019 baz
 docversion: reproducible
 identifier:
 - scheme: DOI
@@ -14,14 +14,14 @@ publications:
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"
 title: The Title Is ‘Baz’
-wordcount: 289
+wordcount: 339
 ---
 
 -   [This is a section](#this-is-a-section){#toc-this-is-a-section}
 -   [Section in simple include](#section-in-simple-include){#toc-section-in-simple-include}
 -   [Section in recursive include](#section-in-recursive-include){#toc-section-in-recursive-include}
 -   [Second section in simple include](#second-section-in-simple-include){#toc-second-section-in-simple-include}
--   [This is a second section](#this-is-a-second-section){#toc-this-is-a-second-section}
+-   [This is a second section](#quux-not-spellchecked){#toc-quux-not-spellchecked}
 
 # This is a section
 
@@ -78,9 +78,23 @@ Text after simple include.
 
 This is a new paragraph. This text is [Small Caps]{.smallcaps}.
 
-# This is a second section
+# This is a second section {#quux-not-spellchecked}
 
-And this is *even more italic text*.
+And this is *even more italic text*. Foo.
+
+``` python
+# Code blocks aren't spellchecked: quux
+```
+
+Inline code isn’t spellchecked: `quux`.
+
+::: quux
+`div` classes aren’t spellchecked.
+:::
+
+Anything in a nospellcheck div isn’t spellchecked: quux.
+
+Automatic links aren’t spellchecked: <http://quux.com>. Neither are the targets or attributes of inline links: [Foo](http://quux.com "Foo"){.quux}. Neither are [span classes]{.quux}. Anything in a nospellcheck span isn’t spellchecked.
 
 [^1]: This is a footnote. It should appear at the bottom of the page.
 

@@ -61,7 +61,7 @@ This is a new paragraph after the stars. This text is [Small Caps]{.smallcaps}. 
 
 # This is a second section
 
-![foo](tests/test2/image.png){width="50%"}
+![foo](tests/test2/image.png "bar"){.quux width="50%"}
 
 There is an image here.
 

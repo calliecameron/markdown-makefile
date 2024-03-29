@@ -16,7 +16,7 @@ GOOD = """Foo bar.
 
 !include %s
 
-An image ![foo](%s) goes here.
+An image ![foo](%s "bar"){.baz} goes here.
 """
 
 
@@ -113,15 +113,26 @@ class TestPreprocess(unittest.TestCase):
         self.assertEqual(used, frozenset(["foo:bar"]))
         self.assertEqual(problems, [])
 
+        # One image, title and attributes
+        line, used, problems = markdown.core.preprocess.process_images(
+            'Foo ![bar](//foo:bar "baz\\quux"){.quux}',
+            images,
+            "foo",
+        )
+        self.assertEqual(line, 'Foo ![bar](foo/bar.jpg "baz\\quux"){.quux}')
+        self.assertEqual(used, frozenset(["foo:bar"]))
+        self.assertEqual(problems, [])
+
         # Multiple images and duplicates
         line, used, problems = markdown.core.preprocess.process_images(
-            "Foo ![bar](:bar) bar ![quux](//baz/quux) baz ![bar](:bar)",
+            'Foo ![bar](:bar) bar ![quux](//baz/quux) baz ![bar](:bar) ![bar](:bar "baz"){.quux}',
             images,
             "foo",
         )
         self.assertEqual(
             line,
-            "Foo ![bar](foo/bar.jpg) bar ![quux](baz/quux/quux.png) baz ![bar](foo/bar.jpg)",
+            "Foo ![bar](foo/bar.jpg) bar ![quux](baz/quux/quux.png) baz ![bar](foo/bar.jpg) "
+            '![bar](foo/bar.jpg "baz"){.quux}',
         )
         self.assertEqual(used, frozenset(["foo:bar", "baz/quux:quux"]))
         self.assertEqual(problems, [])

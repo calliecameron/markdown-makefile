@@ -1,6 +1,6 @@
 The Title Is ‘Baz’
 An Author
-23 February 2019
+23 February 2019 baz
 
 -   This is a section
 -   Section in simple include
@@ -65,7 +65,17 @@ This is a new paragraph. This text is SMALL CAPS.
 
 This is a second section
 
-And this is even more italic text.
+And this is even more italic text. Foo.
+
+    # Code blocks aren't spellchecked: quux
+
+Inline code isn’t spellchecked: quux.
+
+div classes aren’t spellchecked.
+
+Anything in a nospellcheck div isn’t spellchecked: quux.
+
+Automatic links aren’t spellchecked: http://quux.com. Neither are the targets or attributes of inline links: Foo. Neither are span classes. Anything in a nospellcheck span isn’t spellchecked.
 
 [1] This is a footnote. It should appear at the bottom of the page.
 

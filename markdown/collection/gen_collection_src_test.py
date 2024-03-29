@@ -68,6 +68,7 @@ class TestGenCollectionSrc(unittest.TestCase):
                     {
                         "title": "Foo",
                         "author": ["Bar"],
+                        "starts-with-text": "",
                     },
                 ),
             ],
@@ -85,7 +86,7 @@ title: The Title
 
 # Foo
 
-### Bar
+**Bar**
 
 :::
 
@@ -105,6 +106,7 @@ title: The Title
                         "title": "Foo",
                         "author": ["The Author"],
                         "date": "2 January",
+                        "starts-with-text": "",
                     },
                 ),
                 (
@@ -113,6 +115,7 @@ title: The Title
                         "title": "Bar",
                         "author": "Baz",
                         "date": "3 January",
+                        "starts-with-text": "t",
                     },
                 ),
                 (
@@ -121,6 +124,7 @@ title: The Title
                         "title": "Baz",
                         "author": ["The Author"],
                         "date": "",
+                        "starts-with-text": "",
                     },
                 ),
             ],
@@ -139,7 +143,7 @@ title: The Title
 
 # Foo
 
-### 2 January
+**2 January**
 
 :::
 
@@ -149,7 +153,9 @@ title: The Title
 
 # Bar
 
-### Baz, 3 January
+**Baz, 3 January**
+
+&nbsp;
 
 :::
 

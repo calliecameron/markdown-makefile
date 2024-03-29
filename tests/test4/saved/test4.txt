@@ -48,6 +48,8 @@ The Title
 
 An Author
 
+ 
+
 This is some text before a section. It shouldn’t be indented. Each section should start on a new page (but subsections shouldn’t).
 
 This is a section
@@ -169,6 +171,8 @@ Automatic links aren’t spellchecked: http://quux.com. Neither are the targets 
 Title
 
 4 January 2022
+
+ 
 
 This is text before a section. It shouldn’t be indented.
 

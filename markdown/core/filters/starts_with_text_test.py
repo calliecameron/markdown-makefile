@@ -15,6 +15,42 @@ class TestStartsWithText(unittest.TestCase):
         j = markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, "# Foo\n\nBar.")
         self.assertEqual(j["meta"]["starts-with-text"]["c"], "")
 
+        j = markdown.utils.test_utils.pandoc_lua_filter(
+            PANDOC,
+            FILTER,
+            """::: foo
+::: bar
+
+:::
+:::
+
+::: foo
+Foo
+:::
+
+# bar
+""",
+        )
+        self.assertEqual(j["meta"]["starts-with-text"]["c"], "t")
+
+        j = markdown.utils.test_utils.pandoc_lua_filter(
+            PANDOC,
+            FILTER,
+            """::: foo
+::: bar
+
+:::
+:::
+
+::: foo
+# Foo
+:::
+
+bar
+""",
+        )
+        self.assertEqual(j["meta"]["starts-with-text"]["c"], "")
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:  # noqa: PLR2004

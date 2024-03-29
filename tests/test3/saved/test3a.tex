@@ -157,6 +157,11 @@ a blank line before the next paragraph:
 
 ~
 
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
+
 And then we do a simple include:
 
 Text before a section in simple include.
@@ -205,6 +210,11 @@ they're on different lines.'
 Test text test text test text. After this line there should be stars.
 
 \begin{center}* * *\end{center}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 And then there should be some text \textsuperscript{in~superscript} and
 \textsubscript{in~subscript}, and a footnote\footnote{This is a

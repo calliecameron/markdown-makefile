@@ -6,7 +6,7 @@ end
 
 function get_starts_with_text(doc)
     doc = doc:walk({Div = unwrap})
-    if #doc.blocks > 0 and doc.blocks[1].t ~= "Header" then
+    if #doc.blocks > 0 and doc.blocks[1].tag ~= "Header" then
         starts_with_text = "t"
     end
 end

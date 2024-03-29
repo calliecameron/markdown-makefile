@@ -4,20 +4,20 @@
 local words = 0
 
 local wordcount = {
-  Str = function(el)
+  Str = function(elem)
     -- we don't count a word if it's entirely punctuation
-    if el.text:match("%P") then
+    if elem.text:match("%P") then
       words = words + 1
     end
   end,
 
-  Code = function(el)
-    _,n = el.text:gsub("%S+","")
+  Code = function(elem)
+    _,n = elem.text:gsub("%S+","")
     words = words + n
   end,
 
-  CodeBlock = function(el)
-    _,n = el.text:gsub("%S+","")
+  CodeBlock = function(elem)
+    _,n = elem.text:gsub("%S+","")
     words = words + n
   end
 }
@@ -27,10 +27,10 @@ function get_wordcount(doc, meta)
   pandoc.walk_block(pandoc.Div(doc.blocks), wordcount)
 end
 
-function set_wordcount(m)
-  if m.wordcount == nil then
-    m.wordcount = tostring(words)
-    return m
+function set_wordcount(meta)
+  if meta.wordcount == nil then
+    meta.wordcount = tostring(words)
+    return meta
   end
 end
 

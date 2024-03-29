@@ -12,7 +12,7 @@ import markdown.utils.test_utils
 SCRIPT = ""
 
 
-class TestCollectionSrc(unittest.TestCase):
+class TestGenCollectionSrc(unittest.TestCase):
     def dump_file(self, filename: str, content: Mapping[str, Any]) -> None:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)
@@ -57,7 +57,7 @@ class TestCollectionSrc(unittest.TestCase):
 
         return self.load_file(out_file)
 
-    def test_collection_src_simple(self) -> None:
+    def test_gen_collection_src_simple(self) -> None:
         out = self.run_script(
             "The Title",
             "The Author",
@@ -93,7 +93,7 @@ title: The Title
 """,
         )
 
-    def test_collection_src_complex(self) -> None:
+    def test_gen_collection_src_complex(self) -> None:
         out = self.run_script(
             "The Title",
             "The Author",

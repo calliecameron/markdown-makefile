@@ -18,8 +18,8 @@ exports_files(
 )
 
 py_binary(
-    name = "collection_src",
-    srcs = ["collection_src.py"],
+    name = "gen_collection_src",
+    srcs = ["gen_collection_src.py"],
     type_stub_deps = [requirement("types-PyYAML")],
     visibility = ["//visibility:public"],
     deps = [
@@ -29,9 +29,9 @@ py_binary(
 )
 
 py_test(
-    name = "collection_src_test",
-    srcs = ["collection_src_test.py"],
-    args = ["$(rootpath :collection_src)"],
-    data = [":collection_src"],
+    name = "gen_collection_src_test",
+    srcs = ["gen_collection_src_test.py"],
+    args = ["$(rootpath :gen_collection_src)"],
+    data = [":gen_collection_src"],
     deps = ["//markdown/utils:test_utils"],
 )

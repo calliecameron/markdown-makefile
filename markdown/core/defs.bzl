@@ -158,7 +158,12 @@ def _spellcheck(ctx):
         outputs = [spellcheck_ok],
         inputs = [dictionary, spellcheck_input],
         executable = ctx.executable._spellcheck,
-        arguments = [dictionary.path, spellcheck_input.path, spellcheck_ok.path],
+        arguments = [
+            dictionary.path,
+            spellcheck_input.path,
+            spellcheck_ok.path,
+            "en_GB",
+        ],
         progress_message = "%{label}: spellchecking",
     )
 

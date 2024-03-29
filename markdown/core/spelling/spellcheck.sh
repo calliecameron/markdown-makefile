@@ -3,7 +3,7 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") dict_file in_file out_file"
+    echo "Usage: $(basename "${0}") dict_file in_file out_file language"
     exit 1
 }
 
@@ -13,6 +13,8 @@ test -z "${2:-}" && usage
 IN_FILE="${2}"
 test -z "${3:-}" && usage
 OUT_FILE="${3}"
+test -z "${4:-}" && usage
+LANGUAGE="${4}"
 
 if ! command -v hunspell &>/dev/null; then
     echo "ERROR: hunspell is not installed" >&2
@@ -24,7 +26,7 @@ fi
 # shellcheck disable=SC1112
 OUTPUT="$(
     perl -pe 's/(\W)‘/$1/g;s/’(\W)/$1/g;s/^‘//;s/’$//;' <"${IN_FILE}" |
-        HOME="${PWD}" LC_ALL='en_GB.UTF-8' hunspell -d en_GB -p "${DICT_FILE}" -l |
+        HOME="${PWD}" LC_ALL="${LANGUAGE}.UTF-8" hunspell -d "${LANGUAGE}" -p "${DICT_FILE}" -l |
         LC_ALL=C sort --ignore-case |
         uniq
 )"

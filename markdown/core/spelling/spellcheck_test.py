@@ -35,6 +35,7 @@ class TestWriteDictionary(unittest.TestCase):
                 dict_file,
                 in_file,
                 out_file,
+                "en_GB",
             ],
             stderr=subprocess.PIPE,
             check=True,

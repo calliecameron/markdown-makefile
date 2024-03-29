@@ -59,7 +59,7 @@ md_group = rule(
     },
 )
 
-def _lint(ctx):
+def _standard_lint(ctx):
     standard_lint_input = ctx.actions.declare_file(ctx.label.name + "_standard_lint_input.md")
     ctx.actions.run(
         outputs = [standard_lint_input],
@@ -93,6 +93,9 @@ def _lint(ctx):
         progress_message = "%{label}: linting markdown with standard linter",
     )
 
+    return standard_lint_ok
+
+def _custom_lint(ctx):
     custom_lint_ok = ctx.actions.declare_file(ctx.label.name + "_custom_lint_ok.txt")
     ctx.actions.run(
         outputs = [custom_lint_ok],
@@ -107,7 +110,7 @@ def _lint(ctx):
         progress_message = "%{label}: linting markdown with custom linter",
     )
 
-    return [standard_lint_ok, custom_lint_ok]
+    return custom_lint_ok
 
 def _spellcheck(ctx):
     dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
@@ -170,7 +173,11 @@ def _spellcheck(ctx):
     return spellcheck_ok
 
 def _md_file_impl(ctx):
-    lint_ok = _lint(ctx) + [_spellcheck(ctx)]
+    lint_ok = [
+        _standard_lint(ctx),
+        _custom_lint(ctx),
+        _spellcheck(ctx),
+    ]
 
     preprocessed = ctx.actions.declare_file(ctx.label.name + "_stage1_preprocessed.md")
     dep_args = []

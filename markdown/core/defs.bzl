@@ -202,6 +202,7 @@ def _md_file_impl(ctx):
         outputs = [compiled],
         inputs = [
             preprocessed,
+            ctx.file._validate_ids,
             ctx.file._spellcheck_cleanup,
             ctx.file._include,
             ctx.file._starts_with_text,
@@ -211,6 +212,7 @@ def _md_file_impl(ctx):
         executable = ctx.executable._pandoc,
         tools = [ctx.executable._validate],
         arguments = [
+            "--lua-filter=" + ctx.file._validate_ids.path,
             "--lua-filter=" + ctx.file._spellcheck_cleanup.path,
             "--filter=" + ctx.executable._validate.path,
             "--lua-filter=" + ctx.file._include.path,
@@ -386,6 +388,10 @@ md_file = rule(
             default = "//markdown/core:preprocess",
             executable = True,
             cfg = "exec",
+        ),
+        "_validate_ids": attr.label(
+            allow_single_file = True,
+            default = "//markdown/core/filters:validate_ids.lua",
         ),
         "_spellcheck_cleanup": attr.label(
             allow_single_file = True,

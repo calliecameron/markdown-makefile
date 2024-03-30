@@ -2,6 +2,7 @@ load("//markdown/support/python:defs.bzl", "py_test")
 
 exports_files(
     [
+        "validate_ids.lua",
         "include.lua",
         "starts_with_text.lua",
         "wordcount.lua",
@@ -31,6 +32,20 @@ py_test(
     ],
     data = [
         ":validate",
+        "//markdown/external:pandoc",
+    ],
+    deps = ["//markdown/utils:test_utils"],
+)
+
+py_test(
+    name = "validate_ids_test",
+    srcs = ["validate_ids_test.py"],
+    args = [
+        "$(rootpath //markdown/external:pandoc)",
+        "$(rootpath validate_ids.lua)",
+    ],
+    data = [
+        "validate_ids.lua",
         "//markdown/external:pandoc",
     ],
     deps = ["//markdown/utils:test_utils"],

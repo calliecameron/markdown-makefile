@@ -41,7 +41,7 @@ class TestInclude(unittest.TestCase):
             doc1,
             {
                 "blocks": [
-                    {"c": [1, ["foo", [], []], [{"c": "Foo", "t": "Str"}]], "t": "Header"},
+                    {"c": [1, ["", [], []], [{"c": "Foo", "t": "Str"}]], "t": "Header"},
                     {"c": [{"c": "Hello.", "t": "Str"}], "t": "Para"},
                 ],
                 "meta": {},
@@ -61,8 +61,8 @@ class TestInclude(unittest.TestCase):
             doc2,
             {
                 "blocks": [
-                    {"c": [1, ["start", [], []], [{"c": "Start", "t": "Str"}]], "t": "Header"},
-                    {"c": [1, ["foo", [], []], [{"c": "Foo", "t": "Str"}]], "t": "Header"},
+                    {"c": [1, ["", [], []], [{"c": "Start", "t": "Str"}]], "t": "Header"},
+                    {"c": [1, ["", [], []], [{"c": "Foo", "t": "Str"}]], "t": "Header"},
                     {"c": [{"c": "Hello.", "t": "Str"}], "t": "Para"},
                     {"c": [{"c": "Bar.", "t": "Str"}], "t": "Para"},
                 ],
@@ -80,8 +80,8 @@ class TestInclude(unittest.TestCase):
             doc2_inc,
             {
                 "blocks": [
-                    {"c": [1, ["start", [], []], [{"c": "Start", "t": "Str"}]], "t": "Header"},
-                    {"c": [2, ["foo", [], []], [{"c": "Foo", "t": "Str"}]], "t": "Header"},
+                    {"c": [1, ["", [], []], [{"c": "Start", "t": "Str"}]], "t": "Header"},
+                    {"c": [2, ["", [], []], [{"c": "Foo", "t": "Str"}]], "t": "Header"},
                     {"c": [{"c": "Hello.", "t": "Str"}], "t": "Para"},
                     {"c": [{"c": "Bar.", "t": "Str"}], "t": "Para"},
                 ],

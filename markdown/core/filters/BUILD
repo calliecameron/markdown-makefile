@@ -6,6 +6,7 @@ exports_files(
         "include.lua",
         "starts_with_text.lua",
         "wordcount.lua",
+        "header_auto_ids.lua",
         "poetry_lines.lua",
         "write_metadata.lua",
         "cleanup.lua",
@@ -74,6 +75,20 @@ py_test(
     ],
     data = [
         "starts_with_text.lua",
+        "//markdown/external:pandoc",
+    ],
+    deps = ["//markdown/utils:test_utils"],
+)
+
+py_test(
+    name = "header_auto_ids_test",
+    srcs = ["header_auto_ids_test.py"],
+    args = [
+        "$(rootpath //markdown/external:pandoc)",
+        "$(rootpath header_auto_ids.lua)",
+    ],
+    data = [
+        "header_auto_ids.lua",
         "//markdown/external:pandoc",
     ],
     deps = ["//markdown/utils:test_utils"],

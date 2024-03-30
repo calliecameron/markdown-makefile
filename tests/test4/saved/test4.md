@@ -14,16 +14,16 @@ title: Test 4
 wordcount: 837
 ---
 
--   [The Title](#the-title){#toc-the-title}
--   [The Title](#the-title-1){#toc-the-title-1}
--   [The Title Is ‘Baz’](#the-title-is-baz){#toc-the-title-is-baz}
--   [Title](#title){#toc-title}
+-   [The Title](#__h1_1){#toc-__h1_1}
+-   [The Title](#__h1_2){#toc-__h1_2}
+-   [The Title Is ‘Baz’](#__h1_3){#toc-__h1_3}
+-   [Title](#__h1_4){#toc-__h1_4}
 
-# The Title
+# The Title {#__h1_1}
 
 This is some text before a section. It shouldn’t be indented.
 
-## This is a section
+## This is a section {#__h2_1}
 
 This is some test text. This is formatted in *italics* and **bold**, with - various – dashes—, and trailing dots…
 
@@ -33,7 +33,7 @@ This is some test text. This is formatted in *italics* and **bold**, with - vari
 
 And then there should be some text ^in superscript^ and ~in subscript~, and a footnote[^1] with a star, a footnote[^2] with a dagger, and this should be `monospace`.
 
-### Subsection
+### Subsection {#__h3_1}
 
 Test text test text test text.
 
@@ -56,7 +56,7 @@ After this line there should be stars.
 
 This is a new paragraph after the stars. This text is [Small Caps]{.smallcaps}. Here is a pound sign (£), a euro sign (€), and three letters with accents: ëóû.
 
-# The Title
+# The Title {#__h1_2}
 
 **An Author**
 
@@ -64,7 +64,7 @@ This is a new paragraph after the stars. This text is [Small Caps]{.smallcaps}. 
 
 This is some text before a section. It shouldn’t be indented. Each section should start on a new page (but subsections shouldn’t).
 
-## This is a section {#this-is-a-section}
+## This is a section {#__h2_2}
 
 This is some test text. This is formatted in *italics* and **bold**, with - various – dashes—, and trailing dots…
 
@@ -74,7 +74,7 @@ This is some test text. This is formatted in *italics* and **bold**, with - vari
 
 And then there should be some text ^in superscript^ and ~in subscript~, and a footnote[^3] with a star, a footnote[^4] with a dagger, and this should be `monospace`.
 
-### Subsection {#subsection}
+### Subsection {#__h3_2}
 
 Test text test text test text.
 
@@ -97,7 +97,7 @@ After this line there should be stars.
 
 This is a new paragraph after the stars. This text is [Small Caps]{.smallcaps}. Here is a pound sign (£), a euro sign (€), and three letters with accents: ëóû.
 
-## This is a second section
+## This is a second section {#__h2_3}
 
 ![foo](tests/test2/image.png "bar"){.quux width="50%"}
 
@@ -105,11 +105,11 @@ There is an image here.
 
 And this is *even more italic text*.
 
-# The Title Is ‘Baz’
+# The Title Is ‘Baz’ {#__h1_3}
 
 **An Author, 23 February 2019 baz**
 
-## This is a section {#this-is-a-section}
+## This is a section {#__h2_4}
 
 This is some test text. This is formatted in *italics* and **bold**, with - various – dashes—, and trailing dots…
 
@@ -121,7 +121,7 @@ And then we do a simple include:
 
 Text before a section in simple include.
 
-## Section in simple include
+## Section in simple include {#__h2_5}
 
 > This is a quote block. It should be indented slightly and shouldn’t contain a line break.
 
@@ -132,11 +132,11 @@ Text before recursive include, with *italic*, **bold**, “curly quotes,” and�
 
 Text before section in recursive include.
 
-## Section in recursive include
+## Section in recursive include {#__h2_6}
 
 Text in recursive include, with *italic*, **bold**, “curly quotes,” and— an em dash.
 
-### Subsection in recursive include
+### Subsection in recursive include {#__h3_3}
 
 > | “These literal double curly quotes, used where smart
 > | quotes gets it wrong, curl the right way even though
@@ -154,13 +154,13 @@ And then there should be some text ^in superscript^ and ~in subscript~, and a 
 
 Text after recursive include. Here is a pound sign (£), a euro sign (€), and three letters with accents: ëóû.
 
-## Second section in simple include
+## Second section in simple include {#__h2_7}
 
 Test text.
 
 Text after simple include.
 
-### Subsection {#subsection}
+### Subsection {#__h3_4}
 
 This is a new paragraph. This text is [Small Caps]{.smallcaps}.
 
@@ -182,7 +182,7 @@ Anything in a nospellcheck div isn’t spellchecked: quux.
 
 Automatic links aren’t spellchecked: <http://quux.com>. Neither are the targets or attributes of inline links: [Foo](http://quux.com "Foo"){.quux}. Neither are [span classes]{.quux}. Anything in a nospellcheck span isn’t spellchecked.
 
-# Title
+# Title {#__h1_4}
 
 **4 January 2022**
 

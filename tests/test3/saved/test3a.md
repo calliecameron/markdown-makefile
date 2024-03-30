@@ -17,13 +17,13 @@ title: The Title Is ‘Baz’
 wordcount: 339
 ---
 
--   [This is a section](#this-is-a-section){#toc-this-is-a-section}
--   [Section in simple include](#section-in-simple-include){#toc-section-in-simple-include}
--   [Section in recursive include](#section-in-recursive-include){#toc-section-in-recursive-include}
--   [Second section in simple include](#second-section-in-simple-include){#toc-second-section-in-simple-include}
+-   [This is a section](#__h1_1){#toc-__h1_1}
+-   [Section in simple include](#__h1_2){#toc-__h1_2}
+-   [Section in recursive include](#__h1_3){#toc-__h1_3}
+-   [Second section in simple include](#__h1_4){#toc-__h1_4}
 -   [This is a second section](#quux-not-spellchecked){#toc-quux-not-spellchecked}
 
-# This is a section
+# This is a section {#__h1_1}
 
 This is some test text. This is formatted in *italics* and **bold**, with - various – dashes—, and trailing dots…
 
@@ -35,7 +35,7 @@ And then we do a simple include:
 
 Text before a section in simple include.
 
-# Section in simple include
+# Section in simple include {#__h1_2}
 
 > This is a quote block. It should be indented slightly and shouldn’t contain a line break.
 
@@ -46,11 +46,11 @@ Text before recursive include, with *italic*, **bold**, “curly quotes,” and�
 
 Text before section in recursive include.
 
-# Section in recursive include
+# Section in recursive include {#__h1_3}
 
 Text in recursive include, with *italic*, **bold**, “curly quotes,” and— an em dash.
 
-## Subsection in recursive include
+## Subsection in recursive include {#__h2_1}
 
 > | “These literal double curly quotes, used where smart
 > | quotes gets it wrong, curl the right way even though
@@ -68,13 +68,13 @@ And then there should be some text ^in superscript^ and ~in subscript~, and a 
 
 Text after recursive include. Here is a pound sign (£), a euro sign (€), and three letters with accents: ëóû.
 
-# Second section in simple include
+# Second section in simple include {#__h1_4}
 
 Test text.
 
 Text after simple include.
 
-## Subsection
+## Subsection {#__h2_2}
 
 This is a new paragraph. This text is [Small Caps]{.smallcaps}.
 

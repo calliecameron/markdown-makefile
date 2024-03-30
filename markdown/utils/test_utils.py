@@ -18,7 +18,7 @@ def _pandoc(
         output = subprocess.run(
             [
                 pandoc,
-                "--from=markdown-smart",
+                "--from=markdown-smart-auto_identifiers",
                 "--to=json",
                 f"{filter_arg}={filter_filename}",
                 *extra_args,

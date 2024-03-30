@@ -28,7 +28,7 @@ wordcount: 218
 
 This is some text before a section. It shouldn’t be indented.
 
-# This is a section
+# This is a section {#__h1_1}
 
 This is some test text. This is formatted in *italics* and **bold**, with - various – dashes—, and trailing dots…
 
@@ -38,7 +38,7 @@ This is some test text. This is formatted in *italics* and **bold**, with - vari
 
 And then there should be some text ^in superscript^ and ~in subscript~, and a footnote[^1] with a star, a footnote[^2] with a dagger, and this should be `monospace`.
 
-## Subsection
+## Subsection {#__h2_1}
 
 Test text test text test text.
 

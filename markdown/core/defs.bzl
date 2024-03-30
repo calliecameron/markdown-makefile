@@ -1,6 +1,6 @@
 """Markdown rules."""
 
-_SRC_FORMAT = "markdown+smart-pandoc_title_block"
+_SRC_FORMAT = "markdown+smart-pandoc_title_block-auto_identifiers"
 
 MdGroupInfo = provider(
     "Info for a group of markdown files.",
@@ -206,6 +206,7 @@ def _md_file_impl(ctx):
             ctx.file._spellcheck_cleanup,
             ctx.file._include,
             ctx.file._starts_with_text,
+            ctx.file._header_auto_ids,
             ctx.file._wordcount,
             ctx.file._poetry_lines,
         ] + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
@@ -217,6 +218,7 @@ def _md_file_impl(ctx):
             "--filter=" + ctx.executable._validate.path,
             "--lua-filter=" + ctx.file._include.path,
             "--lua-filter=" + ctx.file._starts_with_text.path,
+            "--lua-filter=" + ctx.file._header_auto_ids.path,
             "--lua-filter=" + ctx.file._wordcount.path,
             "--lua-filter=" + ctx.file._poetry_lines.path,
             "--metadata=lang:en-GB",
@@ -409,6 +411,10 @@ md_file = rule(
         "_starts_with_text": attr.label(
             allow_single_file = True,
             default = "//markdown/core/filters:starts_with_text.lua",
+        ),
+        "_header_auto_ids": attr.label(
+            allow_single_file = True,
+            default = "//markdown/core/filters:header_auto_ids.lua",
         ),
         "_wordcount": attr.label(
             allow_single_file = True,

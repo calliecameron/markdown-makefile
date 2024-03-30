@@ -26,7 +26,7 @@ wordcount: 248
 
 This is some text before a section. It shouldn’t be indented. Each section should start on a new page (but subsections shouldn’t).
 
-# This is a section
+# This is a section {#__h1_1}
 
 This is some test text. This is formatted in *italics* and **bold**, with - various – dashes—, and trailing dots…
 
@@ -36,7 +36,7 @@ This is some test text. This is formatted in *italics* and **bold**, with - vari
 
 And then there should be some text ^in superscript^ and ~in subscript~, and a footnote[^1] with a star, a footnote[^2] with a dagger, and this should be `monospace`.
 
-## Subsection
+## Subsection {#__h2_1}
 
 Test text test text test text.
 
@@ -59,7 +59,7 @@ After this line there should be stars.
 
 This is a new paragraph after the stars. This text is [Small Caps]{.smallcaps}. Here is a pound sign (£), a euro sign (€), and three letters with accents: ëóû.
 
-# This is a second section
+# This is a second section {#__h1_2}
 
 ![foo](tests/test2/image.png "bar"){.quux width="50%"}
 

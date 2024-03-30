@@ -1,5 +1,5 @@
-load("//markdown/support/python:defs.bzl", "py_test")
 load("//markdown/support/shell:defs.bzl", "sh_binary")
+load("//markdown/utils:defs.bzl", "pandoc_filter_test", "script_test")
 
 exports_files(
     [
@@ -10,32 +10,16 @@ exports_files(
     visibility = ["//visibility:public"],
 )
 
-py_test(
+pandoc_filter_test(
     name = "spellcheck_filter_test",
-    srcs = ["spellcheck_filter_test.py"],
-    args = [
-        "$(rootpath //markdown/external:pandoc)",
-        "$(rootpath spellcheck_filter.lua)",
-    ],
-    data = [
-        "spellcheck_filter.lua",
-        "//markdown/external:pandoc",
-    ],
-    deps = ["//markdown/utils:test_utils"],
+    src = "spellcheck_filter_test.py",
+    filter = "spellcheck_filter.lua",
 )
 
-py_test(
+pandoc_filter_test(
     name = "spellcheck_cleanup_test",
-    srcs = ["spellcheck_cleanup_test.py"],
-    args = [
-        "$(rootpath //markdown/external:pandoc)",
-        "$(rootpath spellcheck_cleanup.lua)",
-    ],
-    data = [
-        "spellcheck_cleanup.lua",
-        "//markdown/external:pandoc",
-    ],
-    deps = ["//markdown/utils:test_utils"],
+    src = "spellcheck_cleanup_test.py",
+    filter = "spellcheck_cleanup.lua",
 )
 
 sh_binary(
@@ -44,12 +28,10 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-py_test(
+script_test(
     name = "spellcheck_test",
-    srcs = ["spellcheck_test.py"],
-    args = ["$(rootpath :spellcheck)"],
-    data = [":spellcheck"],
-    deps = ["//markdown/utils:test_utils"],
+    src = "spellcheck_test.py",
+    script = ":spellcheck",
 )
 
 sh_binary(
@@ -58,10 +40,8 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-py_test(
+script_test(
     name = "gen_dictionary_test",
-    srcs = ["gen_dictionary_test.py"],
-    args = ["$(rootpath :gen_dictionary)"],
-    data = [":gen_dictionary"],
-    deps = ["//markdown/utils:test_utils"],
+    src = "gen_dictionary_test.py",
+    script = ":gen_dictionary",
 )

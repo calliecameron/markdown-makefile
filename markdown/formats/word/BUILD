@@ -1,6 +1,7 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("//markdown/support/python:defs.bzl", "py_binary", "py_test")
+load("//markdown/support/python:defs.bzl", "py_binary")
 load("//markdown/support/shell:defs.bzl", "sh_binary", "sh_test")
+load("//markdown/utils:defs.bzl", "script_test")
 
 bzl_library(
     name = "defs_bzl",
@@ -34,12 +35,10 @@ py_binary(
     deps = ["//markdown/utils:metadata"],
 )
 
-py_test(
+script_test(
     name = "ms_metadata_test",
-    srcs = ["ms_metadata_test.py"],
-    args = ["$(rootpath :ms_metadata)"],
-    data = [":ms_metadata"],
-    deps = ["//markdown/utils:test_utils"],
+    src = "ms_metadata_test.py",
+    script = ":ms_metadata",
 )
 
 sh_test(

@@ -1,5 +1,7 @@
 """Utils macros."""
 
+load("//markdown/support/python:defs.bzl", "py_test")
+
 def _required_files_update(name, copy, create, extra_update):
     # without the inner quotes, sh_binary will discard this instead of passing
     # an empty arg
@@ -100,4 +102,29 @@ def required_files(name, copy = None, create = None, extra_check = None, extra_u
         check = copy,
         check_mode_only = create,
         extra_check = extra_check,
+    )
+
+def script_test(name, src, script, deps = None):
+    deps = deps or []
+    py_test(
+        name = name,
+        srcs = [src],
+        args = ["$(rootpath %s)" % script],
+        data = [script],
+        deps = ["//markdown/utils:test_utils"] + deps,
+    )
+
+def pandoc_filter_test(name, src, filter):
+    py_test(
+        name = name,
+        srcs = [src],
+        args = [
+            "$(rootpath //markdown/external:pandoc)",
+            "$(rootpath %s)" % filter,
+        ],
+        data = [
+            filter,
+            "//markdown/external:pandoc",
+        ],
+        deps = ["//markdown/utils:test_utils"],
     )

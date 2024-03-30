@@ -1,6 +1,7 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@pip//:requirements.bzl", "requirement")
-load("//markdown/support/python:defs.bzl", "py_binary", "py_test")
+load("//markdown/support/python:defs.bzl", "py_binary")
+load("//markdown/utils:defs.bzl", "script_test")
 
 bzl_library(
     name = "defs_bzl",
@@ -28,10 +29,8 @@ py_binary(
     ],
 )
 
-py_test(
+script_test(
     name = "gen_collection_src_test",
-    srcs = ["gen_collection_src_test.py"],
-    args = ["$(rootpath :gen_collection_src)"],
-    data = [":gen_collection_src"],
-    deps = ["//markdown/utils:test_utils"],
+    src = "gen_collection_src_test.py",
+    script = ":gen_collection_src",
 )

@@ -1,6 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("//markdown/support/python:defs.bzl", "py_test")
 load("//markdown/support/shell:defs.bzl", "sh_binary")
+load("//markdown/utils:defs.bzl", "pandoc_filter_test", "script_test")
 
 bzl_library(
     name = "helpers_bzl",
@@ -40,12 +40,10 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-py_test(
+script_test(
     name = "write_open_script_test",
-    srcs = ["write_open_script_test.py"],
-    args = ["$(rootpath :write_open_script)"],
-    data = [":write_open_script"],
-    deps = ["//markdown/utils:test_utils"],
+    src = "write_open_script_test.py",
+    script = ":write_open_script",
 )
 
 sh_binary(
@@ -54,12 +52,10 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-py_test(
+script_test(
     name = "zip_cleaner_test",
-    srcs = ["zip_cleaner_test.py"],
-    args = ["$(rootpath :zip_cleaner)"],
-    data = [":zip_cleaner"],
-    deps = ["//markdown/utils:test_utils"],
+    src = "zip_cleaner_test.py",
+    script = ":zip_cleaner",
 )
 
 sh_binary(
@@ -68,24 +64,14 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-py_test(
+script_test(
     name = "write_save_script_test",
-    srcs = ["write_save_script_test.py"],
-    args = ["$(rootpath :write_save_script)"],
-    data = [":write_save_script"],
-    deps = ["//markdown/utils:test_utils"],
+    src = "write_save_script_test.py",
+    script = ":write_save_script",
 )
 
-py_test(
+pandoc_filter_test(
     name = "add_title_test",
-    srcs = ["add_title_test.py"],
-    args = [
-        "$(rootpath //markdown/external:pandoc)",
-        "$(rootpath add_title.lua)",
-    ],
-    data = [
-        "add_title.lua",
-        "//markdown/external:pandoc",
-    ],
-    deps = ["//markdown/utils:test_utils"],
+    src = "add_title_test.py",
+    filter = "add_title.lua",
 )

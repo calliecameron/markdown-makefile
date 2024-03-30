@@ -1,18 +1,13 @@
 import json
 import os
 import os.path
-import subprocess
-import sys
-import unittest
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-import markdown.utils.test_utils
-
-SCRIPT = ""
+from markdown.utils import test_utils
 
 
-class TestGenCollectionSrc(unittest.TestCase):
+class TestGenCollectionSrc(test_utils.ScriptTestCase):
     def dump_file(self, filename: str, content: Mapping[str, Any]) -> None:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)
@@ -21,30 +16,26 @@ class TestGenCollectionSrc(unittest.TestCase):
         with open(filename, encoding="utf-8") as f:
             return f.read()
 
-    def run_script(
+    def run_script(  # type: ignore[override]
         self,
         title: str,
         author: str,
         date: str,
         metadata: Sequence[tuple[str, Mapping[str, Any]]],
     ) -> str:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-
         metadata_out = {}
         dep_args = []
         for target, data in metadata:
             metadata_out[target] = data
             dep_args += ["--dep", target]
 
-        metadata_file = os.path.join(test_tmpdir, "metadata.json")
+        metadata_file = os.path.join(self.tmpdir(), "metadata.json")
         self.dump_file(metadata_file, metadata_out)
 
-        out_file = os.path.join(test_tmpdir, "out.md")
+        out_file = os.path.join(self.tmpdir(), "out.md")
 
-        subprocess.run(
-            [
-                sys.executable,
-                SCRIPT,
+        super().run_script(
+            args=[
                 *dep_args,
                 title,
                 author,
@@ -52,7 +43,6 @@ class TestGenCollectionSrc(unittest.TestCase):
                 metadata_file,
                 out_file,
             ],
-            check=True,
         )
 
         return self.load_file(out_file)
@@ -173,8 +163,4 @@ title: The Title
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    SCRIPT = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.ScriptTestCase.main()

@@ -2,18 +2,14 @@ import json
 import os
 import os.path
 import subprocess
-import sys
-import unittest
 from collections.abc import Mapping, Sequence
 from typing import Any
 
 import markdown.core.version
-import markdown.utils.test_utils
-
-SCRIPT = ""
+from markdown.utils import test_utils
 
 
-class TestVersion(unittest.TestCase):
+class TestVersion(test_utils.ScriptTestCase):
     def test_version(self) -> None:
         v = markdown.core.version.Version.from_dict(
             {"docversion": "1", "repo": "foo"},
@@ -133,32 +129,27 @@ class TestVersion(unittest.TestCase):
         with open(filename, encoding="utf-8") as f:
             return f.read()
 
-    def run_script(
+    def run_script(  # type: ignore[override]
         self,
         raw_version: Mapping[str, str],
         deps_metadata: Mapping[str, Mapping[str, str]],
         args: Sequence[str],
     ) -> str:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-
-        raw_version_file = os.path.join(test_tmpdir, "raw_version.json")
+        raw_version_file = os.path.join(self.tmpdir(), "raw_version.json")
         self.dump_file(raw_version_file, raw_version)
 
-        deps_metadata_file = os.path.join(test_tmpdir, "deps_metadata.json")
+        deps_metadata_file = os.path.join(self.tmpdir(), "deps_metadata.json")
         self.dump_file(deps_metadata_file, deps_metadata)
 
-        metadata_out_file = os.path.join(test_tmpdir, "metadata_out.json")
+        metadata_out_file = os.path.join(self.tmpdir(), "metadata_out.json")
 
-        subprocess.run(
-            [
-                sys.executable,
-                SCRIPT,
+        super().run_script(
+            args=[
                 raw_version_file,
                 deps_metadata_file,
                 metadata_out_file,
                 *args,
             ],
-            check=True,
         )
 
         return self.load_file(metadata_out_file)
@@ -233,8 +224,4 @@ class TestVersion(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    SCRIPT = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.ScriptTestCase.main()

@@ -1,14 +1,9 @@
 import json
 import os
 import os.path
-import subprocess
-import sys
-import unittest
 from collections.abc import Sequence
 
-import markdown.utils.test_utils
-
-SCRIPT = ""
+from markdown.utils import test_utils
 
 DATA = {
     "test1:foo": {
@@ -51,21 +46,24 @@ DATA = {
 }
 
 
-class TestSummary(unittest.TestCase):
+class TestSummary(test_utils.ScriptTestCase):
     maxDiff = None
 
-    def run_script(self, args: Sequence[str]) -> str:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-        filename = os.path.join(test_tmpdir, "in.json")
+    def run_script(self, args: Sequence[str]) -> str:  # type: ignore[override]
+        filename = os.path.join(self.tmpdir(), "in.json")
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(DATA, f)
 
-        return subprocess.run(
-            [sys.executable, SCRIPT, filename, *args],
-            check=True,
-            capture_output=True,
-            encoding="utf-8",
-        ).stdout
+        return (
+            super()
+            .run_script(
+                args=[
+                    filename,
+                    *args,
+                ],
+            )
+            .stdout
+        )
 
     def test_summary_pretty(self) -> None:
         self.assertEqual(
@@ -293,8 +291,4 @@ test1:bar,Bar\\nbaz,,,5,0,no,,"quux, dirty",DIRTY
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    SCRIPT = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.ScriptTestCase.main()

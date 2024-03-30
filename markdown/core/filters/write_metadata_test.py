@@ -1,12 +1,7 @@
 import os
 import os.path
-import sys
-import unittest
 
-import markdown.utils.test_utils
-
-PANDOC = ""
-FILTER = ""
+from markdown.utils import test_utils
 
 DOC = """% The Title
 ---
@@ -19,14 +14,11 @@ Baz quux test yay.
 """
 
 
-class TestWriteMetadata(unittest.TestCase):
+class TestWriteMetadata(test_utils.PandocLuaFilterTestCase):
     def test_write_metadata(self) -> None:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-        metadata_out_file = os.path.join(test_tmpdir, "metadata.json")
+        metadata_out_file = os.path.join(self.tmpdir(), "metadata.json")
 
-        markdown.utils.test_utils.pandoc_lua_filter(
-            PANDOC,
-            FILTER,
+        self.run_filter(
             DOC,
             [f"--metadata=metadata-out-file:{metadata_out_file}"],
         )
@@ -36,10 +28,4 @@ class TestWriteMetadata(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    PANDOC = sys.argv[1]
-    del sys.argv[1]
-    FILTER = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.PandocLuaFilterTestCase.main()

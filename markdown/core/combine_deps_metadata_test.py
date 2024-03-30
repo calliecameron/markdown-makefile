@@ -1,17 +1,12 @@
 import json
 import os
 import os.path
-import subprocess
-import sys
-import unittest
 from collections.abc import Mapping, Sequence
 
-import markdown.utils.test_utils
-
-SCRIPT = ""
+from markdown.utils import test_utils
 
 
-class TestCombineDepsMetadata(unittest.TestCase):
+class TestCombineDepsMetadata(test_utils.ScriptTestCase):
     def dump_file(self, filename: str, content: Mapping[str, str]) -> None:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)
@@ -20,25 +15,17 @@ class TestCombineDepsMetadata(unittest.TestCase):
         with open(filename, encoding="utf-8") as f:
             return f.read()
 
-    def run_script(self, metadata: Sequence[Mapping[str, str]]) -> str:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-
+    def run_script(self, metadata: Sequence[Mapping[str, str]]) -> str:  # type: ignore[override]
         metadata_args = []
         for i, d in enumerate(metadata):
-            filename = os.path.join(test_tmpdir, f"metadata_{i+1}.json")
+            filename = os.path.join(self.tmpdir(), f"metadata_{i+1}.json")
             self.dump_file(filename, d)
             metadata_args.append(("--metadata_file", f"dep{i+1}", filename))
 
-        out_file = os.path.join(test_tmpdir, "out.json")
+        out_file = os.path.join(self.tmpdir(), "out.json")
 
-        subprocess.run(
-            [
-                sys.executable,
-                SCRIPT,
-                out_file,
-            ]
-            + [a for sublist in metadata_args for a in sublist],
-            check=True,
+        super().run_script(
+            args=[out_file] + [a for sublist in metadata_args for a in sublist],
         )
 
         return self.load_file(out_file)
@@ -68,8 +55,4 @@ class TestCombineDepsMetadata(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    SCRIPT = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.ScriptTestCase.main()

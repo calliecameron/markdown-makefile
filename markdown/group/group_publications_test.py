@@ -1,26 +1,19 @@
 import json
 import os
 import os.path
-import subprocess
-import sys
-import unittest
 from collections.abc import Mapping
 from typing import Any
 
-import markdown.utils.test_utils
-
-SCRIPT = ""
+from markdown.utils import test_utils
 
 
-class TestPublications(unittest.TestCase):
+class TestPublications(test_utils.ScriptTestCase):
     def dump_file(self, filename: str, content: Mapping[str, Any]) -> None:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(content, f)
 
     def test_publications(self) -> None:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-
-        metadata = os.path.join(test_tmpdir, "metadata.json")
+        metadata = os.path.join(self.tmpdir(), "metadata.json")
         self.dump_file(
             metadata,
             {
@@ -56,16 +49,13 @@ class TestPublications(unittest.TestCase):
             },
         )
 
-        outfile = os.path.join(test_tmpdir, "out.html")
+        outfile = os.path.join(self.tmpdir(), "out.html")
 
-        subprocess.run(
-            [
-                sys.executable,
-                SCRIPT,
+        self.run_script(
+            args=[
                 metadata,
                 outfile,
             ],
-            check=True,
         )
 
         with open(outfile, encoding="utf-8") as f:
@@ -161,8 +151,4 @@ a:visited { color: black; }
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    SCRIPT = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.ScriptTestCase.main()

@@ -1,10 +1,4 @@
-import sys
-import unittest
-
-import markdown.utils.test_utils
-
-PANDOC = ""
-FILTER = ""
+from markdown.utils import test_utils
 
 DOC = """```python
 print("foo")
@@ -42,9 +36,9 @@ Another [foobarbaz]{.nospellcheck} [line]{.foo}
 """
 
 
-class TestSpellcheckFilter(unittest.TestCase):
+class TestSpellcheckFilter(test_utils.PandocLuaFilterTestCase):
     def test_filter(self) -> None:
-        j = markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC)
+        j = self.run_filter(DOC)
 
         self.assertEqual(len(j["blocks"]), 10)
 
@@ -145,55 +139,37 @@ class TestSpellcheckFilter(unittest.TestCase):
 
     def test_filter_fails(self) -> None:
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """``` {.nospellcheck}
 foo
 ```""",
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 '![image](bar.jpg "An image"){.foo .nospellcheck width=50%}',
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 "# Foo {.nospellcheck}",
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 "`foo`{.nospellcheck}",
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 'Foo ![image](bar.jpg "An image"){.foo .nospellcheck width=50%} bar',
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 '[foo](http://example.com "bar"){.foo .nospellcheck}',
             )
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    PANDOC = sys.argv[1]
-    del sys.argv[1]
-    FILTER = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.PandocLuaFilterTestCase.main()

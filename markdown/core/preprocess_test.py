@@ -1,14 +1,10 @@
 import os
 import os.path
 import subprocess
-import sys
-import unittest
 from collections.abc import Sequence
 
 import markdown.core.preprocess
-import markdown.utils.test_utils
-
-SCRIPT = ""
+from markdown.utils import test_utils
 
 GOOD = """Foo bar.
 
@@ -20,7 +16,7 @@ An image ![foo](%s "bar"){.baz} goes here.
 """
 
 
-class TestPreprocess(unittest.TestCase):
+class TestPreprocess(test_utils.ScriptTestCase):
     def test_process_include(self) -> None:
         deps = {
             "foo:bar": "foo/bar.json",
@@ -217,20 +213,18 @@ class TestPreprocess(unittest.TestCase):
         self.assertEqual(len(problems), 4)
         self.assertEqual("\n".join(data), GOOD % ("foo/bar.json", "//blah:yay", "//baz:quux"))
 
-    def run_script(
+    def run_script(  # type: ignore[override]
         self,
         content: str,
         current_package: str,
         deps: Sequence[tuple[str, str]],
         images: Sequence[tuple[str, str]],
     ) -> str:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-
-        in_file = os.path.join(test_tmpdir, "in.md")
+        in_file = os.path.join(self.tmpdir(), "in.md")
         with open(in_file, "w", encoding="utf-8") as f:
             f.write(content)
 
-        out_file = os.path.join(test_tmpdir, "out.md")
+        out_file = os.path.join(self.tmpdir(), "out.md")
 
         dep_args = []
         for dep, file in deps:
@@ -240,17 +234,14 @@ class TestPreprocess(unittest.TestCase):
         for image, file in images:
             image_args += ["--image", image, file]
 
-        subprocess.run(
-            [
-                sys.executable,
-                SCRIPT,
+        super().run_script(
+            args=[
                 in_file,
                 out_file,
                 current_package,
                 *dep_args,
                 *image_args,
             ],
-            check=True,
         )
 
         with open(out_file, encoding="utf-8") as f:
@@ -280,8 +271,4 @@ class TestPreprocess(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    SCRIPT = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.ScriptTestCase.main()

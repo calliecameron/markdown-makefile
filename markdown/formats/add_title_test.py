@@ -1,15 +1,9 @@
-import sys
-import unittest
-
-import markdown.utils.test_utils
-
-PANDOC = ""
-FILTER = ""
+from markdown.utils import test_utils
 
 
-class TestAddTitle(unittest.TestCase):
+class TestAddTitle(test_utils.PandocLuaFilterTestCase):
     def test_existing_title(self) -> None:
-        j = markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, "% The Title")
+        j = self.run_filter("% The Title")
         self.assertEqual(
             j["meta"]["title"],
             {
@@ -19,7 +13,7 @@ class TestAddTitle(unittest.TestCase):
         )
 
     def test_no_title(self) -> None:
-        j = markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, "")
+        j = self.run_filter("")
         self.assertEqual(
             j["meta"]["title"],
             {
@@ -30,10 +24,4 @@ class TestAddTitle(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    PANDOC = sys.argv[1]
-    del sys.argv[1]
-    FILTER = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.PandocLuaFilterTestCase.main()

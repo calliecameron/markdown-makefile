@@ -1,17 +1,9 @@
-import sys
-import unittest
-
-import markdown.utils.test_utils
-
-PANDOC = ""
-FILTER = ""
+from markdown.utils import test_utils
 
 
-class TestValidateIDs(unittest.TestCase):
+class TestValidateIDs(test_utils.PandocLuaFilterTestCase):
     def test_success(self) -> None:
-        markdown.utils.test_utils.pandoc_lua_filter(
-            PANDOC,
-            FILTER,
+        self.run_filter(
             """
 ```
 foo
@@ -57,9 +49,7 @@ Foo ![image](bar.jpg "An image"){#foo .foo width=50%}
 
     def test_failure(self) -> None:
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """``` {#__foo}
 foo
 ```
@@ -67,9 +57,7 @@ foo
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """::: {.foo #__foo}
 foo
 :::
@@ -77,53 +65,35 @@ foo
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 '![image](bar.jpg "An image"){#__foo .foo width=50%}',
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 "# Foo {#__foo}",
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 "`foo`{#__foo}",
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 'Foo ![image](bar.jpg "An image"){#__foo .foo width=50%}',
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 '[foo](http://example.com "bar"){#__foo}',
             )
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 "[foo]{#__foo .bar}",
             )
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    PANDOC = sys.argv[1]
-    del sys.argv[1]
-    FILTER = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.PandocLuaFilterTestCase.main()

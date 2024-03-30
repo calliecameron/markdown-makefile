@@ -1,27 +1,18 @@
 import os
 import os.path
-import subprocess
-import sys
-import unittest
 
-import markdown.utils.test_utils
-
-SCRIPT = ""
+from markdown.utils import test_utils
 
 
-class TestWriteSaveScript(unittest.TestCase):
-    def run_script(self, package: str) -> str:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
+class TestWriteSaveScript(test_utils.ScriptTestCase):
+    def run_script(self, package: str) -> str:  # type: ignore[override]
+        out_file = os.path.join(self.tmpdir(), "out.sh")
 
-        out_file = os.path.join(test_tmpdir, "out.sh")
-
-        subprocess.run(
-            [
-                SCRIPT,
+        super().run_script(
+            args=[
                 out_file,
                 package,
             ],
-            check=True,
         )
 
         with open(out_file, encoding="utf-8") as f:
@@ -65,8 +56,4 @@ chmod u=rw,go= *
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    SCRIPT = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.ScriptTestCase.main()

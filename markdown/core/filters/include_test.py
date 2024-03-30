@@ -1,13 +1,8 @@
 import json
 import os
 import os.path
-import sys
-import unittest
 
-import markdown.utils.test_utils
-
-PANDOC = ""
-FILTER = ""
+from markdown.utils import test_utils
 
 DOC1 = """# Foo
 
@@ -32,11 +27,9 @@ Bar.
 """
 
 
-class TestInclude(unittest.TestCase):
+class TestInclude(test_utils.PandocLuaFilterTestCase):
     def test_include(self) -> None:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-
-        doc1 = markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC1)
+        doc1 = self.run_filter(DOC1)
         self.assertEqual(
             doc1,
             {
@@ -48,13 +41,11 @@ class TestInclude(unittest.TestCase):
                 "pandoc-api-version": [1, 23],
             },
         )
-        doc1_file = os.path.join(test_tmpdir, "doc1.json")
+        doc1_file = os.path.join(self.tmpdir(), "doc1.json")
         with open(doc1_file, "w", encoding="utf-8") as f:
             json.dump(doc1, f)
 
-        doc2 = markdown.utils.test_utils.pandoc_lua_filter(
-            PANDOC,
-            FILTER,
+        doc2 = self.run_filter(
             DOC2 % doc1_file,
         )
         self.assertEqual(
@@ -71,9 +62,7 @@ class TestInclude(unittest.TestCase):
             },
         )
 
-        doc2_inc = markdown.utils.test_utils.pandoc_lua_filter(
-            PANDOC,
-            FILTER,
+        doc2_inc = self.run_filter(
             DOC2_INC % doc1_file,
         )
         self.assertEqual(
@@ -91,18 +80,11 @@ class TestInclude(unittest.TestCase):
         )
 
     def test_include_fails(self) -> None:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-        bad_file = os.path.join(test_tmpdir, "bad.json")
+        bad_file = os.path.join(self.tmpdir(), "bad.json")
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC2 % bad_file)
+            self.run_filter(DOC2 % bad_file)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    PANDOC = sys.argv[1]
-    del sys.argv[1]
-    FILTER = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.PandocLuaFilterTestCase.main()

@@ -1,10 +1,4 @@
-import sys
-import unittest
-
-import markdown.utils.test_utils
-
-PANDOC = ""
-FILTER = ""
+from markdown.utils import test_utils
 
 GOOD = """% “Hello” ‘world’
 % Foo's name
@@ -47,27 +41,25 @@ finished: true
 """  # noqa: RUF001
 
 
-class TestValidate(unittest.TestCase):
+class TestValidate(test_utils.PandocFilterTestCase):
     def test_validate_succeeds(self) -> None:
-        markdown.utils.test_utils.pandoc_filter(PANDOC, FILTER, GOOD)
-        markdown.utils.test_utils.pandoc_filter(PANDOC, FILTER, GOOD2)
+        self.run_filter(GOOD)
+        self.run_filter(GOOD2)
 
     def test_validate_fails(self) -> None:
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(PANDOC, FILTER, "% '")
+            self.run_filter("% '")
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(PANDOC, FILTER, '% "')
+            self.run_filter('% "')
 
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(PANDOC, FILTER, "'")
+            self.run_filter("'")
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(PANDOC, FILTER, '"')
+            self.run_filter('"')
 
         # Unknown key
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 foo: bar
@@ -77,9 +69,7 @@ foo: bar
 
         # Wrong type (should be string)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 title:
@@ -90,9 +80,7 @@ title:
 
         # Wrong type (should be list of string or string)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 author:
@@ -103,9 +91,7 @@ author:
 
         # Wrong type (should be list of string or string)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 author: true
@@ -115,9 +101,7 @@ author: true
 
         # Wrong type (should be string)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 date: true
@@ -127,9 +111,7 @@ date: true
 
         # Wrong type (should be list)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications: foo
@@ -139,9 +121,7 @@ publications: foo
 
         # Unknown key
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -152,9 +132,7 @@ publications:
 
         # Missing required key
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -165,9 +143,7 @@ publications:
 
         # Missing required key
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -178,9 +154,7 @@ publications:
 
         # Wrong type (should be string)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -191,9 +165,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -205,9 +177,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -221,9 +191,7 @@ publications:
 
         # Wrong type (should be date)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -233,9 +201,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -245,9 +211,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -257,9 +221,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -269,9 +231,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -281,9 +241,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -293,9 +251,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -307,9 +263,7 @@ publications:
 
         # Wrong type (should be list)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -322,9 +276,7 @@ publications:
 
         # Wrong type (should be list of string)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -338,9 +290,7 @@ publications:
 
         # Mutually exclusive keys
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -351,9 +301,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -364,9 +312,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -377,9 +323,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -390,9 +334,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -403,9 +345,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -416,9 +356,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -429,9 +367,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -442,9 +378,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -455,9 +389,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -468,9 +400,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -481,9 +411,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -494,9 +422,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -507,9 +433,7 @@ publications:
 """,
             )
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 publications:
@@ -522,9 +446,7 @@ publications:
 
         # Wrong type (should be string)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 notes:
@@ -535,9 +457,7 @@ notes:
 
         # Wrong type (should be bool)
         with self.assertRaises(ValueError):
-            markdown.utils.test_utils.pandoc_filter(
-                PANDOC,
-                FILTER,
+            self.run_filter(
                 """
 ---
 finished: foo
@@ -547,10 +467,4 @@ finished: foo
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    PANDOC = sys.argv[1]
-    del sys.argv[1]
-    FILTER = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.PandocFilterTestCase.main()

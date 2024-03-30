@@ -1,23 +1,15 @@
-import sys
-import unittest
-
-import markdown.utils.test_utils
-
-PANDOC = ""
-FILTER = ""
+from markdown.utils import test_utils
 
 
-class TestStartsWithText(unittest.TestCase):
+class TestStartsWithText(test_utils.PandocLuaFilterTestCase):
     def test_starts_with_text(self) -> None:
-        j = markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, "Foo")
+        j = self.run_filter("Foo")
         self.assertEqual(j["meta"]["starts-with-text"]["c"], "t")
 
-        j = markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, "# Foo\n\nBar.")
+        j = self.run_filter("# Foo\n\nBar.")
         self.assertEqual(j["meta"]["starts-with-text"]["c"], "")
 
-        j = markdown.utils.test_utils.pandoc_lua_filter(
-            PANDOC,
-            FILTER,
+        j = self.run_filter(
             """::: foo
 ::: bar
 
@@ -33,9 +25,7 @@ Foo
         )
         self.assertEqual(j["meta"]["starts-with-text"]["c"], "t")
 
-        j = markdown.utils.test_utils.pandoc_lua_filter(
-            PANDOC,
-            FILTER,
+        j = self.run_filter(
             """::: foo
 ::: bar
 
@@ -53,10 +43,4 @@ bar
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    PANDOC = sys.argv[1]
-    del sys.argv[1]
-    FILTER = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.PandocLuaFilterTestCase.main()

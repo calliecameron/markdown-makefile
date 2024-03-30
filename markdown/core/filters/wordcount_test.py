@@ -1,10 +1,4 @@
-import sys
-import unittest
-
-import markdown.utils.test_utils
-
-PANDOC = ""
-FILTER = ""
+from markdown.utils import test_utils
 
 DOC = """% The Title
 
@@ -14,17 +8,11 @@ Baz quux test yay.
 """
 
 
-class TestWordcount(unittest.TestCase):
+class TestWordcount(test_utils.PandocLuaFilterTestCase):
     def test_wordcount(self) -> None:
-        j = markdown.utils.test_utils.pandoc_lua_filter(PANDOC, FILTER, DOC)
+        j = self.run_filter(DOC)
         self.assertEqual(j["meta"]["wordcount"]["c"], "6")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    PANDOC = sys.argv[1]
-    del sys.argv[1]
-    FILTER = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.PandocLuaFilterTestCase.main()

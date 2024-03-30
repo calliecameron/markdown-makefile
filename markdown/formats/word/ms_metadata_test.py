@@ -1,35 +1,25 @@
 import json
 import os
 import os.path
-import subprocess
-import sys
-import unittest
 from collections.abc import Mapping
 from typing import Any
 
-import markdown.utils.test_utils
-
-SCRIPT = ""
+from markdown.utils import test_utils
 
 
-class TestMsMetadata(unittest.TestCase):
+class TestMsMetadata(test_utils.ScriptTestCase):
     def run_ms_metadata(self, metadata: Mapping[str, Any]) -> str:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-
-        in_file = os.path.join(test_tmpdir, "in.json")
+        in_file = os.path.join(self.tmpdir(), "in.json")
         with open(in_file, "w", encoding="utf-8") as f:
             json.dump(metadata, f)
 
-        out_file = os.path.join(test_tmpdir, "out.json")
+        out_file = os.path.join(self.tmpdir(), "out.json")
 
-        subprocess.run(
-            [
-                sys.executable,
-                SCRIPT,
+        self.run_script(
+            args=[
                 in_file,
                 out_file,
             ],
-            check=True,
         )
 
         with open(out_file, encoding="utf-8") as f:
@@ -83,8 +73,4 @@ class TestMsMetadata(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    SCRIPT = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.ScriptTestCase.main()

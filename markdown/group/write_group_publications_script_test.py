@@ -1,28 +1,19 @@
 import os
 import os.path
-import subprocess
-import sys
-import unittest
 
-import markdown.utils.test_utils
-
-SCRIPT = ""
+from markdown.utils import test_utils
 
 
-class TestWriteGroupPublicationsScript(unittest.TestCase):
+class TestWriteGroupPublicationsScript(test_utils.ScriptTestCase):
     def test_write_group_publications_script(self) -> None:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
+        out_file = os.path.join(self.tmpdir(), "out.sh")
 
-        out_file = os.path.join(test_tmpdir, "out.sh")
-
-        subprocess.run(
-            [
-                SCRIPT,
+        self.run_script(
+            args=[
                 "foo",
                 "bar",
                 out_file,
             ],
-            check=True,
         )
 
         with open(out_file, encoding="utf-8") as f:
@@ -40,8 +31,4 @@ xdg-open "${FILE_TO_OPEN}"
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    SCRIPT = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.ScriptTestCase.main()

@@ -1,33 +1,24 @@
 import os
 import os.path
 import subprocess
-import sys
-import unittest
 
-import markdown.utils.test_utils
-
-SCRIPT = ""
+from markdown.utils import test_utils
 
 
-class TestRawVersion(unittest.TestCase):
-    def run_script(self, content: str, package: str) -> str:
-        test_tmpdir = markdown.utils.test_utils.tmpdir()
-
-        in_file = os.path.join(test_tmpdir, "in.txt")
+class TestRawVersion(test_utils.ScriptTestCase):
+    def run_script(self, content: str, package: str) -> str:  # type: ignore[override]
+        in_file = os.path.join(self.tmpdir(), "in.txt")
         with open(in_file, "w", encoding="utf-8") as f:
             f.write(content)
 
-        out_file = os.path.join(test_tmpdir, "out.json")
+        out_file = os.path.join(self.tmpdir(), "out.json")
 
-        subprocess.run(
-            [
-                sys.executable,
-                SCRIPT,
+        super().run_script(
+            args=[
                 in_file,
                 out_file,
                 package,
             ],
-            check=True,
         )
 
         with open(out_file, encoding="utf-8") as f:
@@ -90,8 +81,4 @@ STABLE_REPO_B /bar/.git
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:  # noqa: PLR2004
-        raise ValueError("Not enough args")
-    SCRIPT = sys.argv[1]
-    del sys.argv[1]
-    unittest.main()
+    test_utils.ScriptTestCase.main()

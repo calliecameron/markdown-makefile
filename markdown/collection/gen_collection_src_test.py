@@ -1,4 +1,3 @@
-import json
 import os
 import os.path
 from collections.abc import Mapping, Sequence
@@ -8,14 +7,6 @@ from markdown.utils import test_utils
 
 
 class TestGenCollectionSrc(test_utils.ScriptTestCase):
-    def dump_file(self, filename: str, content: Mapping[str, Any]) -> None:
-        with open(filename, "w", encoding="utf-8") as f:
-            json.dump(content, f)
-
-    def load_file(self, filename: str) -> str:
-        with open(filename, encoding="utf-8") as f:
-            return f.read()
-
     def run_script(  # type: ignore[override]
         self,
         title: str,
@@ -30,7 +21,7 @@ class TestGenCollectionSrc(test_utils.ScriptTestCase):
             dep_args += ["--dep", target]
 
         metadata_file = os.path.join(self.tmpdir(), "metadata.json")
-        self.dump_file(metadata_file, metadata_out)
+        self.dump_json(metadata_file, metadata_out)
 
         out_file = os.path.join(self.tmpdir(), "out.md")
 

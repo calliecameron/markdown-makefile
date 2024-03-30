@@ -18,13 +18,20 @@ class TestWriteMetadata(test_utils.PandocLuaFilterTestCase):
     def test_write_metadata(self) -> None:
         metadata_out_file = os.path.join(self.tmpdir(), "metadata.json")
 
-        self.run_filter(
+        doc = self.run_filter(
             DOC,
             [f"--metadata=metadata-out-file:{metadata_out_file}"],
         )
 
-        with open(metadata_out_file, encoding="utf-8") as f:
-            self.assertEqual(f.read(), '{"blah":"yay","title":"The Title"}')
+        self.assertEqual(
+            self.load_json(metadata_out_file),
+            {
+                "blah": "yay",
+                "title": "The Title",
+            },
+        )
+
+        self.assertNotIn("metadata-out-file", doc.metadata)
 
 
 if __name__ == "__main__":

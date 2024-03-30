@@ -7,12 +7,10 @@ from markdown.utils import test_utils
 class TestGenDictionary(test_utils.ScriptTestCase):
     def test_gen_dictionary(self) -> None:
         in_file_1 = os.path.join(self.tmpdir(), "in1.dic")
-        with open(in_file_1, "w", encoding="utf-8") as f:
-            f.write("foo\nbar\n")
+        self.dump_file(in_file_1, "foo\nbar\n")
 
         in_file_2 = os.path.join(self.tmpdir(), "in2.dic")
-        with open(in_file_2, "w", encoding="utf-8") as f:
-            f.write("foo\nbaz\n")
+        self.dump_file(in_file_2, "foo\nbaz\n")
 
         out_file = os.path.join(self.tmpdir(), "out.dic")
 
@@ -24,8 +22,7 @@ class TestGenDictionary(test_utils.ScriptTestCase):
             ],
         )
 
-        with open(out_file, encoding="utf-8") as f:
-            self.assertEqual(f.read(), "bar\nbaz\nfoo\n")
+        self.assertEqual(self.load_file(out_file), "bar\nbaz\nfoo\n")
 
 
 if __name__ == "__main__":

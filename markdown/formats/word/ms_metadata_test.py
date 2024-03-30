@@ -1,4 +1,3 @@
-import json
 import os
 import os.path
 from collections.abc import Mapping
@@ -10,8 +9,7 @@ from markdown.utils import test_utils
 class TestMsMetadata(test_utils.ScriptTestCase):
     def run_ms_metadata(self, metadata: Mapping[str, Any]) -> str:
         in_file = os.path.join(self.tmpdir(), "in.json")
-        with open(in_file, "w", encoding="utf-8") as f:
-            json.dump(metadata, f)
+        self.dump_json(in_file, metadata)
 
         out_file = os.path.join(self.tmpdir(), "out.json")
 
@@ -22,8 +20,7 @@ class TestMsMetadata(test_utils.ScriptTestCase):
             ],
         )
 
-        with open(out_file, encoding="utf-8") as f:
-            return f.read()
+        return self.load_file(out_file)
 
     def test_ms_metadata(self) -> None:
         self.assertEqual(

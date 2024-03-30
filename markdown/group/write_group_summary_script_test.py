@@ -17,10 +17,9 @@ class TestWriteGroupSummaryScript(test_utils.ScriptTestCase):
             ],
         )
 
-        with open(out_file, encoding="utf-8") as f:
-            self.assertEqual(
-                f.read(),
-                """#!/bin/bash
+        self.assertEqual(
+            self.load_file(out_file),
+            """#!/bin/bash
 
 set -eu
 
@@ -28,7 +27,7 @@ FILE_TO_OPEN="${0}.runfiles/foo/bar"
 
 "${0}.runfiles/foo/baz" "${FILE_TO_OPEN}" "${@}"
 """,
-            )
+        )
 
 
 if __name__ == "__main__":

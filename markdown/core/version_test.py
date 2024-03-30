@@ -1,9 +1,7 @@
-import json
 import os
 import os.path
 import subprocess
 from collections.abc import Mapping, Sequence
-from typing import Any
 
 import markdown.core.version
 from markdown.utils import test_utils
@@ -121,14 +119,6 @@ class TestVersion(test_utils.ScriptTestCase):
             },
         )
 
-    def dump_file(self, filename: str, content: Mapping[str, Any]) -> None:
-        with open(filename, "w", encoding="utf-8") as f:
-            json.dump(content, f)
-
-    def load_file(self, filename: str) -> str:
-        with open(filename, encoding="utf-8") as f:
-            return f.read()
-
     def run_script(  # type: ignore[override]
         self,
         raw_version: Mapping[str, str],
@@ -136,10 +126,10 @@ class TestVersion(test_utils.ScriptTestCase):
         args: Sequence[str],
     ) -> str:
         raw_version_file = os.path.join(self.tmpdir(), "raw_version.json")
-        self.dump_file(raw_version_file, raw_version)
+        self.dump_json(raw_version_file, raw_version)
 
         deps_metadata_file = os.path.join(self.tmpdir(), "deps_metadata.json")
-        self.dump_file(deps_metadata_file, deps_metadata)
+        self.dump_json(deps_metadata_file, deps_metadata)
 
         metadata_out_file = os.path.join(self.tmpdir(), "metadata_out.json")
 

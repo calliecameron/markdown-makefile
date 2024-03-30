@@ -8,8 +8,7 @@ from markdown.utils import test_utils
 class TestRawVersion(test_utils.ScriptTestCase):
     def run_script(self, content: str, package: str) -> str:  # type: ignore[override]
         in_file = os.path.join(self.tmpdir(), "in.txt")
-        with open(in_file, "w", encoding="utf-8") as f:
-            f.write(content)
+        self.dump_file(in_file, content)
 
         out_file = os.path.join(self.tmpdir(), "out.json")
 
@@ -21,8 +20,7 @@ class TestRawVersion(test_utils.ScriptTestCase):
             ],
         )
 
-        with open(out_file, encoding="utf-8") as f:
-            return f.read()
+        return self.load_file(out_file)
 
     def test_raw_version(self) -> None:
         self.assertEqual(

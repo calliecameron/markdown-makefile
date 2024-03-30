@@ -49,6 +49,17 @@ def py_source(name, src, visibility = None):
         srcs = [src],
     )
 
+def py_filegroup(name, srcs, visibility = None):
+    native.filegroup(
+        name = name,
+        srcs = srcs,
+        visibility = visibility,
+    )
+    _py_lint(
+        name = name,
+        srcs = srcs,
+    )
+
 def _py_lint(name, type_stub_deps = None, **kwargs):
     srcs = kwargs.get("srcs", [])
     deps = kwargs.get("deps", [])
@@ -70,6 +81,7 @@ def _py_lint(name, type_stub_deps = None, **kwargs):
         ] + ["$(location %s)" % src for src in srcs],
         data = [
             "//:pyproject.toml",
+            "//mypy_stubs:stubs",
         ] + srcs,
     )
 

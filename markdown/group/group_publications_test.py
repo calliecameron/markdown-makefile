@@ -1,20 +1,13 @@
-import json
 import os
 import os.path
-from collections.abc import Mapping
-from typing import Any
 
 from markdown.utils import test_utils
 
 
 class TestPublications(test_utils.ScriptTestCase):
-    def dump_file(self, filename: str, content: Mapping[str, Any]) -> None:
-        with open(filename, "w", encoding="utf-8") as f:
-            json.dump(content, f)
-
     def test_publications(self) -> None:
         metadata = os.path.join(self.tmpdir(), "metadata.json")
-        self.dump_file(
+        self.dump_json(
             metadata,
             {
                 "//foo:bar": {
@@ -58,10 +51,9 @@ class TestPublications(test_utils.ScriptTestCase):
             ],
         )
 
-        with open(outfile, encoding="utf-8") as f:
-            self.assertEqual(
-                f.read(),
-                """<!doctype html>
+        self.assertEqual(
+            self.load_file(outfile),
+            """<!doctype html>
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
@@ -147,7 +139,7 @@ a:visited { color: black; }
 </body>
 </html>
 """,  # noqa: E501
-            )
+        )
 
 
 if __name__ == "__main__":

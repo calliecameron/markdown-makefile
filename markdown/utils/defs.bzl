@@ -1,5 +1,6 @@
 """Utils macros."""
 
+load("@pip//:requirements.bzl", "requirement")
 load("//markdown/support/python:defs.bzl", "py_test")
 
 def _required_files_update(name, copy, create, extra_update):
@@ -126,5 +127,8 @@ def pandoc_filter_test(name, src, filter):
             filter,
             "//markdown/external:pandoc",
         ],
-        deps = ["//markdown/utils:test_utils"],
+        deps = [
+            "//markdown/utils:test_utils",
+            requirement("panflute"),
+        ],
     )

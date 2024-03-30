@@ -14,12 +14,10 @@ Test text baz Quux shouldn’t fail
 class TestWriteDictionary(test_utils.ScriptTestCase):
     def run_spellcheck(self, doc: str, dictionary: Sequence[str]) -> str:
         in_file = os.path.join(self.tmpdir(), "in.md")
-        with open(in_file, "w", encoding="utf-8") as f:
-            f.write(doc)
+        self.dump_file(in_file, doc)
 
         dict_file = os.path.join(self.tmpdir(), "in.dic")
-        with open(dict_file, "w", encoding="utf-8") as f:
-            f.write("\n".join(dictionary) + "\n")
+        self.dump_file(dict_file, "\n".join(dictionary) + "\n")
 
         out_file = os.path.join(self.tmpdir(), "out.txt")
 
@@ -32,8 +30,7 @@ class TestWriteDictionary(test_utils.ScriptTestCase):
             ],
         )
 
-        with open(out_file, encoding="utf-8") as f:
-            return f.read()
+        return self.load_file(out_file)
 
     def test_spellcheck(self) -> None:
         self.assertEqual(self.run_spellcheck(DOC, ["baz", "Quux"]), "OK\n")

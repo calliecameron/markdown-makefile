@@ -1,4 +1,8 @@
+from panflute import Caption, Figure, Header, Image, Link, Para, Plain, Space, Str
+
 from markdown.utils import test_utils
+
+# ruff: noqa: ERA001
 
 DOC = """```python
 print("foo")
@@ -38,102 +42,42 @@ Another [foobarbaz]{.nospellcheck} [line]{.foo}
 
 class TestSpellcheckFilter(test_utils.PandocLuaFilterTestCase):
     def test_filter(self) -> None:
-        j = self.run_filter(DOC)
-
-        self.assertEqual(len(j["blocks"]), 10)
-
-        # (removed) fenced code block
-        # (removed) indented code block
-        # (removed) nospellcheck div
-
-        # 0: div: unwrap
+        doc = self.run_filter(DOC)
         self.assertEqual(
-            j["blocks"][0]["c"],
-            [{"t": "Str", "c": "bar"}],
-        )
-
-        # 1: figure: remove target and attributes
-        self.assertEqual(
-            j["blocks"][1]["c"],
+            list(doc.content),
             [
-                ["", [], []],
-                [None, [{"t": "Plain", "c": [{"t": "Str", "c": "image"}]}]],
-                [
-                    {
-                        "t": "Plain",
-                        "c": [
-                            {
-                                "t": "Image",
-                                "c": [["", [], []], [{"t": "Str", "c": "image"}], ["", "An image"]],
-                            },
-                        ],
-                    },
-                ],
-            ],
-        )
-
-        # 2: h1: remove attributes
-        self.assertEqual(
-            j["blocks"][2]["c"],
-            [1, ["", [], []], [{"t": "Str", "c": "Foo"}]],
-        )
-
-        # 3: h2: remove attributes
-        self.assertEqual(
-            j["blocks"][3]["c"],
-            [2, ["", [], []], [{"t": "Str", "c": "Bar"}]],
-        )
-
-        # (removed) include
-
-        # 4: inline code: remove
-        self.assertEqual(
-            j["blocks"][4]["c"],
-            [{"t": "Str", "c": "One"}, {"t": "Space"}, {"t": "Space"}, {"t": "Str", "c": "three"}],
-        )
-
-        # 5: inline image: remove target and attributes
-        self.assertEqual(
-            j["blocks"][5]["c"],
-            [
-                {"t": "Str", "c": "Foo"},
-                {"t": "Space"},
-                {
-                    "t": "Image",
-                    "c": [["", [], []], [{"t": "Str", "c": "image"}], ["", "An image"]],
-                },
-                {"t": "Space"},
-                {"t": "Str", "c": "bar"},
-            ],
-        )
-
-        # 6: automatic link: remove
-        self.assertEqual(
-            j["blocks"][6]["c"],
-            [{"t": "Str", "c": "Foo"}, {"t": "Space"}],
-        )
-
-        # 7: inline link: remove target and attributes
-        self.assertEqual(
-            j["blocks"][7]["c"],
-            [
-                {"t": "Str", "c": "Bar"},
-                {"t": "Space"},
-                {"t": "Link", "c": [["", [], []], [{"t": "Str", "c": "foo"}], ["", "bar"]]},
-            ],
-        )
-
-        # 8: smallcaps: unwrap
-        self.assertEqual(j["blocks"][8]["c"], [{"t": "Str", "c": "Small"}])
-
-        # 9: span: remove nospellcheck, unwrap others
-        self.assertEqual(
-            j["blocks"][9]["c"],
-            [
-                {"t": "Str", "c": "Another"},
-                {"t": "Space"},
-                {"t": "Space"},
-                {"t": "Str", "c": "line"},
+                # (removed) fenced code block
+                # (removed) indented code block
+                # (removed) nospellcheck div
+                # div: unwrap
+                Para(Str("bar")),
+                # figure: remove target and attributes
+                Figure(
+                    Plain(Image(Str("image"), title="An image")),
+                    caption=Caption(Plain(Str("image"))),
+                ),
+                # h1: remove attributes
+                Header(Str("Foo"), level=1),
+                # h2: remove attributes
+                Header(Str("Bar"), level=2),
+                # (removed) include
+                # inline code: remove
+                Para(Str("One"), Space(), Space(), Str("three")),
+                # inline image: remove target and attributes
+                Para(
+                    Str("Foo"),
+                    Space(),
+                    Image(Str("image"), title="An image"),
+                    Space(),
+                    Str("bar"),
+                ),
+                # automatic link: remove
+                Para(Str("Foo"), Space()),
+                Para(Str("Bar"), Space(), Link(Str("foo"), title="bar")),
+                # smallcaps: unwrap
+                Para(Str("Small")),
+                # span: remove nospellcheck, unwrap others
+                Para(Str("Another"), Space(), Space(), Str("line")),
             ],
         )
 

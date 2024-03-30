@@ -16,16 +16,15 @@ class TestWriteOpenScript(test_utils.ScriptTestCase):
             ],
         )
 
-        with open(out_file, encoding="utf-8") as f:
-            self.assertEqual(
-                f.read(),
-                """#!/bin/bash
+        self.assertEqual(
+            self.load_file(out_file),
+            """#!/bin/bash
 
 FILE_TO_OPEN="${0}.runfiles/foo/bar"
 
 xdg-open "${FILE_TO_OPEN}"
 """,
-            )
+        )
 
 
 if __name__ == "__main__":

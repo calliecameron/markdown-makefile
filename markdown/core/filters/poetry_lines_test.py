@@ -1,3 +1,5 @@
+from panflute import MetaString
+
 from markdown.utils import test_utils
 
 DOC = """% The Title
@@ -22,8 +24,8 @@ Baz quux test yay.
 
 class TestPoetryLines(test_utils.PandocLuaFilterTestCase):
     def test_linecount(self) -> None:
-        j = self.run_filter(DOC)
-        self.assertEqual(j["meta"]["poetry-lines"]["c"], "3")
+        doc = self.run_filter(DOC)
+        self.assertEqual(doc.metadata["poetry-lines"], MetaString("3"))
 
 
 if __name__ == "__main__":

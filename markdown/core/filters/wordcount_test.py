@@ -1,3 +1,5 @@
+from panflute import MetaString
+
 from markdown.utils import test_utils
 
 DOC = """% The Title
@@ -10,8 +12,8 @@ Baz quux test yay.
 
 class TestWordcount(test_utils.PandocLuaFilterTestCase):
     def test_wordcount(self) -> None:
-        j = self.run_filter(DOC)
-        self.assertEqual(j["meta"]["wordcount"]["c"], "6")
+        doc = self.run_filter(DOC)
+        self.assertEqual(doc.metadata["wordcount"], MetaString("6"))
 
 
 if __name__ == "__main__":

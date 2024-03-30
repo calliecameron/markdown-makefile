@@ -31,8 +31,7 @@ class TestCustomLint(test_utils.ScriptTestCase):
         content: str,
     ) -> None:
         in_file = os.path.join(self.tmpdir(), "in.md")
-        with open(in_file, "w", encoding="utf-8") as f:
-            f.write(content)
+        self.dump_file(in_file, content)
 
         out_file = os.path.join(self.tmpdir(), "out.txt")
 
@@ -43,8 +42,7 @@ class TestCustomLint(test_utils.ScriptTestCase):
             ],
         )
 
-        with open(out_file, encoding="utf-8") as f:
-            self.assertEqual(f.read(), "OK\n")
+        self.assertEqual(self.load_file(out_file), "OK\n")
 
     def test_main(self) -> None:
         self.run_script(GOOD)

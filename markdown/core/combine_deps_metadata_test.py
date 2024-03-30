@@ -1,4 +1,3 @@
-import json
 import os
 import os.path
 from collections.abc import Mapping, Sequence
@@ -7,19 +6,11 @@ from markdown.utils import test_utils
 
 
 class TestCombineDepsMetadata(test_utils.ScriptTestCase):
-    def dump_file(self, filename: str, content: Mapping[str, str]) -> None:
-        with open(filename, "w", encoding="utf-8") as f:
-            json.dump(content, f)
-
-    def load_file(self, filename: str) -> str:
-        with open(filename, encoding="utf-8") as f:
-            return f.read()
-
     def run_script(self, metadata: Sequence[Mapping[str, str]]) -> str:  # type: ignore[override]
         metadata_args = []
         for i, d in enumerate(metadata):
             filename = os.path.join(self.tmpdir(), f"metadata_{i+1}.json")
-            self.dump_file(filename, d)
+            self.dump_json(filename, d)
             metadata_args.append(("--metadata_file", f"dep{i+1}", filename))
 
         out_file = os.path.join(self.tmpdir(), "out.json")

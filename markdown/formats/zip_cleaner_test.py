@@ -8,8 +8,7 @@ from markdown.utils import test_utils
 class TestZipCleaner(test_utils.ScriptTestCase):
     def test_zip_cleaner(self) -> None:
         txt_file = os.path.join(self.tmpdir(), "in.txt")
-        with open(txt_file, "w", encoding="utf-8") as f:
-            f.write("foo\n")
+        self.dump_file(txt_file, "foo\n")
 
         in_file = os.path.join(self.tmpdir(), "in.zip")
 

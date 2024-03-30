@@ -14,6 +14,7 @@ py_library(
     testonly = True,
     srcs = ["test_utils.py"],
     visibility = ["//markdown:__subpackages__"],
+    deps = [requirement("panflute")],
 )
 
 py_library(

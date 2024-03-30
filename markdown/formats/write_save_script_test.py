@@ -15,8 +15,7 @@ class TestWriteSaveScript(test_utils.ScriptTestCase):
             ],
         )
 
-        with open(out_file, encoding="utf-8") as f:
-            return f.read()
+        return self.load_file(out_file)
 
     def test_write_save_script(self) -> None:
         self.assertEqual(

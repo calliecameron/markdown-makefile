@@ -1,11 +1,14 @@
 import inspect
+import io
 import json
 import os
 import subprocess
 import sys
 import unittest
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any, Generic, TypeVar, cast
+
+import panflute
 
 T = TypeVar("T")
 F = TypeVar("F", bound="PandocFilterBase")
@@ -38,7 +41,7 @@ class PandocFilterBase:
         self._filter_flag = filter_flag
         self._filter_filename = filter_filename
 
-    def run(
+    def _run_raw(
         self,
         *,
         args: Sequence[str] | None = None,
@@ -62,6 +65,14 @@ class PandocFilterBase:
         sys.stderr.write(f"Pandoc stderr: {output.stderr}\n")
         return cast(dict[str, Any], j)
 
+    def run(
+        self,
+        *,
+        args: Sequence[str] | None = None,
+        stdin: str | None = None,
+    ) -> panflute.Doc:
+        return panflute.load(io.StringIO(json.dumps(self._run_raw(args=args, stdin=stdin))))
+
 
 class PandocFilter(PandocFilterBase):
     def __init__(self, pandoc: str, filter_filename: str) -> None:
@@ -80,6 +91,31 @@ class TestCase(unittest.TestCase):
         if not tmp:
             raise ValueError("Couldn't get TEST_TMPDIR")
         return tmp
+
+    @staticmethod
+    def load_file(filename: str) -> str:
+        with open(filename, encoding="utf-8") as f:
+            return f.read()
+
+    @staticmethod
+    def dump_file(filename: str, content: str) -> None:
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(content)
+
+    @staticmethod
+    def load_json(filename: str) -> dict[str, Any]:
+        with open(filename, encoding="utf-8") as f:
+            return cast(dict[str, Any], json.load(f))
+
+    @staticmethod
+    def dump_json(filename: str, content: Mapping[str, Any]) -> None:
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(content, f)
+
+    @staticmethod
+    def dump_doc(filename: str, content: panflute.Doc) -> None:
+        with open(filename, "w", encoding="utf-8") as f:
+            panflute.dump(content, f)
 
 
 class RunnerTestCase(TestCase, Generic[T]):
@@ -128,7 +164,7 @@ class PandocFilterBaseTestCase(RunnerTestCase[F]):
         self,
         stdin: str,
         args: Sequence[str] | None = None,
-    ) -> dict[str, Any]:
+    ) -> panflute.Doc:
         return self._runner().run(args=args, stdin=stdin)
 
 

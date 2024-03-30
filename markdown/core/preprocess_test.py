@@ -221,8 +221,7 @@ class TestPreprocess(test_utils.ScriptTestCase):
         images: Sequence[tuple[str, str]],
     ) -> str:
         in_file = os.path.join(self.tmpdir(), "in.md")
-        with open(in_file, "w", encoding="utf-8") as f:
-            f.write(content)
+        self.dump_file(in_file, content)
 
         out_file = os.path.join(self.tmpdir(), "out.md")
 
@@ -244,8 +243,7 @@ class TestPreprocess(test_utils.ScriptTestCase):
             ],
         )
 
-        with open(out_file, encoding="utf-8") as f:
-            return f.read()
+        return self.load_file(out_file)
 
     def test_main(self) -> None:
         output = self.run_script(

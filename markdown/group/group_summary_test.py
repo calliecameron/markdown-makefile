@@ -1,4 +1,3 @@
-import json
 import os
 import os.path
 from collections.abc import Sequence
@@ -51,8 +50,7 @@ class TestSummary(test_utils.ScriptTestCase):
 
     def run_script(self, args: Sequence[str]) -> str:  # type: ignore[override]
         filename = os.path.join(self.tmpdir(), "in.json")
-        with open(filename, "w", encoding="utf-8") as f:
-            json.dump(DATA, f)
+        self.dump_json(filename, DATA)
 
         return (
             super()

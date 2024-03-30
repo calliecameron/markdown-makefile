@@ -3,7 +3,7 @@ from markdown.utils import test_utils
 
 class TestCleanup(test_utils.PandocLuaFilterTestCase):
     def test_cleanup(self) -> None:
-        j = self.run_filter(
+        doc = self.run_filter(
             """---
 title: Foo
 repo: bar
@@ -11,7 +11,7 @@ repo: bar
 
 """,
         )
-        self.assertNotIn("repo", j["meta"])
+        self.assertNotIn("repo", doc.metadata)
 
 
 if __name__ == "__main__":

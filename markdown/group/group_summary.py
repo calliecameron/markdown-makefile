@@ -16,6 +16,7 @@ from markdown.utils.publications import Publications
 
 TARGET = "target"
 TITLE = "title"
+AUTHOR = "author"
 RAW_DATE = "raw date"
 DATE = "date"
 WORDCOUNT = "wordcount"
@@ -28,6 +29,7 @@ STATUS = "status"
 COLUMNS = (
     TARGET,
     TITLE,
+    AUTHOR,
     RAW_DATE,
     DATE,
     WORDCOUNT,
@@ -156,9 +158,14 @@ def main() -> None:
                 ps = Publications.from_json(j[metadata.PUBLICATIONS])
                 publication = ps.highest_active_state if ps.active else "attempted"
 
+            author = j.get(metadata.AUTHOR, "")
+            if isinstance(author, list):
+                author = ", ".join(author)
+
             row = {
                 TARGET: target,
                 TITLE: sanitise(j.get(metadata.TITLE, "")),
+                AUTHOR: sanitise(author),
                 RAW_DATE: sanitise(j.get(metadata.DATE, "")),
                 DATE: sanitise(parse_date(j[metadata.DATE])) if metadata.DATE in j else "",
                 WORDCOUNT: int(j[metadata.WORDCOUNT]),

@@ -535,17 +535,6 @@ $if(has-frontmatter)$
 \mainmatter
 $endif$
 
-% CUSTOM
-$if(starts-with-text)$
-% Text at the start of body before any headings should behave as if it comes
-% after a heading, so it's indented consistently with text after headings.
-\makeatletter
-\@afterindentfalse
-\@afterheading
-\makeatother
-$endif$
-% END CUSTOM
-
 $body$
 
 $if(has-frontmatter)$

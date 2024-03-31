@@ -24,6 +24,7 @@ bzl_library(
 exports_files(
     [
         "add_title.lua",
+        "remove_paragraph_annotations.lua",
     ],
     visibility = ["//visibility:public"],
 )
@@ -74,4 +75,10 @@ pandoc_filter_py_test(
     name = "add_title_test",
     src = "add_title_test.py",
     filter = "add_title.lua",
+)
+
+pandoc_filter_py_test(
+    name = "remove_paragraph_annotations_test",
+    src = "remove_paragraph_annotations_test.py",
+    filter = "remove_paragraph_annotations.lua",
 )

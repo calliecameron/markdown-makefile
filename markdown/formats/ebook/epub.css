@@ -24,15 +24,21 @@ html {
 }
 p {
   text-indent: 0;
-/* CUSTOM */
-  margin: 0px;
-/* END CUSTOM */
+  margin: 1em 0;
   widows: 2;
   orphans: 2;
 }
 /* CUSTOM */
-p + p {
+div.firstparagraph p {
+  margin: 0px;
+  text-indent: 0;
+}
+div.otherparagraph p {
+  margin: 0px;
   text-indent: 30px;
+}
+div.blankline p {
+  margin: 0px;
 }
 /* END CUSTOM */
 a {
@@ -127,10 +133,7 @@ hr {
   background-color: #1a1a1a;
   border: none;
   height: 1px;
-/* CUSTOM */
-  margin-top: 30px;
-  margin-bottom: 30px;
-/* END CUSTOM */
+  margin: 1em 0;
 }
 table {
   margin: 1em 0;

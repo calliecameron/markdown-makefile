@@ -11,7 +11,7 @@ poetry-lines: 24
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"
 title: Test 4
-wordcount: 837
+wordcount: 905
 ---
 
 -   [The Title](#__h1_1){#toc-__h1_1}
@@ -27,6 +27,22 @@ This is some text before a section. It shouldn’t be indented.
 
 This is some test text. This is formatted in *italics* and **bold**, with - various – dashes—, and trailing dots…
 
+This is a bullet list:
+
+-   This is the first paragraph of the first item.
+
+    And the second paragraph of the first item.
+
+-   The second item only has one paragraph.
+
+This is a numbered list:
+
+1.  This is the first paragraph of the first item.
+
+    And the second paragraph of the first item.
+
+2.  The second item only has one paragraph.
+
 ‘These quotes should be curly,’ and “so should these.” There should be a blank line before the next paragraph:
 
  
@@ -38,6 +54,8 @@ And then there should be some text ^in superscript^ and ~in subscript~, and a 
 Test text test text test text.
 
 > This is a quote block. It should be indented slightly and shouldn’t contain a line break.
+>
+> This is a second paragraph in the same quote block.
 
 > | This is a quoted line block. It should be indented slightly
 > | and have a *line break* after ‘slightly’, and **formatting**.

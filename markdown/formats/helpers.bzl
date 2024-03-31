@@ -70,6 +70,15 @@ def add_title_filter():
 def add_title_arg(ctx):
     return "--lua-filter=" + ctx.file._add_title.path
 
+def remove_paragraph_annotations_filter():
+    return attr.label(
+        allow_single_file = True,
+        default = "//markdown/formats:remove_paragraph_annotations.lua",
+    )
+
+def remove_paragraph_annotations_arg(ctx):
+    return "--lua-filter=" + ctx.file._remove_paragraph_annotations.path
+
 def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message = None):
     """Run pandoc.
 
@@ -140,6 +149,7 @@ def simple_pandoc_output_rule(impl, ext):
             "_pandoc_bin": pandoc_bin(),
             "_write_open_script": write_open_script(),
             "_add_title": add_title_filter(),
+            "_remove_paragraph_annotations": remove_paragraph_annotations_filter(),
         },
     )
 

@@ -248,13 +248,23 @@ is a second section</a></li>
 </ul>
 </nav>
 <h1 id="__h1_1">This is a section</h1>
+<div class="firstparagraph">
 <p>This is some test text. This is formatted in <em>italics</em> and
 <strong>bold</strong>, with - various – dashes—, and trailing dots…</p>
+</div>
+<div class="otherparagraph">
 <p>‘These quotes should be curly,’ and “so should these.” There should
 be a blank line before the next paragraph:</p>
+</div>
+<div class="blankline">
 <p> </p>
+</div>
+<div class="firstparagraph">
 <p>And then we do a simple include:</p>
+</div>
+<div class="otherparagraph">
 <p>Text before a section in simple include.</p>
+</div>
 <h1 id="__h1_2">Section in simple include</h1>
 <blockquote>
 <p>This is a quote block. It should be indented slightly and shouldn’t
@@ -266,12 +276,18 @@ indented slightly<br />
 and have a <em>line break</em> after ‘slightly’, and
 <strong>formatting</strong>.</div>
 </blockquote>
+<div class="firstparagraph">
 <p>Text before recursive include, with <em>italic</em>,
 <strong>bold</strong>, “curly quotes,” and— an em dash.</p>
+</div>
+<div class="otherparagraph">
 <p>Text before section in recursive include.</p>
+</div>
 <h1 id="__h1_3">Section in recursive include</h1>
+<div class="firstparagraph">
 <p>Text in recursive include, with <em>italic</em>,
 <strong>bold</strong>, “curly quotes,” and— an em dash.</p>
+</div>
 <h2 id="__h2_1">Subsection in recursive include</h2>
 <blockquote>
 <div class="line-block">“These literal double curly quotes, used where
@@ -285,37 +301,59 @@ smart<br />
 quotes gets it wrong, curl the right way even though<br />
 they’re on different lines.’</div>
 </blockquote>
+<div class="firstparagraph">
 <p>Test text test text test text. After this line there should be
 stars.</p>
+</div>
 <hr />
+<div class="firstparagraph">
 <p>And then there should be some text <sup>in superscript</sup> and
 <sub>in subscript</sub>, and a footnote<a href="#fn1"
 class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
 with a star, a footnote<a href="#fn2" class="footnote-ref" id="fnref2"
 role="doc-noteref"><sup>2</sup></a> with a dagger, and this should be
 <code>monospace</code>.</p>
+</div>
+<div class="otherparagraph">
 <p>Text after recursive include. Here is a pound sign (£), a euro sign
 (€), and three letters with accents: ëóû.</p>
+</div>
 <h1 id="__h1_4">Second section in simple include</h1>
+<div class="firstparagraph">
 <p>Test text.</p>
+</div>
+<div class="otherparagraph">
 <p>Text after simple include.</p>
+</div>
 <h2 id="__h2_2">Subsection</h2>
+<div class="firstparagraph">
 <p>This is a new paragraph. This text is <span class="smallcaps">Small
 Caps</span>.</p>
+</div>
 <h1 id="quux-not-spellchecked">This is a second section</h1>
+<div class="firstparagraph">
 <p>And this is <em>even more italic text</em>. Foo.</p>
+</div>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Code blocks aren&#39;t spellchecked: quux</span></span></code></pre></div>
+<div class="firstparagraph">
 <p>Inline code isn’t spellchecked: <code>quux</code>.</p>
+</div>
 <div class="quux">
+<div class="otherparagraph">
 <p><code>div</code> classes aren’t spellchecked.</p>
 </div>
+</div>
+<div class="otherparagraph">
 <p>Anything in a nospellcheck div isn’t spellchecked: quux.</p>
+</div>
+<div class="otherparagraph">
 <p>Automatic links aren’t spellchecked: <a href="http://quux.com"
 class="uri">http://quux.com</a>. Neither are the targets or attributes
 of inline links: <a href="http://quux.com" class="quux"
 title="Foo">Foo</a>. Neither are <span class="quux">span classes</span>.
 Anything in a nospellcheck span isn’t spellchecked.</p>
+</div>
 <aside id="footnotes" class="footnotes footnotes-end-of-document"
 role="doc-endnotes">
 <hr />

@@ -96,22 +96,56 @@
 \frenchspacing
 
 
-% CUSTOM
-% Text at the start of body before any headings should behave as if it comes
-% after a heading, so it's indented consistently with text after headings.
 \makeatletter
 \@afterindentfalse
 \@afterheading
 \makeatother
-% END CUSTOM
 
 This is some text before a section. It shouldn't be indented.
 
 \hypertarget{__h1_1}{%
 \section{This is a section}\label{__h1_1}}
 
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
+
 This is some test text. This is formatted in \emph{italics} and
 \textbf{bold}, with - various -- dashes---, and trailing dots\ldots{}
+
+This is a bullet list:
+
+\begin{itemize}
+\item
+  This is the first paragraph of the first item.
+
+  And the second paragraph of the first item.
+\item
+  The second item only has one paragraph.
+\end{itemize}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
+
+This is a numbered list:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  This is the first paragraph of the first item.
+
+  And the second paragraph of the first item.
+\item
+  The second item only has one paragraph.
+\end{enumerate}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 `These quotes should be curly,' and ``so should these.'' There should be
 a blank line before the next paragraph:
@@ -132,11 +166,18 @@ footnote\footnote{Another footnote.} with a dagger, and this should be
 \hypertarget{__h2_1}{%
 \subsection{Subsection}\label{__h2_1}}
 
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
+
 Test text test text test text.
 
 \begin{quote}
 This is a quote block. It should be indented slightly and shouldn't
 contain a line break.
+
+This is a second paragraph in the same quote block.
 \end{quote}
 
 \begin{quote}
@@ -155,6 +196,11 @@ they're on different lines.''
 quotes gets it wrong, curl the right way even though\\
 they're on different lines.'
 \end{quote}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 After this line there should be stars.
 

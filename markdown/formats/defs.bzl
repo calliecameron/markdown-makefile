@@ -18,15 +18,21 @@ load(
     _md_ms_docx = "md_ms_docx",
     _md_odt = "md_odt",
 )
-load(":helpers.bzl", "add_title_arg", "simple_pandoc_output_impl", "simple_pandoc_output_rule")
+load(
+    ":helpers.bzl",
+    "add_title_arg",
+    "remove_paragraph_annotations_arg",
+    "simple_pandoc_output_impl",
+    "simple_pandoc_output_rule",
+)
 
 def _md_md_impl(ctx):
     return simple_pandoc_output_impl(
         ctx,
         "md",
         "markdown-smart",
-        [],
-        ["--standalone", "--wrap=none"],
+        [ctx.file._remove_paragraph_annotations],
+        ["--standalone", "--wrap=none", remove_paragraph_annotations_arg(ctx)],
         {},
         ctx.attr.lib,
         ctx.executable._write_open_script,

@@ -143,11 +143,13 @@
 \tableofcontents
 }
 
-% CUSTOM
-% END CUSTOM
-
 \hypertarget{__h1_1}{%
 \section{This is a section}\label{__h1_1}}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 This is some test text. This is formatted in \emph{italics} and
 \textbf{bold}, with - various -- dashes---, and trailing dots\ldots{}
@@ -179,6 +181,11 @@ This is a quoted line block. It should be indented slightly\\
 and have a \emph{line break} after `slightly', and \textbf{formatting}.
 \end{quote}
 
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
+
 Text before recursive include, with \emph{italic}, \textbf{bold},
 ``curly quotes,'' and--- an em dash.
 
@@ -186,6 +193,11 @@ Text before section in recursive include.
 
 \hypertarget{__h1_3}{%
 \section{Section in recursive include}\label{__h1_3}}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 Text in recursive include, with \emph{italic}, \textbf{bold}, ``curly
 quotes,'' and--- an em dash.
@@ -204,6 +216,11 @@ they're on different lines.''
 quotes gets it wrong, curl the right way even though\\
 they're on different lines.'
 \end{quote}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 Test text test text test text. After this line there should be stars.
 
@@ -226,6 +243,11 @@ and three letters with accents: ëóû.
 \hypertarget{__h1_4}{%
 \section{Second section in simple include}\label{__h1_4}}
 
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
+
 Test text.
 
 Text after simple include.
@@ -233,10 +255,20 @@ Text after simple include.
 \hypertarget{__h2_2}{%
 \subsection{Subsection}\label{__h2_2}}
 
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
+
 This is a new paragraph. This text is \textsc{Small Caps}.
 
 \hypertarget{quux-not-spellchecked}{%
 \section{This is a second section}\label{quux-not-spellchecked}}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 And this is \emph{even more italic text}. Foo.
 
@@ -245,6 +277,11 @@ And this is \emph{even more italic text}. Foo.
 \CommentTok{\# Code blocks aren\textquotesingle{}t spellchecked: quux}
 \end{Highlighting}
 \end{Shaded}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 Inline code isn't spellchecked: \texttt{quux}.
 

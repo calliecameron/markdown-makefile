@@ -1,4 +1,4 @@
-header_ids = {}
+local header_ids = {}
 
 function Header(elem)
     if not header_ids[elem.level] then

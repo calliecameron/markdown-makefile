@@ -112,20 +112,21 @@
 \newcommand{\sectionbreak}{\clearpage}
 
 
-% CUSTOM
-% Text at the start of body before any headings should behave as if it comes
-% after a heading, so it's indented consistently with text after headings.
 \makeatletter
 \@afterindentfalse
 \@afterheading
 \makeatother
-% END CUSTOM
 
 This is some text before a section. It shouldn't be indented. Each
 section should start on a new page (but subsections shouldn't).
 
 \hypertarget{__h1_1}{%
 \section{This is a section}\label{__h1_1}}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 This is some test text. This is formatted in \emph{italics} and
 \textbf{bold}, with - various -- dashes---, and trailing dots\ldots{}
@@ -148,6 +149,11 @@ footnote\footnote{Another footnote.} with a dagger, and this should be
 
 \hypertarget{__h2_1}{%
 \subsection{Subsection}\label{__h2_1}}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 Test text test text test text.
 
@@ -173,6 +179,11 @@ quotes gets it wrong, curl the right way even though\\
 they're on different lines.'
 \end{quote}
 
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
+
 After this line there should be stars.
 
 \begin{center}* * *\end{center}
@@ -194,6 +205,11 @@ accents: ëóû.
 \includegraphics[width=0.5\textwidth,height=\textheight]{tests/test2/image.png}
 \caption{foo}
 \end{figure}
+
+\makeatletter
+\@afterindentfalse
+\@afterheading
+\makeatother
 
 There is an image here.
 

@@ -11,7 +11,7 @@ poetry-lines: 24
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"
 title: Test 4
-wordcount: 906
+wordcount: 897
 ---
 
 -   [The Title](#__h1_1){#toc-__h1_1}

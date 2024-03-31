@@ -22,7 +22,7 @@ publications:
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"
 title: The Title
-wordcount: 286
+wordcount: 284
 ---
 
 This is some text before a section. It shouldn’t be indented.

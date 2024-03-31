@@ -14,7 +14,7 @@ publications:
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"
 title: The Title Is ‘Baz’
-wordcount: 339
+wordcount: 337
 ---
 
 -   [This is a section](#__h1_1){#toc-__h1_1}

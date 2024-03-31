@@ -28,7 +28,11 @@ def _md_group_impl(ctx):
     metadata = ctx.actions.declare_file(ctx.label.name + "_metadata.json")
     metadata_args = []
     for dep in ctx.attr.deps:
-        metadata_args += ["--metadata_file", dep.label.package + ":" + dep.label.name, dep[MdFileInfo].metadata.path]
+        metadata_args += [
+            "--metadata_file",
+            dep.label.package + ":" + dep.label.name,
+            dep[MdFileInfo].metadata.path,
+        ]
     ctx.actions.run(
         outputs = [metadata],
         inputs = [dep[MdFileInfo].metadata for dep in ctx.attr.deps],
@@ -182,15 +186,27 @@ def _md_file_impl(ctx):
     preprocessed = ctx.actions.declare_file(ctx.label.name + "_stage1_preprocessed.md")
     dep_args = []
     for dep in ctx.attr.deps[MdGroupInfo].deps:
-        dep_args += ["--dep", dep.label.package + ":" + dep.label.name, dep[MdFileInfo].output.path]
+        dep_args += [
+            "--dep",
+            dep.label.package + ":" + dep.label.name,
+            dep[MdFileInfo].output.path,
+        ]
     image_args = []
     for image in ctx.attr.images:
-        image_args += ["--image", image.label.package + ":" + image.label.name, image[DefaultInfo].files.to_list()[0].path]
+        image_args += [
+            "--image",
+            image.label.package + ":" + image.label.name,
+            image[DefaultInfo].files.to_list()[0].path,
+        ]
     ctx.actions.run(
         outputs = [preprocessed],
         inputs = [ctx.file.src],
         executable = ctx.executable._preprocess,
-        arguments = dep_args + image_args + [ctx.file.src.path, preprocessed.path, ctx.label.package],
+        arguments = dep_args + image_args + [
+            ctx.file.src.path,
+            preprocessed.path,
+            ctx.label.package,
+        ],
         progress_message = "%{label}: preprocessing markdown",
     )
 
@@ -252,8 +268,25 @@ def _md_file_impl(ctx):
         outputs = [version],
         inputs = [raw_version, ctx.attr.deps[MdGroupInfo].metadata],
         executable = ctx.executable._version,
-        arguments = extra_args + [raw_version.path, ctx.attr.deps[MdGroupInfo].metadata.path, version.path],
+        arguments = extra_args + [
+            raw_version.path,
+            ctx.attr.deps[MdGroupInfo].metadata.path,
+            version.path,
+        ],
         progress_message = "%{label}: computing version",
+    )
+
+    source_hash = ctx.actions.declare_file(ctx.label.name + "_source_hash.json")
+    ctx.actions.run(
+        outputs = [source_hash],
+        inputs = [ctx.file.src, ctx.attr.deps[MdGroupInfo].metadata],
+        executable = ctx.executable._source_hash,
+        arguments = [
+            ctx.file.src.path,
+            ctx.attr.deps[MdGroupInfo].metadata.path,
+            source_hash.path,
+        ],
+        progress_message = "%{label}: computing source hash",
     )
 
     versioned = ctx.actions.declare_file(ctx.label.name + "_stage3_versioned.json")
@@ -263,6 +296,7 @@ def _md_file_impl(ctx):
         inputs = [
             compiled,
             version,
+            source_hash,
             ctx.file._write_metadata,
             ctx.file._cleanup,
         ],
@@ -271,6 +305,7 @@ def _md_file_impl(ctx):
             "--lua-filter=" + ctx.file._write_metadata.path,
             "--lua-filter=" + ctx.file._cleanup.path,
             "--metadata-file=" + version.path,
+            "--metadata-file=" + source_hash.path,
             "--metadata=metadata-out-file:" + versioned_metadata.path,
             "--from=json",
             "--to=json",
@@ -305,7 +340,12 @@ def _md_file_impl(ctx):
     )
     return [
         DefaultInfo(files = depset([output, metadata])),
-        MdFileInfo(name = ctx.label.name, output = output, metadata = metadata, data = data),
+        MdFileInfo(
+            name = ctx.label.name,
+            output = output,
+            metadata = metadata,
+            data = data,
+        ),
     ]
 
 md_file = rule(
@@ -437,6 +477,11 @@ md_file = rule(
         ),
         "_version": attr.label(
             default = "//markdown/core:version",
+            executable = True,
+            cfg = "exec",
+        ),
+        "_source_hash": attr.label(
+            default = "//markdown/core:source_hash",
             executable = True,
             cfg = "exec",
         ),

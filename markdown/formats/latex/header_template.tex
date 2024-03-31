@@ -6,9 +6,9 @@ $if(section-page-break)$
 \usepackage{titlesec}
 $endif$
 
-$if(source-md5)$
+$if(source-hash)$
 \special{pdf:trailerid [
-    <$source-md5$>
-    <$source-md5$>
+    <$source-hash$>
+    <$source-hash$>
 ]}
 $endif$

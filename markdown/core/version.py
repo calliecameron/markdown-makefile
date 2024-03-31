@@ -1,12 +1,10 @@
 import argparse
-import hashlib
 import json
 from collections.abc import Mapping
 
 from markdown.utils.metadata import (
     DOCVERSION,
     REPO,
-    SOURCE_MD5,
     SUBJECT,
 )
 
@@ -75,7 +73,6 @@ def get_metadata(version: str, repo: str) -> dict[str, str]:
         DOCVERSION: version,
         SUBJECT: f"Version: {version}",
         REPO: repo,
-        SOURCE_MD5: hashlib.md5(version.encode("utf-8")).hexdigest(),
     }
 
 

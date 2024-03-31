@@ -106,7 +106,6 @@ class TestVersion(test_utils.ScriptTestCase):
                 "docversion": "foo",
                 "subject": "Version: foo",
                 "repo": "bar",
-                "source-md5": "acbd18db4cc2f85cedef654fccc4a4d8",
             },
         )
         self.assertEqual(
@@ -115,7 +114,6 @@ class TestVersion(test_utils.ScriptTestCase):
                 "docversion": "foo",
                 "subject": "Version: foo",
                 "repo": "bar",
-                "source-md5": "acbd18db4cc2f85cedef654fccc4a4d8",
             },
         )
 
@@ -156,7 +154,6 @@ class TestVersion(test_utils.ScriptTestCase):
             """{
     "docversion": "foo",
     "repo": "bar",
-    "source-md5": "acbd18db4cc2f85cedef654fccc4a4d8",
     "subject": "Version: foo"
 }""",
         )
@@ -176,7 +173,6 @@ class TestVersion(test_utils.ScriptTestCase):
             """{
     "docversion": "foo, dirty deps",
     "repo": "bar",
-    "source-md5": "c316fdd35ec401840bfa345dd973f89e",
     "subject": "Version: foo, dirty deps"
 }""",
         )
@@ -196,7 +192,6 @@ class TestVersion(test_utils.ScriptTestCase):
             """{
     "docversion": "override",
     "repo": "bar",
-    "source-md5": "e3b3f56615d1e5f2608d2f1130a7ef54",
     "subject": "Version: override"
 }""",
         )

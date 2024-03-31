@@ -23,6 +23,19 @@ script_py_test(
 )
 
 py_binary(
+    name = "source_hash",
+    srcs = ["source_hash.py"],
+    visibility = ["//visibility:public"],
+    deps = ["//markdown/utils:metadata"],
+)
+
+script_py_test(
+    name = "source_hash_test",
+    src = "source_hash_test.py",
+    script = ":source_hash",
+)
+
+py_binary(
     name = "raw_version",
     srcs = ["raw_version.py"],
     visibility = ["//visibility:public"],

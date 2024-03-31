@@ -11,7 +11,7 @@ poetry-lines: 8
 publications:
 - self-published: 2022-12-12
   venue: Baz
-source-md5: 2518a18c39cbd5e88b46c164d163e14a
+source-hash: 117f7bb3aeb5d7c200c762e9f4c475a9
 subject: "Version: reproducible"
 title: The Title Is ‘Baz’
 wordcount: 337

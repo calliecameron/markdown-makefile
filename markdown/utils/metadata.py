@@ -15,7 +15,7 @@ LANG = "lang"
 METADATA_OUT_FILE = "metadata-out-file"
 POETRY_LINES = "poetry-lines"
 REPO = "repo"
-SOURCE_MD5 = "source-md5"
+SOURCE_HASH = "source-hash"
 SUBJECT = "subject"
 WORDCOUNT = "wordcount"
 

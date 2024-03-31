@@ -3,6 +3,12 @@
 load("//markdown/utils:defs.bzl", "required_files")
 
 def md_git_repo(name = None, extra_precommit = None):  # buildifier: disable=unused-variable
+    """Git repo setup.
+
+    Args:
+        name: unused
+        extra_precommit: an extra script to run at precommit
+    """
     native.sh_binary(
         name = "git_test_extra",
         srcs = ["@markdown_makefile//markdown/git:git_test_extra.sh"],

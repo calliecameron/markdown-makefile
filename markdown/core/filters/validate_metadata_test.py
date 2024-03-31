@@ -1,9 +1,8 @@
 from markdown.utils import test_utils
 
-GOOD = """% “Hello” ‘world’
-% Foo's name
-
----
+GOOD = """---
+title: Foo
+author: Bar
 publications:
 - venue: Foo
   submitted: 2022-12-01
@@ -16,13 +15,11 @@ publications:
 notes: baz quux
 finished: true
 ---
-
-“Foo” ‘bar’
-"""  # noqa: RUF001
+"""
 
 GOOD2 = """---
-title: “Hello” ‘world’
-author: Foo's name
+title: Foo
+author: Bar
 date: 10 June 2023
 publications:
 - venue: Foo
@@ -36,9 +33,7 @@ publications:
 notes: baz quux
 finished: true
 ---
-
-“Foo” ‘bar’
-"""  # noqa: RUF001
+"""
 
 
 class TestValidate(test_utils.PandocFilterTestCase):
@@ -47,16 +42,6 @@ class TestValidate(test_utils.PandocFilterTestCase):
         self.run_filter(GOOD2)
 
     def test_validate_fails(self) -> None:
-        with self.assertRaises(ValueError):
-            self.run_filter("% '")
-        with self.assertRaises(ValueError):
-            self.run_filter('% "')
-
-        with self.assertRaises(ValueError):
-            self.run_filter("'")
-        with self.assertRaises(ValueError):
-            self.run_filter('"')
-
         # Unknown key
         with self.assertRaises(ValueError):
             self.run_filter(

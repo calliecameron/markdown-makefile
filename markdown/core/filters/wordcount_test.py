@@ -2,7 +2,9 @@ from panflute import MetaString
 
 from markdown.utils import test_utils
 
-DOC = """% The Title
+DOC = """---
+title: The Title
+---
 
 # Foo bar
 

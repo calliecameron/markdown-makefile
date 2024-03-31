@@ -3,8 +3,8 @@ import os.path
 
 from markdown.utils import test_utils
 
-DOC = """% The Title
----
+DOC = """---
+title: The Title
 blah: yay
 ---
 

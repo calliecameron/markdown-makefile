@@ -5,7 +5,12 @@ from markdown.utils import test_utils
 
 class TestAddTitle(test_utils.PandocLuaFilterTestCase):
     def test_existing_title(self) -> None:
-        doc = self.run_filter("% The Title")
+        doc = self.run_filter(
+            """---
+title: The Title
+---
+""",
+        )
         self.assertEqual(
             doc.metadata["title"],
             MetaInlines(Str("The"), Space(), Str("Title")),

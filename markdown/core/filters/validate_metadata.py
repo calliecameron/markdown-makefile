@@ -1,6 +1,6 @@
 import json
 import sys
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from typing import Any, NoReturn, cast
 
 from markdown.utils.metadata import (
@@ -46,44 +46,6 @@ def fail(msg: str) -> NoReturn:
 
 def fail_metadata(msg: str) -> NoReturn:
     fail("invalid metadata: " + msg)
-
-
-def validate_str(s: str) -> None:
-    if "'" in s or '"' in s:
-        fail(
-            (
-                "markdown parsing failed: '%s'\n\n"
-                "Found quotes that weren't converted to smart quotes. Replace them with "
-                "backslash-escaped literal curly quotes (“ ” ‘ ’).\n"  # noqa: RUF001
-            )
-            % s,
-        )
-
-
-def walk_dict(ast: Mapping[str, Any]) -> None:
-    if "t" in ast and ast["t"] == "Str":
-        validate_str(ast["c"])
-        return
-    for _, v in sorted(ast.items()):
-        if isinstance(v, list):
-            walk_list(v)
-        elif isinstance(v, dict):
-            walk_dict(v)
-
-
-def walk_list(ast: Sequence[Any]) -> None:
-    for v in ast:
-        if isinstance(v, list):
-            walk_list(v)
-        elif isinstance(v, dict):
-            walk_dict(v)
-
-
-def validate_text(j: Mapping[str, Any]) -> None:
-    if "blocks" in j:
-        walk_list(j["blocks"])
-    if "meta" in j and "title" in j["meta"]:
-        walk_dict(j["meta"]["title"])
 
 
 def assert_is_type(j: Mapping[str, Any], meta_type: str, msg: str) -> None:
@@ -212,7 +174,6 @@ def validate_author(j: Mapping[str, Any]) -> None:
 def validate() -> None:
     raw = sys.stdin.read()
     j = json.loads(raw)
-    validate_text(j)
     validate_keys(j)
     assert_meta_item_is_string(j, TITLE)
     validate_author(j)

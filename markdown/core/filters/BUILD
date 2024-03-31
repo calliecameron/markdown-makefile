@@ -4,6 +4,7 @@ load("//markdown/utils:defs.bzl", "pandoc_filter_py_test")
 exports_files(
     [
         "validate_ids.lua",
+        "validate_quotes.lua",
         "include.lua",
         "starts_with_text.lua",
         "wordcount.lua",
@@ -15,9 +16,21 @@ exports_files(
     visibility = ["//visibility:public"],
 )
 
+pandoc_filter_py_test(
+    name = "validate_ids_test",
+    src = "validate_ids_test.py",
+    filter = "validate_ids.lua",
+)
+
+pandoc_filter_py_test(
+    name = "validate_quotes_test",
+    src = "validate_quotes_test.py",
+    filter = "validate_quotes.lua",
+)
+
 py_binary(
-    name = "validate",
-    srcs = ["validate.py"],
+    name = "validate_metadata",
+    srcs = ["validate_metadata.py"],
     visibility = ["//visibility:public"],
     deps = [
         "//markdown/utils:metadata",
@@ -26,15 +39,9 @@ py_binary(
 )
 
 pandoc_filter_py_test(
-    name = "validate_test",
-    src = "validate_test.py",
-    filter = ":validate",
-)
-
-pandoc_filter_py_test(
-    name = "validate_ids_test",
-    src = "validate_ids_test.py",
-    filter = "validate_ids.lua",
+    name = "validate_metadata_test",
+    src = "validate_metadata_test.py",
+    filter = ":validate_metadata",
 )
 
 pandoc_filter_py_test(

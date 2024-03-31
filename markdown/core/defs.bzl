@@ -204,6 +204,7 @@ def _md_file_impl(ctx):
             preprocessed,
             ctx.file._validate_ids,
             ctx.file._spellcheck_cleanup,
+            ctx.file._validate_quotes,
             ctx.file._include,
             ctx.file._starts_with_text,
             ctx.file._header_auto_ids,
@@ -211,11 +212,12 @@ def _md_file_impl(ctx):
             ctx.file._poetry_lines,
         ] + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
         executable = ctx.executable._pandoc,
-        tools = [ctx.executable._validate],
+        tools = [ctx.executable._validate_metadata],
         arguments = [
             "--lua-filter=" + ctx.file._validate_ids.path,
             "--lua-filter=" + ctx.file._spellcheck_cleanup.path,
-            "--filter=" + ctx.executable._validate.path,
+            "--lua-filter=" + ctx.file._validate_quotes.path,
+            "--filter=" + ctx.executable._validate_metadata.path,
             "--lua-filter=" + ctx.file._include.path,
             "--lua-filter=" + ctx.file._starts_with_text.path,
             "--lua-filter=" + ctx.file._header_auto_ids.path,
@@ -399,8 +401,12 @@ md_file = rule(
             allow_single_file = True,
             default = "//markdown/core/spelling:spellcheck_cleanup.lua",
         ),
-        "_validate": attr.label(
-            default = "//markdown/core/filters:validate",
+        "_validate_quotes": attr.label(
+            allow_single_file = True,
+            default = "//markdown/core/filters:validate_quotes.lua",
+        ),
+        "_validate_metadata": attr.label(
+            default = "//markdown/core/filters:validate_metadata",
             executable = True,
             cfg = "exec",
         ),

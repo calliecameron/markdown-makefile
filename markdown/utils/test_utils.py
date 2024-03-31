@@ -51,7 +51,7 @@ class PandocFilterBase:
         try:
             output = self._script.run(
                 args=[
-                    "--from=markdown-smart-auto_identifiers",
+                    "--from=markdown-smart-pandoc_title_block-auto_identifiers",
                     "--to=json",
                     f"{self._filter_flag}={self._filter_filename}",
                     *(args or []),

@@ -52,7 +52,7 @@ md_group = rule(
             doc = "md_file targets to include in the group.",
         ),
         "_combine_deps_metadata": attr.label(
-            default = "//markdown/core:combine_deps_metadata",
+            default = "//markdown/core/group:combine_deps_metadata",
             executable = True,
             cfg = "exec",
         ),

@@ -79,6 +79,24 @@ def remove_paragraph_annotations_filter():
 def remove_paragraph_annotations_arg(ctx):
     return "--lua-filter=" + ctx.file._remove_paragraph_annotations.path
 
+def remove_collection_separators_filter():
+    return attr.label(
+        allow_single_file = True,
+        default = "//markdown/formats:remove_collection_separators.lua",
+    )
+
+def remove_collection_separators_arg(ctx):
+    return "--lua-filter=" + ctx.file._remove_collection_separators.path
+
+def remove_collection_separators_before_headers_filter():
+    return attr.label(
+        allow_single_file = True,
+        default = "//markdown/formats:remove_collection_separators_before_headers.lua",
+    )
+
+def remove_collection_separators_before_headers_arg(ctx):
+    return "--lua-filter=" + ctx.file._remove_collection_separators_before_headers.path
+
 def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message = None):
     """Run pandoc.
 
@@ -150,6 +168,7 @@ def simple_pandoc_output_rule(impl, ext):
             "_write_open_script": write_open_script(),
             "_add_title": add_title_filter(),
             "_remove_paragraph_annotations": remove_paragraph_annotations_filter(),
+            "_remove_collection_separators": remove_collection_separators_filter(),
         },
     )
 

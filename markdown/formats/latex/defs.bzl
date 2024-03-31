@@ -8,6 +8,8 @@ load(
     "pandoc",
     "pandoc_bin",
     "pandoc_script",
+    "remove_collection_separators_before_headers_arg",
+    "remove_collection_separators_before_headers_filter",
     "simple_pandoc_output_impl",
     "timestamp_override",
     "write_open_script",
@@ -93,13 +95,15 @@ def _tex_output_impl(ctx, ext, to, extra_args):
             ctx.attr.intermediate[MdTexIntermediateInfo].header,
             ctx.attr.intermediate[MdTexIntermediateInfo].before,
             ctx.file._template,
-            ctx.file._filter,
+            ctx.file._remove_collection_separators_before_headers,
+            ctx.file._latex_filter,
         ],
         [
             "--include-in-header=" + ctx.attr.intermediate[MdTexIntermediateInfo].header.path,
             "--include-before-body=" + ctx.attr.intermediate[MdTexIntermediateInfo].before.path,
             "--template=" + ctx.file._template.path,
-            "--lua-filter=" + ctx.file._filter.path,
+            remove_collection_separators_before_headers_arg(ctx),
+            "--lua-filter=" + ctx.file._latex_filter.path,
         ] + extra_args + _LATEX_VARS + expand_locations(ctx, ctx.attr.intermediate, ctx.attr.extra_pandoc_flags),
         timestamp_override(ctx),
         ctx.attr.intermediate,
@@ -128,10 +132,11 @@ def _tex_output_rule(impl, ext):
                 allow_single_file = True,
                 default = "//markdown/formats/latex:template.tex",
             ),
-            "_filter": attr.label(
+            "_latex_filter": attr.label(
                 allow_single_file = True,
                 default = "//markdown/formats/latex:latex_filter.lua",
             ),
+            "_remove_collection_separators_before_headers": remove_collection_separators_before_headers_filter(),
         },
     )
 

@@ -11,7 +11,7 @@ poetry-lines: 24
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
 subject: "Version: reproducible"
 title: Test 4
-wordcount: 905
+wordcount: 906
 ---
 
 -   [The Title](#__h1_1){#toc-__h1_1}
@@ -77,8 +77,6 @@ This is a new paragraph after the stars. This text is [Small Caps]{.smallcaps}. 
 # The Title {#__h1_2}
 
 **An Author**
-
- 
 
 This is some text before a section. It shouldn’t be indented. Each section should start on a new page (but subsections shouldn’t).
 
@@ -203,8 +201,6 @@ Automatic links aren’t spellchecked: <http://quux.com>. Neither are the target
 # Title {#__h1_4}
 
 **4 January 2022**
-
- 
 
 This is text before a section. It shouldn’t be indented.
 

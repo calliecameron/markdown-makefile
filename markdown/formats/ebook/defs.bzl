@@ -12,6 +12,8 @@ load(
     "pandoc",
     "pandoc_bin",
     "pandoc_script",
+    "remove_collection_separators_before_headers_arg",
+    "remove_collection_separators_before_headers_filter",
     "timestamp_override",
     "write_open_script",
     "zip_cleaner",
@@ -31,10 +33,15 @@ def _md_epub_impl(ctx):
         ctx,
         "epub",
         "epub",
-        [ctx.file._css, ctx.file._add_title],
+        [
+            ctx.file._css,
+            ctx.file._add_title,
+            ctx.file._remove_collection_separators_before_headers,
+        ],
         [
             "--css=" + ctx.file._css.path,
             add_title_arg(ctx),
+            remove_collection_separators_before_headers_arg(ctx),
         ] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
         timestamp_override(ctx),
         ctx.attr.lib,
@@ -75,6 +82,7 @@ md_epub = rule(
         "_pandoc_bin": pandoc_bin(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
+        "_remove_collection_separators_before_headers": remove_collection_separators_before_headers_filter(),
     },
 )
 

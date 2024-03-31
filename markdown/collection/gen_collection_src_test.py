@@ -49,7 +49,6 @@ class TestGenCollectionSrc(test_utils.ScriptTestCase):
                     {
                         "title": "Foo",
                         "author": ["Bar"],
-                        "starts-with-text": "",
                     },
                 ),
             ],
@@ -69,6 +68,10 @@ title: The Title
 
 **Bar**
 
+::: collectionseparator
+&nbsp;
+:::
+
 :::
 
 !include //foo
@@ -87,7 +90,6 @@ title: The Title
                         "title": "Foo",
                         "author": ["The Author"],
                         "date": "2 January",
-                        "starts-with-text": "",
                     },
                 ),
                 (
@@ -96,7 +98,6 @@ title: The Title
                         "title": "Bar",
                         "author": "Baz",
                         "date": "3 January",
-                        "starts-with-text": "t",
                     },
                 ),
                 (
@@ -105,7 +106,6 @@ title: The Title
                         "title": "Baz",
                         "author": ["The Author"],
                         "date": "",
-                        "starts-with-text": "",
                     },
                 ),
             ],
@@ -126,6 +126,10 @@ title: The Title
 
 **2 January**
 
+::: collectionseparator
+&nbsp;
+:::
+
 :::
 
 !include //foo
@@ -136,7 +140,9 @@ title: The Title
 
 **Baz, 3 January**
 
+::: collectionseparator
 &nbsp;
+:::
 
 :::
 

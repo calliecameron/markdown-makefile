@@ -1,27 +1,19 @@
-from panflute import Div, Para, Str
+from panflute import Para, Str
 
 from markdown.utils import test_utils
 
 
-class TestRemoveParagraphAnnotations(test_utils.PandocLuaFilterTestCase):
+class TestRemoveCollectionSeparators(test_utils.PandocLuaFilterTestCase):
     def test_success(self) -> None:
         doc = self.run_filter(
             """
-::: firstparagraph
 Foo
+
+::: collectionseparator
+&nbsp;
 :::
 
-::: foo
-::: otherparagraph
 Bar
-:::
-:::
-
-::: blankline
-Baz
-:::
-
-Quux
 """,
         )
 
@@ -29,9 +21,7 @@ Quux
             list(doc.content),
             [
                 Para(Str("Foo")),
-                Div(Para(Str("Bar")), classes=["foo"]),
-                Para(Str("Baz")),
-                Para(Str("Quux")),
+                Para(Str("Bar")),
             ],
         )
 

@@ -1,37 +1,33 @@
-from panflute import Div, Para, Str
+from panflute import Div, Header, Para, Str
 
 from markdown.utils import test_utils
 
 
-class TestRemoveParagraphAnnotations(test_utils.PandocLuaFilterTestCase):
+class TestRemoveCollectionSeparatorsBeforeHeaders(test_utils.PandocLuaFilterTestCase):
     def test_success(self) -> None:
         doc = self.run_filter(
-            """
-::: firstparagraph
+            """::: collectionseparator
+&nbsp;
+:::
+
 Foo
+
+::: collectionseparator
+&nbsp
 :::
 
 ::: foo
-::: otherparagraph
-Bar
+# Foo
 :::
-:::
-
-::: blankline
-Baz
-:::
-
-Quux
 """,
         )
 
         self.assertEqual(
             list(doc.content),
             [
+                Para(Str("\u00A0")),
                 Para(Str("Foo")),
-                Div(Para(Str("Bar")), classes=["foo"]),
-                Para(Str("Baz")),
-                Para(Str("Quux")),
+                Div(Header(Str("Foo"), level=1), classes=["foo"]),
             ],
         )
 

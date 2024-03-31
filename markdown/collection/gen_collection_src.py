@@ -42,9 +42,14 @@ def main() -> None:
         if print_date:
             tagline.append(j["date"])
         if tagline:
-            output += ["", "**" + ", ".join(tagline) + "**"]
-            if j["starts-with-text"] == "t":
-                output += ["", "&nbsp;"]
+            output += [
+                "",
+                "**" + ", ".join(tagline) + "**",
+                "",
+                "::: collectionseparator",
+                "&nbsp;",
+                ":::",
+            ]
         output += ["", ":::", "", f"!include //{target}", ""]
 
     with open(args.out_file, "w", encoding="utf-8") as f:

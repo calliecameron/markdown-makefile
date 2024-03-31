@@ -10,6 +10,10 @@ load(
     "pandoc",
     "pandoc_bin",
     "pandoc_script",
+    "remove_collection_separators_arg",
+    "remove_collection_separators_before_headers_arg",
+    "remove_collection_separators_before_headers_filter",
+    "remove_collection_separators_filter",
     "timestamp_override",
     "write_open_script",
     "zip_cleaner",
@@ -29,8 +33,10 @@ def _md_odt_impl(ctx):
         ctx,
         "odt",
         "odt",
-        [],
-        expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
+        [ctx.file._remove_collection_separators],
+        [
+            remove_collection_separators_arg(ctx),
+        ] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
         timestamp_override(ctx),
         ctx.attr.lib,
         intermediate,
@@ -63,6 +69,7 @@ md_odt = rule(
         "_pandoc_bin": pandoc_bin(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
+        "_remove_collection_separators": remove_collection_separators_filter(),
     },
 )
 
@@ -74,11 +81,13 @@ def _md_docx_impl(ctx):
         "docx",
         [
             ctx.file._template,
-            ctx.file._filter,
+            ctx.file._remove_collection_separators_before_headers,
+            ctx.file._docx_filter,
         ],
         [
             "--reference-doc=" + ctx.file._template.path,
-            "--lua-filter=" + ctx.file._filter.path,
+            remove_collection_separators_before_headers_arg(ctx),
+            "--lua-filter=" + ctx.file._docx_filter.path,
         ] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
         timestamp_override(ctx),
         ctx.attr.lib,
@@ -114,7 +123,7 @@ md_docx = rule(
             allow_single_file = True,
             default = "//markdown/formats/word:reference.docx",
         ),
-        "_filter": attr.label(
+        "_docx_filter": attr.label(
             allow_single_file = True,
             default = "//markdown/formats/word:docx_filter.lua",
         ),
@@ -122,6 +131,7 @@ md_docx = rule(
         "_pandoc_bin": pandoc_bin(),
         "_zip_cleaner": zip_cleaner_script(),
         "_write_open_script": write_open_script(),
+        "_remove_collection_separators_before_headers": remove_collection_separators_before_headers_filter(),
     },
 )
 

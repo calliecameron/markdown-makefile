@@ -25,6 +25,8 @@ exports_files(
     [
         "add_title.lua",
         "remove_paragraph_annotations.lua",
+        "remove_collection_separators.lua",
+        "remove_collection_separators_before_headers.lua",
     ],
     visibility = ["//visibility:public"],
 )
@@ -81,4 +83,16 @@ pandoc_filter_py_test(
     name = "remove_paragraph_annotations_test",
     src = "remove_paragraph_annotations_test.py",
     filter = "remove_paragraph_annotations.lua",
+)
+
+pandoc_filter_py_test(
+    name = "remove_collection_separators_test",
+    src = "remove_collection_separators_test.py",
+    filter = "remove_collection_separators.lua",
+)
+
+pandoc_filter_py_test(
+    name = "remove_collection_separators_before_headers_test",
+    src = "remove_collection_separators_before_headers_test.py",
+    filter = "remove_collection_separators_before_headers.lua",
 )

@@ -2,7 +2,7 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@pip//:requirements.bzl", "requirement")
 load("//markdown/support/python:defs.bzl", "py_binary")
 load("//markdown/support/shell:defs.bzl", "sh_binary")
-load("//markdown/utils:defs.bzl", "script_test")
+load("//markdown/utils:defs.bzl", "script_py_test")
 
 bzl_library(
     name = "defs_bzl",
@@ -30,7 +30,7 @@ py_binary(
     ],
 )
 
-script_test(
+script_py_test(
     name = "group_summary_test",
     src = "group_summary_test.py",
     script = ":group_summary",
@@ -42,7 +42,7 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-script_test(
+script_py_test(
     name = "write_group_summary_script_test",
     src = "write_group_summary_script_test.py",
     script = ":write_group_summary_script",
@@ -58,7 +58,7 @@ py_binary(
     ],
 )
 
-script_test(
+script_py_test(
     name = "group_publications_test",
     src = "group_publications_test.py",
     script = ":group_publications",
@@ -70,7 +70,7 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-script_test(
+script_py_test(
     name = "write_group_publications_script_test",
     src = "write_group_publications_script_test.py",
     script = ":write_group_publications_script",

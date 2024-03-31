@@ -105,7 +105,7 @@ def required_files(name, copy = None, create = None, extra_check = None, extra_u
         extra_check = extra_check,
     )
 
-def script_test(name, src, script, deps = None):
+def script_py_test(name, src, script, deps = None):
     deps = deps or []
     py_test(
         name = name,
@@ -115,7 +115,7 @@ def script_test(name, src, script, deps = None):
         deps = ["//markdown/utils:test_utils"] + deps,
     )
 
-def pandoc_filter_test(name, src, filter):
+def pandoc_filter_py_test(name, src, filter):
     py_test(
         name = name,
         srcs = [src],

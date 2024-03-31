@@ -1,6 +1,6 @@
 load("@pip//:requirements.bzl", "requirement")
 load("//markdown/support/python:defs.bzl", "py_binary")
-load("//markdown/utils:defs.bzl", "script_test")
+load("//markdown/utils:defs.bzl", "script_py_test")
 
 py_binary(
     name = "gen_standard_lint_input",
@@ -8,7 +8,7 @@ py_binary(
     visibility = ["//visibility:public"],
 )
 
-script_test(
+script_py_test(
     name = "gen_standard_lint_input_test",
     src = "gen_standard_lint_input_test.py",
     script = ":gen_standard_lint_input",
@@ -27,7 +27,7 @@ py_binary(
     visibility = ["//visibility:public"],
 )
 
-script_test(
+script_py_test(
     name = "custom_lint_test",
     src = "custom_lint_test.py",
     script = ":custom_lint",

@@ -1,6 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("//markdown/support/shell:defs.bzl", "sh_binary")
-load("//markdown/utils:defs.bzl", "pandoc_filter_test", "script_test")
+load("//markdown/utils:defs.bzl", "pandoc_filter_py_test", "script_py_test")
 
 bzl_library(
     name = "helpers_bzl",
@@ -40,7 +40,7 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-script_test(
+script_py_test(
     name = "write_open_script_test",
     src = "write_open_script_test.py",
     script = ":write_open_script",
@@ -52,7 +52,7 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-script_test(
+script_py_test(
     name = "zip_cleaner_test",
     src = "zip_cleaner_test.py",
     script = ":zip_cleaner",
@@ -64,13 +64,13 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-script_test(
+script_py_test(
     name = "write_save_script_test",
     src = "write_save_script_test.py",
     script = ":write_save_script",
 )
 
-pandoc_filter_test(
+pandoc_filter_py_test(
     name = "add_title_test",
     src = "add_title_test.py",
     filter = "add_title.lua",

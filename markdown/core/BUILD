@@ -1,6 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("//markdown/support/python:defs.bzl", "py_binary")
-load("//markdown/utils:defs.bzl", "script_test")
+load("//markdown/utils:defs.bzl", "script_py_test")
 
 bzl_library(
     name = "defs_bzl",
@@ -14,7 +14,7 @@ py_binary(
     visibility = ["//visibility:public"],
 )
 
-script_test(
+script_py_test(
     name = "combine_deps_metadata_test",
     src = "combine_deps_metadata_test.py",
     script = ":combine_deps_metadata",
@@ -27,7 +27,7 @@ py_binary(
     deps = ["//markdown/utils:bazel_package"],
 )
 
-script_test(
+script_py_test(
     name = "preprocess_test",
     src = "preprocess_test.py",
     script = ":preprocess",
@@ -44,7 +44,7 @@ py_binary(
     ],
 )
 
-script_test(
+script_py_test(
     name = "raw_version_test",
     src = "raw_version_test.py",
     script = ":raw_version",
@@ -57,7 +57,7 @@ py_binary(
     deps = ["//markdown/utils:metadata"],
 )
 
-script_test(
+script_py_test(
     name = "version_test",
     src = "version_test.py",
     script = ":version",

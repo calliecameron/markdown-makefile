@@ -1,5 +1,5 @@
 load("//markdown/support/shell:defs.bzl", "sh_binary")
-load("//markdown/utils:defs.bzl", "pandoc_filter_test", "script_test")
+load("//markdown/utils:defs.bzl", "pandoc_filter_py_test", "script_py_test")
 
 exports_files(
     [
@@ -10,13 +10,13 @@ exports_files(
     visibility = ["//visibility:public"],
 )
 
-pandoc_filter_test(
+pandoc_filter_py_test(
     name = "spellcheck_filter_test",
     src = "spellcheck_filter_test.py",
     filter = "spellcheck_filter.lua",
 )
 
-pandoc_filter_test(
+pandoc_filter_py_test(
     name = "spellcheck_cleanup_test",
     src = "spellcheck_cleanup_test.py",
     filter = "spellcheck_cleanup.lua",
@@ -28,7 +28,7 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-script_test(
+script_py_test(
     name = "spellcheck_test",
     src = "spellcheck_test.py",
     script = ":spellcheck",
@@ -40,7 +40,7 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
-script_test(
+script_py_test(
     name = "gen_dictionary_test",
     src = "gen_dictionary_test.py",
     script = ":gen_dictionary",

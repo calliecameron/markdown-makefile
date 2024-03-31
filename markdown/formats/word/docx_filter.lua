@@ -11,6 +11,6 @@ local rule = [[<w:p>
   </w:r>
 </w:p>]]
 
-function HorizontalRule (elem)
-  return pandoc.RawBlock('openxml', rule)
+function HorizontalRule(elem)
+    return pandoc.RawBlock("openxml", rule)
 end

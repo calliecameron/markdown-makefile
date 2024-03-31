@@ -7,7 +7,6 @@ exports_files(
         "validate_quotes.lua",
         "include.lua",
         "paragraph_annotations.lua",
-        "starts_with_text.lua",
         "wordcount.lua",
         "header_auto_ids.lua",
         "poetry_lines.lua",
@@ -55,12 +54,6 @@ pandoc_filter_py_test(
     name = "paragraph_annotations_test",
     src = "paragraph_annotations_test.py",
     filter = "paragraph_annotations.lua",
-)
-
-pandoc_filter_py_test(
-    name = "starts_with_text_test",
-    src = "starts_with_text_test.py",
-    filter = "starts_with_text.lua",
 )
 
 pandoc_filter_py_test(

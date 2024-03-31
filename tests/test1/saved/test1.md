@@ -20,7 +20,6 @@ publications:
   submitted: 2022-11-11
   venue: Bar
 source-md5: 2518a18c39cbd5e88b46c164d163e14a
-starts-with-text: t
 subject: "Version: reproducible"
 title: The Title
 wordcount: 286

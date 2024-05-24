@@ -1,5 +1,3 @@
-load("@aspect_rules_lint//lint:shellcheck.bzl", "shellcheck_binary")
-
 alias(
     name = "ebook_convert",
     actual = "@calibre//:ebook_convert",
@@ -27,18 +25,14 @@ alias(
     visibility = ["//:__subpackages__"],
 )
 
-shellcheck_binary(
-    name = "_shellcheck",
-)
-
 alias(
     name = "shellcheck",
-    actual = ":_shellcheck",
+    actual = "@rules_shellcheck//:shellcheck",
     visibility = ["//:__subpackages__"],
 )
 
 alias(
     name = "shfmt",
-    actual = "@shfmt_linux_x86_64//file:shfmt",
+    actual = "@shfmt//file",
     visibility = ["//:__subpackages__"],
 )

@@ -153,7 +153,7 @@ def validate_publications(j: Mapping[str, Any]) -> None:
     try:
         Publications.from_json(ps)
     except ValueError as e:
-        fail_metadata("failed to parse publications: %s" % str(e))
+        fail_metadata(f"failed to parse publications: {e}")
 
 
 def validate_author(j: Mapping[str, Any]) -> None:

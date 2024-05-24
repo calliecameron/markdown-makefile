@@ -155,7 +155,7 @@ class Dates:
         out = {}
         for k, v in j.items():
             if k not in _DATE_KEYS:
-                raise ValueError("Unknown date key '%s'" % k)
+                raise ValueError(f"Unknown date key '{k}'")
             try:
                 d = datetime.date.fromisoformat(v)
                 out[k.replace("-", "_")] = d
@@ -214,7 +214,7 @@ class Publication:
 
         unknown_keys = frozenset(j.keys()) - _KEYS
         if unknown_keys:
-            raise ValueError("Found unknown keys '%s'" % unknown_keys)
+            raise ValueError(f"Found unknown keys '{unknown_keys}'")
 
         venue = ""
         date_strings = {}
@@ -240,7 +240,7 @@ class Publication:
                     raise ValueError(f"Value of key '{k}' must be a list; got '{type(v)}'")
                 for url in v:
                     if not isinstance(url, str):
-                        raise ValueError("URLs must be strings; got '%s'" % str(type(url)))
+                        raise ValueError(f"URLs must be strings; got '{type(url)}'")
                     urls.append(url)
 
         dates = Dates.from_json(date_strings)

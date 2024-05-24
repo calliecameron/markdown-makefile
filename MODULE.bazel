@@ -7,11 +7,11 @@ module(
 
 bazel_dep(
     name = "bazel_skylib",
-    version = "1.5.0",
+    version = "1.6.1",
 )
 bazel_dep(
     name = "rules_python",
-    version = "0.31.0",
+    version = "0.32.2",
 )
 bazel_dep(
     name = "buildifier_prebuilt",
@@ -19,11 +19,15 @@ bazel_dep(
 )
 bazel_dep(
     name = "aspect_rules_lint",
-    version = "0.12.0",
+    version = "0.21.0",
 )
 bazel_dep(
     name = "platforms",
-    version = "0.0.8",
+    version = "0.0.10",
+)
+bazel_dep(
+    name = "rules_shellcheck",
+    version = "0.3.3",
 )
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
@@ -48,3 +52,6 @@ use_repo(pandoc, "pandoc")
 
 prosegrinder_pandoc_templates = use_extension("//markdown/external:prosegrinder_pandoc_templates.bzl", "prosegrinder_pandoc_templates")
 use_repo(prosegrinder_pandoc_templates, "prosegrinder_pandoc_templates")
+
+shfmt = use_extension("//markdown/external:shfmt.bzl", "shfmt")
+use_repo(shfmt, "shfmt")

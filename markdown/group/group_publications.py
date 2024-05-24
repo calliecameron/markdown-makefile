@@ -104,8 +104,9 @@ def generate_details(raw: Mapping[str, Any]) -> list[str]:
         if PUBLICATIONS in raw[target] and raw[target][PUBLICATIONS]:
             out += [
                 f'<h3 id="{html.escape(target)}">{html.escape(target, quote=False)}</h3>',
-                "<code><pre>%s</pre></code>"
-                % html.escape(json.dumps(raw[target], sort_keys=True, indent=4), quote=False),
+                "<code><pre>{}</pre></code>".format(  # noqa: UP032
+                    html.escape(json.dumps(raw[target], sort_keys=True, indent=4), quote=False),
+                ),
             ]
     return out
 
@@ -120,13 +121,13 @@ def generate_head() -> list[str]:
         "th, td { border: 1px solid; padding: 5px; }",
         "a:link { color: black; }",
         "a:visited { color: black; }",
-        ".%s { background-color: #ffff00; }" % SUBMITTED,
-        ".%s { background-color: #ff6d6d; }" % REJECTED,
-        ".%s { background-color: #ff972f; }" % WITHDRAWN,
-        ".%s { background-color: #cccccc; }" % ABANDONED,
-        ".%s { background-color: #729fcf; }" % ACCEPTED,
-        ".%s { background-color: #158466; }" % SELF_PUBLISHED,
-        ".%s { background-color: #81d41a; }" % PUBLISHED,
+        f".{SUBMITTED} {{ background-color: #ffff00; }}",
+        f".{REJECTED} {{ background-color: #ff6d6d; }}",
+        f".{WITHDRAWN} {{ background-color: #ff972f; }}",
+        f".{ABANDONED} {{ background-color: #cccccc; }}",
+        f".{ACCEPTED} {{ background-color: #729fcf; }}",
+        f".{SELF_PUBLISHED} {{ background-color: #158466; }}",
+        f".{PUBLISHED} {{ background-color: #81d41a; }}",
         "</style>",
         "</head>",
     ]

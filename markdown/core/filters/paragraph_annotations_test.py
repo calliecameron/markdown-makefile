@@ -155,7 +155,7 @@ Bar
                 HorizontalRule(),
                 Div(Div(Para(Str("Foo")), classes=["firstparagraph"]), classes=["foo"]),
                 Div(Para(Str("Bar")), classes=["otherparagraph"]),
-                Div(Para(Str("\u00A0")), classes=["blankline"]),
+                Div(Para(Str("\u00a0")), classes=["blankline"]),
                 Div(Para(Str("Foo")), classes=["firstparagraph"]),
                 Div(Para(Str("Bar")), classes=["otherparagraph"]),
             ],

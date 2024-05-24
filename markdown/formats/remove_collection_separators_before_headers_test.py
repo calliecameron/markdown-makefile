@@ -25,7 +25,7 @@ Foo
         self.assertEqual(
             list(doc.content),
             [
-                Para(Str("\u00A0")),
+                Para(Str("\u00a0")),
                 Para(Str("Foo")),
                 Div(Header(Str("Foo"), level=1), classes=["foo"]),
             ],

@@ -2,28 +2,7 @@ import argparse
 import json
 from collections.abc import Mapping
 
-from markdown.utils.metadata import (
-    DOCVERSION,
-    REPO,
-    SUBJECT,
-)
-
-
-class Version:
-    def __init__(self, version: str, repo: str) -> None:
-        super().__init__()
-        self.version = version
-        self.repo = repo
-
-    def to_dict(self) -> dict[str, str]:
-        return {
-            DOCVERSION: self.version,
-            REPO: self.repo,
-        }
-
-    @staticmethod
-    def from_dict(d: Mapping[str, str]) -> "Version":
-        return Version(d[DOCVERSION], d[REPO])
+from markdown.utils.metadata import Version, VersionMetadata
 
 
 def get_version(
@@ -35,20 +14,22 @@ def get_version(
     unversioned_deps = []
 
     for target, version in sorted(dep_versions.items()):
-        if "dirty" in version.version:
+        if "dirty" in version.docversion:
             dirty_deps.append((target, version))
-        if "unversioned" in version.version:
+        if "unversioned" in version.docversion:
             unversioned_deps.append((target, version))
 
     version = Version(
-        version_override
-        if version_override
-        else (
-            raw_version.version
-            + (", dirty deps" if dirty_deps else "")
-            + (", unversioned deps" if unversioned_deps else "")
+        docversion=(
+            version_override
+            if version_override
+            else (
+                raw_version.docversion
+                + (", dirty deps" if dirty_deps else "")
+                + (", unversioned deps" if unversioned_deps else "")
+            )
         ),
-        raw_version.repo,
+        repo=raw_version.repo,
     )
 
     # Dirty or unversioned deps in the same repo are OK
@@ -68,12 +49,12 @@ def get_version(
     return version
 
 
-def get_metadata(version: str, repo: str) -> dict[str, str]:
-    return {
-        DOCVERSION: version,
-        SUBJECT: f"Version: {version}",
-        REPO: repo,
-    }
+def get_metadata(version: Version) -> VersionMetadata:
+    return VersionMetadata(
+        docversion=version.docversion,
+        subject=f"Version: {version.docversion}",
+        repo=version.repo,
+    )
 
 
 def main() -> None:
@@ -85,18 +66,18 @@ def main() -> None:
     args = parser.parse_args()
 
     with open(args.raw_version_file, encoding="utf-8") as f:
-        raw_version = Version.from_dict(json.load(f))
+        raw_version = Version.model_validate_json(f.read())
 
     dep_versions = {}
     with open(args.deps_metadata_file, encoding="utf-8") as f:
         for target, metadata in json.load(f).items():
-            dep_versions[target] = Version.from_dict(metadata)
+            dep_versions[target] = Version(docversion=metadata["docversion"], repo=metadata["repo"])
 
     version = get_version(raw_version, dep_versions, args.version_override)
-    metadata = get_metadata(version.version, version.repo)
+    metadata = get_metadata(version)
 
     with open(args.metadata_out_file, mode="w", encoding="utf-8") as f:
-        json.dump(metadata, f, sort_keys=True, indent=4)
+        json.dump(metadata.model_dump(mode="json"), f, sort_keys=True, indent=4)
 
 
 if __name__ == "__main__":

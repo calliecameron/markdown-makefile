@@ -2,7 +2,7 @@ import argparse
 import json
 
 import markdown.utils.bazel_package
-from markdown.utils.metadata import DOCVERSION, REPO
+from markdown.utils.metadata import Version
 
 
 def main() -> None:
@@ -33,10 +33,10 @@ def main() -> None:
 
     with open(args.outfile, mode="w", encoding="utf-8") as f:
         json.dump(
-            {
-                DOCVERSION: version,
-                REPO: repo,
-            },
+            Version(
+                docversion=version,
+                repo=repo,
+            ).model_dump(mode="json"),
             f,
             sort_keys=True,
             indent=4,

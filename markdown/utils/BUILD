@@ -33,6 +33,7 @@ py_library(
     name = "metadata",
     srcs = ["metadata.py"],
     visibility = ["//markdown:__subpackages__"],
+    deps = [requirement("pydantic")],
 )
 
 py_test(

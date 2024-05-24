@@ -1,6 +1,8 @@
 from collections.abc import Mapping
 from typing import Any, cast
 
+from pydantic import BaseModel, ConfigDict
+
 TITLE = "title"
 AUTHOR = "author"
 DATE = "date"
@@ -43,3 +45,26 @@ def parse_author(metadata: Mapping[str, Any]) -> str:
     raise ValueError(
         f"metadata item '{AUTHOR}' must be a non-empty list of string or a string; got {author}",
     )
+
+
+class Version(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        strict=True,
+        extra="forbid",
+    )
+
+    docversion: str
+    repo: str
+
+
+class VersionMetadata(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        strict=True,
+        extra="forbid",
+    )
+
+    docversion: str
+    repo: str
+    subject: str

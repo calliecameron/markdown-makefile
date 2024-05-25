@@ -233,8 +233,8 @@ def _md_file_impl(ctx):
             "--lua-filter=" + ctx.file._validate_ids.path,
             "--lua-filter=" + ctx.file._spellcheck_cleanup.path,
             "--lua-filter=" + ctx.file._validate_quotes.path,
-            "--filter=" + ctx.executable._validate_metadata.path,
             "--lua-filter=" + ctx.file._include.path,
+            "--filter=" + ctx.executable._validate_metadata.path,
             "--lua-filter=" + ctx.file._paragraph_annotations.path,
             "--lua-filter=" + ctx.file._header_auto_ids.path,
             "--lua-filter=" + ctx.file._wordcount.path,
@@ -445,14 +445,14 @@ md_file = rule(
             allow_single_file = True,
             default = "//markdown/core/filters:validate_quotes.lua",
         ),
+        "_include": attr.label(
+            allow_single_file = True,
+            default = "//markdown/core/filters:include.lua",
+        ),
         "_validate_metadata": attr.label(
             default = "//markdown/core/filters:validate_metadata",
             executable = True,
             cfg = "exec",
-        ),
-        "_include": attr.label(
-            allow_single_file = True,
-            default = "//markdown/core/filters:include.lua",
         ),
         "_paragraph_annotations": attr.label(
             allow_single_file = True,

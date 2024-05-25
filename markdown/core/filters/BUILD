@@ -1,3 +1,4 @@
+load("@pip//:requirements.bzl", "requirement")
 load("//markdown/support/python:defs.bzl", "py_binary")
 load("//markdown/utils:defs.bzl", "pandoc_filter_py_test")
 
@@ -34,7 +35,7 @@ py_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//markdown/utils:metadata",
-        "//markdown/utils:publications",
+        requirement("panflute"),
     ],
 )
 

@@ -1,5 +1,6 @@
 import io
 from collections.abc import Mapping, Sequence
+from typing import Any
 
 class Element:
     content: Sequence[Element]
@@ -10,6 +11,7 @@ class MetaValue(Element): ...
 
 class Doc(Element):
     metadata: Mapping[str, MetaValue]
+    def get_metadata(self) -> Mapping[str, Any]: ...
 
 class BlockQuote(Block):
     def __init__(self, *args: Block) -> None: ...

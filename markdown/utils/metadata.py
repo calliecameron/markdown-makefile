@@ -1,7 +1,9 @@
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any, cast
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
+
+from markdown.utils.publications import Publications
 
 TITLE = "title"
 AUTHOR = "author"
@@ -12,7 +14,6 @@ PUBLICATIONS = "publications"
 
 DOCVERSION = "docversion"
 IDENTIFIER = "identifier"
-INCREMENT_INCLUDED_HEADERS = "increment-included-headers"
 LANG = "lang"
 METADATA_OUT_FILE = "metadata-out-file"
 POETRY_LINES = "poetry-lines"
@@ -52,6 +53,7 @@ class _BaseModel(BaseModel):
         frozen=True,
         strict=True,
         extra="forbid",
+        alias_generator=lambda s: s.replace("_", "-"),
     )
 
 
@@ -64,3 +66,38 @@ class VersionMetadata(_BaseModel):
     docversion: str
     repo: str
     subject: str
+
+
+class Identifier(_BaseModel):
+    scheme: str
+    text: str
+
+
+class _BaseMetadata(_BaseModel):
+    title: str = ""
+    author: Sequence[str] = []
+    date: str = ""
+    notes: str = ""
+    finished: bool = False
+    publications: Publications = Publications.model_construct([])
+    identifier: Sequence[Identifier] = []
+
+    @field_validator("author", mode="before")
+    @classmethod
+    def _convert_author(cls, v: Any) -> Any:  # noqa: ANN401
+        if isinstance(v, str):
+            return [v]
+        if isinstance(v, list) and not v:
+            raise ValueError(
+                f"metadata item 'author' must be a non-empty list of string or a string; got "
+                f"{v}",
+            )
+        return v
+
+
+class InputMetadata(_BaseMetadata):
+    pass
+
+
+class OutputMetadata(_BaseMetadata):
+    pass

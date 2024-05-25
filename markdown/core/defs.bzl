@@ -228,13 +228,13 @@ def _md_file_impl(ctx):
             ctx.file._poetry_lines,
         ] + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
         executable = ctx.executable._pandoc,
-        tools = [ctx.executable._validate_metadata],
+        tools = [ctx.executable._validate_input_metadata],
         arguments = [
             "--lua-filter=" + ctx.file._validate_ids.path,
             "--lua-filter=" + ctx.file._spellcheck_cleanup.path,
             "--lua-filter=" + ctx.file._validate_quotes.path,
             "--lua-filter=" + ctx.file._include.path,
-            "--filter=" + ctx.executable._validate_metadata.path,
+            "--filter=" + ctx.executable._validate_input_metadata.path,
             "--lua-filter=" + ctx.file._paragraph_annotations.path,
             "--lua-filter=" + ctx.file._header_auto_ids.path,
             "--lua-filter=" + ctx.file._wordcount.path,
@@ -449,8 +449,8 @@ md_file = rule(
             allow_single_file = True,
             default = "//markdown/core/filters:include.lua",
         ),
-        "_validate_metadata": attr.label(
-            default = "//markdown/core/filters:validate_metadata",
+        "_validate_input_metadata": attr.label(
+            default = "//markdown/core/filters:validate_input_metadata",
             executable = True,
             cfg = "exec",
         ),

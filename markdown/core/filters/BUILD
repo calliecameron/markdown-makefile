@@ -29,8 +29,8 @@ pandoc_filter_py_test(
 )
 
 py_binary(
-    name = "validate_metadata",
-    srcs = ["validate_metadata.py"],
+    name = "validate_input_metadata",
+    srcs = ["validate_input_metadata.py"],
     visibility = ["//visibility:public"],
     deps = [
         "//markdown/utils:metadata",
@@ -39,9 +39,9 @@ py_binary(
 )
 
 pandoc_filter_py_test(
-    name = "validate_metadata_test",
-    src = "validate_metadata_test.py",
-    filter = ":validate_metadata",
+    name = "validate_input_metadata_test",
+    src = "validate_input_metadata_test.py",
+    filter = ":validate_input_metadata",
 )
 
 pandoc_filter_py_test(

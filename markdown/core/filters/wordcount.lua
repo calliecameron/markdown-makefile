@@ -27,10 +27,8 @@ function get_wordcount(doc, meta)
 end
 
 function set_wordcount(meta)
-    if meta.wordcount == nil then
-        meta.wordcount = tostring(words)
-        return meta
-    end
+    meta.wordcount = tostring(words)
+    return meta
 end
 
 return {{Pandoc = get_wordcount}, {Meta = set_wordcount}}

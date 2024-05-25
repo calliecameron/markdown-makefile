@@ -1,7 +1,7 @@
 from collections.abc import Mapping, Sequence
 from typing import Any, cast
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from markdown.utils.publications import Publications
 
@@ -100,4 +100,10 @@ class InputMetadata(_BaseMetadata):
 
 
 class OutputMetadata(_BaseMetadata):
-    pass
+    wordcount: int = Field(strict=False, ge=0)
+    poetry_lines: int = Field(strict=False, ge=0)
+    lang: str
+    docversion: str
+    repo: str
+    subject: str
+    source_hash: str

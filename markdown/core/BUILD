@@ -64,3 +64,16 @@ script_py_test(
     script = ":version",
     deps = [":version"],
 )
+
+py_binary(
+    name = "validate_output_metadata",
+    srcs = ["validate_output_metadata.py"],
+    visibility = ["//visibility:public"],
+    deps = ["//markdown/utils:metadata"],
+)
+
+script_py_test(
+    name = "validate_output_metadata_test",
+    src = "validate_output_metadata_test.py",
+    script = ":validate_output_metadata",
+)

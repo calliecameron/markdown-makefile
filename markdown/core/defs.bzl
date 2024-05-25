@@ -176,6 +176,23 @@ def _spellcheck(ctx):
 
     return spellcheck_ok
 
+def _validate_output_metadata(ctx, output_metadata):
+    output_metadata_ok = ctx.actions.declare_file(ctx.label.name + "_output_metadata_ok.txt")
+    ctx.actions.run(
+        outputs = [output_metadata_ok],
+        inputs = [
+            output_metadata,
+        ],
+        executable = ctx.executable._validate_output_metadata,
+        arguments = [
+            output_metadata.path,
+            output_metadata_ok.path,
+        ],
+        progress_message = "%{label}: validating metadata",
+    )
+
+    return output_metadata_ok
+
 def _md_file_impl(ctx):
     lint_ok = [
         _standard_lint(ctx),
@@ -316,10 +333,12 @@ def _md_file_impl(ctx):
         progress_message = "%{label}: adding version information",
     )
 
+    output_metadata_ok = _validate_output_metadata(ctx, versioned_metadata)
+
     output = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.run(
         outputs = [output],
-        inputs = [versioned] + lint_ok,
+        inputs = [versioned] + lint_ok + [output_metadata_ok],
         executable = "cp",
         arguments = [versioned.path, output.path],
         progress_message = "%{label}: generating output",
@@ -492,6 +511,11 @@ md_file = rule(
         "_cleanup": attr.label(
             allow_single_file = True,
             default = "//markdown/core/filters:cleanup.lua",
+        ),
+        "_validate_output_metadata": attr.label(
+            default = "//markdown/core:validate_output_metadata",
+            executable = True,
+            cfg = "exec",
         ),
     },
 )

@@ -68,7 +68,7 @@ a:visited { color: black; }
 .withdrawn { background-color: #ff972f; }
 .abandoned { background-color: #cccccc; }
 .accepted { background-color: #729fcf; }
-.self-published { background-color: #158466; }
+.self_published { background-color: #158466; }
 .published { background-color: #81d41a; }
 </style>
 </head>
@@ -87,12 +87,12 @@ a:visited { color: black; }
 </thead>
 <tbody>
 <tr>
-<td class="self-published" title="//baz:quux"><a href="#//baz:quux">//baz:quux</a></td>
+<td class="self_published" title="//baz:quux"><a href="#//baz:quux">//baz:quux</a></td>
 <td title="Baz">Baz</td>
 <td title="20">20</td>
 <td style="border-right: 3px solid" title=""></td>
 <td></td>
-<td class="self-published" title="//baz:quux, Foo"><a href="#//baz:quux">2022-11-14 Self-published</a></td>
+<td class="self_published" title="//baz:quux, Foo"><a href="#//baz:quux">2022-11-14 Self-published</a></td>
 </tr>
 <tr>
 <td class="published" title="//foo:bar"><a href="#//foo:bar">//foo:bar</a></td>

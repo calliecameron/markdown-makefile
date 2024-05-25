@@ -155,8 +155,12 @@ def main() -> None:
         for target, j in json.load(f).items():
             publication = ""
             if j.get(metadata.PUBLICATIONS):
-                ps = Publications.from_json(j[metadata.PUBLICATIONS])
-                publication = ps.highest_active_state if ps.active else "attempted"
+                ps = Publications.model_validate_json(json.dumps(j[metadata.PUBLICATIONS]))
+                publication = (
+                    ps.highest_active_state.name.lower().replace("_", "-")
+                    if ps.highest_active_state
+                    else "attempted"
+                )
 
             author = j.get(metadata.AUTHOR, "")
             if isinstance(author, list):

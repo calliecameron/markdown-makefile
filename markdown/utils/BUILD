@@ -46,6 +46,7 @@ py_library(
     name = "publications",
     srcs = ["publications.py"],
     visibility = ["//markdown:__subpackages__"],
+    deps = [requirement("pydantic")],
 )
 
 py_test(

@@ -151,7 +151,7 @@ def validate_publications(j: Mapping[str, Any]) -> None:
         ps.append(dict_to_json(p))
 
     try:
-        Publications.from_json(ps)
+        Publications.model_validate_json(json.dumps(ps))
     except ValueError as e:
         fail_metadata(f"failed to parse publications: {e}")
 

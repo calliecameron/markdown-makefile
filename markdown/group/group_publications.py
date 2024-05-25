@@ -5,17 +5,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from markdown.utils.metadata import NOTES, PUBLICATIONS, TITLE, WORDCOUNT
-from markdown.utils.publications import (
-    ABANDONED,
-    ACCEPTED,
-    PUBLISHED,
-    REJECTED,
-    SELF_PUBLISHED,
-    SUBMITTED,
-    WITHDRAWN,
-    Publication,
-    Publications,
-)
+from markdown.utils.publications import Publication, Publications, State
 
 
 def generate_header(venues: Sequence[str]) -> list[str]:
@@ -47,8 +37,8 @@ def generate_row(
     notes = raw.get(NOTES, "")
 
     class_attr = ""
-    if data.active:
-        class_attr = data.highest_active_state
+    if data.highest_active_state:
+        class_attr = data.highest_active_state.name.lower()
 
     out = [
         "<tr>",
@@ -71,9 +61,12 @@ def generate_row(
 
 
 def generate_cell(target: str, p: Publication) -> str:
-    content = [date.date_str() + " " + date.state.capitalize() for date in p.dates.dates]
+    content = [
+        d.date.isoformat() + " " + d.state.name.lower().replace("_", "-").capitalize()
+        for d in p.dates
+    ]
     return (
-        f'<td class="{p.dates.latest.state}" title="{html.escape(target + ", " + p.venue)}">'
+        f'<td class="{p.latest.state.name.lower()}" title="{html.escape(target + ", " + p.venue)}">'
         f'<a href="#{html.escape(target)}">'
         f'{"<br>".join([html.escape(c, quote=False) for c in content])}</a></td>'
     )
@@ -121,13 +114,13 @@ def generate_head() -> list[str]:
         "th, td { border: 1px solid; padding: 5px; }",
         "a:link { color: black; }",
         "a:visited { color: black; }",
-        f".{SUBMITTED} {{ background-color: #ffff00; }}",
-        f".{REJECTED} {{ background-color: #ff6d6d; }}",
-        f".{WITHDRAWN} {{ background-color: #ff972f; }}",
-        f".{ABANDONED} {{ background-color: #cccccc; }}",
-        f".{ACCEPTED} {{ background-color: #729fcf; }}",
-        f".{SELF_PUBLISHED} {{ background-color: #158466; }}",
-        f".{PUBLISHED} {{ background-color: #81d41a; }}",
+        f".{State.SUBMITTED.name.lower()} {{ background-color: #ffff00; }}",
+        f".{State.REJECTED.name.lower()} {{ background-color: #ff6d6d; }}",
+        f".{State.WITHDRAWN.name.lower()} {{ background-color: #ff972f; }}",
+        f".{State.ABANDONED.name.lower()} {{ background-color: #cccccc; }}",
+        f".{State.ACCEPTED.name.lower()} {{ background-color: #729fcf; }}",
+        f".{State.SELF_PUBLISHED.name.lower()} {{ background-color: #158466; }}",
+        f".{State.PUBLISHED.name.lower()} {{ background-color: #81d41a; }}",
         "</style>",
         "</head>",
     ]
@@ -153,7 +146,11 @@ def main() -> None:
     with open(args.metadata_file, encoding="utf-8") as f:
         j = json.load(f)
 
-    data = {k: Publications.from_json(v[PUBLICATIONS]) for k, v in j.items() if PUBLICATIONS in v}
+    data = {
+        k: Publications.model_validate_json(json.dumps(v[PUBLICATIONS]))
+        for k, v in j.items()
+        if PUBLICATIONS in v
+    }
 
     out = [
         "<!doctype html>",

@@ -1,9 +1,10 @@
 import datetime
 from collections.abc import Sequence
 from enum import Enum, auto
-from typing import NamedTuple
+from typing import Annotated, Any, NamedTuple
 
-from pydantic import BaseModel, ConfigDict, RootModel, model_validator
+from pydantic import BaseModel, ConfigDict, Field, RootModel, model_validator
+from pydantic.functional_validators import BeforeValidator
 
 
 # Later states must come later in the enum
@@ -25,6 +26,15 @@ class Date(NamedTuple):
     date: datetime.date
 
 
+def _validate_date_field(v: Any) -> Any:  # noqa: ANN401
+    if not isinstance(v, datetime.date) and not isinstance(v, str):
+        raise ValueError("Must be date or string in YYYY-MM-DD format")
+    return v
+
+
+DateField = Annotated[datetime.date | None, BeforeValidator(_validate_date_field)]
+
+
 class Publication(BaseModel):
     model_config = ConfigDict(
         frozen=True,
@@ -37,13 +47,13 @@ class Publication(BaseModel):
     urls: Sequence[str] = []
     notes: str = ""
     paid: str = ""
-    submitted: datetime.date | None = None
-    accepted: datetime.date | None = None
-    abandoned: datetime.date | None = None
-    withdrawn: datetime.date | None = None
-    rejected: datetime.date | None = None
-    self_published: datetime.date | None = None
-    published: datetime.date | None = None
+    submitted: DateField = Field(strict=False, default=None)
+    accepted: DateField = Field(strict=False, default=None)
+    abandoned: DateField = Field(strict=False, default=None)
+    withdrawn: DateField = Field(strict=False, default=None)
+    rejected: DateField = Field(strict=False, default=None)
+    self_published: DateField = Field(strict=False, default=None)
+    published: DateField = Field(strict=False, default=None)
 
     @property
     def dates(self) -> tuple[Date, ...]:

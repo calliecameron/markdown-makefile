@@ -147,9 +147,7 @@ def main() -> None:
         j = json.load(f)
 
     data = {
-        k: Publications.model_validate_json(json.dumps(v[PUBLICATIONS]))
-        for k, v in j.items()
-        if PUBLICATIONS in v
+        k: Publications.model_validate(v[PUBLICATIONS]) for k, v in j.items() if PUBLICATIONS in v
     }
 
     out = [

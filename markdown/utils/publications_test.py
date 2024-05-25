@@ -8,7 +8,7 @@ class TestPublication(unittest.TestCase):
     def test_good_minimal(self) -> None:
         p = Publication(
             venue="foo",
-            submitted=date(2023, 5, 16),
+            submitted="2023-05-16",  # type: ignore[arg-type]
         )
         self.assertEqual(p.venue, "foo")
         self.assertEqual(p.urls, [])

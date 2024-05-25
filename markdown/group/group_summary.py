@@ -155,7 +155,7 @@ def main() -> None:
         for target, j in json.load(f).items():
             publication = ""
             if j.get(metadata.PUBLICATIONS):
-                ps = Publications.model_validate_json(json.dumps(j[metadata.PUBLICATIONS]))
+                ps = Publications.model_validate(j[metadata.PUBLICATIONS])
                 publication = (
                     ps.highest_active_state.name.lower().replace("_", "-")
                     if ps.highest_active_state

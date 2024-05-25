@@ -47,24 +47,20 @@ def parse_author(metadata: Mapping[str, Any]) -> str:
     )
 
 
-class Version(BaseModel):
+class _BaseModel(BaseModel):
     model_config = ConfigDict(
         frozen=True,
         strict=True,
         extra="forbid",
     )
 
+
+class Version(_BaseModel):
     docversion: str
     repo: str
 
 
-class VersionMetadata(BaseModel):
-    model_config = ConfigDict(
-        frozen=True,
-        strict=True,
-        extra="forbid",
-    )
-
+class VersionMetadata(_BaseModel):
     docversion: str
     repo: str
     subject: str

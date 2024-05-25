@@ -156,7 +156,12 @@ class ScriptTestCase(RunnerTestCase[Script]):
         args: Sequence[str] | None = None,
         stdin: str | None = None,
     ) -> subprocess.CompletedProcess[str]:
-        return self._runner().run(args=args, stdin=stdin)
+        try:
+            return self._runner().run(args=args, stdin=stdin)
+        except subprocess.CalledProcessError as e:
+            sys.stderr.write("Subprocss stdout: " + e.stdout + "\n")
+            sys.stderr.write("Subprocss stderr: " + e.stderr + "\n")
+            raise
 
 
 class PandocFilterBaseTestCase(RunnerTestCase[F]):

@@ -5,6 +5,7 @@ py_binary(
     name = "combine_deps_metadata",
     srcs = ["combine_deps_metadata.py"],
     visibility = ["//visibility:public"],
+    deps = ["//markdown/utils:metadata"],
 )
 
 script_py_test(

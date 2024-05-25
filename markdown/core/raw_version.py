@@ -36,7 +36,12 @@ def main() -> None:
             Version(
                 docversion=version,
                 repo=repo,
-            ).model_dump(mode="json"),
+            ).model_dump(
+                mode="json",
+                by_alias=True,
+                exclude_unset=True,
+                exclude_defaults=True,
+            ),
             f,
             sort_keys=True,
             indent=4,

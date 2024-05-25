@@ -1,51 +1,9 @@
 from collections.abc import Mapping, Sequence
-from typing import Any, cast
+from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, RootModel, field_validator
 
 from markdown.utils.publications import Publications
-
-TITLE = "title"
-AUTHOR = "author"
-DATE = "date"
-NOTES = "notes"
-FINISHED = "finished"
-PUBLICATIONS = "publications"
-
-DOCVERSION = "docversion"
-IDENTIFIER = "identifier"
-LANG = "lang"
-METADATA_OUT_FILE = "metadata-out-file"
-POETRY_LINES = "poetry-lines"
-REPO = "repo"
-SOURCE_HASH = "source-hash"
-SUBJECT = "subject"
-WORDCOUNT = "wordcount"
-
-
-USER_KEYS = frozenset(
-    [
-        TITLE,
-        AUTHOR,
-        DATE,
-        NOTES,
-        FINISHED,
-        PUBLICATIONS,
-    ],
-)
-
-
-def parse_author(metadata: Mapping[str, Any]) -> str:
-    if AUTHOR not in metadata:
-        return ""
-    author = metadata[AUTHOR]
-    if isinstance(author, str):
-        return author
-    if isinstance(author, list) and author and all(isinstance(a, str) for a in author):
-        return cast(str, author[0])
-    raise ValueError(
-        f"metadata item '{AUTHOR}' must be a non-empty list of string or a string; got {author}",
-    )
 
 
 class _BaseModel(BaseModel):
@@ -66,6 +24,10 @@ class VersionMetadata(_BaseModel):
     docversion: str
     repo: str
     subject: str
+
+
+class SourceHash(_BaseModel):
+    source_hash: str
 
 
 class Identifier(_BaseModel):
@@ -107,3 +69,14 @@ class OutputMetadata(_BaseMetadata):
     repo: str
     subject: str
     source_hash: str
+
+
+class CombinedMetadata(RootModel[Mapping[str, OutputMetadata]]):
+    model_config = ConfigDict(
+        frozen=True,
+        strict=True,
+    )
+
+    @property
+    def metadata(self) -> Mapping[str, OutputMetadata]:
+        return self.root

@@ -2,7 +2,7 @@ import argparse
 import hashlib
 import json
 
-from markdown.utils.metadata import SOURCE_HASH
+from markdown.utils.metadata import CombinedMetadata, SourceHash
 
 
 def main() -> None:
@@ -14,8 +14,8 @@ def main() -> None:
 
     dep_hashes = {}
     with open(args.deps_metadata_file, encoding="utf-8") as f:
-        for target, metadata in json.load(f).items():
-            dep_hashes[target] = metadata[SOURCE_HASH]
+        for target, metadata in CombinedMetadata.model_validate_json(f.read()).metadata.items():
+            dep_hashes[target] = metadata.source_hash
 
     with open(args.src_file, encoding="utf-8") as f:
         src = f.read()
@@ -24,7 +24,17 @@ def main() -> None:
     hash_output = hashlib.md5(hash_input.encode("utf-8")).hexdigest()
 
     with open(args.metadata_out_file, "w", encoding="utf-8") as f:
-        json.dump({SOURCE_HASH: hash_output}, f, sort_keys=True, indent=4)
+        json.dump(
+            SourceHash.model_validate({"source-hash": hash_output}).model_dump(
+                mode="json",
+                by_alias=True,
+                exclude_unset=True,
+                exclude_defaults=True,
+            ),
+            f,
+            sort_keys=True,
+            indent=4,
+        )
 
 
 if __name__ == "__main__":

@@ -27,6 +27,11 @@ class TestPublications(test_utils.ScriptTestCase):
                             "rejected": "2022-10-14",
                         },
                     ],
+                    "poetry-lines": "0",
+                    "lang": "en-GB",
+                    "repo": "bar",
+                    "subject": "baz",
+                    "source-hash": "1",
                 },
                 "//baz:quux": {
                     "title": "Baz",
@@ -38,6 +43,11 @@ class TestPublications(test_utils.ScriptTestCase):
                             "self-published": "2022-11-14",
                         },
                     ],
+                    "poetry-lines": "0",
+                    "lang": "en-GB",
+                    "repo": "bar",
+                    "subject": "baz",
+                    "source-hash": "1",
                 },
             },
         )
@@ -108,18 +118,25 @@ a:visited { color: black; }
 <h3 id="//baz:quux">//baz:quux</h3>
 <code><pre>{
     "docversion": "quux, dirty",
+    "lang": "en-GB",
+    "poetry-lines": 0,
     "publications": [
         {
             "self-published": "2022-11-14",
             "venue": "Foo"
         }
     ],
+    "repo": "bar",
+    "source-hash": "1",
+    "subject": "baz",
     "title": "Baz",
-    "wordcount": "20"
+    "wordcount": 20
 }</pre></code>
 <h3 id="//foo:bar">//foo:bar</h3>
 <code><pre>{
     "docversion": "bar",
+    "lang": "en-GB",
+    "poetry-lines": 0,
     "publications": [
         {
             "accepted": "2022-12-13",
@@ -133,8 +150,11 @@ a:visited { color: black; }
             "venue": "Bar"
         }
     ],
+    "repo": "bar",
+    "source-hash": "1",
+    "subject": "baz",
     "title": "Foo &lt;Bar&gt;",
-    "wordcount": "10"
+    "wordcount": 10
 }</pre></code>
 </body>
 </html>

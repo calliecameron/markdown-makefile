@@ -77,7 +77,17 @@ def main() -> None:
     metadata = get_metadata(version)
 
     with open(args.metadata_out_file, mode="w", encoding="utf-8") as f:
-        json.dump(metadata.model_dump(mode="json"), f, sort_keys=True, indent=4)
+        json.dump(
+            metadata.model_dump(
+                mode="json",
+                by_alias=True,
+                exclude_unset=True,
+                exclude_defaults=True,
+            ),
+            f,
+            sort_keys=True,
+            indent=4,
+        )
 
 
 if __name__ == "__main__":

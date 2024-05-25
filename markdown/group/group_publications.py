@@ -2,9 +2,8 @@ import argparse
 import html
 import json
 from collections.abc import Mapping, Sequence
-from typing import Any
 
-from markdown.utils.metadata import NOTES, PUBLICATIONS, TITLE, WORDCOUNT
+from markdown.utils.metadata import CombinedMetadata, OutputMetadata
 from markdown.utils.publications import Publication, Publications, State
 
 
@@ -26,15 +25,15 @@ def generate_row(
     target: str,
     data: Publications,
     venues: Sequence[str],
-    raw: Mapping[str, Any],
+    metadata: OutputMetadata,
 ) -> list[str]:
     ps = {}
-    for p in data.publications:
+    for p in metadata.publications.publications:
         ps[p.venue] = p
 
-    title = raw.get(TITLE, "")
-    wordcount = raw.get(WORDCOUNT, "")
-    notes = raw.get(NOTES, "")
+    title = metadata.title
+    wordcount = str(metadata.wordcount)
+    notes = metadata.notes
 
     class_attr = ""
     if data.highest_active_state:
@@ -72,7 +71,7 @@ def generate_cell(target: str, p: Publication) -> str:
     )
 
 
-def generate_table(data: Mapping[str, Publications], raw: Mapping[str, Any]) -> list[str]:
+def generate_table(data: Mapping[str, Publications], metadata: CombinedMetadata) -> list[str]:
     out = ["<table>"]
 
     venue_set = set()
@@ -85,20 +84,32 @@ def generate_table(data: Mapping[str, Publications], raw: Mapping[str, Any]) -> 
 
     out.append("<tbody>")
     for target, ps in sorted(data.items()):
-        out += generate_row(target, ps, venues, raw[target])
+        out += generate_row(target, ps, venues, metadata.metadata[target])
     out += ["</tbody>", "</table>"]
 
     return out
 
 
-def generate_details(raw: Mapping[str, Any]) -> list[str]:
+def generate_details(metadata: CombinedMetadata) -> list[str]:
     out = ["<h2>Details</h2>"]
-    for target in sorted(raw):
-        if PUBLICATIONS in raw[target] and raw[target][PUBLICATIONS]:
+    for target in sorted(metadata.metadata):
+        if metadata.metadata[target].publications.publications:
             out += [
                 f'<h3 id="{html.escape(target)}">{html.escape(target, quote=False)}</h3>',
-                "<code><pre>{}</pre></code>".format(  # noqa: UP032
-                    html.escape(json.dumps(raw[target], sort_keys=True, indent=4), quote=False),
+                "<code><pre>{}</pre></code>".format(
+                    html.escape(
+                        json.dumps(
+                            metadata.metadata[target].model_dump(
+                                mode="json",
+                                by_alias=True,
+                                exclude_unset=True,
+                                exclude_defaults=True,
+                            ),
+                            sort_keys=True,
+                            indent=4,
+                        ),
+                        quote=False,
+                    ),
                 ),
             ]
     return out
@@ -126,13 +137,13 @@ def generate_head() -> list[str]:
     ]
 
 
-def generate_body(data: Mapping[str, Publications], raw: Mapping[str, Any]) -> list[str]:
+def generate_body(data: Mapping[str, Publications], metadata: CombinedMetadata) -> list[str]:
     out = [
         "<body>",
         "<h1>Publications</h1>",
     ]
-    out += generate_table(data, raw)
-    out += generate_details(raw)
+    out += generate_table(data, metadata)
+    out += generate_details(metadata)
     out += ["</body>"]
     return out
 
@@ -144,11 +155,9 @@ def main() -> None:
     args = parser.parse_args()
 
     with open(args.metadata_file, encoding="utf-8") as f:
-        j = json.load(f)
+        metadata = CombinedMetadata.model_validate_json(f.read())
 
-    data = {
-        k: Publications.model_validate(v[PUBLICATIONS]) for k, v in j.items() if PUBLICATIONS in v
-    }
+    data = {k: v.publications for k, v in metadata.metadata.items() if v.publications.publications}
 
     out = [
         "<!doctype html>",
@@ -156,7 +165,7 @@ def main() -> None:
     ]
 
     out += generate_head()
-    out += generate_body(data, j)
+    out += generate_body(data, metadata)
 
     out += [
         "</html>",

@@ -1,7 +1,6 @@
 import argparse
 import csv
 import functools
-import json
 import re
 import sys
 from collections.abc import Mapping
@@ -11,8 +10,7 @@ import tabulate
 from dateparser.date import DateDataParser
 from dateparser.search import search_dates
 
-from markdown.utils import metadata
-from markdown.utils.publications import Publications
+from markdown.utils.metadata import CombinedMetadata
 
 TARGET = "target"
 TITLE = "title"
@@ -152,32 +150,28 @@ def main() -> None:
 
     data: list[dict[str, Any]] = []
     with open(args.in_file, encoding="utf-8") as f:
-        for target, j in json.load(f).items():
+        for target, m in CombinedMetadata.model_validate_json(f.read()).metadata.items():
             publication = ""
-            if j.get(metadata.PUBLICATIONS):
-                ps = Publications.model_validate(j[metadata.PUBLICATIONS])
+            if m.publications.publications:
+                ps = m.publications
                 publication = (
                     ps.highest_active_state.name.lower().replace("_", "-")
                     if ps.highest_active_state
                     else "attempted"
                 )
 
-            author = j.get(metadata.AUTHOR, "")
-            if isinstance(author, list):
-                author = ", ".join(author)
-
             row = {
                 TARGET: target,
-                TITLE: sanitise(j.get(metadata.TITLE, "")),
-                AUTHOR: sanitise(author),
-                RAW_DATE: sanitise(j.get(metadata.DATE, "")),
-                DATE: sanitise(parse_date(j[metadata.DATE])) if metadata.DATE in j else "",
-                WORDCOUNT: int(j[metadata.WORDCOUNT]),
-                POETRY_LINES: int(j[metadata.POETRY_LINES]),
-                FINISHED: "yes" if j.get(metadata.FINISHED) else "no",
+                TITLE: sanitise(m.title),
+                AUTHOR: sanitise(", ".join(m.author)),
+                RAW_DATE: sanitise(m.date),
+                DATE: sanitise(parse_date(m.date)) if m.date else "",
+                WORDCOUNT: m.wordcount,
+                POETRY_LINES: m.poetry_lines,
+                FINISHED: "yes" if m.finished else "no",
                 PUBLICATION: publication,
-                VERSION: j[metadata.DOCVERSION],
-                STATUS: "DIRTY" if "dirty" in j[metadata.DOCVERSION] else "ok",
+                VERSION: m.docversion,
+                STATUS: "DIRTY" if "dirty" in m.docversion else "ok",
             }
 
             if should_include(row, args):

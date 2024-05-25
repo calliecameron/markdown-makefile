@@ -24,7 +24,19 @@ class TestMsMetadata(test_utils.ScriptTestCase):
 
     def test_ms_metadata(self) -> None:
         self.assertEqual(
-            self.run_ms_metadata({"title": "The Title", "author": ["An Author"]}),
+            self.run_ms_metadata(
+                {
+                    "title": "The Title",
+                    "author": ["An Author"],
+                    "wordcount": "10",
+                    "poetry-lines": "0",
+                    "lang": "en-GB",
+                    "docversion": "foo",
+                    "repo": "bar",
+                    "subject": "baz",
+                    "source-hash": "1",
+                },
+            ),
             """{
     "author_lastname": "Author",
     "contact_address": "`\\\\n`{=tex}",
@@ -38,7 +50,18 @@ class TestMsMetadata(test_utils.ScriptTestCase):
 
     def test_ms_metadata_no_title(self) -> None:
         self.assertEqual(
-            self.run_ms_metadata({"author": "An Author"}),
+            self.run_ms_metadata(
+                {
+                    "author": "An Author",
+                    "wordcount": "10",
+                    "poetry-lines": "0",
+                    "lang": "en-GB",
+                    "docversion": "foo",
+                    "repo": "bar",
+                    "subject": "baz",
+                    "source-hash": "1",
+                },
+            ),
             """{
     "author_lastname": "Author",
     "contact_address": "`\\\\n`{=tex}",
@@ -53,7 +76,18 @@ class TestMsMetadata(test_utils.ScriptTestCase):
 
     def test_ms_metadata_no_author(self) -> None:
         self.assertEqual(
-            self.run_ms_metadata({"title": "The Title"}),
+            self.run_ms_metadata(
+                {
+                    "title": "The Title",
+                    "wordcount": "10",
+                    "poetry-lines": "0",
+                    "lang": "en-GB",
+                    "docversion": "foo",
+                    "repo": "bar",
+                    "subject": "baz",
+                    "source-hash": "1",
+                },
+            ),
             """{
     "author": [
         "[Unknown]"

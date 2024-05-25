@@ -21,6 +21,10 @@ DATA = {
                 "published": "2023-05-18",
             },
         ],
+        "lang": "en-GB",
+        "repo": "bar",
+        "subject": "baz",
+        "source-hash": "1",
     },
     "test1:bar": {
         "title": "Bar\nbaz",
@@ -28,6 +32,10 @@ DATA = {
         "wordcount": "5",
         "poetry-lines": "0",
         "docversion": "quux, dirty",
+        "lang": "en-GB",
+        "repo": "bar",
+        "subject": "baz",
+        "source-hash": "1",
     },
     "test2:baz": {
         "title": "baz",
@@ -44,6 +52,10 @@ DATA = {
                 "rejected": "2023-05-18",
             },
         ],
+        "lang": "en-GB",
+        "repo": "bar",
+        "subject": "baz",
+        "source-hash": "1",
     },
 }
 

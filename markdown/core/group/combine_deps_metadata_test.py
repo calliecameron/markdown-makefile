@@ -28,18 +28,44 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
         self.assertEqual(
             self.run_script(
                 [
-                    {"a": "b", "c": "d"},
-                    {"a": "z", "c": "y"},
+                    {
+                        "wordcount": "10",
+                        "poetry-lines": "0",
+                        "lang": "en-GB",
+                        "docversion": "foo",
+                        "repo": "bar",
+                        "subject": "baz",
+                        "source-hash": "quux",
+                    },
+                    {
+                        "wordcount": "20",
+                        "poetry-lines": "10",
+                        "lang": "en-US",
+                        "docversion": "blah",
+                        "repo": "yay",
+                        "subject": "yay1",
+                        "source-hash": "yay2",
+                    },
                 ],
             ),
             """{
     "dep1": {
-        "a": "b",
-        "c": "d"
+        "docversion": "foo",
+        "lang": "en-GB",
+        "poetry-lines": 0,
+        "repo": "bar",
+        "source-hash": "quux",
+        "subject": "baz",
+        "wordcount": 10
     },
     "dep2": {
-        "a": "z",
-        "c": "y"
+        "docversion": "blah",
+        "lang": "en-US",
+        "poetry-lines": 10,
+        "repo": "yay",
+        "source-hash": "yay2",
+        "subject": "yay1",
+        "wordcount": 20
     }
 }""",
         )

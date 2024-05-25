@@ -34,8 +34,24 @@ class TestSourceHash(test_utils.ScriptTestCase):
         metadata_out = self.run_script(
             "foo bar\n",
             {
-                "dep1": {"source-hash": "1"},
-                "dep2": {"source-hash": "3"},
+                "dep1": {
+                    "wordcount": "10",
+                    "poetry-lines": "0",
+                    "lang": "en-GB",
+                    "docversion": "foo",
+                    "repo": "bar",
+                    "subject": "baz",
+                    "source-hash": "1",
+                },
+                "dep2": {
+                    "wordcount": "20",
+                    "poetry-lines": "10",
+                    "lang": "en-US",
+                    "docversion": "blah",
+                    "repo": "yay",
+                    "subject": "yay1",
+                    "source-hash": "3",
+                },
             },
         )
 

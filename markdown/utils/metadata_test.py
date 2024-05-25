@@ -1,22 +1,19 @@
 import unittest
 
-import markdown.utils.metadata
+from markdown.utils.metadata import InputMetadata
 
 
 class TestMetadata(unittest.TestCase):
-    def test_parse_author(self) -> None:
-        self.assertEqual(markdown.utils.metadata.parse_author({}), "")
-        self.assertEqual(markdown.utils.metadata.parse_author({"author": "Foo"}), "Foo")
-        self.assertEqual(
-            markdown.utils.metadata.parse_author({"author": ["Foo", "Bar"]}),
-            "Foo",
-        )
+    def test_author(self) -> None:
+        self.assertEqual(InputMetadata().author, [])
+        self.assertEqual(InputMetadata(author="foo").author, ["foo"])
+        self.assertEqual(InputMetadata(author=["foo", "bar"]).author, ["foo", "bar"])
 
         with self.assertRaises(ValueError):
-            markdown.utils.metadata.parse_author({"author": 2})
+            InputMetadata(author=2)  # type: ignore[arg-type]
 
         with self.assertRaises(ValueError):
-            markdown.utils.metadata.parse_author({"author": ["Foo", 2]})
+            InputMetadata(author=[])
 
 
 if __name__ == "__main__":

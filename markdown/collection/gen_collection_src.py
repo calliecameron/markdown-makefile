@@ -1,9 +1,8 @@
 import argparse
-import json
 
 import yaml
 
-from markdown.utils.metadata import AUTHOR, DATE, TITLE, parse_author
+from markdown.utils.metadata import CombinedMetadata, InputMetadata
 
 
 def main() -> None:
@@ -18,29 +17,42 @@ def main() -> None:
 
     main_author = args.author
 
-    main_metadata = {TITLE: args.title, AUTHOR: [main_author]}
-    if args.date:
-        main_metadata[DATE] = args.date
+    main_metadata = InputMetadata(
+        title=args.title,
+        author=[main_author],
+        date=args.date if args.date else "",
+    )
 
     output = ["---"]
-    output += yaml.dump(main_metadata).strip().split("\n")
+    output += (
+        yaml.dump(
+            main_metadata.model_dump(
+                mode="json",
+                by_alias=True,
+                exclude_unset=True,
+                exclude_defaults=True,
+            ),
+        )
+        .strip()
+        .split("\n")
+    )
     output.append("---")
     output.append("")
 
     with open(args.metadata_file, encoding="utf-8") as f:
-        metadata = json.load(f)
+        metadata = CombinedMetadata.model_validate_json(f.read())
 
     for target in args.dep:
-        j = metadata[target]
-        output += ["::: nospellcheck", "", f"# {j[TITLE]}"]
-        author = parse_author(j)
+        m = metadata.metadata[target]
+        output += ["::: nospellcheck", "", f"# {m.title}"]
+        author = m.author[0] if m.author else ""
         print_author = author != args.author
-        print_date = DATE in j and j[DATE]
+        print_date = m.date != ""
         tagline = []
         if print_author:
             tagline.append(author)
         if print_date:
-            tagline.append(j["date"])
+            tagline.append(m.date)
         if tagline:
             output += [
                 "",

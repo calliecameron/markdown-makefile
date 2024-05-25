@@ -8,7 +8,6 @@ from markdown.utils.metadata import (
     DATE,
     FINISHED,
     IDENTIFIER,
-    LANG,
     NOTES,
     PUBLICATIONS,
     TITLE,
@@ -20,7 +19,6 @@ KNOWN_KEYS = USER_KEYS | frozenset(
     [
         # Keys added during processing
         IDENTIFIER,
-        LANG,
     ],
 )
 

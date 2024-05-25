@@ -1,5 +1,3 @@
-import json
-
 import panflute
 
 from markdown.utils.metadata import InputMetadata
@@ -7,7 +5,7 @@ from markdown.utils.metadata import InputMetadata
 
 def main() -> None:
     doc = panflute.load()
-    InputMetadata.model_validate_json(json.dumps(doc.get_metadata()))
+    InputMetadata.model_validate(doc.get_metadata())
     panflute.dump(doc)
 
 

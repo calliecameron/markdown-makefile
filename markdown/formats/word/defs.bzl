@@ -36,9 +36,9 @@ def _md_odt_impl(ctx):
         [ctx.file._remove_collection_separators],
         [
             remove_collection_separators_arg(ctx),
-        ] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
+        ] + expand_locations(ctx, ctx.attr.file, ctx.attr.extra_pandoc_flags),
         timestamp_override(ctx),
-        ctx.attr.lib,
+        ctx.attr.file,
         intermediate,
     )
 
@@ -56,7 +56,7 @@ md_odt = rule(
     executable = True,
     doc = doc_for_ext("odt"),
     attrs = {
-        "lib": attr.label(
+        "file": attr.label(
             providers = [MdFileInfo],
             doc = "An md_file target.",
         ),
@@ -88,9 +88,9 @@ def _md_docx_impl(ctx):
             "--reference-doc=" + ctx.file._template.path,
             remove_collection_separators_before_headers_arg(ctx),
             "--lua-filter=" + ctx.file._docx_filter.path,
-        ] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
+        ] + expand_locations(ctx, ctx.attr.file, ctx.attr.extra_pandoc_flags),
         timestamp_override(ctx),
-        ctx.attr.lib,
+        ctx.attr.file,
         intermediate,
     )
 
@@ -102,7 +102,7 @@ def _md_docx_impl(ctx):
     return [
         default_info_for_ext(ctx, output, script),
         MdDocxInfo(output = output),
-        ctx.attr.lib[MdFileInfo],
+        ctx.attr.file[MdFileInfo],
     ]
 
 md_docx = rule(
@@ -110,7 +110,7 @@ md_docx = rule(
     executable = True,
     doc = doc_for_ext("docx"),
     attrs = {
-        "lib": attr.label(
+        "file": attr.label(
             providers = [MdFileInfo],
             doc = "An md_file target.",
         ),
@@ -181,10 +181,10 @@ def _md_ms_docx_impl(ctx):
     metadata = ctx.actions.declare_file(ctx.label.name + "_ms_metadata.json")
     ctx.actions.run(
         outputs = [metadata],
-        inputs = [ctx.attr.lib[MdFileInfo].metadata],
+        inputs = [ctx.attr.file[MdFileInfo].metadata],
         executable = ctx.executable._ms_metadata,
         arguments = [
-            ctx.attr.lib[MdFileInfo].metadata.path,
+            ctx.attr.file[MdFileInfo].metadata.path,
             metadata.path,
         ],
         progress_message = "%{label}: generating ms metadata",
@@ -194,12 +194,12 @@ def _md_ms_docx_impl(ctx):
     env = timestamp_override(ctx)
     env["PANDOC"] = ctx.executable._pandoc_bin.path
     data_inputs = []
-    for target in ctx.attr.lib[MdFileInfo].data.to_list():
+    for target in ctx.attr.file[MdFileInfo].data.to_list():
         data_inputs += target.files.to_list()
     ctx.actions.run(
         outputs = [intermediate_docx],
         inputs = data_inputs + [
-            ctx.attr.lib[MdFileInfo].output,
+            ctx.attr.file[MdFileInfo].output,
             metadata,
             ctx.file._filter,
             ctx.executable._pandoc_bin,
@@ -214,7 +214,7 @@ def _md_ms_docx_impl(ctx):
             intermediate_docx.path,
             "--metadata-file=" + metadata.path,
             "--lua-filter=" + ctx.file._filter.path,
-            ctx.attr.lib[MdFileInfo].output.path,
+            ctx.attr.file[MdFileInfo].output.path,
         ],
         env = env,
         progress_message = "%{label}: generating ms.docx output",
@@ -234,7 +234,7 @@ md_ms_docx = rule(
     executable = True,
     doc = doc_for_ext("ms.docx"),
     attrs = {
-        "lib": attr.label(
+        "file": attr.label(
             providers = [MdFileInfo],
             doc = "An md_file target.",
         ),

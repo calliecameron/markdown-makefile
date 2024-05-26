@@ -42,9 +42,9 @@ def _md_epub_impl(ctx):
             "--css=" + ctx.file._css.path,
             add_title_arg(ctx),
             remove_collection_separators_before_headers_arg(ctx),
-        ] + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
+        ] + expand_locations(ctx, ctx.attr.file, ctx.attr.extra_pandoc_flags),
         timestamp_override(ctx),
-        ctx.attr.lib,
+        ctx.attr.file,
         intermediate,
     )
 
@@ -56,7 +56,7 @@ def _md_epub_impl(ctx):
     return [
         default_info_for_ext(ctx, output, script),
         MdEpubInfo(output = output),
-        ctx.attr.lib[MdFileInfo],
+        ctx.attr.file[MdFileInfo],
     ]
 
 md_epub = rule(
@@ -64,7 +64,7 @@ md_epub = rule(
     executable = True,
     doc = doc_for_ext("epub"),
     attrs = {
-        "lib": attr.label(
+        "file": attr.label(
             providers = [MdFileInfo],
             doc = "An md_file target.",
         ),

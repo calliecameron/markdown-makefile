@@ -43,7 +43,7 @@ def _md_md_impl(ctx):
             remove_collection_separators_arg(ctx),
         ],
         {},
-        ctx.attr.lib,
+        ctx.attr.file,
         ctx.executable._write_open_script,
     )
 
@@ -61,7 +61,7 @@ def _md_txt_impl(ctx):
             remove_collection_separators_arg(ctx),
         ],
         {},
-        ctx.attr.lib,
+        ctx.attr.file,
         ctx.executable._write_open_script,
     )
 
@@ -82,7 +82,7 @@ def _md_html_impl(ctx):
             remove_collection_separators_arg(ctx),
         ],
         {},
-        ctx.attr.lib,
+        ctx.attr.file,
         ctx.executable._write_open_script,
     )
 

@@ -2,8 +2,8 @@
 
 load("//markdown/core:defs.bzl", "MdFileInfo")
 
-def expand_locations(ctx, lib, args):
-    data = lib[MdFileInfo].data.to_list()
+def expand_locations(ctx, file, args):
+    data = file[MdFileInfo].data.to_list()
     return [ctx.expand_location(arg, targets = data) for arg in args]
 
 def doc_for_ext(ext):
@@ -97,7 +97,7 @@ def remove_collection_separators_before_headers_filter():
 def remove_collection_separators_before_headers_arg(ctx):
     return "--lua-filter=" + ctx.file._remove_collection_separators_before_headers.path
 
-def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message = None):
+def pandoc(ctx, ext, to_format, inputs, args, env, file, output, progress_message = None):
     """Run pandoc.
 
     Args:
@@ -107,7 +107,7 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
         inputs: action inputs.
         args: extra action args.
         env: environment variables to pass to pandoc.
-        lib: something that provides MdFileInfo.
+        file: something that provides MdFileInfo.
         output: the output file.
         progress_message: message to display when running the action.
     """
@@ -115,13 +115,13 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
         progress_message = "generating " + ext + " output"
     progress_message = "%{label}: " + progress_message
     data_inputs = []
-    for target in lib[MdFileInfo].data.to_list():
+    for target in file[MdFileInfo].data.to_list():
         data_inputs += target.files.to_list()
 
     ctx.actions.run(
         outputs = [output],
         inputs = [
-            lib[MdFileInfo].output,
+            file[MdFileInfo].output,
             ctx.executable._pandoc_bin,
         ] + data_inputs + inputs,
         executable = ctx.executable._pandoc,
@@ -132,19 +132,19 @@ def pandoc(ctx, ext, to_format, inputs, args, env, lib, output, progress_message
             "--fail-if-warnings",
             "--output=" + output.path,
         ] + args + [
-            lib[MdFileInfo].output.path,
+            file[MdFileInfo].output.path,
         ],
         env = env,
         progress_message = progress_message,
     )
 
-def pandoc_for_output(ctx, ext, to_format, inputs, args, env, lib):
+def pandoc_for_output(ctx, ext, to_format, inputs, args, env, file):
     output = ctx.outputs.out
-    pandoc(ctx, ext, to_format, inputs, args, env, lib, output)
+    pandoc(ctx, ext, to_format, inputs, args, env, file, output)
     return output
 
-def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, env, lib, write_open_script):
-    file = pandoc_for_output(ctx, ext, to_format, inputs, args + expand_locations(ctx, lib, ctx.attr.extra_pandoc_flags), env, lib)
+def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, env, file, write_open_script):
+    file = pandoc_for_output(ctx, ext, to_format, inputs, args + expand_locations(ctx, file, ctx.attr.extra_pandoc_flags), env, file)
     script = open_script(ctx, ext, file, write_open_script)
 
     return [default_info_for_ext(ctx, file, script)]
@@ -155,7 +155,7 @@ def simple_pandoc_output_rule(impl, ext):
         executable = True,
         doc = doc_for_ext(ext),
         attrs = {
-            "lib": attr.label(
+            "file": attr.label(
                 providers = [MdFileInfo],
                 doc = "An md_file target.",
             ),

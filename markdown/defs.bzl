@@ -72,7 +72,7 @@ def md_file(
     """md_file represents a markdown source file.
 
     Args:
-        name: the name of the library.
+        name: the name of the file.
         src: the source file, if different from <name>.md.
         deps: other md_file targets used in !include statements in src.
         extra_dictionaries: extra dictionaries for spellchecking.
@@ -126,7 +126,7 @@ def md_document(
         extra_latex_flags = None,
         version_override = None,
         timestamp_override = None,
-        existing_lib = None,
+        existing_file = None,
         main_document = True):
     """md_document compiles a markdown source file into many formats.
 
@@ -147,15 +147,15 @@ def md_document(
             the computed value. Should only be used for testing.
         timestamp_override: set the build timestamp to this value, rather than
             the current value. Should only be used for testing.
-        existing_lib: use an existing md_file rather than creating one; if
+        existing_file: use an existing md_file rather than creating one; if
             set, most other args must not be set.
         main_document: whether this is the main document in the package; creates
             some convenience aliases.
     """
-    if existing_lib:
+    if existing_file:
         if src or deps or extra_dictionaries or data or images or increment_included_headers or version_override:
-            native.fail("Other args must not be set when existing_lib is set")
-        lib = existing_lib
+            native.fail("Other args must not be set when existing_file is set")
+        file = existing_file
     else:
         md_file(
             name = name,
@@ -167,35 +167,35 @@ def md_document(
             increment_included_headers = increment_included_headers,
             version_override = version_override,
         )
-        lib = name
+        file = name
 
     extra_pandoc_flags = extra_pandoc_flags or []
     extra_latex_flags = extra_latex_flags or []
 
     _md_md(
         name = name + "_md",
-        lib = lib,
+        file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "md"),
         visibility = ["//visibility:private"],
     )
     _md_txt(
         name = name + "_txt",
-        lib = lib,
+        file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "txt"),
         visibility = ["//visibility:private"],
     )
     _md_html(
         name = name + "_html",
-        lib = lib,
+        file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "html"),
         visibility = ["//visibility:private"],
     )
     _md_tex_intermediate(
         name = name + "_tex_intermediate",
-        lib = lib,
+        file = file,
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
         visibility = ["//visibility:private"],
     )
@@ -217,7 +217,7 @@ def md_document(
     )
     _md_epub(
         name = name + "_epub",
-        lib = lib,
+        file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "epub"),
         timestamp_override = timestamp_override,
@@ -231,7 +231,7 @@ def md_document(
     )
     _md_odt(
         name = name + "_odt",
-        lib = lib,
+        file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "odt"),
         timestamp_override = timestamp_override,
@@ -239,7 +239,7 @@ def md_document(
     )
     _md_docx(
         name = name + "_docx",
-        lib = lib,
+        file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "docx"),
         timestamp_override = timestamp_override,
@@ -253,7 +253,7 @@ def md_document(
     )
     _md_ms_docx(
         name = name + "_ms_docx",
-        lib = lib,
+        file = file,
         out = _output(name, "ms.docx"),
         timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],

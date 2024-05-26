@@ -30,7 +30,7 @@ diff_test(
 
 md_document(
     name = "test3a",
-    existing_lib = ":test3",
+    existing_file = ":test3",
     extra_latex_flags = ["--include-in-header=$(rootpath custom-toc.tex)"],
     extra_pandoc_flags = [
         "--table-of-contents",

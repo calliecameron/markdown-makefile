@@ -43,9 +43,9 @@ def _md_tex_intermediate_impl(ctx):
             "latex",
             [template],
             ["--template=" + template.path] +
-            _LATEX_VARS + expand_locations(ctx, ctx.attr.lib, ctx.attr.extra_pandoc_flags),
+            _LATEX_VARS + expand_locations(ctx, ctx.attr.file, ctx.attr.extra_pandoc_flags),
             {},
-            ctx.attr.lib,
+            ctx.attr.file,
             output,
             "generating latex " + name,
         )
@@ -59,14 +59,14 @@ def _md_tex_intermediate_impl(ctx):
     return [
         DefaultInfo(files = depset([header, before])),
         MdTexIntermediateInfo(header = header, before = before),
-        ctx.attr.lib[MdFileInfo],
+        ctx.attr.file[MdFileInfo],
     ]
 
 md_tex_intermediate = rule(
     implementation = _md_tex_intermediate_impl,
     doc = "md_tex_intermediate generates intermediate files for latex-based outputs",
     attrs = {
-        "lib": attr.label(
+        "file": attr.label(
             providers = [MdFileInfo],
             doc = "An md_file target.",
         ),

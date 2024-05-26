@@ -324,11 +324,12 @@ class TestPublications(unittest.TestCase):
             ],
         )
 
-        self.assertEqual(len(ps.publications), 2)
+        self.assertTrue(ps)
+        self.assertEqual(len(ps), 2)
         self.assertTrue(ps.active)
         self.assertEqual(ps.highest_active_state, State.PUBLISHED)
 
-        p = ps.publications[0]
+        p = ps[0]
         self.assertEqual(p.venue, "Book")
         self.assertEqual(p.submitted, date(2023, 5, 16))
         self.assertEqual(p.accepted, date(2023, 5, 17))
@@ -341,7 +342,7 @@ class TestPublications(unittest.TestCase):
         self.assertEqual(p.notes, "baz")
         self.assertEqual(p.paid, "quux")
 
-        p = ps.publications[1]
+        p = ps[1]
         self.assertEqual(p.venue, "Book2")
         self.assertEqual(p.submitted, date(2023, 5, 19))
         self.assertEqual(p.accepted, date(2023, 5, 20))
@@ -376,11 +377,12 @@ class TestPublications(unittest.TestCase):
             ],
         )
 
-        self.assertEqual(len(ps.publications), 2)
+        self.assertTrue(ps)
+        self.assertEqual(len(ps), 2)
         self.assertFalse(ps.active)
         self.assertEqual(ps.highest_active_state, None)
 
-        p = ps.publications[0]
+        p = ps[0]
         self.assertEqual(p.venue, "Book")
         self.assertEqual(p.submitted, date(2023, 5, 16))
         self.assertIsNone(p.accepted)
@@ -393,7 +395,7 @@ class TestPublications(unittest.TestCase):
         self.assertEqual(p.notes, "baz")
         self.assertEqual(p.paid, "quux")
 
-        p = ps.publications[1]
+        p = ps[1]
         self.assertEqual(p.venue, "Book2")
         self.assertEqual(p.submitted, date(2023, 5, 19))
         self.assertIsNone(p.accepted)
@@ -409,6 +411,13 @@ class TestPublications(unittest.TestCase):
     def test_bad(self) -> None:
         with self.assertRaises(ValueError):
             Publications([])
+
+    def test_empty(self) -> None:
+        ps = Publications.model_construct([])
+        self.assertFalse(ps)
+        self.assertEqual(len(ps), 0)
+        self.assertFalse(ps.active)
+        self.assertEqual(ps.highest_active_state, None)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 import datetime
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from enum import Enum, auto
-from typing import Annotated, Any, NamedTuple
+from typing import Annotated, Any, NamedTuple, overload
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel, model_validator
 from pydantic.functional_validators import BeforeValidator
@@ -129,21 +129,32 @@ class Publication(BaseModel):
         return out
 
 
-class Publications(RootModel[Sequence[Publication]]):
+class Publications(RootModel[Sequence[Publication]], Sequence[Publication]):
     model_config = ConfigDict(
         frozen=True,
         strict=True,
     )
+
+    @overload
+    def __getitem__(self, i: int) -> Publication: ...
+
+    @overload
+    def __getitem__(self, i: slice) -> Sequence[Publication]: ...
+
+    def __getitem__(self, i: int | slice) -> Publication | Sequence[Publication]:
+        return self.root[i]
+
+    def __iter__(self) -> Iterator[Publication]:  # type: ignore[override]
+        return iter(self.root)
+
+    def __len__(self) -> int:
+        return len(self.root)
 
     @model_validator(mode="after")
     def _validate(self) -> "Publications":
         if not self.root:
             raise ValueError("No publications specified")
         return self
-
-    @property
-    def publications(self) -> Sequence[Publication]:
-        return self.root
 
     @property
     def active(self) -> bool:

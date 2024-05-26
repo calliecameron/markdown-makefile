@@ -28,25 +28,21 @@ def generate_row(
     metadata: OutputMetadata,
 ) -> list[str]:
     ps = {}
-    for p in metadata.publications.publications:
+    for p in metadata.publications:
         ps[p.venue] = p
 
-    title = metadata.title
-    wordcount = str(metadata.wordcount)
-    notes = metadata.notes
-
-    class_attr = ""
-    if data.highest_active_state:
-        class_attr = data.highest_active_state.name.lower()
+    class_attr = data.highest_active_state.name.lower() if data.highest_active_state else ""
 
     out = [
         "<tr>",
         f'<td class="{class_attr}" title="{html.escape(target)}">'
         f'<a href="#{html.escape(target)}">{html.escape(target, quote=False)}</a></td>',
-        f'<td title="{html.escape(title)}">{html.escape(title, quote=False)}</td>',
-        f'<td title="{html.escape(wordcount)}">{html.escape(wordcount, quote=False)}</td>',
-        f'<td style="border-right: 3px solid" title="{html.escape(notes)}">'
-        f"{html.escape(notes, quote=False)}</td>",
+        f'<td title="{html.escape(metadata.title)}">{html.escape(metadata.title, quote=False)}'
+        "</td>",
+        f'<td title="{html.escape(str(metadata.wordcount))}">'
+        f"{html.escape(str(metadata.wordcount), quote=False)}</td>",
+        f'<td style="border-right: 3px solid" title="{html.escape(metadata.notes)}">'
+        f"{html.escape(metadata.notes, quote=False)}</td>",
     ]
 
     for v in sorted(venues):
@@ -76,7 +72,7 @@ def generate_table(data: Mapping[str, Publications], metadata: MetadataMap) -> l
 
     venue_set = set()
     for ps in data.values():
-        for p in ps.publications:
+        for p in ps:
             venue_set.add(p.venue)
     venues = sorted(venue_set)
 
@@ -93,7 +89,7 @@ def generate_table(data: Mapping[str, Publications], metadata: MetadataMap) -> l
 def generate_details(metadata: MetadataMap) -> list[str]:
     out = ["<h2>Details</h2>"]
     for target, m in sorted(metadata.items()):
-        if m.publications.publications:
+        if m.publications:
             out += [
                 f'<h3 id="{html.escape(target)}">{html.escape(target, quote=False)}</h3>',
                 "<code><pre>{}</pre></code>".format(
@@ -157,7 +153,7 @@ def main() -> None:
     with open(args.metadata_file, encoding="utf-8") as f:
         metadata = MetadataMap.model_validate_json(f.read())
 
-    data = {k: v.publications for k, v in metadata.items() if v.publications.publications}
+    data = {k: v.publications for k, v in metadata.items() if v.publications}
 
     out = [
         "<!doctype html>",

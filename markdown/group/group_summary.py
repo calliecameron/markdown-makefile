@@ -152,11 +152,10 @@ def main() -> None:
     with open(args.in_file, encoding="utf-8") as f:
         for target, m in MetadataMap.model_validate_json(f.read()).items():
             publication = ""
-            if m.publications.publications:
-                ps = m.publications
+            if m.publications:
                 publication = (
-                    ps.highest_active_state.name.lower().replace("_", "-")
-                    if ps.highest_active_state
+                    m.publications.highest_active_state.name.lower().replace("_", "-")
+                    if m.publications.highest_active_state
                     else "attempted"
                 )
 

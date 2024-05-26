@@ -10,7 +10,7 @@ import tabulate
 from dateparser.date import DateDataParser
 from dateparser.search import search_dates
 
-from markdown.utils.metadata import CombinedMetadata
+from markdown.utils.metadata import MetadataMap
 
 TARGET = "target"
 TITLE = "title"
@@ -150,7 +150,7 @@ def main() -> None:
 
     data: list[dict[str, Any]] = []
     with open(args.in_file, encoding="utf-8") as f:
-        for target, m in CombinedMetadata.model_validate_json(f.read()).metadata.items():
+        for target, m in MetadataMap.model_validate_json(f.read()).metadata.items():
             publication = ""
             if m.publications.publications:
                 ps = m.publications

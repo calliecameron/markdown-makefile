@@ -1,7 +1,7 @@
 import argparse
 import json
 
-from markdown.utils.metadata import CombinedMetadata, OutputMetadata
+from markdown.utils.metadata import MetadataMap, OutputMetadata
 
 
 def main() -> None:
@@ -17,7 +17,7 @@ def main() -> None:
 
     with open(args.out_file, mode="w", encoding="utf-8") as f:
         json.dump(
-            CombinedMetadata(out).model_dump(
+            MetadataMap(out).model_dump(
                 mode="json",
                 by_alias=True,
                 exclude_unset=True,

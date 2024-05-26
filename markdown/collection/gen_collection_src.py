@@ -2,7 +2,7 @@ import argparse
 
 import yaml
 
-from markdown.utils.metadata import CombinedMetadata, InputMetadata
+from markdown.utils.metadata import InputMetadata, MetadataMap
 
 
 def main() -> None:
@@ -40,7 +40,7 @@ def main() -> None:
     output.append("")
 
     with open(args.metadata_file, encoding="utf-8") as f:
-        metadata = CombinedMetadata.model_validate_json(f.read())
+        metadata = MetadataMap.model_validate_json(f.read())
 
     for target in args.dep:
         m = metadata.metadata[target]

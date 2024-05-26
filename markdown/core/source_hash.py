@@ -2,7 +2,7 @@ import argparse
 import hashlib
 import json
 
-from markdown.utils.metadata import CombinedMetadata, SourceHash
+from markdown.utils.metadata import MetadataMap, SourceHash
 
 
 def main() -> None:
@@ -14,7 +14,7 @@ def main() -> None:
 
     dep_hashes = {}
     with open(args.deps_metadata_file, encoding="utf-8") as f:
-        for target, metadata in CombinedMetadata.model_validate_json(f.read()).metadata.items():
+        for target, metadata in MetadataMap.model_validate_json(f.read()).metadata.items():
             dep_hashes[target] = metadata.source_hash
 
     with open(args.src_file, encoding="utf-8") as f:

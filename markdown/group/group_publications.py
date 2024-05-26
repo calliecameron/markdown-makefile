@@ -3,7 +3,7 @@ import html
 import json
 from collections.abc import Mapping, Sequence
 
-from markdown.utils.metadata import CombinedMetadata, OutputMetadata
+from markdown.utils.metadata import MetadataMap, OutputMetadata
 from markdown.utils.publications import Publication, Publications, State
 
 
@@ -71,7 +71,7 @@ def generate_cell(target: str, p: Publication) -> str:
     )
 
 
-def generate_table(data: Mapping[str, Publications], metadata: CombinedMetadata) -> list[str]:
+def generate_table(data: Mapping[str, Publications], metadata: MetadataMap) -> list[str]:
     out = ["<table>"]
 
     venue_set = set()
@@ -90,7 +90,7 @@ def generate_table(data: Mapping[str, Publications], metadata: CombinedMetadata)
     return out
 
 
-def generate_details(metadata: CombinedMetadata) -> list[str]:
+def generate_details(metadata: MetadataMap) -> list[str]:
     out = ["<h2>Details</h2>"]
     for target in sorted(metadata.metadata):
         if metadata.metadata[target].publications.publications:
@@ -137,7 +137,7 @@ def generate_head() -> list[str]:
     ]
 
 
-def generate_body(data: Mapping[str, Publications], metadata: CombinedMetadata) -> list[str]:
+def generate_body(data: Mapping[str, Publications], metadata: MetadataMap) -> list[str]:
     out = [
         "<body>",
         "<h1>Publications</h1>",
@@ -155,7 +155,7 @@ def main() -> None:
     args = parser.parse_args()
 
     with open(args.metadata_file, encoding="utf-8") as f:
-        metadata = CombinedMetadata.model_validate_json(f.read())
+        metadata = MetadataMap.model_validate_json(f.read())
 
     data = {k: v.publications for k, v in metadata.metadata.items() if v.publications.publications}
 

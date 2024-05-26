@@ -35,7 +35,7 @@ class Identifier(_BaseModel):
     text: str
 
 
-class _BaseMetadata(_BaseModel):
+class InputMetadata(_BaseModel):
     title: str = ""
     author: Sequence[str] = []
     date: str = ""
@@ -57,11 +57,7 @@ class _BaseMetadata(_BaseModel):
         return v
 
 
-class InputMetadata(_BaseMetadata):
-    pass
-
-
-class OutputMetadata(_BaseMetadata):
+class OutputMetadata(InputMetadata):
     wordcount: int = Field(strict=False, ge=0)
     poetry_lines: int = Field(strict=False, ge=0)
     lang: str
@@ -71,7 +67,7 @@ class OutputMetadata(_BaseMetadata):
     source_hash: str
 
 
-class CombinedMetadata(RootModel[Mapping[str, OutputMetadata]]):
+class MetadataMap(RootModel[Mapping[str, OutputMetadata]]):
     model_config = ConfigDict(
         frozen=True,
         strict=True,

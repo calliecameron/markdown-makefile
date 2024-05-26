@@ -150,7 +150,7 @@ def main() -> None:
 
     data: list[dict[str, Any]] = []
     with open(args.in_file, encoding="utf-8") as f:
-        for target, m in MetadataMap.model_validate_json(f.read()).metadata.items():
+        for target, m in MetadataMap.model_validate_json(f.read()).items():
             publication = ""
             if m.publications.publications:
                 ps = m.publications

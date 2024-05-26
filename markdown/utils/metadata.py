@@ -1,4 +1,4 @@
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterator, Mapping, Sequence
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel, field_validator
@@ -67,12 +67,17 @@ class OutputMetadata(InputMetadata):
     source_hash: str
 
 
-class MetadataMap(RootModel[Mapping[str, OutputMetadata]]):
+class MetadataMap(RootModel[Mapping[str, OutputMetadata]], Mapping[str, OutputMetadata]):
     model_config = ConfigDict(
         frozen=True,
         strict=True,
     )
 
-    @property
-    def metadata(self) -> Mapping[str, OutputMetadata]:
-        return self.root
+    def __getitem__(self, k: str) -> OutputMetadata:
+        return self.root[k]
+
+    def __iter__(self) -> Iterator[str]:  # type: ignore[override]
+        return iter(self.root)
+
+    def __len__(self) -> int:
+        return len(self.root)

@@ -84,7 +84,7 @@ def generate_table(data: Mapping[str, Publications], metadata: MetadataMap) -> l
 
     out.append("<tbody>")
     for target, ps in sorted(data.items()):
-        out += generate_row(target, ps, venues, metadata.metadata[target])
+        out += generate_row(target, ps, venues, metadata[target])
     out += ["</tbody>", "</table>"]
 
     return out
@@ -92,14 +92,14 @@ def generate_table(data: Mapping[str, Publications], metadata: MetadataMap) -> l
 
 def generate_details(metadata: MetadataMap) -> list[str]:
     out = ["<h2>Details</h2>"]
-    for target in sorted(metadata.metadata):
-        if metadata.metadata[target].publications.publications:
+    for target, m in sorted(metadata.items()):
+        if m.publications.publications:
             out += [
                 f'<h3 id="{html.escape(target)}">{html.escape(target, quote=False)}</h3>',
                 "<code><pre>{}</pre></code>".format(
                     html.escape(
                         json.dumps(
-                            metadata.metadata[target].model_dump(
+                            m.model_dump(
                                 mode="json",
                                 by_alias=True,
                                 exclude_unset=True,
@@ -157,7 +157,7 @@ def main() -> None:
     with open(args.metadata_file, encoding="utf-8") as f:
         metadata = MetadataMap.model_validate_json(f.read())
 
-    data = {k: v.publications for k, v in metadata.metadata.items() if v.publications.publications}
+    data = {k: v.publications for k, v in metadata.items() if v.publications.publications}
 
     out = [
         "<!doctype html>",

@@ -43,7 +43,7 @@ def main() -> None:
         metadata = MetadataMap.model_validate_json(f.read())
 
     for target in args.dep:
-        m = metadata.metadata[target]
+        m = metadata[target]
         output += ["::: nospellcheck", "", f"# {m.title}"]
         author = m.author[0] if m.author else ""
         print_author = author != args.author

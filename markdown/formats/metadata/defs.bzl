@@ -10,19 +10,19 @@ load(
     "write_open_script",
 )
 
-def _copy_impl(ctx, ext, input):
+def _copy_impl(ctx, extension, input):
     output = ctx.outputs.out
     ctx.actions.run(
         outputs = [output],
         inputs = [input],
         executable = "cp",
         arguments = [input.path, output.path],
-        progress_message = progress_message(ext),
+        progress_message = progress_message(extension),
     )
 
     script = write_open_script(
         ctx = ctx,
-        ext = ext,
+        extension = extension,
         file_to_open = output,
     )
 
@@ -33,7 +33,7 @@ def _copy_impl(ctx, ext, input):
 def _md_metadata_json_impl(ctx):
     return _copy_impl(
         ctx = ctx,
-        ext = "metadata.json",
+        extension = "metadata.json",
         input = ctx.attr.file[MdFileInfo].metadata,
     )
 
@@ -54,7 +54,7 @@ md_metadata_json = rule(
 def _md_deps_metadata_json_impl(ctx):
     return _copy_impl(
         ctx = ctx,
-        ext = "deps_metadata.json",
+        extension = "deps_metadata.json",
         input = ctx.attr.group[MdGroupInfo].metadata,
     )
 

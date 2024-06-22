@@ -10,7 +10,7 @@ load(
 def _md_html_impl(ctx):
     return simple_pandoc_output_impl(
         ctx = ctx,
-        ext = "html",
+        extension = "html",
         to_format = "html",
         inputs = [
             filters.add_title.file(ctx),
@@ -27,7 +27,7 @@ def _md_html_impl(ctx):
 
 md_html = simple_pandoc_output_rule(
     impl = _md_html_impl,
-    ext = "html",
+    extension = "html",
     filters = [
         filters.add_title,
         filters.remove_collection_separators,

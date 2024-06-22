@@ -26,7 +26,7 @@ def _md_odt_impl(ctx):
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.odt")
     pandoc(
         ctx = ctx,
-        ext = "odt",
+        extension = "odt",
         to_format = "odt",
         inputs = [filters.remove_collection_separators.file(ctx)],
         args = [
@@ -46,7 +46,7 @@ def _md_odt_impl(ctx):
 
     script = write_open_script(
         ctx = ctx,
-        ext = "odt",
+        extension = "odt",
         file_to_open = output,
     )
 
@@ -79,7 +79,7 @@ def _md_docx_impl(ctx):
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.docx")
     pandoc(
         ctx = ctx,
-        ext = "docx",
+        extension = "docx",
         to_format = "docx",
         inputs = [
             ctx.file._template,
@@ -105,7 +105,7 @@ def _md_docx_impl(ctx):
 
     script = write_open_script(
         ctx = ctx,
-        ext = "docx",
+        extension = "docx",
         file_to_open = output,
     )
 
@@ -163,7 +163,7 @@ def _md_doc_impl(ctx):
 
     script = write_open_script(
         ctx = ctx,
-        ext = "doc",
+        extension = "doc",
         file_to_open = output,
     )
 
@@ -242,7 +242,7 @@ def _md_ms_docx_impl(ctx):
 
     script = write_open_script(
         ctx = ctx,
-        ext = "ms.docx",
+        extension = "ms.docx",
         file_to_open = output,
     )
 

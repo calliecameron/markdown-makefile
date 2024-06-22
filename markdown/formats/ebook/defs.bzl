@@ -26,7 +26,7 @@ def _md_epub_impl(ctx):
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.epub")
     pandoc(
         ctx = ctx,
-        ext = "epub",
+        extension = "epub",
         to_format = "epub",
         inputs = [
             ctx.file._css,
@@ -52,7 +52,7 @@ def _md_epub_impl(ctx):
 
     script = write_open_script(
         ctx = ctx,
-        ext = "epub",
+        extension = "epub",
         file_to_open = output,
     )
 
@@ -107,7 +107,7 @@ def _md_mobi_impl(ctx):
 
     script = write_open_script(
         ctx = ctx,
-        ext = "mobi",
+        extension = "mobi",
         file_to_open = output,
     )
 

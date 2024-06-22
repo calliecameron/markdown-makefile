@@ -101,14 +101,14 @@ def expand_locations(ctx, file, args):
     data = file[MdFileInfo].data.to_list()
     return [ctx.expand_location(arg, targets = data) for arg in args]
 
-def docstring(ext):
-    return "md_" + ext + " generates " + ext + " output from an md_file."
+def docstring(extension):
+    return "md_" + extension + " generates " + extension + " output from an md_file."
 
-def _progress_message_without_label(ext):
-    return "generating " + ext + " output"
+def _progress_message_without_label(extension):
+    return "generating " + extension + " output"
 
-def progress_message(ext):
-    return "%{label}: " + _progress_message_without_label(ext)
+def progress_message(extension):
+    return "%{label}: " + _progress_message_without_label(extension)
 
 def default_info(ctx, output, script):
     return DefaultInfo(
@@ -117,14 +117,14 @@ def default_info(ctx, output, script):
         executable = script,
     )
 
-def write_open_script(ctx, ext, file_to_open):
+def write_open_script(ctx, extension, file_to_open):
     script = ctx.actions.declare_file(ctx.label.name + ".sh")
     ctx.actions.run(
         outputs = [script],
         inputs = [file_to_open],
         executable = tools.write_open_script.executable(ctx),
         arguments = [ctx.workspace_name, file_to_open.short_path, script.path],
-        progress_message = "%{label}: generating " + ext + " open script",
+        progress_message = "%{label}: generating " + extension + " open script",
     )
     return script
 
@@ -140,12 +140,12 @@ def clean_zip(ctx, in_file, out_file):
         progress_message = "%{label}: cleaining zip file",
     )
 
-def pandoc(ctx, ext, to_format, inputs, args, env, file, output, progress_message = None):
+def pandoc(ctx, extension, to_format, inputs, args, env, file, output, progress_message = None):
     """Run pandoc.
 
     Args:
         ctx: rule ctx.
-        ext: file extension of the output format.
+        extension: file extension of the output format.
         to_format: pandoc output format.
         inputs: action inputs.
         args: extra action args.
@@ -155,7 +155,7 @@ def pandoc(ctx, ext, to_format, inputs, args, env, file, output, progress_messag
         progress_message: message to display when running the action.
     """
     if not progress_message:
-        progress_message = _progress_message_without_label(ext)
+        progress_message = _progress_message_without_label(extension)
     progress_message = "%{label}: " + progress_message
     data_inputs = []
     for target in file[MdFileInfo].data.to_list():
@@ -181,11 +181,11 @@ def pandoc(ctx, ext, to_format, inputs, args, env, file, output, progress_messag
         progress_message = progress_message,
     )
 
-def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, env, file):
+def simple_pandoc_output_impl(ctx, extension, to_format, inputs, args, env, file):
     output = ctx.outputs.out
     pandoc(
         ctx = ctx,
-        ext = ext,
+        extension = extension,
         to_format = to_format,
         inputs = inputs,
         args = args + expand_locations(ctx, file, ctx.attr.extra_pandoc_flags),
@@ -195,13 +195,13 @@ def simple_pandoc_output_impl(ctx, ext, to_format, inputs, args, env, file):
     )
     script = write_open_script(
         ctx = ctx,
-        ext = ext,
+        extension = extension,
         file_to_open = output,
     )
 
     return [default_info(ctx, output, script)]
 
-def simple_pandoc_output_rule(impl, ext, filters = None):
+def simple_pandoc_output_rule(impl, extension, filters = None):
     attrs = {
         "file": attr.label(
             providers = [MdFileInfo],
@@ -219,6 +219,6 @@ def simple_pandoc_output_rule(impl, ext, filters = None):
     return rule(
         implementation = impl,
         executable = True,
-        doc = docstring(ext),
+        doc = docstring(extension),
         attrs = attrs,
     )

@@ -3,8 +3,8 @@ load("//markdown/support/shell:defs.bzl", "sh_binary")
 load("//markdown/utils:defs.bzl", "pandoc_filter_py_test", "script_py_test")
 
 bzl_library(
-    name = "helpers_bzl",
-    srcs = ["helpers.bzl"],
+    name = "lib_bzl",
+    srcs = ["lib.bzl"],
     visibility = ["//markdown/formats:__subpackages__"],
     deps = ["//markdown/core:defs_bzl"],
 )
@@ -14,7 +14,6 @@ bzl_library(
     srcs = ["defs.bzl"],
     visibility = ["//markdown:__pkg__"],
     deps = [
-        ":helpers_bzl",
         "//markdown/formats/ebook:defs_bzl",
         "//markdown/formats/html:defs_bzl",
         "//markdown/formats/latex:defs_bzl",

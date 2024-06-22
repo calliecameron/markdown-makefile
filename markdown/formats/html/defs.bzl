@@ -1,7 +1,7 @@
 """Rules for html outputs."""
 
 load(
-    "//markdown/formats:helpers.bzl",
+    "//markdown/formats:lib.bzl",
     "add_title_arg",
     "remove_collection_separators_arg",
     "simple_pandoc_output_impl",

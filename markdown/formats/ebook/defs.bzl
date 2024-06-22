@@ -2,7 +2,7 @@
 
 load("//markdown/core:defs.bzl", "MdFileInfo")
 load(
-    "//markdown/formats:helpers.bzl",
+    "//markdown/formats:lib.bzl",
     "add_title_arg",
     "add_title_filter",
     "default_info_for_ext",

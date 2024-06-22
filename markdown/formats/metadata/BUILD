@@ -6,6 +6,6 @@ bzl_library(
     visibility = ["//markdown/formats:__pkg__"],
     deps = [
         "//markdown/core:defs_bzl",
-        "//markdown/formats:helpers_bzl",
+        "//markdown/formats:lib_bzl",
     ],
 )

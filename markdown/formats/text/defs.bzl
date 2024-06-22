@@ -1,7 +1,7 @@
 """Rules for text outputs."""
 
 load(
-    "//markdown/formats:helpers.bzl",
+    "//markdown/formats:lib.bzl",
     "remove_collection_separators_arg",
     "remove_paragraph_annotations_arg",
     "simple_pandoc_output_impl",

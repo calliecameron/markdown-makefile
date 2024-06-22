@@ -2,7 +2,7 @@
 
 load("//markdown/core:defs.bzl", "MdFileInfo")
 load(
-    "//markdown/formats:helpers.bzl",
+    "//markdown/formats:lib.bzl",
     "doc_for_ext",
     "expand_locations",
     "pandoc",

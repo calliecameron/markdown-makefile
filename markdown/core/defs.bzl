@@ -211,34 +211,36 @@ def _md_file_impl(ctx):
     )
 
     compiled = ctx.actions.declare_file(ctx.label.name + "_stage2_compiled.json")
+    input_metadata_raw = ctx.actions.declare_file(ctx.label.name + "_input_metadata_raw.json")
     extra_args = []
     if ctx.attr.increment_included_headers:
         extra_args.append("--metadata=increment-included-headers:t")
     ctx.actions.run(
-        outputs = [compiled],
+        outputs = [compiled, input_metadata_raw],
         inputs = [
             preprocessed,
             ctx.file._validate_ids,
             ctx.file._spellcheck_cleanup,
             ctx.file._validate_quotes,
             ctx.file._include,
+            ctx.file._write_metadata,
             ctx.file._paragraph_annotations,
             ctx.file._header_auto_ids,
             ctx.file._wordcount,
             ctx.file._poetry_lines,
         ] + [dep[MdFileInfo].output for dep in ctx.attr.deps[MdGroupInfo].deps],
         executable = ctx.executable._pandoc,
-        tools = [ctx.executable._validate_input_metadata],
         arguments = [
             "--lua-filter=" + ctx.file._validate_ids.path,
             "--lua-filter=" + ctx.file._spellcheck_cleanup.path,
             "--lua-filter=" + ctx.file._validate_quotes.path,
             "--lua-filter=" + ctx.file._include.path,
-            "--filter=" + ctx.executable._validate_input_metadata.path,
+            "--lua-filter=" + ctx.file._write_metadata.path,
             "--lua-filter=" + ctx.file._paragraph_annotations.path,
             "--lua-filter=" + ctx.file._header_auto_ids.path,
             "--lua-filter=" + ctx.file._wordcount.path,
             "--lua-filter=" + ctx.file._poetry_lines.path,
+            "--metadata=metadata-out-file:" + input_metadata_raw.path,
             "--from=" + _SRC_FORMAT,
             "--to=json",
             "--strip-comments",
@@ -248,6 +250,20 @@ def _md_file_impl(ctx):
             preprocessed.path,
         ],
         progress_message = "%{label}: compiling markdown",
+    )
+
+    input_metadata = ctx.actions.declare_file(ctx.label.name + "_input_metadata.json")
+    ctx.actions.run(
+        outputs = [input_metadata],
+        inputs = [
+            input_metadata_raw,
+        ],
+        executable = ctx.executable._validate_input_metadata,
+        arguments = [
+            input_metadata_raw.path,
+            input_metadata.path,
+        ],
+        progress_message = "%{label}: validating input metadata",
     )
 
     raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
@@ -294,6 +310,7 @@ def _md_file_impl(ctx):
         outputs = [versioned, versioned_metadata_raw],
         inputs = [
             compiled,
+            input_metadata,
             version,
             source_hash,
             ctx.file._write_metadata,
@@ -463,11 +480,6 @@ md_file = rule(
             allow_single_file = True,
             default = "//markdown/core/filters:include.lua",
         ),
-        "_validate_input_metadata": attr.label(
-            default = "//markdown/core/filters:validate_input_metadata",
-            executable = True,
-            cfg = "exec",
-        ),
         "_paragraph_annotations": attr.label(
             allow_single_file = True,
             default = "//markdown/core/filters:paragraph_annotations.lua",
@@ -483,6 +495,11 @@ md_file = rule(
         "_poetry_lines": attr.label(
             allow_single_file = True,
             default = "//markdown/core/filters:poetry_lines.lua",
+        ),
+        "_validate_input_metadata": attr.label(
+            default = "//markdown/core:validate_input_metadata",
+            executable = True,
+            cfg = "exec",
         ),
         "_raw_version": attr.label(
             default = "//markdown/core:raw_version",

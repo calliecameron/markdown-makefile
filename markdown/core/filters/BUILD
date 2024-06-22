@@ -1,5 +1,3 @@
-load("@pip//:requirements.bzl", "requirement")
-load("//markdown/support/python:defs.bzl", "py_binary")
 load("//markdown/utils:defs.bzl", "pandoc_filter_py_test")
 
 exports_files(
@@ -27,22 +25,6 @@ pandoc_filter_py_test(
     name = "validate_quotes_test",
     src = "validate_quotes_test.py",
     filter = "validate_quotes.lua",
-)
-
-py_binary(
-    name = "validate_input_metadata",
-    srcs = ["validate_input_metadata.py"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//markdown/utils:metadata",
-        requirement("panflute"),
-    ],
-)
-
-pandoc_filter_py_test(
-    name = "validate_input_metadata_test",
-    src = "validate_input_metadata_test.py",
-    filter = ":validate_input_metadata",
 )
 
 pandoc_filter_py_test(

@@ -23,6 +23,19 @@ script_py_test(
 )
 
 py_binary(
+    name = "validate_input_metadata",
+    srcs = ["validate_input_metadata.py"],
+    visibility = ["//visibility:public"],
+    deps = ["//markdown/utils:metadata"],
+)
+
+script_py_test(
+    name = "validate_input_metadata_test",
+    src = "validate_input_metadata_test.py",
+    script = ":validate_input_metadata",
+)
+
+py_binary(
     name = "source_hash",
     srcs = ["source_hash.py"],
     visibility = ["//visibility:public"],

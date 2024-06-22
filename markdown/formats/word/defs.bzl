@@ -27,6 +27,7 @@ def _md_odt_impl(ctx):
     pandoc(
         ctx = ctx,
         extension = "odt",
+        variant = None,
         to_format = "odt",
         inputs = [filters.remove_collection_separators.file(ctx)],
         args = [
@@ -47,6 +48,7 @@ def _md_odt_impl(ctx):
     script = write_open_script(
         ctx = ctx,
         extension = "odt",
+        variant = None,
         file_to_open = output,
     )
 
@@ -57,7 +59,7 @@ def _md_odt_impl(ctx):
 md_odt = rule(
     implementation = _md_odt_impl,
     executable = True,
-    doc = docstring("odt"),
+    doc = docstring("odt", None),
     attrs = {
                 "file": attr.label(
                     providers = [MdFileInfo],
@@ -80,6 +82,7 @@ def _md_docx_impl(ctx):
     pandoc(
         ctx = ctx,
         extension = "docx",
+        variant = None,
         to_format = "docx",
         inputs = [
             ctx.file._template,
@@ -106,6 +109,7 @@ def _md_docx_impl(ctx):
     script = write_open_script(
         ctx = ctx,
         extension = "docx",
+        variant = None,
         file_to_open = output,
     )
 
@@ -118,7 +122,7 @@ def _md_docx_impl(ctx):
 md_docx = rule(
     implementation = _md_docx_impl,
     executable = True,
-    doc = docstring("docx"),
+    doc = docstring("docx", None),
     attrs = {
                 "file": attr.label(
                     providers = [MdFileInfo],
@@ -158,12 +162,13 @@ def _md_doc_impl(ctx):
             ctx.attr.docx[MdDocxInfo].output.path,
         ],
         env = {"HOME": "/tmp"},
-        progress_message = progress_message("doc"),
+        progress_message = progress_message("doc", None),
     )
 
     script = write_open_script(
         ctx = ctx,
         extension = "doc",
+        variant = None,
         file_to_open = output,
     )
 
@@ -174,7 +179,7 @@ def _md_doc_impl(ctx):
 md_doc = rule(
     implementation = _md_doc_impl,
     executable = True,
-    doc = docstring("doc"),
+    doc = docstring("doc", None),
     attrs = {
                 "docx": attr.label(
                     providers = [MdFileInfo, MdDocxInfo],
@@ -230,7 +235,7 @@ def _md_ms_docx_impl(ctx):
             ctx.attr.file[MdFileInfo].output.path,
         ],
         env = env,
-        progress_message = progress_message("ms.docx"),
+        progress_message = progress_message("docx", "ms"),
     )
 
     output = ctx.outputs.out
@@ -242,7 +247,8 @@ def _md_ms_docx_impl(ctx):
 
     script = write_open_script(
         ctx = ctx,
-        extension = "ms.docx",
+        extension = "docx",
+        variant = "ms",
         file_to_open = output,
     )
 
@@ -253,7 +259,7 @@ def _md_ms_docx_impl(ctx):
 md_ms_docx = rule(
     implementation = _md_ms_docx_impl,
     executable = True,
-    doc = docstring("ms.docx"),
+    doc = docstring("docx", "ms"),
     attrs = {
                 "file": attr.label(
                     providers = [MdFileInfo],

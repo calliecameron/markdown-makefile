@@ -12,6 +12,8 @@ load(
 )
 load(
     "//markdown/formats:defs.bzl",
+    "ext_var_dot",
+    "ext_var_underscore",
     _md_deps_metadata_json = "md_deps_metadata_json",
     _md_doc = "md_doc",
     _md_docx = "md_docx",
@@ -46,23 +48,26 @@ load(
 )
 
 _FORMATS = [
-    "md",
-    "txt",
-    "html",
-    "tex",
-    "pdf",
-    "epub",
-    "mobi",
-    "odt",
-    "docx",
-    "doc",
-    "ms_docx",
-    "metadata_json",
-    "deps_metadata_json",
+    ("md", None),
+    ("txt", None),
+    ("html", None),
+    ("tex", None),
+    ("pdf", None),
+    ("epub", None),
+    ("mobi", None),
+    ("odt", None),
+    ("docx", None),
+    ("doc", None),
+    ("docx", "ms"),
+    ("json", "metadata"),
+    ("json", "deps_metadata"),
 ]
 
-def _output(name, ext):
-    return "output/%s.%s" % (name, ext)
+def _name(name, extension, variant):
+    return name + "_" + ext_var_underscore(extension, variant)
+
+def _output(name, extension, variant):
+    return "output/%s.%s" % (name, ext_var_dot(extension, variant))
 
 def md_file(
         name,
@@ -176,108 +181,108 @@ def md_document(
     extra_latex_flags = extra_latex_flags or []
 
     _md_md(
-        name = name + "_md",
+        name = _name(name, "md", None),
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
-        out = _output(name, "md"),
+        out = _output(name, "md", None),
         visibility = ["//visibility:private"],
     )
     _md_txt(
-        name = name + "_txt",
+        name = _name(name, "txt", None),
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
-        out = _output(name, "txt"),
+        out = _output(name, "txt", None),
         visibility = ["//visibility:private"],
     )
     _md_html(
-        name = name + "_html",
+        name = _name(name, "html", None),
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
-        out = _output(name, "html"),
+        out = _output(name, "html", None),
         visibility = ["//visibility:private"],
     )
     _md_tex_intermediate(
-        name = name + "_tex_intermediate",
+        name = _name(name, "tex_intermediate", None),
         file = file,
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
         visibility = ["//visibility:private"],
     )
     _md_tex(
-        name = name + "_tex",
-        intermediate = name + "_tex_intermediate",
+        name = _name(name, "tex", None),
+        intermediate = _name(name, "tex_intermediate", None),
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
-        out = _output(name, "tex"),
+        out = _output(name, "tex", None),
         timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_pdf(
-        name = name + "_pdf",
-        intermediate = name + "_tex_intermediate",
+        name = _name(name, "pdf", None),
+        intermediate = _name(name, "tex_intermediate", None),
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
-        out = _output(name, "pdf"),
+        out = _output(name, "pdf", None),
         timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_epub(
-        name = name + "_epub",
+        name = _name(name, "epub", None),
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
-        out = _output(name, "epub"),
+        out = _output(name, "epub", None),
         timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_mobi(
-        name = name + "_mobi",
-        epub = name + "_epub",
-        out = _output(name, "mobi"),
+        name = _name(name, "mobi", None),
+        epub = _name(name, "epub", None),
+        out = _output(name, "mobi", None),
         visibility = ["//visibility:private"],
     )
     _md_odt(
-        name = name + "_odt",
+        name = _name(name, "odt", None),
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
-        out = _output(name, "odt"),
+        out = _output(name, "odt", None),
         timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_docx(
-        name = name + "_docx",
+        name = _name(name, "docx", None),
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
-        out = _output(name, "docx"),
+        out = _output(name, "docx", None),
         timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_doc(
-        name = name + "_doc",
-        docx = name + "_docx",
-        out = _output(name, "doc"),
+        name = _name(name, "doc", None),
+        docx = _name(name, "docx", None),
+        out = _output(name, "doc", None),
         visibility = ["//visibility:private"],
     )
     _md_ms_docx(
-        name = name + "_ms_docx",
+        name = _name(name, "docx", "ms"),
         file = file,
-        out = _output(name, "ms.docx"),
+        out = _output(name, "docx", "ms"),
         timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )
     _md_metadata_json(
-        name = name + "_metadata_json",
+        name = _name(name, "json", "metadata"),
         file = file,
-        out = _output(name, "metadata.json"),
+        out = _output(name, "json", "metadata"),
         visibility = ["//visibility:private"],
     )
     _md_deps_metadata_json(
-        name = name + "_deps_metadata_json",
+        name = _name(name, "json", "deps_metadata"),
         group = file + "_deps",
-        out = _output(name, "deps_metadata.json"),
+        out = _output(name, "json", "deps_metadata"),
         visibility = ["//visibility:private"],
     )
 
     native.filegroup(
         name = name + "_all",
-        srcs = [name + "_" + f for f in _FORMATS],
-        data = [name + "_" + f for f in _FORMATS],
+        srcs = [_name(name, ext, var) for (ext, var) in _FORMATS],
+        data = [_name(name, ext, var) for (ext, var) in _FORMATS],
         visibility = ["//visibility:private"],
     )
 
@@ -297,10 +302,10 @@ def md_document(
     )
 
     if main_document:
-        for f in _FORMATS:
+        for (ext, var) in _FORMATS:
             native.alias(
-                name = f,
-                actual = name + "_" + f,
+                name = ext_var_underscore(ext, var),
+                actual = _name(name, ext, var),
                 visibility = ["//visibility:private"],
             )
         native.alias(

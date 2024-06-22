@@ -32,6 +32,11 @@ load(
     _md_ms_docx = "md_ms_docx",
     _md_odt = "md_odt",
 )
+load(
+    ":lib.bzl",
+    _ext_var_dot = "ext_var_dot",
+    _ext_var_underscore = "ext_var_underscore",
+)
 
 md_md = _md_md
 md_txt = _md_txt
@@ -47,3 +52,6 @@ md_ms_docx = _md_ms_docx
 md_odt = _md_odt
 md_metadata_json = _md_metadata_json
 md_deps_metadata_json = _md_deps_metadata_json
+
+ext_var_underscore = _ext_var_underscore
+ext_var_dot = _ext_var_dot

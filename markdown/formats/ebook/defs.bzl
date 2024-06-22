@@ -27,6 +27,7 @@ def _md_epub_impl(ctx):
     pandoc(
         ctx = ctx,
         extension = "epub",
+        variant = None,
         to_format = "epub",
         inputs = [
             ctx.file._css,
@@ -53,6 +54,7 @@ def _md_epub_impl(ctx):
     script = write_open_script(
         ctx = ctx,
         extension = "epub",
+        variant = None,
         file_to_open = output,
     )
 
@@ -65,7 +67,7 @@ def _md_epub_impl(ctx):
 md_epub = rule(
     implementation = _md_epub_impl,
     executable = True,
-    doc = docstring("epub"),
+    doc = docstring("epub", None),
     attrs = {
                 "file": attr.label(
                     providers = [MdFileInfo],
@@ -102,12 +104,13 @@ def _md_mobi_impl(ctx):
             ctx.attr.epub[MdEpubInfo].output.path,
             output.path,
         ],
-        progress_message = progress_message("mobi"),
+        progress_message = progress_message("mobi", None),
     )
 
     script = write_open_script(
         ctx = ctx,
         extension = "mobi",
+        variant = None,
         file_to_open = output,
     )
 
@@ -116,7 +119,7 @@ def _md_mobi_impl(ctx):
 md_mobi = rule(
     implementation = _md_mobi_impl,
     executable = True,
-    doc = docstring("mobi"),
+    doc = docstring("mobi", None),
     attrs = {
                 "epub": attr.label(
                     providers = [MdFileInfo, MdEpubInfo],

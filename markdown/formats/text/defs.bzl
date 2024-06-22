@@ -11,6 +11,7 @@ def _md_md_impl(ctx):
     return simple_pandoc_output_impl(
         ctx = ctx,
         extension = "md",
+        variant = None,
         to_format = "markdown-smart",
         inputs = [
             filters.remove_paragraph_annotations.file(ctx),
@@ -29,6 +30,7 @@ def _md_md_impl(ctx):
 md_md = simple_pandoc_output_rule(
     impl = _md_md_impl,
     extension = "md",
+    variant = None,
     filters = [
         filters.remove_paragraph_annotations,
         filters.remove_collection_separators,
@@ -39,6 +41,7 @@ def _md_txt_impl(ctx):
     return simple_pandoc_output_impl(
         ctx = ctx,
         extension = "txt",
+        variant = None,
         to_format = "plain",
         inputs = [filters.remove_collection_separators.file(ctx)],
         args = [
@@ -53,6 +56,7 @@ def _md_txt_impl(ctx):
 md_txt = simple_pandoc_output_rule(
     impl = _md_txt_impl,
     extension = "txt",
+    variant = None,
     filters = [
         filters.remove_collection_separators,
     ],

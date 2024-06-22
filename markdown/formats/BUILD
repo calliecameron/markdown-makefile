@@ -14,6 +14,7 @@ bzl_library(
     srcs = ["defs.bzl"],
     visibility = ["//markdown:__pkg__"],
     deps = [
+        ":lib_bzl",
         "//markdown/formats/ebook:defs_bzl",
         "//markdown/formats/html:defs_bzl",
         "//markdown/formats/latex:defs_bzl",

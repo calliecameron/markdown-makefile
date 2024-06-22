@@ -37,6 +37,7 @@ def _md_tex_intermediate_impl(ctx):
         pandoc(
             ctx = ctx,
             extension = "",
+            variant = None,
             to_format = "latex",
             inputs = [template],
             args = ["--template=" + template.path] +
@@ -86,6 +87,7 @@ def _tex_output_impl(ctx, extension, to, extra_args):
     return simple_pandoc_output_impl(
         ctx = ctx,
         extension = extension,
+        variant = None,
         to_format = to,
         inputs = [
             ctx.attr.intermediate[MdTexIntermediateInfo].header,
@@ -109,7 +111,7 @@ def _tex_output_rule(impl, extension):
     return rule(
         implementation = impl,
         executable = True,
-        doc = docstring(extension),
+        doc = docstring(extension, None),
         attrs = {
                     "intermediate": attr.label(
                         providers = [MdFileInfo, MdTexIntermediateInfo],

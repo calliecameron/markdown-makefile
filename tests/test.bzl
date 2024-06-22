@@ -47,3 +47,6 @@ def diff_test(target, name = None):  # buildifier: disable=unused-variable
     _build_test(target, "doc")  # Doc is nondeterministic, so we only test it builds
 
     _diff_test(target, "ms.docx", "$(rootpath //markdown/utils:zipdump)", "//markdown/utils:zipdump")
+
+    _diff_test(target, "metadata.json", "cat")
+    _diff_test(target, "deps_metadata.json", "cat")

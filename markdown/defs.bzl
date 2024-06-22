@@ -12,11 +12,13 @@ load(
 )
 load(
     "//markdown/formats:defs.bzl",
+    _md_deps_metadata_json = "md_deps_metadata_json",
     _md_doc = "md_doc",
     _md_docx = "md_docx",
     _md_epub = "md_epub",
     _md_html = "md_html",
     _md_md = "md_md",
+    _md_metadata_json = "md_metadata_json",
     _md_mobi = "md_mobi",
     _md_ms_docx = "md_ms_docx",
     _md_odt = "md_odt",
@@ -55,6 +57,8 @@ _FORMATS = [
     "docx",
     "doc",
     "ms_docx",
+    "metadata_json",
+    "deps_metadata_json",
 ]
 
 def _output(name, ext):
@@ -255,6 +259,18 @@ def md_document(
         file = file,
         out = _output(name, "ms.docx"),
         timestamp_override = timestamp_override,
+        visibility = ["//visibility:private"],
+    )
+    _md_metadata_json(
+        name = name + "_metadata_json",
+        file = file,
+        out = _output(name, "metadata.json"),
+        visibility = ["//visibility:private"],
+    )
+    _md_deps_metadata_json(
+        name = name + "_deps_metadata_json",
+        group = file + "_deps",
+        out = _output(name, "deps_metadata.json"),
         visibility = ["//visibility:private"],
     )
 

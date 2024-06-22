@@ -1,0 +1,127 @@
+{
+    "tests/test1:test1": {
+        "author": [
+            "The Author"
+        ],
+        "docversion": "reproducible",
+        "finished": true,
+        "identifier": [
+            {
+                "scheme": "DOI",
+                "text": "doi:10.234234.234/33"
+            }
+        ],
+        "lang": "en-GB",
+        "notes": "foo",
+        "poetry-lines": 8,
+        "publications": [
+            {
+                "accepted": "2022-12-12",
+                "published": "2022-12-13",
+                "submitted": "2022-12-11",
+                "urls": [
+                    "http://example.com"
+                ],
+                "venue": "Foo"
+            },
+            {
+                "rejected": "2022-11-12",
+                "submitted": "2022-11-11",
+                "venue": "Bar"
+            }
+        ],
+        "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
+        "source-hash": "73310d412aba179c1f378944fdfc6b17",
+        "subject": "Version: reproducible",
+        "title": "The Title",
+        "wordcount": 284
+    },
+    "tests/test2:test2": {
+        "author": [
+            "An Author"
+        ],
+        "docversion": "reproducible",
+        "identifier": [
+            {
+                "scheme": "DOI",
+                "text": "doi:10.234234.234/33"
+            }
+        ],
+        "lang": "en-GB",
+        "poetry-lines": 8,
+        "publications": [
+            {
+                "accepted": "2022-10-12",
+                "notes": "foo bar baz",
+                "paid": "\u00a310",
+                "published": "2022-10-13",
+                "submitted": "2022-10-11",
+                "urls": [
+                    "http://example.com"
+                ],
+                "venue": "Bar"
+            }
+        ],
+        "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
+        "source-hash": "fd343bad17949ebeb3106e0d71ca560b",
+        "subject": "Version: reproducible",
+        "title": "The Title",
+        "wordcount": 246
+    },
+    "tests/test3:test3": {
+        "author": [
+            "An Author"
+        ],
+        "date": "23 February 2019 baz",
+        "docversion": "reproducible",
+        "identifier": [
+            {
+                "scheme": "DOI",
+                "text": "doi:10.234234.234/33"
+            }
+        ],
+        "lang": "en-GB",
+        "poetry-lines": 8,
+        "publications": [
+            {
+                "self-published": "2022-12-12",
+                "venue": "Baz"
+            }
+        ],
+        "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
+        "source-hash": "117f7bb3aeb5d7c200c762e9f4c475a9",
+        "subject": "Version: reproducible",
+        "title": "The Title Is 'Baz'",
+        "wordcount": 337
+    },
+    "tests/test4:test4a": {
+        "author": [
+            "The Author"
+        ],
+        "date": "4 January 2022",
+        "docversion": "reproducible",
+        "lang": "en-GB",
+        "poetry-lines": 0,
+        "publications": [
+            {
+                "rejected": "2022-10-11",
+                "submitted": "2022-10-10",
+                "venue": "Quux"
+            },
+            {
+                "submitted": "2022-10-10",
+                "venue": "Yay"
+            },
+            {
+                "abandoned": "2022-11-10",
+                "submitted": "2022-10-10",
+                "venue": "Blah"
+            }
+        ],
+        "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
+        "source-hash": "77c1626ffdd3fd7a91f02fc3ca786bce",
+        "subject": "Version: reproducible",
+        "title": "Title",
+        "wordcount": 10
+    }
+}

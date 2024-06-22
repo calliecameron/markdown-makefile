@@ -1,0 +1,32 @@
+{
+    "author": [
+        "An Author"
+    ],
+    "docversion": "reproducible",
+    "identifier": [
+        {
+            "scheme": "DOI",
+            "text": "doi:10.234234.234/33"
+        }
+    ],
+    "lang": "en-GB",
+    "poetry-lines": 8,
+    "publications": [
+        {
+            "accepted": "2022-10-12",
+            "notes": "foo bar baz",
+            "paid": "\u00a310",
+            "published": "2022-10-13",
+            "submitted": "2022-10-11",
+            "urls": [
+                "http://example.com"
+            ],
+            "venue": "Bar"
+        }
+    ],
+    "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
+    "source-hash": "fd343bad17949ebeb3106e0d71ca560b",
+    "subject": "Version: reproducible",
+    "title": "The Title",
+    "wordcount": 246
+}

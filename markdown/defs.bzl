@@ -105,7 +105,6 @@ def md_file(
         images = images,
         increment_included_headers = increment_included_headers,
         version_override = version_override,
-        metadata_out = name + "_metadata.json",
         visibility = ["//visibility:public"],
     )
 

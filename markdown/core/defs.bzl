@@ -356,7 +356,7 @@ def _md_file_impl(ctx):
         progress_message = "%{label}: generating output",
     )
 
-    output_metadata = ctx.outputs.metadata_out
+    output_metadata = ctx.actions.declare_file(ctx.label.name + "_metadata.json")
     ctx.actions.run(
         outputs = [output_metadata],
         inputs = [output, versioned_metadata],
@@ -413,9 +413,6 @@ md_file = rule(
         "version_override": attr.string(
             default = "",
             doc = "Set the document version to this value, rather than the computed value. Should only be used for testing.",
-        ),
-        "metadata_out": attr.output(
-            doc = "Label of the output metadata file.",
         ),
         "_pandoc": attr.label(
             default = "//markdown/external:pandoc",

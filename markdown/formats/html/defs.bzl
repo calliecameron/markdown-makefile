@@ -2,29 +2,34 @@
 
 load(
     "//markdown/formats:lib.bzl",
-    "add_title_arg",
-    "remove_collection_separators_arg",
+    "filters",
     "simple_pandoc_output_impl",
     "simple_pandoc_output_rule",
 )
 
 def _md_html_impl(ctx):
     return simple_pandoc_output_impl(
-        ctx,
-        "html",
-        "html",
-        [
-            ctx.file._add_title,
-            ctx.file._remove_collection_separators,
+        ctx = ctx,
+        ext = "html",
+        to_format = "html",
+        inputs = [
+            filters.add_title.file(ctx),
+            filters.remove_collection_separators.file(ctx),
         ],
-        [
+        args = [
             "--standalone",
-            add_title_arg(ctx),
-            remove_collection_separators_arg(ctx),
+            filters.add_title.arg(ctx),
+            filters.remove_collection_separators.arg(ctx),
         ],
-        {},
-        ctx.attr.file,
-        ctx.executable._write_open_script,
+        env = {},
+        file = ctx.attr.file,
     )
 
-md_html = simple_pandoc_output_rule(_md_html_impl, "html")
+md_html = simple_pandoc_output_rule(
+    impl = _md_html_impl,
+    ext = "html",
+    filters = [
+        filters.add_title,
+        filters.remove_collection_separators,
+    ],
+)

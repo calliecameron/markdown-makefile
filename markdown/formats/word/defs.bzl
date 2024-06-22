@@ -3,21 +3,16 @@
 load("//markdown/core:defs.bzl", "MdFileInfo")
 load(
     "//markdown/formats:lib.bzl",
-    "default_info_for_ext",
-    "doc_for_ext",
+    "clean_zip",
+    "default_info",
+    "docstring",
     "expand_locations",
-    "open_script",
+    "filters",
     "pandoc",
-    "pandoc_bin",
-    "pandoc_script",
-    "remove_collection_separators_arg",
-    "remove_collection_separators_before_headers_arg",
-    "remove_collection_separators_before_headers_filter",
-    "remove_collection_separators_filter",
+    "progress_message",
     "timestamp_override",
+    "tools",
     "write_open_script",
-    "zip_cleaner",
-    "zip_cleaner_script",
 )
 
 MdDocxInfo = provider(
@@ -30,77 +25,92 @@ MdDocxInfo = provider(
 def _md_odt_impl(ctx):
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.odt")
     pandoc(
-        ctx,
-        "odt",
-        "odt",
-        [ctx.file._remove_collection_separators],
-        [
-            remove_collection_separators_arg(ctx),
+        ctx = ctx,
+        ext = "odt",
+        to_format = "odt",
+        inputs = [filters.remove_collection_separators.file(ctx)],
+        args = [
+            filters.remove_collection_separators.arg(ctx),
         ] + expand_locations(ctx, ctx.attr.file, ctx.attr.extra_pandoc_flags),
-        timestamp_override(ctx),
-        ctx.attr.file,
-        intermediate,
+        env = timestamp_override.env(ctx),
+        file = ctx.attr.file,
+        output = intermediate,
     )
 
     output = ctx.outputs.out
-    zip_cleaner(ctx, intermediate, output, ctx.executable._zip_cleaner)
+    clean_zip(
+        ctx = ctx,
+        in_file = intermediate,
+        out_file = output,
+    )
 
-    script = open_script(ctx, "odt", output, ctx.executable._write_open_script)
+    script = write_open_script(
+        ctx = ctx,
+        ext = "odt",
+        file_to_open = output,
+    )
 
     return [
-        default_info_for_ext(ctx, output, script),
+        default_info(ctx, output, script),
     ]
 
 md_odt = rule(
     implementation = _md_odt_impl,
     executable = True,
-    doc = doc_for_ext("odt"),
+    doc = docstring("odt"),
     attrs = {
-        "file": attr.label(
-            providers = [MdFileInfo],
-            doc = "An md_file target.",
-        ),
-        "extra_pandoc_flags": attr.string_list(
-            doc = "Extra flags to pass to pandoc",
-        ),
-        "out": attr.output(),
-        "timestamp_override": attr.string(),
-        "_pandoc": pandoc_script(),
-        "_pandoc_bin": pandoc_bin(),
-        "_zip_cleaner": zip_cleaner_script(),
-        "_write_open_script": write_open_script(),
-        "_remove_collection_separators": remove_collection_separators_filter(),
-    },
+                "file": attr.label(
+                    providers = [MdFileInfo],
+                    doc = "An md_file target.",
+                ),
+                "extra_pandoc_flags": attr.string_list(
+                    doc = "Extra flags to pass to pandoc",
+                ),
+                "out": attr.output(),
+            } |
+            tools.pandoc.attr |
+            tools.write_open_script.attr |
+            tools.zip_cleaner.attr |
+            filters.remove_collection_separators.attr |
+            timestamp_override.attr,
 )
 
 def _md_docx_impl(ctx):
     intermediate = ctx.actions.declare_file(ctx.label.name + "_intermediate.docx")
     pandoc(
-        ctx,
-        "docx",
-        "docx",
-        [
+        ctx = ctx,
+        ext = "docx",
+        to_format = "docx",
+        inputs = [
             ctx.file._template,
-            ctx.file._remove_collection_separators_before_headers,
+            filters.remove_collection_separators_before_headers.file(ctx),
             ctx.file._docx_filter,
         ],
-        [
+        args = [
             "--reference-doc=" + ctx.file._template.path,
-            remove_collection_separators_before_headers_arg(ctx),
+            filters.remove_collection_separators_before_headers.arg(ctx),
             "--lua-filter=" + ctx.file._docx_filter.path,
         ] + expand_locations(ctx, ctx.attr.file, ctx.attr.extra_pandoc_flags),
-        timestamp_override(ctx),
-        ctx.attr.file,
-        intermediate,
+        env = timestamp_override.env(ctx),
+        file = ctx.attr.file,
+        output = intermediate,
     )
 
     output = ctx.outputs.out
-    zip_cleaner(ctx, intermediate, output, ctx.executable._zip_cleaner)
+    clean_zip(
+        ctx = ctx,
+        in_file = intermediate,
+        out_file = output,
+    )
 
-    script = open_script(ctx, "docx", output, ctx.executable._write_open_script)
+    script = write_open_script(
+        ctx = ctx,
+        ext = "docx",
+        file_to_open = output,
+    )
 
     return [
-        default_info_for_ext(ctx, output, script),
+        default_info(ctx, output, script),
         MdDocxInfo(output = output),
         ctx.attr.file[MdFileInfo],
     ]
@@ -108,31 +118,30 @@ def _md_docx_impl(ctx):
 md_docx = rule(
     implementation = _md_docx_impl,
     executable = True,
-    doc = doc_for_ext("docx"),
+    doc = docstring("docx"),
     attrs = {
-        "file": attr.label(
-            providers = [MdFileInfo],
-            doc = "An md_file target.",
-        ),
-        "extra_pandoc_flags": attr.string_list(
-            doc = "Extra flags to pass to pandoc",
-        ),
-        "out": attr.output(),
-        "timestamp_override": attr.string(),
-        "_template": attr.label(
-            allow_single_file = True,
-            default = "//markdown/formats/word:reference.docx",
-        ),
-        "_docx_filter": attr.label(
-            allow_single_file = True,
-            default = "//markdown/formats/word:docx_filter.lua",
-        ),
-        "_pandoc": pandoc_script(),
-        "_pandoc_bin": pandoc_bin(),
-        "_zip_cleaner": zip_cleaner_script(),
-        "_write_open_script": write_open_script(),
-        "_remove_collection_separators_before_headers": remove_collection_separators_before_headers_filter(),
-    },
+                "file": attr.label(
+                    providers = [MdFileInfo],
+                    doc = "An md_file target.",
+                ),
+                "extra_pandoc_flags": attr.string_list(
+                    doc = "Extra flags to pass to pandoc",
+                ),
+                "out": attr.output(),
+                "_template": attr.label(
+                    allow_single_file = True,
+                    default = "//markdown/formats/word:reference.docx",
+                ),
+                "_docx_filter": attr.label(
+                    allow_single_file = True,
+                    default = "//markdown/formats/word:docx_filter.lua",
+                ),
+            } |
+            tools.pandoc.attr |
+            tools.write_open_script.attr |
+            tools.zip_cleaner.attr |
+            filters.remove_collection_separators_before_headers.attr |
+            timestamp_override.attr,
 )
 
 def _md_doc_impl(ctx):
@@ -149,32 +158,36 @@ def _md_doc_impl(ctx):
             ctx.attr.docx[MdDocxInfo].output.path,
         ],
         env = {"HOME": "/tmp"},
-        progress_message = "%{label}: generating doc output",
+        progress_message = progress_message("doc"),
     )
 
-    script = open_script(ctx, "doc", output, ctx.executable._write_open_script)
+    script = write_open_script(
+        ctx = ctx,
+        ext = "doc",
+        file_to_open = output,
+    )
 
     return [
-        default_info_for_ext(ctx, output, script),
+        default_info(ctx, output, script),
     ]
 
 md_doc = rule(
     implementation = _md_doc_impl,
     executable = True,
-    doc = doc_for_ext("doc"),
+    doc = docstring("doc"),
     attrs = {
-        "docx": attr.label(
-            providers = [MdFileInfo, MdDocxInfo],
-            doc = "An md_docx target.",
-        ),
-        "out": attr.output(),
-        "_unoconv": attr.label(
-            default = "//markdown/formats/word:unoconv",
-            executable = True,
-            cfg = "exec",
-        ),
-        "_write_open_script": write_open_script(),
-    },
+                "docx": attr.label(
+                    providers = [MdFileInfo, MdDocxInfo],
+                    doc = "An md_docx target.",
+                ),
+                "out": attr.output(),
+                "_unoconv": attr.label(
+                    default = "//markdown/formats/word:unoconv",
+                    executable = True,
+                    cfg = "exec",
+                ),
+            } |
+            tools.write_open_script.attr,
 )
 
 def _md_ms_docx_impl(ctx):
@@ -191,8 +204,8 @@ def _md_ms_docx_impl(ctx):
     )
 
     intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.docx")
-    env = timestamp_override(ctx)
-    env["PANDOC"] = ctx.executable._pandoc_bin.path
+    env = timestamp_override.env(ctx)
+    env["PANDOC"] = tools.pandoc.wrapped_executable(ctx).path
     data_inputs = []
     for target in ctx.attr.file[MdFileInfo].data.to_list():
         data_inputs += target.files.to_list()
@@ -202,7 +215,7 @@ def _md_ms_docx_impl(ctx):
             ctx.attr.file[MdFileInfo].output,
             metadata,
             ctx.file._filter,
-            ctx.executable._pandoc_bin,
+            tools.pandoc.wrapped_executable(ctx),
         ],
         executable = ctx.executable._md2short,
         arguments = [
@@ -217,45 +230,53 @@ def _md_ms_docx_impl(ctx):
             ctx.attr.file[MdFileInfo].output.path,
         ],
         env = env,
-        progress_message = "%{label}: generating ms.docx output",
+        progress_message = progress_message("ms.docx"),
     )
 
     output = ctx.outputs.out
-    zip_cleaner(ctx, intermediate_docx, output, ctx.executable._zip_cleaner)
+    clean_zip(
+        ctx = ctx,
+        in_file = intermediate_docx,
+        out_file = output,
+    )
 
-    script = open_script(ctx, "ms.docx", output, ctx.executable._write_open_script)
+    script = write_open_script(
+        ctx = ctx,
+        ext = "ms.docx",
+        file_to_open = output,
+    )
 
     return [
-        default_info_for_ext(ctx, output, script),
+        default_info(ctx, output, script),
     ]
 
 md_ms_docx = rule(
     implementation = _md_ms_docx_impl,
     executable = True,
-    doc = doc_for_ext("ms.docx"),
+    doc = docstring("ms.docx"),
     attrs = {
-        "file": attr.label(
-            providers = [MdFileInfo],
-            doc = "An md_file target.",
-        ),
-        "out": attr.output(),
-        "timestamp_override": attr.string(),
-        "_ms_metadata": attr.label(
-            default = "//markdown/formats/word:ms_metadata",
-            executable = True,
-            cfg = "exec",
-        ),
-        "_md2short": attr.label(
-            default = "//markdown/external:md2short",
-            executable = True,
-            cfg = "exec",
-        ),
-        "_filter": attr.label(
-            allow_single_file = True,
-            default = "//markdown/formats/word:ms_docx_filter.lua",
-        ),
-        "_pandoc_bin": pandoc_bin(),
-        "_zip_cleaner": zip_cleaner_script(),
-        "_write_open_script": write_open_script(),
-    },
+                "file": attr.label(
+                    providers = [MdFileInfo],
+                    doc = "An md_file target.",
+                ),
+                "out": attr.output(),
+                "_ms_metadata": attr.label(
+                    default = "//markdown/formats/word:ms_metadata",
+                    executable = True,
+                    cfg = "exec",
+                ),
+                "_md2short": attr.label(
+                    default = "//markdown/external:md2short",
+                    executable = True,
+                    cfg = "exec",
+                ),
+                "_filter": attr.label(
+                    allow_single_file = True,
+                    default = "//markdown/formats/word:ms_docx_filter.lua",
+                ),
+            } |
+            tools.pandoc.attr |
+            tools.write_open_script.attr |
+            tools.zip_cleaner.attr |
+            timestamp_override.attr,
 )

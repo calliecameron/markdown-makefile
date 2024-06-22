@@ -2,48 +2,58 @@
 
 load(
     "//markdown/formats:lib.bzl",
-    "remove_collection_separators_arg",
-    "remove_paragraph_annotations_arg",
+    "filters",
     "simple_pandoc_output_impl",
     "simple_pandoc_output_rule",
 )
 
 def _md_md_impl(ctx):
     return simple_pandoc_output_impl(
-        ctx,
-        "md",
-        "markdown-smart",
-        [
-            ctx.file._remove_paragraph_annotations,
-            ctx.file._remove_collection_separators,
+        ctx = ctx,
+        ext = "md",
+        to_format = "markdown-smart",
+        inputs = [
+            filters.remove_paragraph_annotations.file(ctx),
+            filters.remove_collection_separators.file(ctx),
         ],
-        [
+        args = [
             "--standalone",
             "--wrap=none",
-            remove_paragraph_annotations_arg(ctx),
-            remove_collection_separators_arg(ctx),
+            filters.remove_paragraph_annotations.arg(ctx),
+            filters.remove_collection_separators.arg(ctx),
         ],
-        {},
-        ctx.attr.file,
-        ctx.executable._write_open_script,
+        env = {},
+        file = ctx.attr.file,
     )
 
-md_md = simple_pandoc_output_rule(_md_md_impl, "md")
+md_md = simple_pandoc_output_rule(
+    impl = _md_md_impl,
+    ext = "md",
+    filters = [
+        filters.remove_paragraph_annotations,
+        filters.remove_collection_separators,
+    ],
+)
 
 def _md_txt_impl(ctx):
     return simple_pandoc_output_impl(
-        ctx,
-        "txt",
-        "plain",
-        [ctx.file._remove_collection_separators],
-        [
+        ctx = ctx,
+        ext = "txt",
+        to_format = "plain",
+        inputs = [filters.remove_collection_separators.file(ctx)],
+        args = [
             "--standalone",
             "--wrap=none",
-            remove_collection_separators_arg(ctx),
+            filters.remove_collection_separators.arg(ctx),
         ],
-        {},
-        ctx.attr.file,
-        ctx.executable._write_open_script,
+        env = {},
+        file = ctx.attr.file,
     )
 
-md_txt = simple_pandoc_output_rule(_md_txt_impl, "txt")
+md_txt = simple_pandoc_output_rule(
+    impl = _md_txt_impl,
+    ext = "txt",
+    filters = [
+        filters.remove_collection_separators,
+    ],
+)

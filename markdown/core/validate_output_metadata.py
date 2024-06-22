@@ -1,4 +1,5 @@
 import argparse
+import json
 
 from markdown.utils.metadata import OutputMetadata
 
@@ -10,10 +11,20 @@ def main() -> None:
     args = parser.parse_args()
 
     with open(args.in_file, encoding="utf-8") as f:
-        OutputMetadata.model_validate_json(f.read())
+        metadata = OutputMetadata.model_validate_json(f.read())
 
     with open(args.out_file, mode="w", encoding="utf-8") as f:
-        f.write("OK\n")
+        json.dump(
+            metadata.model_dump(
+                mode="json",
+                by_alias=True,
+                exclude_unset=True,
+                exclude_defaults=True,
+            ),
+            f,
+            sort_keys=True,
+            indent=4,
+        )
 
 
 if __name__ == "__main__":

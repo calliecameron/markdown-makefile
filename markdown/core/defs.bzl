@@ -176,23 +176,6 @@ def _spellcheck(ctx):
 
     return spellcheck_ok
 
-def _validate_output_metadata(ctx, output_metadata):
-    output_metadata_ok = ctx.actions.declare_file(ctx.label.name + "_output_metadata_ok.txt")
-    ctx.actions.run(
-        outputs = [output_metadata_ok],
-        inputs = [
-            output_metadata,
-        ],
-        executable = ctx.executable._validate_output_metadata,
-        arguments = [
-            output_metadata.path,
-            output_metadata_ok.path,
-        ],
-        progress_message = "%{label}: validating metadata",
-    )
-
-    return output_metadata_ok
-
 def _md_file_impl(ctx):
     lint_ok = [
         _standard_lint(ctx),
@@ -306,9 +289,9 @@ def _md_file_impl(ctx):
     )
 
     versioned = ctx.actions.declare_file(ctx.label.name + "_stage3_versioned.json")
-    versioned_metadata = ctx.actions.declare_file(ctx.label.name + "_stage3_versioned_metadata.json")
+    versioned_metadata_raw = ctx.actions.declare_file(ctx.label.name + "_stage3_versioned_metadata_raw.json")
     ctx.actions.run(
-        outputs = [versioned, versioned_metadata],
+        outputs = [versioned, versioned_metadata_raw],
         inputs = [
             compiled,
             version,
@@ -322,7 +305,7 @@ def _md_file_impl(ctx):
             "--lua-filter=" + ctx.file._cleanup.path,
             "--metadata-file=" + version.path,
             "--metadata-file=" + source_hash.path,
-            "--metadata=metadata-out-file:" + versioned_metadata.path,
+            "--metadata=metadata-out-file:" + versioned_metadata_raw.path,
             "--metadata=lang:en-GB",
             "--from=json",
             "--to=json",
@@ -333,23 +316,35 @@ def _md_file_impl(ctx):
         progress_message = "%{label}: adding version information",
     )
 
-    output_metadata_ok = _validate_output_metadata(ctx, versioned_metadata)
+    versioned_metadata = ctx.actions.declare_file(ctx.label.name + "_stage3_versioned_metadata.json")
+    ctx.actions.run(
+        outputs = [versioned_metadata],
+        inputs = [
+            versioned_metadata_raw,
+        ],
+        executable = ctx.executable._validate_output_metadata,
+        arguments = [
+            versioned_metadata_raw.path,
+            versioned_metadata.path,
+        ],
+        progress_message = "%{label}: validating output metadata",
+    )
 
     output = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.run(
         outputs = [output],
-        inputs = [versioned] + lint_ok + [output_metadata_ok],
+        inputs = [versioned, versioned_metadata] + lint_ok,
         executable = "cp",
         arguments = [versioned.path, output.path],
         progress_message = "%{label}: generating output",
     )
 
-    metadata = ctx.outputs.metadata_out
+    output_metadata = ctx.outputs.metadata_out
     ctx.actions.run(
-        outputs = [metadata],
+        outputs = [output_metadata],
         inputs = [output, versioned_metadata],
         executable = "cp",
-        arguments = [versioned_metadata.path, metadata.path],
+        arguments = [versioned_metadata.path, output_metadata.path],
         progress_message = "%{label}: generating metadata",
     )
 
@@ -358,11 +353,11 @@ def _md_file_impl(ctx):
         transitive = [dep[MdFileInfo].data for dep in ctx.attr.deps[MdGroupInfo].deps],
     )
     return [
-        DefaultInfo(files = depset([output, metadata])),
+        DefaultInfo(files = depset([output, output_metadata])),
         MdFileInfo(
             name = ctx.label.name,
             output = output,
-            metadata = metadata,
+            metadata = output_metadata,
             data = data,
         ),
     ]

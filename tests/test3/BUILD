@@ -3,11 +3,13 @@ load("//tests:test.bzl", "diff_test")
 
 md_file(
     name = "include1",
+    version_override = "reproducible",
     deps = [":include2"],
 )
 
 md_file(
     name = "include2",
+    version_override = "reproducible",
 )
 
 md_document(

@@ -3,17 +3,9 @@ author:
 - An Author
 date: 23 February 2019 baz
 docversion: reproducible
-identifier:
-- scheme: DOI
-  text: "doi:10.234234.234/33"
 lang: en-GB
-poetry-lines: 8
-publications:
-- self-published: 2022-12-12
-  venue: Baz
 source-hash: 117f7bb3aeb5d7c200c762e9f4c475a9
 title: The Title Is ‘Baz’
-wordcount: 337
 ---
 
 -   [This is a section](#__h1_1){#toc-__h1_1}

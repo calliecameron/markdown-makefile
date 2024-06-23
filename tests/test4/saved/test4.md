@@ -3,14 +3,9 @@ author:
 - The Author
 date: 1 January 2022
 docversion: reproducible
-identifier:
-- scheme: DOI
-  text: "doi:10.234234.234/33"
 lang: en-GB
-poetry-lines: 24
 source-hash: e39b4b5abc3ebb895c799e1e6f5711ab
 title: Test 4
-wordcount: 897
 ---
 
 -   [The Title](#__h1_1){#toc-__h1_1}

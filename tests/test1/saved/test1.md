@@ -2,26 +2,9 @@
 author:
 - The Author
 docversion: reproducible
-finished: true
-identifier:
-- scheme: DOI
-  text: "doi:10.234234.234/33"
 lang: en-GB
-notes: foo
-poetry-lines: 8
-publications:
-- accepted: 2022-12-12
-  published: 2022-12-13
-  submitted: 2022-12-11
-  urls:
-  - "http://example.com"
-  venue: Foo
-- rejected: 2022-11-12
-  submitted: 2022-11-11
-  venue: Bar
 source-hash: 73310d412aba179c1f378944fdfc6b17
 title: The Title
-wordcount: 284
 ---
 
 This is some text before a section. It shouldn’t be indented.

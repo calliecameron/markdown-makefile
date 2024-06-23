@@ -2,24 +2,9 @@
 author:
 - An Author
 docversion: reproducible
-finished: false
-identifier:
-- scheme: DOI
-  text: "doi:10.234234.234/33"
 lang: en-GB
-poetry-lines: 8
-publications:
-- accepted: 2022-10-12
-  notes: foo bar baz
-  paid: £10
-  published: 2022-10-13
-  submitted: 2022-10-11
-  urls:
-  - "http://example.com"
-  venue: Bar
 source-hash: fd343bad17949ebeb3106e0d71ca560b
 title: The Title
-wordcount: 246
 ---
 
 This is some text before a section. It shouldn’t be indented. Each section should start on a new page (but subsections shouldn’t).

@@ -94,6 +94,7 @@ def _tex_output_impl(ctx, extension, to, extra_args):
             ctx.attr.intermediate[MdTexIntermediateInfo].before,
             ctx.file._template,
             filters.add_subject.file(ctx),
+            filters.cleanup_metadata.file(ctx),
             filters.remove_collection_separators_before_headers.file(ctx),
             ctx.file._latex_filter,
         ],
@@ -102,6 +103,7 @@ def _tex_output_impl(ctx, extension, to, extra_args):
             "--include-before-body=" + ctx.attr.intermediate[MdTexIntermediateInfo].before.path,
             "--template=" + ctx.file._template.path,
             filters.add_subject.arg(ctx),
+            filters.cleanup_metadata.arg(ctx),
             filters.remove_collection_separators_before_headers.arg(ctx),
             "--lua-filter=" + ctx.file._latex_filter.path,
         ] + extra_args + _LATEX_VARS + expand_locations(ctx, ctx.attr.intermediate, ctx.attr.extra_pandoc_flags),
@@ -135,6 +137,7 @@ def _tex_output_rule(impl, extension):
                 tools.pandoc.attr |
                 tools.write_open_script.attr |
                 filters.add_subject.attr |
+                filters.cleanup_metadata.attr |
                 filters.remove_collection_separators_before_headers.attr |
                 timestamp_override.attr,
     )

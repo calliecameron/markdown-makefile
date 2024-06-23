@@ -15,11 +15,13 @@ def _md_html_impl(ctx):
         to_format = "html",
         inputs = [
             filters.add_title.file(ctx),
+            filters.cleanup_metadata.file(ctx),
             filters.remove_collection_separators.file(ctx),
         ],
         args = [
             "--standalone",
             filters.add_title.arg(ctx),
+            filters.cleanup_metadata.arg(ctx),
             filters.remove_collection_separators.arg(ctx),
         ],
         env = {},
@@ -32,6 +34,7 @@ md_html = simple_pandoc_output_rule(
     variant = None,
     filters = [
         filters.add_title,
+        filters.cleanup_metadata,
         filters.remove_collection_separators,
     ],
 )

@@ -33,12 +33,14 @@ def _md_epub_impl(ctx):
             ctx.file._css,
             filters.add_title.file(ctx),
             filters.add_subject.file(ctx),
+            filters.cleanup_metadata.file(ctx),
             filters.remove_collection_separators_before_headers.file(ctx),
         ],
         args = [
             "--css=" + ctx.file._css.path,
             filters.add_title.arg(ctx),
             filters.add_subject.arg(ctx),
+            filters.cleanup_metadata.arg(ctx),
             filters.remove_collection_separators_before_headers.arg(ctx),
         ] + expand_locations(ctx, ctx.attr.file, ctx.attr.extra_pandoc_flags),
         env = timestamp_override.env(ctx),
@@ -89,6 +91,7 @@ md_epub = rule(
             tools.zip_cleaner.attr |
             filters.add_title.attr |
             filters.add_subject.attr |
+            filters.cleanup_metadata.attr |
             filters.remove_collection_separators_before_headers.attr |
             timestamp_override.attr,
 )

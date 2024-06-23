@@ -10,7 +10,6 @@ exports_files(
         "header_auto_ids.lua",
         "poetry_lines.lua",
         "write_metadata.lua",
-        "cleanup.lua",
     ],
     visibility = ["//visibility:public"],
 )
@@ -61,10 +60,4 @@ pandoc_filter_py_test(
     name = "write_metadata_test",
     src = "write_metadata_test.py",
     filter = "write_metadata.lua",
-)
-
-pandoc_filter_py_test(
-    name = "cleanup_test",
-    src = "cleanup_test.py",
-    filter = "cleanup.lua",
 )

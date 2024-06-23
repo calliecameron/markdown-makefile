@@ -62,6 +62,16 @@ filters = struct(
         file = lambda ctx: ctx.file._add_subject,
         arg = lambda ctx: "--lua-filter=" + ctx.file._add_subject.path,
     ),
+    cleanup_metadata = struct(
+        attr = {
+            "_cleanup_metadata": attr.label(
+                allow_single_file = True,
+                default = "//markdown/formats/filters:cleanup_metadata.lua",
+            ),
+        },
+        file = lambda ctx: ctx.file._cleanup_metadata,
+        arg = lambda ctx: "--lua-filter=" + ctx.file._cleanup_metadata.path,
+    ),
     remove_paragraph_annotations = struct(
         attr = {
             "_remove_paragraph_annotations": attr.label(

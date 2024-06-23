@@ -14,12 +14,14 @@ def _md_md_impl(ctx):
         variant = None,
         to_format = "markdown-smart",
         inputs = [
+            filters.cleanup_metadata.file(ctx),
             filters.remove_paragraph_annotations.file(ctx),
             filters.remove_collection_separators.file(ctx),
         ],
         args = [
             "--standalone",
             "--wrap=none",
+            filters.cleanup_metadata.arg(ctx),
             filters.remove_paragraph_annotations.arg(ctx),
             filters.remove_collection_separators.arg(ctx),
         ],
@@ -32,6 +34,7 @@ md_md = simple_pandoc_output_rule(
     extension = "md",
     variant = None,
     filters = [
+        filters.cleanup_metadata,
         filters.remove_paragraph_annotations,
         filters.remove_collection_separators,
     ],
@@ -43,10 +46,14 @@ def _md_txt_impl(ctx):
         extension = "txt",
         variant = None,
         to_format = "plain",
-        inputs = [filters.remove_collection_separators.file(ctx)],
+        inputs = [
+            filters.cleanup_metadata.file(ctx),
+            filters.remove_collection_separators.file(ctx),
+        ],
         args = [
             "--standalone",
             "--wrap=none",
+            filters.cleanup_metadata.arg(ctx),
             filters.remove_collection_separators.arg(ctx),
         ],
         env = {},
@@ -58,6 +65,7 @@ md_txt = simple_pandoc_output_rule(
     extension = "txt",
     variant = None,
     filters = [
+        filters.cleanup_metadata,
         filters.remove_collection_separators,
     ],
 )

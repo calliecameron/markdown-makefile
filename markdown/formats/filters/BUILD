@@ -4,6 +4,7 @@ exports_files(
     [
         "add_title.lua",
         "add_subject.lua",
+        "cleanup_metadata.lua",
         "remove_paragraph_annotations.lua",
         "remove_collection_separators.lua",
         "remove_collection_separators_before_headers.lua",
@@ -21,6 +22,12 @@ pandoc_filter_py_test(
     name = "add_subject_test",
     src = "add_subject_test.py",
     filter = "add_subject.lua",
+)
+
+pandoc_filter_py_test(
+    name = "cleanup_metadata_test",
+    src = "cleanup_metadata_test.py",
+    filter = "cleanup_metadata.lua",
 )
 
 pandoc_filter_py_test(

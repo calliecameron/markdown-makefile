@@ -314,12 +314,10 @@ def _md_file_impl(ctx):
             version,
             source_hash,
             ctx.file._write_metadata,
-            ctx.file._cleanup,
         ],
         executable = ctx.executable._pandoc,
         arguments = [
             "--lua-filter=" + ctx.file._write_metadata.path,
-            "--lua-filter=" + ctx.file._cleanup.path,
             "--metadata-file=" + version.path,
             "--metadata-file=" + source_hash.path,
             "--metadata=metadata-out-file:" + versioned_metadata_raw.path,
@@ -516,10 +514,6 @@ md_file = rule(
         "_write_metadata": attr.label(
             allow_single_file = True,
             default = "//markdown/core/filters:write_metadata.lua",
-        ),
-        "_cleanup": attr.label(
-            allow_single_file = True,
-            default = "//markdown/core/filters:cleanup.lua",
         ),
         "_validate_output_metadata": attr.label(
             default = "//markdown/core:validate_output_metadata",

@@ -1,4 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@pip//:requirements.bzl", "requirement")
 load("//markdown/support/python:defs.bzl", "py_binary")
 load("//markdown/utils:defs.bzl", "script_py_test")
 
@@ -76,6 +77,25 @@ script_py_test(
     src = "version_test.py",
     script = ":version",
     deps = [":version"],
+)
+
+py_binary(
+    name = "parse_date",
+    srcs = ["parse_date.py"],
+    type_stub_deps = [
+        requirement("types-dateparser"),
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//markdown/utils:metadata",
+        requirement("dateparser"),
+    ],
+)
+
+script_py_test(
+    name = "parse_date_test",
+    src = "parse_date_test.py",
+    script = ":parse_date",
 )
 
 py_binary(

@@ -10,7 +10,7 @@ class TestSourceHash(test_utils.ScriptTestCase):
     def run_script(  # type: ignore[override]
         self,
         src: str,
-        deps_metadata: Mapping[str, Mapping[str, str]],
+        deps_metadata: Mapping[str, Mapping[str, str | list[str]]],
     ) -> dict[str, Any]:
         src_file = os.path.join(self.tmpdir(), "src.md")
         self.dump_file(src_file, src)
@@ -41,6 +41,7 @@ class TestSourceHash(test_utils.ScriptTestCase):
                     "version": "foo",
                     "repo": "bar",
                     "source-hash": "1",
+                    "parsed-dates": [],
                 },
                 "dep2": {
                     "wordcount": "20",
@@ -49,6 +50,7 @@ class TestSourceHash(test_utils.ScriptTestCase):
                     "version": "blah",
                     "repo": "yay",
                     "source-hash": "3",
+                    "parsed-dates": [],
                 },
             },
         )

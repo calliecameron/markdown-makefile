@@ -12,6 +12,7 @@
         ],
         "lang": "en-GB",
         "notes": "foo",
+        "parsed-dates": [],
         "poetry-lines": 8,
         "publications": [
             {
@@ -46,6 +47,7 @@
             }
         ],
         "lang": "en-GB",
+        "parsed-dates": [],
         "poetry-lines": 8,
         "publications": [
             {
@@ -78,6 +80,9 @@
             }
         ],
         "lang": "en-GB",
+        "parsed-dates": [
+            "2019/02/23"
+        ],
         "poetry-lines": 8,
         "publications": [
             {
@@ -97,6 +102,9 @@
         ],
         "date": "4 January 2022",
         "lang": "en-GB",
+        "parsed-dates": [
+            "2022/01/04"
+        ],
         "poetry-lines": 0,
         "publications": [
             {

@@ -6,7 +6,7 @@ from markdown.utils import test_utils
 
 
 class TestCombineDepsMetadata(test_utils.ScriptTestCase):
-    def run_script(self, metadata: Sequence[Mapping[str, str]]) -> str:  # type: ignore[override]
+    def run_script(self, metadata: Sequence[Mapping[str, str | list[str]]]) -> str:  # type: ignore[override]
         metadata_args = []
         for i, d in enumerate(metadata):
             filename = os.path.join(self.tmpdir(), f"metadata_{i+1}.json")
@@ -35,6 +35,7 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
                         "version": "foo",
                         "repo": "bar",
                         "source-hash": "quux",
+                        "parsed-dates": ["2020"],
                     },
                     {
                         "wordcount": "20",
@@ -43,12 +44,16 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
                         "version": "blah",
                         "repo": "yay",
                         "source-hash": "yay2",
+                        "parsed-dates": ["2023/01/01"],
                     },
                 ],
             ),
             """{
     "dep1": {
         "lang": "en-GB",
+        "parsed-dates": [
+            "2020"
+        ],
         "poetry-lines": 0,
         "repo": "bar",
         "source-hash": "quux",
@@ -57,6 +62,9 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
     },
     "dep2": {
         "lang": "en-US",
+        "parsed-dates": [
+            "2023/01/01"
+        ],
         "poetry-lines": 10,
         "repo": "yay",
         "source-hash": "yay2",

@@ -31,6 +31,7 @@ class TestPublications(test_utils.ScriptTestCase):
                     "lang": "en-GB",
                     "repo": "bar",
                     "source-hash": "1",
+                    "parsed-dates": ["2020"],
                 },
                 "//baz:quux": {
                     "title": "Baz",
@@ -46,6 +47,7 @@ class TestPublications(test_utils.ScriptTestCase):
                     "lang": "en-GB",
                     "repo": "bar",
                     "source-hash": "1",
+                    "parsed-dates": ["2021"],
                 },
             },
         )
@@ -116,6 +118,9 @@ a:visited { color: black; }
 <h3 id="//baz:quux">//baz:quux</h3>
 <code><pre>{
     "lang": "en-GB",
+    "parsed-dates": [
+        "2021"
+    ],
     "poetry-lines": 0,
     "publications": [
         {
@@ -132,6 +137,9 @@ a:visited { color: black; }
 <h3 id="//foo:bar">//foo:bar</h3>
 <code><pre>{
     "lang": "en-GB",
+    "parsed-dates": [
+        "2020"
+    ],
     "poetry-lines": 0,
     "publications": [
         {

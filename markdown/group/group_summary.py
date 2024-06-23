@@ -7,8 +7,6 @@ from collections.abc import Mapping
 from typing import Any
 
 import tabulate
-from dateparser.date import DateDataParser
-from dateparser.search import search_dates
 
 from markdown.utils.metadata import MetadataMap
 
@@ -66,24 +64,6 @@ class Sorter:
 
     def sort(self, data: list[Mapping[str, Any]]) -> None:
         data.sort(key=self.key, reverse=self._reverse)
-
-
-def parse_date(date: str) -> str:
-    settings = {"DATE_ORDER": "DMY", "PARSERS": ["custom-formats", "absolute-time"]}
-    parser = DateDataParser(["en"], ["en-GB"], settings=settings)  # type: ignore[arg-type]
-
-    out = set()
-    for text, _ in search_dates(date, languages=["en"], settings=settings) or []:
-        data = parser.get_date_data(text)
-        if data.date_obj:
-            if data.period == "year":
-                out.add(data.date_obj.strftime("%Y"))
-            elif data.period == "month":
-                out.add(data.date_obj.strftime("%Y/%m"))
-            elif data.period == "day":
-                out.add(data.date_obj.strftime("%Y/%m/%d"))
-
-    return ", ".join(sorted(out))
 
 
 def sanitise(s: str) -> str:
@@ -164,7 +144,7 @@ def main() -> None:
                 TITLE: sanitise(m.title),
                 AUTHOR: sanitise(", ".join(m.author)),
                 RAW_DATE: sanitise(m.date),
-                DATE: sanitise(parse_date(m.date)) if m.date else "",
+                DATE: sanitise(", ".join(m.parsed_dates)) if m.parsed_dates else "",
                 WORDCOUNT: m.wordcount,
                 POETRY_LINES: m.poetry_lines,
                 FINISHED: "yes" if m.finished else "no",

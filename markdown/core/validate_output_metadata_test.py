@@ -36,10 +36,12 @@ class TestValidateOutputMetadata(test_utils.ScriptTestCase):
                     "version": "foo",
                     "repo": "bar",
                     "source-hash": "quux",
+                    "parsed-dates": [],
                 },
             ),
             """{
     "lang": "en-GB",
+    "parsed-dates": [],
     "poetry-lines": 10,
     "repo": "bar",
     "source-hash": "quux",

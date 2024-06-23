@@ -34,6 +34,7 @@ class TestShunnMetadata(test_utils.ScriptTestCase):
                     "version": "foo",
                     "repo": "bar",
                     "source-hash": "1",
+                    "parsed-dates": [],
                 },
             ),
             """{
@@ -58,6 +59,7 @@ class TestShunnMetadata(test_utils.ScriptTestCase):
                     "version": "foo",
                     "repo": "bar",
                     "source-hash": "1",
+                    "parsed-dates": [],
                 },
             ),
             """{
@@ -83,6 +85,7 @@ class TestShunnMetadata(test_utils.ScriptTestCase):
                     "version": "foo",
                     "repo": "bar",
                     "source-hash": "1",
+                    "parsed-dates": [],
                 },
             ),
             """{

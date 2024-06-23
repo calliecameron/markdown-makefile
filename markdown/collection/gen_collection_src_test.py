@@ -55,6 +55,7 @@ class TestGenCollectionSrc(test_utils.ScriptTestCase):
                         "version": "foo",
                         "repo": "bar",
                         "source-hash": "1",
+                        "parsed-dates": ["2020"],
                     },
                 ),
             ],
@@ -102,6 +103,7 @@ title: The Title
                         "version": "foo",
                         "repo": "bar",
                         "source-hash": "1",
+                        "parsed-dates": ["2020"],
                     },
                 ),
                 (
@@ -116,6 +118,7 @@ title: The Title
                         "version": "foo",
                         "repo": "bar",
                         "source-hash": "1",
+                        "parsed-dates": ["2021"],
                     },
                 ),
                 (
@@ -130,6 +133,7 @@ title: The Title
                         "version": "foo",
                         "repo": "bar",
                         "source-hash": "1",
+                        "parsed-dates": ["2022"],
                     },
                 ),
             ],

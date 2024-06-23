@@ -304,6 +304,18 @@ def _md_file_impl(ctx):
         progress_message = "%{label}: computing source hash",
     )
 
+    parsed_dates = ctx.actions.declare_file(ctx.label.name + "_parsed_dates.json")
+    ctx.actions.run(
+        outputs = [parsed_dates],
+        inputs = [input_metadata],
+        executable = ctx.executable._parse_date,
+        arguments = [
+            input_metadata.path,
+            parsed_dates.path,
+        ],
+        progress_message = "%{label}: parsing date",
+    )
+
     versioned = ctx.actions.declare_file(ctx.label.name + "_stage3_versioned.json")
     versioned_metadata_raw = ctx.actions.declare_file(ctx.label.name + "_stage3_versioned_metadata_raw.json")
     ctx.actions.run(
@@ -313,6 +325,7 @@ def _md_file_impl(ctx):
             input_metadata,
             version,
             source_hash,
+            parsed_dates,
             ctx.file._write_metadata,
         ],
         executable = ctx.executable._pandoc,
@@ -320,6 +333,7 @@ def _md_file_impl(ctx):
             "--lua-filter=" + ctx.file._write_metadata.path,
             "--metadata-file=" + version.path,
             "--metadata-file=" + source_hash.path,
+            "--metadata-file=" + parsed_dates.path,
             "--metadata=metadata-out-file:" + versioned_metadata_raw.path,
             "--metadata=lang:en-GB",
             "--from=json",
@@ -508,6 +522,11 @@ md_file = rule(
         ),
         "_source_hash": attr.label(
             default = "//markdown/core:source_hash",
+            executable = True,
+            cfg = "exec",
+        ),
+        "_parse_date": attr.label(
+            default = "//markdown/core:parse_date",
             executable = True,
             cfg = "exec",
         ),

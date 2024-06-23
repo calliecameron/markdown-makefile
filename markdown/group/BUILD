@@ -19,12 +19,10 @@ py_binary(
     srcs = ["group_summary.py"],
     type_stub_deps = [
         requirement("types-tabulate"),
-        requirement("types-dateparser"),
     ],
     visibility = ["//visibility:public"],
     deps = [
         requirement("tabulate"),
-        requirement("dateparser"),
         "//markdown/utils:metadata",
         "//markdown/utils:publications",
     ],

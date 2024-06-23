@@ -24,6 +24,7 @@ DATA = {
         "lang": "en-GB",
         "repo": "bar",
         "source-hash": "1",
+        "parsed-dates": ["2022"],
     },
     "test1:bar": {
         "title": "Bar\nbaz",
@@ -34,6 +35,7 @@ DATA = {
         "lang": "en-GB",
         "repo": "bar",
         "source-hash": "1",
+        "parsed-dates": [],
     },
     "test2:baz": {
         "title": "baz",
@@ -53,6 +55,7 @@ DATA = {
         "lang": "en-GB",
         "repo": "bar",
         "source-hash": "1",
+        "parsed-dates": ["2020/08", "2023/03/01"],
     },
 }
 

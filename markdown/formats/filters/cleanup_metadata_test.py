@@ -12,6 +12,8 @@ publications: foo
 wordcount: 100
 poetry-lines: 10
 repo: foo
+parsed-dates:
+- foo
 ---
 """,
         )
@@ -27,6 +29,7 @@ publications: foo
 wordcount: 100
 poetry-lines: 10
 repo: foo
+parsed-dates: []
 ---
 """,
         )

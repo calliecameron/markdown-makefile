@@ -17,6 +17,9 @@ function Meta(meta)
     if meta["repo"] ~= nil then
         meta["repo"] = nil
     end
+    if meta["parsed-dates"] ~= nil then
+        meta["parsed-dates"] = nil
+    end
 
     if FORMAT ~= "epub" then
         if meta["identifier"] ~= nil then

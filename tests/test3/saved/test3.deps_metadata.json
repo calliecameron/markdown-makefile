@@ -1,6 +1,7 @@
 {
     "tests/test3:include1": {
         "lang": "en-GB",
+        "parsed-dates": [],
         "poetry-lines": 8,
         "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
         "source-hash": "589160c12a8ea76d40f8986f4d2d4cb9",

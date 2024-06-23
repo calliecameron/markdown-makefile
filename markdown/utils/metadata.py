@@ -1,9 +1,43 @@
+import datetime
 from collections.abc import Iterator, Mapping, Sequence
-from typing import Any
+from typing import Annotated, Any
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel, field_validator
+from pydantic.functional_validators import BeforeValidator
 
 from markdown.utils.publications import Publications
+
+
+def _validate_parsed_date(d: str) -> None:
+    patterns = ("%Y", "%Y/%m", "%Y/%m/%d")
+    for pattern in patterns:
+        try:
+            datetime.datetime.strptime(d, pattern)  # noqa: DTZ007
+        except ValueError:  # noqa: PERF203
+            pass
+        else:
+            return
+    raise ValueError("Must match YYYY, YYYY/MM or YYYY/MM/DD format")
+
+
+def _validate_sorted_date_set_field(v: Any) -> Any:  # noqa: ANN401
+    if not isinstance(v, Sequence):
+        raise ValueError("Must be a sequence of strings in YYYY, YYYY/MM or YYYY/MM/DD format")
+    out = []
+    for i in v:
+        if not isinstance(i, str):
+            raise ValueError("Must be a string in YYYY, YYYY/MM or YYYY/MM/DD format")
+        _validate_parsed_date(i)
+        out.append(i)
+    if out != sorted(frozenset(out)):
+        raise ValueError("Elements must be unique and sorted")
+    return out
+
+
+ParsedDateSet = Annotated[
+    Sequence[str],
+    BeforeValidator(_validate_sorted_date_set_field),
+]
 
 
 class _BaseModel(BaseModel):
@@ -22,6 +56,10 @@ class Version(_BaseModel):
 
 class SourceHash(_BaseModel):
     source_hash: str
+
+
+class ParsedDates(_BaseModel):
+    parsed_dates: ParsedDateSet
 
 
 class Identifier(_BaseModel):
@@ -58,6 +96,7 @@ class OutputMetadata(InputMetadata):
     version: str
     repo: str
     source_hash: str
+    parsed_dates: ParsedDateSet
 
 
 class MetadataMap(RootModel[Mapping[str, OutputMetadata]], Mapping[str, OutputMetadata]):

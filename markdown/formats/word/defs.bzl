@@ -29,8 +29,12 @@ def _md_odt_impl(ctx):
         extension = "odt",
         variant = None,
         to_format = "odt",
-        inputs = [filters.remove_collection_separators.file(ctx)],
+        inputs = [
+            filters.add_subject.file(ctx),
+            filters.remove_collection_separators.file(ctx),
+        ],
         args = [
+            filters.add_subject.arg(ctx),
             filters.remove_collection_separators.arg(ctx),
         ] + expand_locations(ctx, ctx.attr.file, ctx.attr.extra_pandoc_flags),
         env = timestamp_override.env(ctx),
@@ -73,6 +77,7 @@ md_odt = rule(
             tools.pandoc.attr |
             tools.write_open_script.attr |
             tools.zip_cleaner.attr |
+            filters.add_subject.attr |
             filters.remove_collection_separators.attr |
             timestamp_override.attr,
 )
@@ -86,11 +91,13 @@ def _md_docx_impl(ctx):
         to_format = "docx",
         inputs = [
             ctx.file._template,
+            filters.add_subject.file(ctx),
             filters.remove_collection_separators_before_headers.file(ctx),
             ctx.file._docx_filter,
         ],
         args = [
             "--reference-doc=" + ctx.file._template.path,
+            filters.add_subject.arg(ctx),
             filters.remove_collection_separators_before_headers.arg(ctx),
             "--lua-filter=" + ctx.file._docx_filter.path,
         ] + expand_locations(ctx, ctx.attr.file, ctx.attr.extra_pandoc_flags),
@@ -144,6 +151,7 @@ md_docx = rule(
             tools.pandoc.attr |
             tools.write_open_script.attr |
             tools.zip_cleaner.attr |
+            filters.add_subject.attr |
             filters.remove_collection_separators_before_headers.attr |
             timestamp_override.attr,
 )
@@ -219,6 +227,7 @@ def _md_shunnmodern_docx_impl(ctx):
         inputs = data_inputs + [
             ctx.attr.file[MdFileInfo].output,
             metadata,
+            filters.add_subject.file(ctx),
             ctx.file._filter,
             tools.pandoc.wrapped_executable(ctx),
         ],
@@ -231,6 +240,7 @@ def _md_shunnmodern_docx_impl(ctx):
             "--output",
             intermediate_docx.path,
             "--metadata-file=" + metadata.path,
+            filters.add_subject.arg(ctx),
             "--lua-filter=" + ctx.file._filter.path,
             ctx.attr.file[MdFileInfo].output.path,
         ],
@@ -284,5 +294,6 @@ md_shunnmodern_docx = rule(
             tools.pandoc.attr |
             tools.write_open_script.attr |
             tools.zip_cleaner.attr |
+            filters.add_subject.attr |
             timestamp_override.attr,
 )

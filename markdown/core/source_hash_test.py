@@ -40,7 +40,6 @@ class TestSourceHash(test_utils.ScriptTestCase):
                     "lang": "en-GB",
                     "docversion": "foo",
                     "repo": "bar",
-                    "subject": "baz",
                     "source-hash": "1",
                 },
                 "dep2": {
@@ -49,7 +48,6 @@ class TestSourceHash(test_utils.ScriptTestCase):
                     "lang": "en-US",
                     "docversion": "blah",
                     "repo": "yay",
-                    "subject": "yay1",
                     "source-hash": "3",
                 },
             },

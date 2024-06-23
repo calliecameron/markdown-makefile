@@ -23,7 +23,6 @@ DATA = {
         ],
         "lang": "en-GB",
         "repo": "bar",
-        "subject": "baz",
         "source-hash": "1",
     },
     "test1:bar": {
@@ -34,7 +33,6 @@ DATA = {
         "docversion": "quux, dirty",
         "lang": "en-GB",
         "repo": "bar",
-        "subject": "baz",
         "source-hash": "1",
     },
     "test2:baz": {
@@ -54,7 +52,6 @@ DATA = {
         ],
         "lang": "en-GB",
         "repo": "bar",
-        "subject": "baz",
         "source-hash": "1",
     },
 }

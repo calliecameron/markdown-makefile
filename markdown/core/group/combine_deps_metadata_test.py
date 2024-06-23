@@ -34,7 +34,6 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
                         "lang": "en-GB",
                         "docversion": "foo",
                         "repo": "bar",
-                        "subject": "baz",
                         "source-hash": "quux",
                     },
                     {
@@ -43,7 +42,6 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
                         "lang": "en-US",
                         "docversion": "blah",
                         "repo": "yay",
-                        "subject": "yay1",
                         "source-hash": "yay2",
                     },
                 ],
@@ -55,7 +53,6 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
         "poetry-lines": 0,
         "repo": "bar",
         "source-hash": "quux",
-        "subject": "baz",
         "wordcount": 10
     },
     "dep2": {
@@ -64,7 +61,6 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
         "poetry-lines": 10,
         "repo": "yay",
         "source-hash": "yay2",
-        "subject": "yay1",
         "wordcount": 20
     }
 }""",

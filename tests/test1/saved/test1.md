@@ -20,7 +20,6 @@ publications:
   submitted: 2022-11-11
   venue: Bar
 source-hash: 73310d412aba179c1f378944fdfc6b17
-subject: "Version: reproducible"
 title: The Title
 wordcount: 284
 ---

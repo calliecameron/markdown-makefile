@@ -20,12 +20,6 @@ class Version(_BaseModel):
     repo: str
 
 
-class VersionMetadata(_BaseModel):
-    docversion: str
-    repo: str
-    subject: str
-
-
 class SourceHash(_BaseModel):
     source_hash: str
 
@@ -63,7 +57,6 @@ class OutputMetadata(InputMetadata):
     lang: str
     docversion: str
     repo: str
-    subject: str
     source_hash: str
 
 

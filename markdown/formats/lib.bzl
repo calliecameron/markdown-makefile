@@ -52,6 +52,16 @@ filters = struct(
         file = lambda ctx: ctx.file._add_title,
         arg = lambda ctx: "--lua-filter=" + ctx.file._add_title.path,
     ),
+    add_subject = struct(
+        attr = {
+            "_add_subject": attr.label(
+                allow_single_file = True,
+                default = "//markdown/formats:add_subject.lua",
+            ),
+        },
+        file = lambda ctx: ctx.file._add_subject,
+        arg = lambda ctx: "--lua-filter=" + ctx.file._add_subject.path,
+    ),
     remove_paragraph_annotations = struct(
         attr = {
             "_remove_paragraph_annotations": attr.label(

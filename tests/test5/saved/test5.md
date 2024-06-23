@@ -6,7 +6,6 @@ identifier:
 lang: en-GB
 poetry-lines: 0
 source-hash: 68a95fd2c5559a60b1a35c207c6cfc8e
-subject: "Version: reproducible"
 wordcount: 9
 ---
 

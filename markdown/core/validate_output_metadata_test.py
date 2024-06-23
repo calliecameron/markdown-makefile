@@ -35,7 +35,6 @@ class TestValidateOutputMetadata(test_utils.ScriptTestCase):
                     "lang": "en-GB",
                     "docversion": "foo",
                     "repo": "bar",
-                    "subject": "baz",
                     "source-hash": "quux",
                 },
             ),
@@ -45,7 +44,6 @@ class TestValidateOutputMetadata(test_utils.ScriptTestCase):
     "poetry-lines": 10,
     "repo": "bar",
     "source-hash": "quux",
-    "subject": "baz",
     "wordcount": 10
 }""",
         )

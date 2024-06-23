@@ -2,7 +2,7 @@ import argparse
 import json
 from collections.abc import Mapping
 
-from markdown.utils.metadata import Version, VersionMetadata
+from markdown.utils.metadata import Version
 
 
 def get_version(
@@ -49,14 +49,6 @@ def get_version(
     return version
 
 
-def get_metadata(version: Version) -> VersionMetadata:
-    return VersionMetadata(
-        docversion=version.docversion,
-        subject=f"Version: {version.docversion}",
-        repo=version.repo,
-    )
-
-
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("raw_version_file")
@@ -74,11 +66,10 @@ def main() -> None:
             dep_versions[target] = Version(docversion=metadata["docversion"], repo=metadata["repo"])
 
     version = get_version(raw_version, dep_versions, args.version_override)
-    metadata = get_metadata(version)
 
     with open(args.metadata_out_file, mode="w", encoding="utf-8") as f:
         json.dump(
-            metadata.model_dump(
+            version.model_dump(
                 mode="json",
                 by_alias=True,
                 exclude_unset=True,

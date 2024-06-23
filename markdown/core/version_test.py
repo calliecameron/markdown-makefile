@@ -5,7 +5,7 @@ from collections.abc import Mapping, Sequence
 
 import markdown.core.version
 from markdown.utils import test_utils
-from markdown.utils.metadata import Version, VersionMetadata
+from markdown.utils.metadata import Version
 
 
 class TestVersion(test_utils.ScriptTestCase):
@@ -59,12 +59,6 @@ class TestVersion(test_utils.ScriptTestCase):
         with self.assertRaises(ValueError):
             markdown.core.version.get_version(base, {"a": unversioned}, "OVERRIDE")
 
-    def test_get_metadata(self) -> None:
-        self.assertEqual(
-            markdown.core.version.get_metadata(Version(docversion="foo", repo="bar")),
-            VersionMetadata(docversion="foo", repo="bar", subject="Version: foo"),
-        )
-
     def run_script(  # type: ignore[override]
         self,
         raw_version: Mapping[str, str],
@@ -101,8 +95,7 @@ class TestVersion(test_utils.ScriptTestCase):
             metadata_out,
             """{
     "docversion": "foo",
-    "repo": "bar",
-    "subject": "Version: foo"
+    "repo": "bar"
 }""",
         )
 
@@ -120,8 +113,7 @@ class TestVersion(test_utils.ScriptTestCase):
             metadata_out,
             """{
     "docversion": "foo, dirty deps",
-    "repo": "bar",
-    "subject": "Version: foo, dirty deps"
+    "repo": "bar"
 }""",
         )
 
@@ -139,8 +131,7 @@ class TestVersion(test_utils.ScriptTestCase):
             metadata_out,
             """{
     "docversion": "override",
-    "repo": "bar",
-    "subject": "Version: override"
+    "repo": "bar"
 }""",
         )
 

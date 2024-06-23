@@ -30,6 +30,7 @@ bzl_library(
 exports_files(
     [
         "add_title.lua",
+        "add_subject.lua",
         "remove_paragraph_annotations.lua",
         "remove_collection_separators.lua",
         "remove_collection_separators_before_headers.lua",
@@ -83,6 +84,12 @@ pandoc_filter_py_test(
     name = "add_title_test",
     src = "add_title_test.py",
     filter = "add_title.lua",
+)
+
+pandoc_filter_py_test(
+    name = "add_subject_test",
+    src = "add_subject_test.py",
+    filter = "add_subject.lua",
 )
 
 pandoc_filter_py_test(

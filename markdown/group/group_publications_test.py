@@ -30,7 +30,6 @@ class TestPublications(test_utils.ScriptTestCase):
                     "poetry-lines": "0",
                     "lang": "en-GB",
                     "repo": "bar",
-                    "subject": "baz",
                     "source-hash": "1",
                 },
                 "//baz:quux": {
@@ -46,7 +45,6 @@ class TestPublications(test_utils.ScriptTestCase):
                     "poetry-lines": "0",
                     "lang": "en-GB",
                     "repo": "bar",
-                    "subject": "baz",
                     "source-hash": "1",
                 },
             },
@@ -128,7 +126,6 @@ a:visited { color: black; }
     ],
     "repo": "bar",
     "source-hash": "1",
-    "subject": "baz",
     "title": "Baz",
     "wordcount": 20
 }</pre></code>
@@ -152,7 +149,6 @@ a:visited { color: black; }
     ],
     "repo": "bar",
     "source-hash": "1",
-    "subject": "baz",
     "title": "Foo &lt;Bar&gt;",
     "wordcount": 10
 }</pre></code>

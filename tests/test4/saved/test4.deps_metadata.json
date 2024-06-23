@@ -32,7 +32,6 @@
         ],
         "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
         "source-hash": "73310d412aba179c1f378944fdfc6b17",
-        "subject": "Version: reproducible",
         "title": "The Title",
         "wordcount": 284
     },
@@ -64,7 +63,6 @@
         ],
         "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
         "source-hash": "fd343bad17949ebeb3106e0d71ca560b",
-        "subject": "Version: reproducible",
         "title": "The Title",
         "wordcount": 246
     },
@@ -90,7 +88,6 @@
         ],
         "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
         "source-hash": "117f7bb3aeb5d7c200c762e9f4c475a9",
-        "subject": "Version: reproducible",
         "title": "The Title Is 'Baz'",
         "wordcount": 337
     },
@@ -120,7 +117,6 @@
         ],
         "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
         "source-hash": "77c1626ffdd3fd7a91f02fc3ca786bce",
-        "subject": "Version: reproducible",
         "title": "Title",
         "wordcount": 10
     }

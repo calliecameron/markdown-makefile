@@ -18,7 +18,6 @@ publications:
   - "http://example.com"
   venue: Bar
 source-hash: fd343bad17949ebeb3106e0d71ca560b
-subject: "Version: reproducible"
 title: The Title
 wordcount: 246
 ---

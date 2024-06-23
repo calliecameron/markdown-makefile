@@ -9,7 +9,6 @@ identifier:
 lang: en-GB
 poetry-lines: 24
 source-hash: e39b4b5abc3ebb895c799e1e6f5711ab
-subject: "Version: reproducible"
 title: Test 4
 wordcount: 897
 ---

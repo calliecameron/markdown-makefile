@@ -46,7 +46,7 @@ filters = struct(
         attr = {
             "_add_title": attr.label(
                 allow_single_file = True,
-                default = "//markdown/formats:add_title.lua",
+                default = "//markdown/formats/filters:add_title.lua",
             ),
         },
         file = lambda ctx: ctx.file._add_title,
@@ -56,7 +56,7 @@ filters = struct(
         attr = {
             "_add_subject": attr.label(
                 allow_single_file = True,
-                default = "//markdown/formats:add_subject.lua",
+                default = "//markdown/formats/filters:add_subject.lua",
             ),
         },
         file = lambda ctx: ctx.file._add_subject,
@@ -66,7 +66,7 @@ filters = struct(
         attr = {
             "_remove_paragraph_annotations": attr.label(
                 allow_single_file = True,
-                default = "//markdown/formats:remove_paragraph_annotations.lua",
+                default = "//markdown/formats/filters:remove_paragraph_annotations.lua",
             ),
         },
         file = lambda ctx: ctx.file._remove_paragraph_annotations,
@@ -76,7 +76,7 @@ filters = struct(
         attr = {
             "_remove_collection_separators": attr.label(
                 allow_single_file = True,
-                default = "//markdown/formats:remove_collection_separators.lua",
+                default = "//markdown/formats/filters:remove_collection_separators.lua",
             ),
         },
         file = lambda ctx: ctx.file._remove_collection_separators,
@@ -86,7 +86,7 @@ filters = struct(
         attr = {
             "_remove_collection_separators_before_headers": attr.label(
                 allow_single_file = True,
-                default = "//markdown/formats:remove_collection_separators_before_headers.lua",
+                default = "//markdown/formats/filters:remove_collection_separators_before_headers.lua",
             ),
         },
         file = lambda ctx: ctx.file._remove_collection_separators_before_headers,

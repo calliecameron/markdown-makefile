@@ -1,10 +1,10 @@
 ---
 author:
 - An Author
-docversion: reproducible
 lang: en-GB
 source-hash: fd343bad17949ebeb3106e0d71ca560b
 title: The Title
+version: reproducible
 ---
 
 This is some text before a section. It shouldn’t be indented. Each section should start on a new page (but subsections shouldn’t).

@@ -14,17 +14,17 @@ def get_version(
     unversioned_deps = []
 
     for target, version in sorted(dep_versions.items()):
-        if "dirty" in version.docversion:
+        if "dirty" in version.version:
             dirty_deps.append((target, version))
-        if "unversioned" in version.docversion:
+        if "unversioned" in version.version:
             unversioned_deps.append((target, version))
 
     version = Version(
-        docversion=(
+        version=(
             version_override
             if version_override
             else (
-                raw_version.docversion
+                raw_version.version
                 + (", dirty deps" if dirty_deps else "")
                 + (", unversioned deps" if unversioned_deps else "")
             )
@@ -63,7 +63,7 @@ def main() -> None:
     dep_versions = {}
     with open(args.deps_metadata_file, encoding="utf-8") as f:
         for target, metadata in json.load(f).items():
-            dep_versions[target] = Version(docversion=metadata["docversion"], repo=metadata["repo"])
+            dep_versions[target] = Version(version=metadata["version"], repo=metadata["repo"])
 
     version = get_version(raw_version, dep_versions, args.version_override)
 

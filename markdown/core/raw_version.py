@@ -34,7 +34,7 @@ def main() -> None:
     with open(args.outfile, mode="w", encoding="utf-8") as f:
         json.dump(
             Version(
-                docversion=version,
+                version=version,
                 repo=repo,
             ).model_dump(
                 mode="json",

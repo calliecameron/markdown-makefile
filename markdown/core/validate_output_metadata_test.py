@@ -33,17 +33,17 @@ class TestValidateOutputMetadata(test_utils.ScriptTestCase):
                     "wordcount": 10,
                     "poetry-lines": "10",
                     "lang": "en-GB",
-                    "docversion": "foo",
+                    "version": "foo",
                     "repo": "bar",
                     "source-hash": "quux",
                 },
             ),
             """{
-    "docversion": "foo",
     "lang": "en-GB",
     "poetry-lines": 10,
     "repo": "bar",
     "source-hash": "quux",
+    "version": "foo",
     "wordcount": 10
 }""",
         )

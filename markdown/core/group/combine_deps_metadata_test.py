@@ -32,7 +32,7 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
                         "wordcount": "10",
                         "poetry-lines": "0",
                         "lang": "en-GB",
-                        "docversion": "foo",
+                        "version": "foo",
                         "repo": "bar",
                         "source-hash": "quux",
                     },
@@ -40,7 +40,7 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
                         "wordcount": "20",
                         "poetry-lines": "10",
                         "lang": "en-US",
-                        "docversion": "blah",
+                        "version": "blah",
                         "repo": "yay",
                         "source-hash": "yay2",
                     },
@@ -48,19 +48,19 @@ class TestCombineDepsMetadata(test_utils.ScriptTestCase):
             ),
             """{
     "dep1": {
-        "docversion": "foo",
         "lang": "en-GB",
         "poetry-lines": 0,
         "repo": "bar",
         "source-hash": "quux",
+        "version": "foo",
         "wordcount": 10
     },
     "dep2": {
-        "docversion": "blah",
         "lang": "en-US",
         "poetry-lines": 10,
         "repo": "yay",
         "source-hash": "yay2",
+        "version": "blah",
         "wordcount": 20
     }
 }""",

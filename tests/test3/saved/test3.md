@@ -2,10 +2,10 @@
 author:
 - An Author
 date: 23 February 2019 baz
-docversion: reproducible
 lang: en-GB
 source-hash: 117f7bb3aeb5d7c200c762e9f4c475a9
 title: The Title Is ‘Baz’
+version: reproducible
 ---
 
 -   [This is a section](#__h1_1){#toc-__h1_1}

@@ -12,7 +12,7 @@ DATA = {
         "wordcount": "10",
         "poetry-lines": "3",
         "finished": True,
-        "docversion": "bar",
+        "version": "bar",
         "publications": [
             {
                 "venue": "foo",
@@ -30,7 +30,7 @@ DATA = {
         "author": "A",
         "wordcount": "5",
         "poetry-lines": "0",
-        "docversion": "quux, dirty",
+        "version": "quux, dirty",
         "lang": "en-GB",
         "repo": "bar",
         "source-hash": "1",
@@ -42,7 +42,7 @@ DATA = {
         "wordcount": "20",
         "poetry-lines": "5",
         "finished": False,
-        "docversion": "baz",
+        "version": "baz",
         "publications": [
             {
                 "venue": "baz",

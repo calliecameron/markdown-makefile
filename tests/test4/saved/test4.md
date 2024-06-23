@@ -2,10 +2,10 @@
 author:
 - The Author
 date: 1 January 2022
-docversion: reproducible
 lang: en-GB
 source-hash: e39b4b5abc3ebb895c799e1e6f5711ab
 title: Test 4
+version: reproducible
 ---
 
 -   [The Title](#__h1_1){#toc-__h1_1}

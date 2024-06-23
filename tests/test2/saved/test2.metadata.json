@@ -2,7 +2,6 @@
     "author": [
         "An Author"
     ],
-    "docversion": "reproducible",
     "identifier": [
         {
             "scheme": "DOI",
@@ -27,5 +26,6 @@
     "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
     "source-hash": "fd343bad17949ebeb3106e0d71ca560b",
     "title": "The Title",
+    "version": "reproducible",
     "wordcount": 246
 }

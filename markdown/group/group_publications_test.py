@@ -13,7 +13,7 @@ class TestPublications(test_utils.ScriptTestCase):
                 "//foo:bar": {
                     "title": "Foo <Bar>",
                     "wordcount": "10",
-                    "docversion": "bar",
+                    "version": "bar",
                     "publications": [
                         {
                             "venue": "Foo",
@@ -35,7 +35,7 @@ class TestPublications(test_utils.ScriptTestCase):
                 "//baz:quux": {
                     "title": "Baz",
                     "wordcount": "20",
-                    "docversion": "quux, dirty",
+                    "version": "quux, dirty",
                     "publications": [
                         {
                             "venue": "Foo",
@@ -115,7 +115,6 @@ a:visited { color: black; }
 <h2>Details</h2>
 <h3 id="//baz:quux">//baz:quux</h3>
 <code><pre>{
-    "docversion": "quux, dirty",
     "lang": "en-GB",
     "poetry-lines": 0,
     "publications": [
@@ -127,11 +126,11 @@ a:visited { color: black; }
     "repo": "bar",
     "source-hash": "1",
     "title": "Baz",
+    "version": "quux, dirty",
     "wordcount": 20
 }</pre></code>
 <h3 id="//foo:bar">//foo:bar</h3>
 <code><pre>{
-    "docversion": "bar",
     "lang": "en-GB",
     "poetry-lines": 0,
     "publications": [
@@ -150,6 +149,7 @@ a:visited { color: black; }
     "repo": "bar",
     "source-hash": "1",
     "title": "Foo &lt;Bar&gt;",
+    "version": "bar",
     "wordcount": 10
 }</pre></code>
 </body>

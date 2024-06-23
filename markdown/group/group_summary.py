@@ -169,8 +169,8 @@ def main() -> None:
                 POETRY_LINES: m.poetry_lines,
                 FINISHED: "yes" if m.finished else "no",
                 PUBLICATION: publication,
-                VERSION: m.docversion,
-                STATUS: "DIRTY" if "dirty" in m.docversion else "ok",
+                VERSION: m.version,
+                STATUS: "DIRTY" if "dirty" in m.version else "ok",
             }
 
             if should_include(row, args):

@@ -3,7 +3,6 @@
         "author": [
             "The Author"
         ],
-        "docversion": "reproducible",
         "finished": true,
         "identifier": [
             {
@@ -33,13 +32,13 @@
         "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
         "source-hash": "73310d412aba179c1f378944fdfc6b17",
         "title": "The Title",
+        "version": "reproducible",
         "wordcount": 284
     },
     "tests/test2:test2": {
         "author": [
             "An Author"
         ],
-        "docversion": "reproducible",
         "identifier": [
             {
                 "scheme": "DOI",
@@ -64,6 +63,7 @@
         "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
         "source-hash": "fd343bad17949ebeb3106e0d71ca560b",
         "title": "The Title",
+        "version": "reproducible",
         "wordcount": 246
     },
     "tests/test3:test3": {
@@ -71,7 +71,6 @@
             "An Author"
         ],
         "date": "23 February 2019 baz",
-        "docversion": "reproducible",
         "identifier": [
             {
                 "scheme": "DOI",
@@ -89,6 +88,7 @@
         "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
         "source-hash": "117f7bb3aeb5d7c200c762e9f4c475a9",
         "title": "The Title Is 'Baz'",
+        "version": "reproducible",
         "wordcount": 337
     },
     "tests/test4:test4a": {
@@ -96,7 +96,6 @@
             "The Author"
         ],
         "date": "4 January 2022",
-        "docversion": "reproducible",
         "lang": "en-GB",
         "poetry-lines": 0,
         "publications": [
@@ -118,6 +117,7 @@
         "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
         "source-hash": "77c1626ffdd3fd7a91f02fc3ca786bce",
         "title": "Title",
+        "version": "reproducible",
         "wordcount": 10
     }
 }

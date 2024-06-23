@@ -33,8 +33,8 @@ STABLE_REPO_B /bar/.git
                 "a/b",
             ),
             """{
-    "docversion": "10",
-    "repo": "/foo/.git"
+    "repo": "/foo/.git",
+    "version": "10"
 }""",
         )
 
@@ -49,8 +49,8 @@ STABLE_REPO_B /bar/.git
                 "",
             ),
             """{
-    "docversion": "10",
-    "repo": "/foo/.git"
+    "repo": "/foo/.git",
+    "version": "10"
 }""",
         )
 

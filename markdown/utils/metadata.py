@@ -16,7 +16,7 @@ class _BaseModel(BaseModel):
 
 
 class Version(_BaseModel):
-    docversion: str
+    version: str
     repo: str
 
 
@@ -55,7 +55,7 @@ class OutputMetadata(InputMetadata):
     wordcount: int = Field(strict=False, ge=0)
     poetry_lines: int = Field(strict=False, ge=0)
     lang: str
-    docversion: str
+    version: str
     repo: str
     source_hash: str
 

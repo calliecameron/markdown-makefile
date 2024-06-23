@@ -1,5 +1,4 @@
 {
-    "docversion": "reproducible",
     "identifier": [
         {
             "scheme": "DOI",
@@ -10,5 +9,6 @@
     "poetry-lines": 0,
     "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
     "source-hash": "68a95fd2c5559a60b1a35c207c6cfc8e",
+    "version": "reproducible",
     "wordcount": 9
 }

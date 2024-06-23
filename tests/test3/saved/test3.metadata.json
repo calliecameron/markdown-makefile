@@ -3,7 +3,6 @@
         "An Author"
     ],
     "date": "23 February 2019 baz",
-    "docversion": "reproducible",
     "identifier": [
         {
             "scheme": "DOI",
@@ -21,5 +20,6 @@
     "repo": "/home/callie/markdown-makefile-dev/markdown-makefile/.git",
     "source-hash": "117f7bb3aeb5d7c200c762e9f4c475a9",
     "title": "The Title Is 'Baz'",
+    "version": "reproducible",
     "wordcount": 337
 }

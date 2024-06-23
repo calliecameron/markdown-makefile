@@ -7,7 +7,7 @@ class TestAddSubject(test_utils.PandocLuaFilterTestCase):
     def test_version(self) -> None:
         doc = self.run_filter(
             """---
-docversion: Foo
+version: Foo
 ---
 """,
         )

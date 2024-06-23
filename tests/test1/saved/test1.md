@@ -1,10 +1,10 @@
 ---
 author:
 - The Author
-docversion: reproducible
 lang: en-GB
 source-hash: 73310d412aba179c1f378944fdfc6b17
 title: The Title
+version: reproducible
 ---
 
 This is some text before a section. It shouldn’t be indented.

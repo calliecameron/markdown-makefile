@@ -17,7 +17,7 @@ exports_files(
     [
         "reference.docx",
         "docx_filter.lua",
-        "ms_docx_filter.lua",
+        "shunn_docx_filter.lua",
     ],
     visibility = ["//visibility:public"],
 )
@@ -29,29 +29,29 @@ sh_binary(
 )
 
 py_binary(
-    name = "ms_metadata",
-    srcs = ["ms_metadata.py"],
+    name = "shunn_metadata",
+    srcs = ["shunn_metadata.py"],
     visibility = ["//visibility:public"],
     deps = ["//markdown/utils:metadata"],
 )
 
 script_py_test(
-    name = "ms_metadata_test",
-    src = "ms_metadata_test.py",
-    script = ":ms_metadata",
+    name = "shunn_metadata_test",
+    src = "shunn_metadata_test.py",
+    script = ":shunn_metadata",
 )
 
 sh_test(
-    name = "ms_docx_filter_test",
-    srcs = ["ms_docx_filter_test.sh"],
+    name = "shunn_docx_filter_test",
+    srcs = ["shunn_docx_filter_test.sh"],
     args = [
         "$(rootpath //markdown/external:pandoc)",
-        "$(rootpath ms_docx_filter.lua)",
+        "$(rootpath shunn_docx_filter.lua)",
         "$(rootpath reference.docx)",
     ],
     data = [
-        "ms_docx_filter.lua",
         "reference.docx",
+        "shunn_docx_filter.lua",
         "//markdown/external:pandoc",
     ],
 )

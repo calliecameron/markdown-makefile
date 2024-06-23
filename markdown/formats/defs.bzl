@@ -29,8 +29,8 @@ load(
     "//markdown/formats/word:defs.bzl",
     _md_doc = "md_doc",
     _md_docx = "md_docx",
-    _md_ms_docx = "md_ms_docx",
     _md_odt = "md_odt",
+    _md_shunnmodern_docx = "md_shunnmodern_docx",
 )
 load(
     ":lib.bzl",
@@ -48,7 +48,7 @@ md_tex = _md_tex
 md_tex_intermediate = _md_tex_intermediate
 md_doc = _md_doc
 md_docx = _md_docx
-md_ms_docx = _md_ms_docx
+md_shunnmodern_docx = _md_shunnmodern_docx
 md_odt = _md_odt
 md_metadata_json = _md_metadata_json
 md_deps_metadata_json = _md_deps_metadata_json

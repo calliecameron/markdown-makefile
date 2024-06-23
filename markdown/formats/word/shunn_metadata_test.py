@@ -6,8 +6,8 @@ from typing import Any
 from markdown.utils import test_utils
 
 
-class TestMsMetadata(test_utils.ScriptTestCase):
-    def run_ms_metadata(self, metadata: Mapping[str, Any]) -> str:
+class TestShunnMetadata(test_utils.ScriptTestCase):
+    def run_shunn_metadata(self, metadata: Mapping[str, Any]) -> str:
         in_file = os.path.join(self.tmpdir(), "in.json")
         self.dump_json(in_file, metadata)
 
@@ -22,9 +22,9 @@ class TestMsMetadata(test_utils.ScriptTestCase):
 
         return self.load_file(out_file)
 
-    def test_ms_metadata(self) -> None:
+    def test_shunn_metadata(self) -> None:
         self.assertEqual(
-            self.run_ms_metadata(
+            self.run_shunn_metadata(
                 {
                     "title": "The Title",
                     "author": ["An Author"],
@@ -48,9 +48,9 @@ class TestMsMetadata(test_utils.ScriptTestCase):
 }""",
         )
 
-    def test_ms_metadata_no_title(self) -> None:
+    def test_shunn_metadata_no_title(self) -> None:
         self.assertEqual(
-            self.run_ms_metadata(
+            self.run_shunn_metadata(
                 {
                     "author": "An Author",
                     "wordcount": "10",
@@ -74,9 +74,9 @@ class TestMsMetadata(test_utils.ScriptTestCase):
 }""",
         )
 
-    def test_ms_metadata_no_author(self) -> None:
+    def test_shunn_metadata_no_author(self) -> None:
         self.assertEqual(
-            self.run_ms_metadata(
+            self.run_shunn_metadata(
                 {
                     "title": "The Title",
                     "wordcount": "10",

@@ -12,13 +12,15 @@ bzl_library(
 bzl_library(
     name = "defs_bzl",
     srcs = ["defs.bzl"],
-    visibility = ["//markdown:__pkg__"],
+    visibility = [
+        "//markdown:__pkg__",
+        "//tests:__pkg__",
+    ],
     deps = [
         ":lib_bzl",
         "//markdown/formats/ebook:defs_bzl",
         "//markdown/formats/html:defs_bzl",
         "//markdown/formats/latex:defs_bzl",
-        "//markdown/formats/markdown:defs_bzl",
         "//markdown/formats/metadata:defs_bzl",
         "//markdown/formats/text:defs_bzl",
         "//markdown/formats/word:defs_bzl",

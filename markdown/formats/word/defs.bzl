@@ -195,20 +195,20 @@ md_doc = rule(
             tools.write_open_script.attr,
 )
 
-def _md_ms_docx_impl(ctx):
-    metadata = ctx.actions.declare_file(ctx.label.name + "_ms_metadata.json")
+def _md_shunnmodern_docx_impl(ctx):
+    metadata = ctx.actions.declare_file(ctx.label.name + "_shunnmodern_metadata.json")
     ctx.actions.run(
         outputs = [metadata],
         inputs = [ctx.attr.file[MdFileInfo].metadata],
-        executable = ctx.executable._ms_metadata,
+        executable = ctx.executable._shunn_metadata,
         arguments = [
             ctx.attr.file[MdFileInfo].metadata.path,
             metadata.path,
         ],
-        progress_message = "%{label}: generating ms metadata",
+        progress_message = "%{label}: generating shunn metadata",
     )
 
-    intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_ms_intermediate.docx")
+    intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_shunnmodern_intermediate.docx")
     env = timestamp_override.env(ctx)
     env["PANDOC"] = tools.pandoc.wrapped_executable(ctx).path
     data_inputs = []
@@ -235,7 +235,7 @@ def _md_ms_docx_impl(ctx):
             ctx.attr.file[MdFileInfo].output.path,
         ],
         env = env,
-        progress_message = progress_message("docx", "ms"),
+        progress_message = progress_message("docx", "shunnmodern"),
     )
 
     output = ctx.outputs.out
@@ -248,7 +248,7 @@ def _md_ms_docx_impl(ctx):
     script = write_open_script(
         ctx = ctx,
         extension = "docx",
-        variant = "ms",
+        variant = "shunnmodern",
         file_to_open = output,
     )
 
@@ -256,18 +256,18 @@ def _md_ms_docx_impl(ctx):
         default_info(ctx, output, script),
     ]
 
-md_ms_docx = rule(
-    implementation = _md_ms_docx_impl,
+md_shunnmodern_docx = rule(
+    implementation = _md_shunnmodern_docx_impl,
     executable = True,
-    doc = docstring("docx", "ms"),
+    doc = docstring("docx", "shunnmodern"),
     attrs = {
                 "file": attr.label(
                     providers = [MdFileInfo],
                     doc = "An md_file target.",
                 ),
                 "out": attr.output(),
-                "_ms_metadata": attr.label(
-                    default = "//markdown/formats/word:ms_metadata",
+                "_shunn_metadata": attr.label(
+                    default = "//markdown/formats/word:shunn_metadata",
                     executable = True,
                     cfg = "exec",
                 ),
@@ -278,7 +278,7 @@ md_ms_docx = rule(
                 ),
                 "_filter": attr.label(
                     allow_single_file = True,
-                    default = "//markdown/formats/word:ms_docx_filter.lua",
+                    default = "//markdown/formats/word:shunn_docx_filter.lua",
                 ),
             } |
             tools.pandoc.attr |

@@ -22,9 +22,9 @@ load(
     _md_md = "md_md",
     _md_metadata_json = "md_metadata_json",
     _md_mobi = "md_mobi",
-    _md_ms_docx = "md_ms_docx",
     _md_odt = "md_odt",
     _md_pdf = "md_pdf",
+    _md_shunnmodern_docx = "md_shunnmodern_docx",
     _md_tex = "md_tex",
     _md_tex_intermediate = "md_tex_intermediate",
     _md_txt = "md_txt",
@@ -58,7 +58,7 @@ _FORMATS = [
     ("odt", None),
     ("docx", None),
     ("doc", None),
-    ("docx", "ms"),
+    ("docx", "shunnmodern"),
     ("json", "metadata"),
     ("json", "deps_metadata"),
 ]
@@ -259,10 +259,10 @@ def md_document(
         out = _output(name, "doc", None),
         visibility = ["//visibility:private"],
     )
-    _md_ms_docx(
-        name = _name(name, "docx", "ms"),
+    _md_shunnmodern_docx(
+        name = _name(name, "docx", "shunnmodern"),
         file = file,
-        out = _output(name, "docx", "ms"),
+        out = _output(name, "docx", "shunnmodern"),
         timestamp_override = timestamp_override,
         visibility = ["//visibility:private"],
     )

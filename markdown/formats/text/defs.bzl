@@ -13,13 +13,13 @@ load(
 
 _md_tumblr_filter = filter(
     attr = {
-        "_markdown_tumblr_filter": attr.label(
+        "_tumblr_markdown_filter": attr.label(
             allow_single_file = True,
-            default = "//markdown/formats/text:markdown_tumblr_filter.lua",
+            default = "//markdown/formats/text:tumblr_markdown_filter.lua",
         ),
     },
-    file = lambda ctx: ctx.file._markdown_tumblr_filter,
-    arg = lambda ctx: "--lua-filter=" + ctx.file._markdown_tumblr_filter.path,
+    file = lambda ctx: ctx.file._tumblr_markdown_filter,
+    arg = lambda ctx: "--lua-filter=" + ctx.file._tumblr_markdown_filter.path,
 )
 
 def _md_output_impl(ctx, variant, extra_filters):

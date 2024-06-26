@@ -3,8 +3,8 @@ from panflute import Para, Space, Str
 from markdown.utils import test_utils
 
 
-class TestMarkdownTumblrFilter(test_utils.PandocLuaFilterTestCase):
-    def test_markdown_tumblr_filter(self) -> None:
+class TestTumblrMarkdownFilter(test_utils.PandocLuaFilterTestCase):
+    def test_tumblr_markdown_filter(self) -> None:
         doc = self.run_filter(
             """\\<Foo\\>
 

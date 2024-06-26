@@ -1,4 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("//markdown/utils:defs.bzl", "pandoc_filter_py_test")
 
 bzl_library(
     name = "defs_bzl",
@@ -18,4 +19,10 @@ exports_files(
         "latex_filter.lua",
     ],
     visibility = ["//visibility:public"],
+)
+
+pandoc_filter_py_test(
+    name = "latex_filter_test",
+    src = "latex_filter_test.py",
+    filter = "latex_filter.lua",
 )

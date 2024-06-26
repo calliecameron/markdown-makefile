@@ -79,6 +79,9 @@ class Para(Block):
 class Plain(Block):
     def __init__(self, *args: Inline) -> None: ...
 
+class RawBlock(Block):
+    def __init__(self, text: str, fmt: str) -> None: ...
+
 class Space(Inline): ...
 
 class Span(Inline):

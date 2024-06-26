@@ -13,13 +13,13 @@ bzl_library(
 
 exports_files(
     [
-        "markdown_tumblr_filter.lua",
+        "tumblr_markdown_filter.lua",
     ],
     visibility = ["//visibility:public"],
 )
 
 pandoc_filter_py_test(
-    name = "markdown_tumblr_filter_test",
-    src = "markdown_tumblr_filter_test.py",
-    filter = "markdown_tumblr_filter.lua",
+    name = "tumblr_markdown_filter_test",
+    src = "tumblr_markdown_filter_test.py",
+    filter = "tumblr_markdown_filter.lua",
 )

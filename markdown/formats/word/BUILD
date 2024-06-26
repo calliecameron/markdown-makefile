@@ -1,7 +1,7 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("//markdown/support/python:defs.bzl", "py_binary")
 load("//markdown/support/shell:defs.bzl", "sh_binary", "sh_test")
-load("//markdown/utils:defs.bzl", "script_py_test")
+load("//markdown/utils:defs.bzl", "pandoc_filter_py_test", "script_py_test")
 
 bzl_library(
     name = "defs_bzl",
@@ -39,6 +39,12 @@ script_py_test(
     name = "shunn_metadata_test",
     src = "shunn_metadata_test.py",
     script = ":shunn_metadata",
+)
+
+pandoc_filter_py_test(
+    name = "docx_filter_test",
+    src = "docx_filter_test.py",
+    filter = "docx_filter.lua",
 )
 
 sh_test(

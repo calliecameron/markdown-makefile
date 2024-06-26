@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "762ca910ae40c2393a3bdca0aff6ec8014fe1d9e2328d6d20d03681ddf59664e",
+  "moduleFileHash": "1bd82da5cdc13bce06978b2784a7cf8d8e0ddc97d00a7e0fde42fddd7b707b76",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -14,7 +14,7 @@
   },
   "localOverrideHashes": {
     "bazel_tools": "1ae69322ac3823527337acf02016e8ee95813d8d356f47060255b8956fa642f0",
-    "rules_markdown": "4e95c9bfc34e86110a24a9e58647d4253988c02e701755e7dadca81e95c76081"
+    "rules_markdown": "44c99ac9e23780dbd67e9120fee497bfde1afaa6d208ab94ba7266ec56568dad"
   },
   "moduleDepGraph": {
     "<root>": {
@@ -33,7 +33,7 @@
     },
     "rules_markdown@_": {
       "name": "rules_markdown",
-      "version": "0.16.0",
+      "version": "0.17.0",
       "key": "rules_markdown@_",
       "repoName": "rules_markdown",
       "executionPlatformsToRegister": [],

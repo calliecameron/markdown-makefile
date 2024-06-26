@@ -3236,6 +3236,32 @@
         ]
       }
     },
+    "@@rules_markdown~//markdown/external:calibre.bzl%calibre": {
+      "general": {
+        "bzlTransitiveDigest": "mZ6x4VCHA5jxPNa0JJ8QbLBVgBCVGl5VpcCHCw1jXOA=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "calibre": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file": "@@rules_markdown~//markdown/external:calibre.build",
+              "url": "https://download.calibre-ebook.com/6.15.1/calibre-6.15.1-x86_64.txz",
+              "sha256": "1c1b1ae0649395593dadd1b39e2cc6552c99b10f1ca175eb594756bd9284c077"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_markdown~",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
     "@@rules_markdown~//markdown/external:pandoc.bzl%pandoc": {
       "general": {
         "bzlTransitiveDigest": "jNFX4RYO7FSfU9mS+bgh0ND7HxmLNacMFySobZBcUo0=",
@@ -3251,6 +3277,36 @@
               "url": "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz",
               "sha256": "4e1c607f7e4e9243fa1e1f5b208cd4f1d3f6fd055d5d8c39ba0cdc38644e1c35",
               "strip_prefix": "pandoc-3.1.2"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_markdown~",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
+    "@@rules_markdown~//markdown/external:prosegrinder_pandoc_templates.bzl%prosegrinder_pandoc_templates": {
+      "general": {
+        "bzlTransitiveDigest": "j3MXnCjPsj/hZch/O2ioLtzwTvXritMsksAauIKM5sc=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "prosegrinder_pandoc_templates": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file": "@@rules_markdown~//markdown/external:prosegrinder_pandoc_templates.build",
+              "url": "https://github.com/prosegrinder/pandoc-templates/archive/71d6e9e47ec142a763fff1398b468ba1a008ced0.zip",
+              "sha256": "7978b6122ecf7c751c2f1a54f0fcb500f2fa982cc400653a6d77fe88489471f8",
+              "strip_prefix": "pandoc-templates-71d6e9e47ec142a763fff1398b468ba1a008ced0",
+              "patches": [
+                "@@rules_markdown~//markdown/external:md2short.sh.patch"
+              ]
             }
           }
         },

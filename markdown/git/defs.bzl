@@ -11,29 +11,29 @@ def md_git_repo(name = None, extra_precommit = None):  # buildifier: disable=unu
     """
     native.sh_binary(
         name = "git_test_extra",
-        srcs = ["@markdown_makefile//markdown/git:git_test_extra.sh"],
+        srcs = ["@rules_markdown//markdown/git:git_test_extra.sh"],
         data = native.glob([".git/config"]),
         visibility = ["//visibility:private"],
     )
 
     copy = [
         (
-            "@markdown_makefile//markdown/git:default_gitattributes",
+            "@rules_markdown//markdown/git:default_gitattributes",
             ".gitattributes",
             "600",
         ),
         (
-            "@markdown_makefile//markdown/git:default_gitconfig",
+            "@rules_markdown//markdown/git:default_gitconfig",
             ".gitconfig",
             "600",
         ),
         (
-            "@markdown_makefile//markdown/git:default_gitignore",
+            "@rules_markdown//markdown/git:default_gitignore",
             ".gitignore",
             "600",
         ),
         (
-            "@markdown_makefile//markdown/git:precommit",
+            "@rules_markdown//markdown/git:precommit",
             ".git/hooks/pre-commit",
             "700",
         ),
@@ -50,5 +50,5 @@ def md_git_repo(name = None, extra_precommit = None):  # buildifier: disable=unu
         name = "git",
         copy = copy,
         extra_check = ":git_test_extra",
-        extra_update = "@markdown_makefile//markdown/git:git_update_extra",
+        extra_update = "@rules_markdown//markdown/git:git_update_extra",
     )

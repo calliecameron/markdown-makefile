@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "96350277b20de26e74e49f5b1211291833da3c93297585dae07f29cfac80deae",
+  "moduleFileHash": "4e95c9bfc34e86110a24a9e58647d4253988c02e701755e7dadca81e95c76081",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -17,10 +17,10 @@
   },
   "moduleDepGraph": {
     "<root>": {
-      "name": "markdown_makefile",
+      "name": "rules_markdown",
       "version": "0.16.0",
       "key": "<root>",
-      "repoName": "markdown_makefile",
+      "repoName": "rules_markdown",
       "executionPlatformsToRegister": [],
       "toolchainsToRegister": [],
       "extensionUsages": [
@@ -87,7 +87,7 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//markdown/external:calibre.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/external:calibre.bzl",
           "extensionName": "calibre",
           "usingModule": "<root>",
           "location": {
@@ -104,7 +104,7 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//markdown/external:pandoc.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/external:pandoc.bzl",
           "extensionName": "pandoc",
           "usingModule": "<root>",
           "location": {
@@ -121,7 +121,7 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//markdown/external:prosegrinder_pandoc_templates.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/external:prosegrinder_pandoc_templates.bzl",
           "extensionName": "prosegrinder_pandoc_templates",
           "usingModule": "<root>",
           "location": {
@@ -138,7 +138,7 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//markdown/external:shfmt.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/external:shfmt.bzl",
           "extensionName": "shfmt",
           "usingModule": "<root>",
           "location": {

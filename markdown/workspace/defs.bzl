@@ -15,7 +15,7 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
 
     native.sh_binary(
         name = "new",
-        srcs = ["@markdown_makefile//markdown/workspace:new_package.sh"],
+        srcs = ["@rules_markdown//markdown/workspace:new_package.sh"],
         visibility = ["//visibility:private"],
     )
 
@@ -23,17 +23,17 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
         name = "workspace",
         copy = [
             (
-                "@markdown_makefile//markdown/workspace:workspace_status",
+                "@rules_markdown//markdown/workspace:workspace_status",
                 ".markdown_workspace/workspace_status",
                 "700",
             ),
             (
-                "@markdown_makefile//markdown/workspace:bazelversion",
+                "@rules_markdown//markdown/workspace:bazelversion",
                 ".bazelversion",
                 "600",
             ),
             (
-                "@markdown_makefile//markdown/workspace:bazelrc",
+                "@rules_markdown//markdown/workspace:bazelrc",
                 ".bazelrc",
                 "600",
             ),

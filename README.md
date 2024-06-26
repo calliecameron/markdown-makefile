@@ -1,4 +1,4 @@
-# markdown-makefile
+# rules_markdown
 
 Opinionated bazel rules for markdown. Uses pandoc and other tools to convert
 markdown to many output formats. Formatting is intended for short stories and
@@ -52,13 +52,13 @@ odt, docx, doc, and docx in
     )
 
     bazel_dep(
-        name = "markdown_makefile",
+        name = "rules_markdown",
         # Set this to the latest tag on github
         version = ...,
     )
 
     archive_override(
-        module_name = "markdown_makefile",
+        module_name = "rules_markdown",
         # Set these from the latest tag on github
         urls = ...
         integrity = ...
@@ -69,7 +69,7 @@ odt, docx, doc, and docx in
     `BUILD`:
 
     ```text
-    load("@markdown_makefile//markdown:defs.bzl", "md_workspace")
+    load("@rules_markdown//markdown:defs.bzl", "md_workspace")
 
     md_workspace()
     ```
@@ -96,7 +96,7 @@ odt, docx, doc, and docx in
 Example BUILD file:
 
 ```text
-load("@markdown_makefile//markdown:defs.bzl", "md_document")
+load("@rules_markdown//markdown:defs.bzl", "md_document")
 
 md_document(
     name = "foo",

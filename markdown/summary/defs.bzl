@@ -14,12 +14,12 @@ def md_summary(name = None):  # buildifier: disable=unused-variable
 
     copy = [
         (
-            "@markdown_makefile//markdown/summary:summarise_contents",
+            "@rules_markdown//markdown/summary:summarise_contents",
             "summarise_contents",
             "700",
         ),
         (
-            "@markdown_makefile//markdown/summary:summarise_publications",
+            "@rules_markdown//markdown/summary:summarise_publications",
             "summarise_publications",
             "700",
         ),
@@ -27,12 +27,12 @@ def md_summary(name = None):  # buildifier: disable=unused-variable
     if not has_subpackage:
         copy += [
             (
-                "@markdown_makefile//markdown/summary:contents.build",
+                "@rules_markdown//markdown/summary:contents.build",
                 subpackage_name + "/BUILD",
                 "600",
             ),
             (
-                "@markdown_makefile//markdown/summary:refresh",
+                "@rules_markdown//markdown/summary:refresh",
                 subpackage_name + "/refresh",
                 "700",
             ),
@@ -42,7 +42,7 @@ def md_summary(name = None):  # buildifier: disable=unused-variable
     if not has_subpackage:
         create.append(
             (
-                "@markdown_makefile//markdown/summary:contents.bzl",
+                "@rules_markdown//markdown/summary:contents.bzl",
                 subpackage_name + "/contents.bzl",
                 "600",
             ),

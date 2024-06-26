@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "0d4a93a59d2c12ba4bd49d71cd15973859d759b17a06d89126e124dbfe74666b",
+  "moduleFileHash": "762ca910ae40c2393a3bdca0aff6ec8014fe1d9e2328d6d20d03681ddf59664e",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -13,8 +13,8 @@
     "compatibilityMode": "ERROR"
   },
   "localOverrideHashes": {
-    "markdown_makefile": "96350277b20de26e74e49f5b1211291833da3c93297585dae07f29cfac80deae",
-    "bazel_tools": "1ae69322ac3823527337acf02016e8ee95813d8d356f47060255b8956fa642f0"
+    "bazel_tools": "1ae69322ac3823527337acf02016e8ee95813d8d356f47060255b8956fa642f0",
+    "rules_markdown": "4e95c9bfc34e86110a24a9e58647d4253988c02e701755e7dadca81e95c76081"
   },
   "moduleDepGraph": {
     "<root>": {
@@ -26,25 +26,25 @@
       "toolchainsToRegister": [],
       "extensionUsages": [],
       "deps": {
-        "markdown_makefile": "markdown_makefile@_",
+        "rules_markdown": "rules_markdown@_",
         "bazel_tools": "bazel_tools@_",
         "local_config_platform": "local_config_platform@_"
       }
     },
-    "markdown_makefile@_": {
-      "name": "markdown_makefile",
+    "rules_markdown@_": {
+      "name": "rules_markdown",
       "version": "0.16.0",
-      "key": "markdown_makefile@_",
-      "repoName": "markdown_makefile",
+      "key": "rules_markdown@_",
+      "repoName": "rules_markdown",
       "executionPlatformsToRegister": [],
       "toolchainsToRegister": [],
       "extensionUsages": [
         {
           "extensionBzlFile": "@rules_python//python/extensions:python.bzl",
           "extensionName": "python",
-          "usingModule": "markdown_makefile@_",
+          "usingModule": "rules_markdown@_",
           "location": {
-            "file": "@@markdown_makefile~//:MODULE.bazel",
+            "file": "@@rules_markdown~//:MODULE.bazel",
             "line": 33,
             "column": 23
           },
@@ -60,7 +60,7 @@
               },
               "devDependency": false,
               "location": {
-                "file": "@@markdown_makefile~//:MODULE.bazel",
+                "file": "@@rules_markdown~//:MODULE.bazel",
                 "line": 34,
                 "column": 17
               }
@@ -72,9 +72,9 @@
         {
           "extensionBzlFile": "@rules_python//python/extensions:pip.bzl",
           "extensionName": "pip",
-          "usingModule": "markdown_makefile@_",
+          "usingModule": "rules_markdown@_",
           "location": {
-            "file": "@@markdown_makefile~//:MODULE.bazel",
+            "file": "@@rules_markdown~//:MODULE.bazel",
             "line": 39,
             "column": 20
           },
@@ -92,7 +92,7 @@
               },
               "devDependency": false,
               "location": {
-                "file": "@@markdown_makefile~//:MODULE.bazel",
+                "file": "@@rules_markdown~//:MODULE.bazel",
                 "line": 40,
                 "column": 10
               }
@@ -102,11 +102,11 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//markdown/external:calibre.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/external:calibre.bzl",
           "extensionName": "calibre",
-          "usingModule": "markdown_makefile@_",
+          "usingModule": "rules_markdown@_",
           "location": {
-            "file": "@@markdown_makefile~//:MODULE.bazel",
+            "file": "@@rules_markdown~//:MODULE.bazel",
             "line": 47,
             "column": 24
           },
@@ -119,11 +119,11 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//markdown/external:pandoc.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/external:pandoc.bzl",
           "extensionName": "pandoc",
-          "usingModule": "markdown_makefile@_",
+          "usingModule": "rules_markdown@_",
           "location": {
-            "file": "@@markdown_makefile~//:MODULE.bazel",
+            "file": "@@rules_markdown~//:MODULE.bazel",
             "line": 50,
             "column": 23
           },
@@ -136,11 +136,11 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//markdown/external:prosegrinder_pandoc_templates.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/external:prosegrinder_pandoc_templates.bzl",
           "extensionName": "prosegrinder_pandoc_templates",
-          "usingModule": "markdown_makefile@_",
+          "usingModule": "rules_markdown@_",
           "location": {
-            "file": "@@markdown_makefile~//:MODULE.bazel",
+            "file": "@@rules_markdown~//:MODULE.bazel",
             "line": 53,
             "column": 46
           },
@@ -153,11 +153,11 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@markdown_makefile//markdown/external:shfmt.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/external:shfmt.bzl",
           "extensionName": "shfmt",
-          "usingModule": "markdown_makefile@_",
+          "usingModule": "rules_markdown@_",
           "location": {
-            "file": "@@markdown_makefile~//:MODULE.bazel",
+            "file": "@@rules_markdown~//:MODULE.bazel",
             "line": 56,
             "column": 22
           },
@@ -2707,89 +2707,6 @@
         ]
       }
     },
-    "@@markdown_makefile~//markdown/external:calibre.bzl%calibre": {
-      "general": {
-        "bzlTransitiveDigest": "mZ6x4VCHA5jxPNa0JJ8QbLBVgBCVGl5VpcCHCw1jXOA=",
-        "recordedFileInputs": {},
-        "recordedDirentsInputs": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "calibre": {
-            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
-            "ruleClassName": "http_archive",
-            "attributes": {
-              "build_file": "@@markdown_makefile~//markdown/external:calibre.build",
-              "url": "https://download.calibre-ebook.com/6.15.1/calibre-6.15.1-x86_64.txz",
-              "sha256": "1c1b1ae0649395593dadd1b39e2cc6552c99b10f1ca175eb594756bd9284c077"
-            }
-          }
-        },
-        "recordedRepoMappingEntries": [
-          [
-            "markdown_makefile~",
-            "bazel_tools",
-            "bazel_tools"
-          ]
-        ]
-      }
-    },
-    "@@markdown_makefile~//markdown/external:pandoc.bzl%pandoc": {
-      "general": {
-        "bzlTransitiveDigest": "jNFX4RYO7FSfU9mS+bgh0ND7HxmLNacMFySobZBcUo0=",
-        "recordedFileInputs": {},
-        "recordedDirentsInputs": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "pandoc": {
-            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
-            "ruleClassName": "http_archive",
-            "attributes": {
-              "build_file": "@@markdown_makefile~//markdown/external:pandoc.build",
-              "url": "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz",
-              "sha256": "4e1c607f7e4e9243fa1e1f5b208cd4f1d3f6fd055d5d8c39ba0cdc38644e1c35",
-              "strip_prefix": "pandoc-3.1.2"
-            }
-          }
-        },
-        "recordedRepoMappingEntries": [
-          [
-            "markdown_makefile~",
-            "bazel_tools",
-            "bazel_tools"
-          ]
-        ]
-      }
-    },
-    "@@markdown_makefile~//markdown/external:prosegrinder_pandoc_templates.bzl%prosegrinder_pandoc_templates": {
-      "general": {
-        "bzlTransitiveDigest": "j3MXnCjPsj/hZch/O2ioLtzwTvXritMsksAauIKM5sc=",
-        "recordedFileInputs": {},
-        "recordedDirentsInputs": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "prosegrinder_pandoc_templates": {
-            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
-            "ruleClassName": "http_archive",
-            "attributes": {
-              "build_file": "@@markdown_makefile~//markdown/external:prosegrinder_pandoc_templates.build",
-              "url": "https://github.com/prosegrinder/pandoc-templates/archive/71d6e9e47ec142a763fff1398b468ba1a008ced0.zip",
-              "sha256": "7978b6122ecf7c751c2f1a54f0fcb500f2fa982cc400653a6d77fe88489471f8",
-              "strip_prefix": "pandoc-templates-71d6e9e47ec142a763fff1398b468ba1a008ced0",
-              "patches": [
-                "@@markdown_makefile~//markdown/external:md2short.sh.patch"
-              ]
-            }
-          }
-        },
-        "recordedRepoMappingEntries": [
-          [
-            "markdown_makefile~",
-            "bazel_tools",
-            "bazel_tools"
-          ]
-        ]
-      }
-    },
     "@@rules_buf~//buf:extensions.bzl%ext": {
       "general": {
         "bzlTransitiveDigest": "NQ6Q24l4iPh6qgIwSVIFCofgF32NX8nMR8ht1WUY9HA=",
@@ -3319,6 +3236,33 @@
         ]
       }
     },
+    "@@rules_markdown~//markdown/external:pandoc.bzl%pandoc": {
+      "general": {
+        "bzlTransitiveDigest": "jNFX4RYO7FSfU9mS+bgh0ND7HxmLNacMFySobZBcUo0=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "pandoc": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file": "@@rules_markdown~//markdown/external:pandoc.build",
+              "url": "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz",
+              "sha256": "4e1c607f7e4e9243fa1e1f5b208cd4f1d3f6fd055d5d8c39ba0cdc38644e1c35",
+              "strip_prefix": "pandoc-3.1.2"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_markdown~",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
     "@@rules_multitool~//multitool:extension.bzl%multitool": {
       "general": {
         "bzlTransitiveDigest": "AtvPzG/SAawYMKVVHcMoJq4EXkVPTIhS3AeNwENXp9E=",
@@ -3491,8 +3435,8 @@
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "Kl0pHTx96WScro+1r1IjCGTKX2IuzOE9gL8LbQBdUys=",
         "recordedFileInputs": {
-          "@@rules_python~//tools/publish/requirements.txt": "8ced1e640eab3ee44298590e5ad88cd612f5bf96245af1981709f7a8884a982b",
-          "@@markdown_makefile~//requirements_lock.txt": "09f8222c4f0f0da495ce3a5acf095186d6ddff854a53119905414f84bda755fc"
+          "@@rules_markdown~//requirements_lock.txt": "09f8222c4f0f0da495ce3a5acf095186d6ddff854a53119905414f84bda755fc",
+          "@@rules_python~//tools/publish/requirements.txt": "8ced1e640eab3ee44298590e5ad88cd612f5bf96245af1981709f7a8884a982b"
         },
         "recordedDirentsInputs": {},
         "envVariables": {},

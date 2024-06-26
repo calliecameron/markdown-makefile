@@ -5,5 +5,5 @@ sh_binary(
         "filters/**",
         "shunn/**",
     ]),
-    visibility = ["@markdown_makefile//markdown/external:__pkg__"],
+    visibility = ["@rules_markdown//markdown/external:__pkg__"],
 )

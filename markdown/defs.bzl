@@ -298,8 +298,8 @@ def md_document(
     native.genrule(
         name = name + "_save_sh",
         outs = [name + "_save.sh"],
-        cmd = "$(location @markdown_makefile//markdown/formats:write_save_script) $@ %s" % native.package_name(),
-        tools = ["@markdown_makefile//markdown/formats:write_save_script"],
+        cmd = "$(location @rules_markdown//markdown/formats:write_save_script) $@ %s" % native.package_name(),
+        tools = ["@rules_markdown//markdown/formats:write_save_script"],
         visibility = ["//visibility:private"],
     )
 
@@ -372,8 +372,8 @@ def md_collection(
         src = name + "_src",
         deps = deps,
         data = [
-            "@markdown_makefile//markdown/collection:collection_header.tex",
-            "@markdown_makefile//markdown/collection:collection_before.tex",
+            "@rules_markdown//markdown/collection:collection_header.tex",
+            "@rules_markdown//markdown/collection:collection_before.tex",
         ] + ([extra_metadata] if extra_metadata else []),
         increment_included_headers = True,
         extra_pandoc_flags = [
@@ -382,8 +382,8 @@ def md_collection(
         ] + (["--metadata-file=$(rootpath %s)" % extra_metadata] if extra_metadata else []),
         extra_latex_flags = [
             "--variable=section-page-break",
-            "--include-in-header=$(rootpath @markdown_makefile//markdown/collection:collection_header.tex)",
-            "--include-before-body=$(rootpath @markdown_makefile//markdown/collection:collection_before.tex)",
+            "--include-in-header=$(rootpath @rules_markdown//markdown/collection:collection_header.tex)",
+            "--include-before-body=$(rootpath @rules_markdown//markdown/collection:collection_before.tex)",
         ],
         version_override = version_override,
         timestamp_override = timestamp_override,

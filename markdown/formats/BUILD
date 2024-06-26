@@ -3,10 +3,19 @@ load("//markdown/support/shell:defs.bzl", "sh_binary")
 load("//markdown/utils:defs.bzl", "script_py_test")
 
 bzl_library(
+    name = "types_bzl",
+    srcs = ["types.bzl"],
+    visibility = ["//markdown/formats:__subpackages__"],
+)
+
+bzl_library(
     name = "lib_bzl",
     srcs = ["lib.bzl"],
     visibility = ["//markdown/formats:__subpackages__"],
-    deps = ["//markdown/core:defs_bzl"],
+    deps = [
+        ":types_bzl",
+        "//markdown/core:defs_bzl",
+    ],
 )
 
 bzl_library(

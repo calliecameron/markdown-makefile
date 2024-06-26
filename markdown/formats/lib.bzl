@@ -1,6 +1,7 @@
 """Helpers for output formats."""
 
 load("//markdown/core:defs.bzl", "MdFileInfo")
+load(":types.bzl", "filter")
 
 tools = struct(
     pandoc = struct(
@@ -42,7 +43,7 @@ tools = struct(
 )
 
 filters = struct(
-    add_title = struct(
+    add_title = filter(
         attr = {
             "_add_title": attr.label(
                 allow_single_file = True,
@@ -52,7 +53,7 @@ filters = struct(
         file = lambda ctx: ctx.file._add_title,
         arg = lambda ctx: "--lua-filter=" + ctx.file._add_title.path,
     ),
-    add_subject = struct(
+    add_subject = filter(
         attr = {
             "_add_subject": attr.label(
                 allow_single_file = True,
@@ -62,7 +63,7 @@ filters = struct(
         file = lambda ctx: ctx.file._add_subject,
         arg = lambda ctx: "--lua-filter=" + ctx.file._add_subject.path,
     ),
-    cleanup_metadata = struct(
+    cleanup_metadata = filter(
         attr = {
             "_cleanup_metadata": attr.label(
                 allow_single_file = True,
@@ -72,7 +73,7 @@ filters = struct(
         file = lambda ctx: ctx.file._cleanup_metadata,
         arg = lambda ctx: "--lua-filter=" + ctx.file._cleanup_metadata.path,
     ),
-    remove_paragraph_annotations = struct(
+    remove_paragraph_annotations = filter(
         attr = {
             "_remove_paragraph_annotations": attr.label(
                 allow_single_file = True,
@@ -82,7 +83,7 @@ filters = struct(
         file = lambda ctx: ctx.file._remove_paragraph_annotations,
         arg = lambda ctx: "--lua-filter=" + ctx.file._remove_paragraph_annotations.path,
     ),
-    remove_collection_separators = struct(
+    remove_collection_separators = filter(
         attr = {
             "_remove_collection_separators": attr.label(
                 allow_single_file = True,
@@ -92,7 +93,7 @@ filters = struct(
         file = lambda ctx: ctx.file._remove_collection_separators,
         arg = lambda ctx: "--lua-filter=" + ctx.file._remove_collection_separators.path,
     ),
-    remove_collection_separators_before_headers = struct(
+    remove_collection_separators_before_headers = filter(
         attr = {
             "_remove_collection_separators_before_headers": attr.label(
                 allow_single_file = True,

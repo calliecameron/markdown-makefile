@@ -27,6 +27,7 @@ load(
     _md_shunnmodern_docx = "md_shunnmodern_docx",
     _md_tex = "md_tex",
     _md_tex_intermediate = "md_tex_intermediate",
+    _md_tumblr_md = "md_tumblr_md",
     _md_txt = "md_txt",
 )
 load(
@@ -49,6 +50,7 @@ load(
 
 _FORMATS = [
     ("md", None),
+    ("md", "tumblr"),
     ("txt", None),
     ("html", None),
     ("tex", None),
@@ -185,6 +187,13 @@ def md_document(
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "md", None),
+        visibility = ["//visibility:private"],
+    )
+    _md_tumblr_md(
+        name = _name(name, "md", "tumblr"),
+        file = file,
+        extra_pandoc_flags = extra_pandoc_flags,
+        out = _output(name, "md", "tumblr"),
         visibility = ["//visibility:private"],
     )
     _md_txt(

@@ -38,6 +38,7 @@ def diff_test(target, name = None):  # buildifier: disable=unused-variable
         name: unused.
     """
     _diff_test(target, "md", None, "cat")
+    _diff_test(target, "md", "tumblr", "cat")
     _diff_test(target, "txt", None, "cat")
     _diff_test(target, "html", None, "cat")
 

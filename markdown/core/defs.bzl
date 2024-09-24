@@ -285,6 +285,8 @@ def _md_file_impl(ctx):
     extra_args = []
     if ctx.attr.version_override:
         extra_args += ["--version_override", ctx.attr.version_override]
+    if ctx.attr.repo_override:
+        extra_args += ["--repo_override", ctx.attr.repo_override]
     ctx.actions.run(
         outputs = [version],
         inputs = [raw_version, ctx.attr.deps[MdGroupInfo].metadata],
@@ -435,6 +437,10 @@ md_file = rule(
         "version_override": attr.string(
             default = "",
             doc = "Set the document version to this value, rather than the computed value. Should only be used for testing.",
+        ),
+        "repo_override": attr.string(
+            default = "",
+            doc = "Set the document repo to this value, rather than the computed value. Should only be used for testing.",
         ),
         "_pandoc": attr.label(
             default = "//markdown/external:pandoc",

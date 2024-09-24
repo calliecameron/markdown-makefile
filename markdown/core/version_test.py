@@ -17,11 +17,11 @@ class TestVersion(test_utils.ScriptTestCase):
         dirty_same_repo = Version(version="4-dirty", repo="foo")
         unversioned_same_repo = Version(version="unversioned", repo="foo")
 
-        v = markdown.core.version.get_version(base, {}, "")
+        v = markdown.core.version.get_version(base, {}, "", "")
         self.assertEqual(v.version, "1")
         self.assertEqual(v.repo, "foo")
 
-        v = markdown.core.version.get_version(base, {"a": clean}, "")
+        v = markdown.core.version.get_version(base, {"a": clean}, "", "")
         self.assertEqual(v.version, "1")
         self.assertEqual(v.repo, "foo")
 
@@ -29,20 +29,21 @@ class TestVersion(test_utils.ScriptTestCase):
             base,
             {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo},
             "",
+            "",
         )
         self.assertEqual(v.version, "1, dirty deps, unversioned deps")
         self.assertEqual(v.repo, "foo")
 
         with self.assertRaises(ValueError):
-            markdown.core.version.get_version(base, {"a": dirty}, "")
+            markdown.core.version.get_version(base, {"a": dirty}, "", "")
         with self.assertRaises(ValueError):
-            markdown.core.version.get_version(base, {"a": unversioned}, "")
+            markdown.core.version.get_version(base, {"a": unversioned}, "", "")
 
-        v = markdown.core.version.get_version(base, {}, "OVERRIDE")
+        v = markdown.core.version.get_version(base, {}, "OVERRIDE", "")
         self.assertEqual(v.version, "OVERRIDE")
         self.assertEqual(v.repo, "foo")
 
-        v = markdown.core.version.get_version(base, {"a": clean}, "OVERRIDE")
+        v = markdown.core.version.get_version(base, {"a": clean}, "OVERRIDE", "")
         self.assertEqual(v.version, "OVERRIDE")
         self.assertEqual(v.repo, "foo")
 
@@ -50,14 +51,19 @@ class TestVersion(test_utils.ScriptTestCase):
             base,
             {"a": clean, "b": dirty_same_repo, "c": unversioned_same_repo},
             "OVERRIDE",
+            "",
         )
         self.assertEqual(v.version, "OVERRIDE")
         self.assertEqual(v.repo, "foo")
 
+        v = markdown.core.version.get_version(base, {}, "", "OVERRIDE")
+        self.assertEqual(v.version, "1")
+        self.assertEqual(v.repo, "OVERRIDE")
+
         with self.assertRaises(ValueError):
-            markdown.core.version.get_version(base, {"a": dirty}, "OVERRIDE")
+            markdown.core.version.get_version(base, {"a": dirty}, "OVERRIDE", "OVERRIDE")
         with self.assertRaises(ValueError):
-            markdown.core.version.get_version(base, {"a": unversioned}, "OVERRIDE")
+            markdown.core.version.get_version(base, {"a": unversioned}, "OVERRIDE", "OVERRIDE")
 
     def run_script(  # type: ignore[override]
         self,
@@ -117,7 +123,7 @@ class TestVersion(test_utils.ScriptTestCase):
 }""",
         )
 
-    def test_main_override(self) -> None:
+    def test_main_version_override(self) -> None:
         metadata_out = self.run_script(
             {"version": "foo", "repo": "bar"},
             {
@@ -132,6 +138,24 @@ class TestVersion(test_utils.ScriptTestCase):
             """{
     "repo": "bar",
     "version": "override"
+}""",
+        )
+
+    def test_main_repo_override(self) -> None:
+        metadata_out = self.run_script(
+            {"version": "foo", "repo": "bar"},
+            {
+                "dep1": {"version": "2, dirty", "repo": "bar"},
+                "dep2": {"version": "3", "repo": "quux"},
+            },
+            ["--repo_override", "override"],
+        )
+
+        self.assertEqual(
+            metadata_out,
+            """{
+    "repo": "override",
+    "version": "foo, dirty deps"
 }""",
         )
 

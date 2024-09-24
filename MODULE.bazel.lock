@@ -2053,6 +2053,7 @@
           "@@//.mypy_cache/3.10/prompt_toolkit/widgets": "cedca39d284ee652825c83f0bcec899f22b07be240014f6fd0d752ebbb420184",
           "@@//.mypy_cache/3.10/prompt_toolkit/filters": "64743c4e83dabacd11281fbc842ceb07397fd90091f87d7db5a8b0aead607881",
           "@@//.mypy_cache/3.10/prompt_toolkit/styles": "7a5e3b6a1c7ef31e7bde92919f1ab0478c55c9bde86278fcb215bc4e4cc44c22",
+          "@@//.mypy_cache/3.10/markdown/formats": "ac9f7c38808e7090da5863fa594938a2d7479fe52888223d50d75f225eb6c504",
           "@@//.mypy_cache/3.10/cryptography/hazmat/backends/openssl": "a6802f212f50e1ac0dfdcf10de0c68c391aebe32c47cf9ab2b752c8b7dbcdee5",
           "@@//.mypy_cache/3.10/cryptography/hazmat/bindings/openssl": "0db31b91ff3b4d8dd8fd1cd6e447c76045b28663a6ecb32902e6e389522b4b21",
           "@@//.mypy_cache/3.10/xml/sax": "5a37773a3a48572ebe9cf2e39282fdd0ccac5d31a22289bf81cbb2b5ce839884",
@@ -2067,7 +2068,7 @@
           "@@//.mypy_cache/3.10/urllib": "62727f987cb75e0eaaac89c2ffeffe085ff9735afee18c80da29755eb3f38a11",
           "@@//markdown/support/python": "28ee055d2ddef0fab919aaf5444a65119727d10945f630a44f777dca335fa069",
           "@@//markdown/support/shell": "bc9c42acf61690142422705cb80ea402cdd14f49fbedb6a414d102ffbf36e705",
-          "@@//": "4a621d637427fccc361b7b3c060f5573acb9e4c2bdac8fe24e2fc36535aaa4da",
+          "@@//": "55f54152fa7383628b8a559e29f3a98848182fa65612ca8731927701c8118fd0",
           "@@//.mypy_cache/3.10/prompt_toolkit/shortcuts": "8dbcdf1af4baba9a4d9fcca90b572497f661fa091df15ccd095f0785c1f9d296",
           "@@//.mypy_cache/3.10/tkinter": "45fdcd042945361b4269eb1324bbad67f5fd39504c17d41e05d64a5383ba743c",
           "@@//.mypy_cache/3.10/cryptography/hazmat/backends": "44e035a137c31eb21e7a24a4cc9cad5fd0d3b3126a8dea08c3d41a150d2bd1e4",
@@ -2098,7 +2099,6 @@
           "@@//.mypy_cache/3.10/cryptography/hazmat/primitives/kdf": "f5c27950af99b26eacd4e43948c777d68c81de227392784e8d110bc1a47b0e33",
           "@@//tests/.markdown_summary": "23964a9bf04c1645deb3cffa8b2b8408858ad949d6b01595c150c5c31e7d2373",
           "@@//.mypy_cache/3.10/pathspec/patterns": "c56b10d81abd0a8c4eeb92f875aa81618f44c26ed0a7a6622f169ad836f3638c",
-          "@@//foo": "e6539ae07e46cb592a5a92e3e20a386010b16d81fd312bc1abe45ae834dd8094",
           "@@//.mypy_cache/3.10/pdfminer": "bd801b8918d56cade9844d9e0eec417ee8dec5da02afcdf39eea3eabf8fcf070",
           "@@//.mypy_cache/3.10/asyncio": "1e62e1d0982f1d03c102b96731fb71242c0a406862ac231812223a6a4e46f1ed",
           "@@//.mypy_cache/3.10/asttokens": "74e6387510eec51346fc4c6fae8ace8300d14293bdcf48891afe3234e779d08b",
@@ -2114,12 +2114,12 @@
           "@@//.mypy_cache/3.10/IPython": "d6961b40bfab5bcebc1d0321755f1cc3d9b02e389151ee8294fa9ff8e1107cff",
           "@@//.mypy_cache/3.10/executing": "eed2bd54eb1d81be092265a06f77e30738c6424aba754f57a9425f4aa899a652",
           "@@//.mypy_cache/3.10/markdown_makefile/workspace": "065d2ce4caf199d90591a2f113bf789f0ed41c1f7dda8b4dd6850c9c3c0e8ac9",
-          "@@//.mypy_cache/3.10/markdown": "0894505f15946a39eeacec8a9ac101a023ef75acf0b502acb711a6863ce5038c",
+          "@@//.mypy_cache/3.10/markdown": "a17347d17c83d439d21c025b22d00209526f382d3a171147f6f83f4aa5beb7b6",
           "@@//.mypy_cache/3.10/IPython/extensions": "e4781c3590d823aeb7c00120683028130f326e967cef64b9517a5919064faad3",
           "@@//.mypy_cache/3.10/zmq/backend": "853e191d44380271237cd0839b5f061c1a4479242b0d82ad546c16959b65e44e",
           "@@//.markdown_workspace": "bc84a5f6476a661e3aeb50a28aa946523be792aa38027e7f124b424c4a41fdfc",
           "@@//.mypy_cache/3.10": "d335e2108e8e29ade8b6d12bb7d5b63f57cd7d848a97a44df19c4bcee8dff22a",
-          "@@//.mypy_cache/3.10/markdown/core": "40fa5e094cc9153620e70f7f645a1173cca7896bacacc2701b55e28cead8aa03",
+          "@@//.mypy_cache/3.10/markdown/core": "ce9745d9cc3711df1557d1291b591073f7e658ba70349d34644603f1fd48fba2",
           "@@//tests/other_workspace/.markdown_workspace": "bc84a5f6476a661e3aeb50a28aa946523be792aa38027e7f124b424c4a41fdfc",
           "@@//.mypy_cache/3.10/markdown_makefile": "54f19e8a470eb4664c6f22e6e481f1b1ee12d7734d679a75e2ac9ea2e428af50",
           "@@//.mypy_cache/3.10/prompt_toolkit/formatted_text": "9004ec83363530d6929a86e2e26280e84ab76a75d39bbc9f62ca1cc8d624c92c",
@@ -2225,19 +2225,13 @@
           "@@//.mypy_cache/3.10/jupyter_client": "b57e17543f7811060f1995945bbf7a32f9770e59393ab529edb6acc050c0fff2",
           "@@//.mypy_cache/3.10/tomli": "3805ae0210c47bb36e5daa9d44746248c7fd3d3fcfec45f720bf61b9e556aa06",
           "@@//.mypy_cache/3.10/markdown_makefile/core": "e7e2dd95548314da019d5fdf5accfd4024ab0d3b96d5589c738b0e7c7dbb9525",
+          "@@//.mypy_cache/3.10/markdown/formats/filters": "9235c6d523530aee7095f8f6624808ae2d9dbaed077214e22582a3d851d9a62a",
           "@@//markdown/group": "2d047c2555913b3107d8c687c1fe5fba86d97f670c21dcccd73666bb8a1bb98f",
           "@@//.mypy_cache/3.10/pydantic": "aa890228d8af630f6a4b0e9b381522c065685ab49a0c6f68d1e244d0eb35ce27",
           "@@//.mypy_cache/3.10/ipykernel/gui": "c491a0ebf513b6cd17fc29e35206ee7eb0ac3c43cca7f32cbf1efc09841aa7bd"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
-          "git_repo_foo": {
-            "bzlFile": "@@//markdown/extensions:git_repo.bzl",
-            "ruleClassName": "git_repo",
-            "attributes": {
-              "root": "/home/callie/markdown-makefile-dev/markdown-makefile/foo"
-            }
-          },
           "markdown": {
             "bzlFile": "@@//markdown/extensions:main_repo.bzl",
             "ruleClassName": "main_repo",
@@ -2245,7 +2239,6 @@
               "package_repos": {
                 "": "git_repo_",
                 ".markdown_summary": "git_repo_",
-                "foo": "git_repo_foo",
                 "markdown": "git_repo_",
                 "markdown/collection": "git_repo_",
                 "markdown/core": "git_repo_",
@@ -2286,8 +2279,7 @@
                 "tests/test5": "git_repo_"
               },
               "repos": [
-                "git_repo_",
-                "git_repo_foo"
+                "git_repo_"
               ]
             }
           },

@@ -6,6 +6,7 @@ md_collection(
     author = "The Author",
     date = "1 January 2022",
     extra_metadata = "test4.yaml",
+    repo_override = "reproducible",
     timestamp_override = "1618243321",
     title = "Test 4",
     version_override = "reproducible",
@@ -24,5 +25,6 @@ diff_test(
 
 md_file(
     name = "test4a",
+    repo_override = "reproducible",
     version_override = "reproducible",
 )

@@ -80,7 +80,8 @@ def md_file(
         data = None,
         images = None,
         increment_included_headers = False,
-        version_override = ""):
+        version_override = "",
+        repo_override = ""):
     """md_file represents a markdown source file.
 
     Args:
@@ -94,6 +95,8 @@ def md_file(
             incremented, e.g. level 1 headers become level 2 headers. If false,
             headers are unchanged.
         version_override: set the document version to this value, rather than
+           the computed value. Should only be used for testing.
+        repo_override: set the document repo to this value, rather than
            the computed value. Should only be used for testing.
     """
     if not src:
@@ -118,6 +121,7 @@ def md_file(
         increment_included_headers = increment_included_headers,
         version_file = version_file(native.package_name()),
         version_override = version_override,
+        repo_override = repo_override,
         visibility = ["//visibility:public"],
     )
 
@@ -137,6 +141,7 @@ def md_document(
         extra_pandoc_flags = None,
         extra_latex_flags = None,
         version_override = None,
+        repo_override = None,
         timestamp_override = None,
         existing_file = None,
         main_document = True):
@@ -157,6 +162,8 @@ def md_document(
             formats.
         version_override: set the document version to this value, rather than
             the computed value. Should only be used for testing.
+        repo_override: set the document repo to this value, rather than
+            the computed value. Should only be used for testing.
         timestamp_override: set the build timestamp to this value, rather than
             the current value. Should only be used for testing.
         existing_file: use an existing md_file rather than creating one; if
@@ -165,7 +172,7 @@ def md_document(
             some convenience aliases.
     """
     if existing_file:
-        if src or deps or extra_dictionaries or data or images or increment_included_headers or version_override:
+        if src or deps or extra_dictionaries or data or images or increment_included_headers or version_override or repo_override:
             native.fail("Other args must not be set when existing_file is set")
         file = existing_file
     else:
@@ -178,6 +185,7 @@ def md_document(
             images = images,
             increment_included_headers = increment_included_headers,
             version_override = version_override,
+            repo_override = repo_override,
         )
         file = name
 
@@ -343,6 +351,7 @@ def md_collection(
         date = None,
         extra_metadata = None,
         version_override = None,
+        repo_override = None,
         timestamp_override = None,
         main_document = True):
     """md_collection collects multiple documents into a single document.
@@ -355,6 +364,8 @@ def md_collection(
         deps: md_file targets to include in the collection.
         extra_metadata: a metadata file to include.
         version_override: set the document version to this value, rather than
+            the computed value. Should only be used for testing.
+        repo_override: set the document repo to this value, rather than
             the computed value. Should only be used for testing.
         timestamp_override: set the build timestamp to this value, rather than
             the current value. Should only be used for testing.
@@ -388,6 +399,7 @@ def md_collection(
             "--include-before-body=$(rootpath @rules_markdown//markdown/collection:collection_before.tex)",
         ],
         version_override = version_override,
+        repo_override = repo_override,
         timestamp_override = timestamp_override,
         main_document = main_document,
     )

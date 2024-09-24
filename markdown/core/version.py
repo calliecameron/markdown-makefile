@@ -9,6 +9,7 @@ def get_version(
     raw_version: Version,
     dep_versions: Mapping[str, Version],
     version_override: str,
+    repo_override: str,
 ) -> Version:
     dirty_deps = []
     unversioned_deps = []
@@ -46,6 +47,12 @@ def get_version(
             msg += ["  " + dep for dep in bad_unversioned_deps]
         raise ValueError("\n".join(msg))
 
+    if repo_override:
+        version = Version(
+            version=version.version,
+            repo=repo_override,
+        )
+
     return version
 
 
@@ -55,6 +62,7 @@ def main() -> None:
     parser.add_argument("deps_metadata_file")
     parser.add_argument("metadata_out_file")
     parser.add_argument("--version_override", default="")
+    parser.add_argument("--repo_override", default="")
     args = parser.parse_args()
 
     with open(args.raw_version_file, encoding="utf-8") as f:
@@ -65,7 +73,7 @@ def main() -> None:
         for target, metadata in json.load(f).items():
             dep_versions[target] = Version(version=metadata["version"], repo=metadata["repo"])
 
-    version = get_version(raw_version, dep_versions, args.version_override)
+    version = get_version(raw_version, dep_versions, args.version_override, args.repo_override)
 
     with open(args.metadata_out_file, mode="w", encoding="utf-8") as f:
         json.dump(

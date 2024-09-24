@@ -3,12 +3,14 @@ load("//tests:test.bzl", "diff_test")
 
 md_file(
     name = "include1",
+    repo_override = "reproducible",
     version_override = "reproducible",
     deps = [":include2"],
 )
 
 md_file(
     name = "include2",
+    repo_override = "reproducible",
     version_override = "reproducible",
 )
 
@@ -21,6 +23,7 @@ md_document(
         "--table-of-contents",
         "--toc-depth=1",
     ],
+    repo_override = "reproducible",
     timestamp_override = "1618243321",
     version_override = "reproducible",
     deps = [":include1"],

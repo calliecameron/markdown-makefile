@@ -6,34 +6,6 @@ import markdown.utils.bazel_package
 
 
 class TestBazelPackage(unittest.TestCase):
-    def test_normalised_char_name(self) -> None:
-        self.assertEqual(
-            markdown.utils.bazel_package._normalised_char_name("/"),
-            "SOLIDUS",
-        )
-        with self.assertRaises(ValueError):
-            markdown.utils.bazel_package._normalised_char_name("ab")
-        with self.assertRaises(ValueError):
-            markdown.utils.bazel_package._normalised_char_name("")
-
-    def test_package_key(self) -> None:
-        self.assertEqual(
-            markdown.utils.bazel_package.package_key("a-b_/cd"),
-            "A_HYPHENMINUS_B___SOLIDUS_CD",
-        )
-        self.assertEqual(markdown.utils.bazel_package.package_key(""), "")
-
-    def test_version_key(self) -> None:
-        self.assertEqual(
-            markdown.utils.bazel_package.version_key("foo"),
-            "STABLE_VERSION_foo",
-        )
-        self.assertEqual(markdown.utils.bazel_package.version_key(""), "STABLE_VERSION_")
-
-    def test_repo_key(self) -> None:
-        self.assertEqual(markdown.utils.bazel_package.repo_key("foo"), "STABLE_REPO_foo")
-        self.assertEqual(markdown.utils.bazel_package.repo_key(""), "STABLE_REPO_")
-
     def test_validate_package(self) -> None:
         markdown.utils.bazel_package._validate_package("")
         markdown.utils.bazel_package._validate_package("a")

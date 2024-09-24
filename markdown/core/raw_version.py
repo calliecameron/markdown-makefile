@@ -1,42 +1,58 @@
 import argparse
 import json
 
-import markdown.utils.bazel_package
 from markdown.utils.metadata import Version
+
+REPO_KEY = "STABLE_WORKSPACE_PARENT_REPO"
+VERSION_KEY = "STABLE_WORKSPACE_PARENT_VERSION"
+
+
+def from_version_file(file: str) -> Version:
+    with open(file, encoding="utf-8") as f:
+        return Version.model_validate_json(f.read())
+
+
+def from_info_file(file: str) -> Version:
+    version = ""
+    repo = ""
+
+    with open(file, encoding="utf-8") as f:
+        for line in f:
+            if line.startswith(REPO_KEY):
+                repo = line[len(REPO_KEY) :].strip()
+            elif line.startswith(VERSION_KEY):
+                version = line[len(VERSION_KEY) :].strip()
+
+    if not version or not repo:
+        return Version(
+            version="unversioned",
+            repo="unversioned",
+        )
+
+    return Version(
+        version=version,
+        repo=repo,
+    )
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("infile")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--version_file")
+    group.add_argument("--info_file")
     parser.add_argument("outfile")
-    parser.add_argument("package")
     args = parser.parse_args()
 
-    key = markdown.utils.bazel_package.package_key(args.package)
-    version_key = markdown.utils.bazel_package.version_key(key) + " "
-    repo_key = markdown.utils.bazel_package.repo_key(key) + " "
-
-    version = ""
-    repo = ""
-
-    with open(args.infile, encoding="utf-8") as f:
-        for line in f:
-            if line.startswith(version_key):
-                version = line[len(version_key) :].strip()
-            elif line.startswith(repo_key):
-                repo = line[len(repo_key) :].strip()
-
-    if not version:
-        raise ValueError("Package version not found")
-    if not repo:
-        raise ValueError("Package repo not found")
+    if args.version_file:
+        version = from_version_file(args.version_file)
+    elif args.info_file:
+        version = from_info_file(args.info_file)
+    else:
+        raise ValueError("Neither version file specified")
 
     with open(args.outfile, mode="w", encoding="utf-8") as f:
         json.dump(
-            Version(
-                version=version,
-                repo=repo,
-            ).model_dump(
+            version.model_dump(
                 mode="json",
                 by_alias=True,
                 exclude_unset=True,

@@ -1,80 +1,87 @@
 import os
 import os.path
 import subprocess
+from collections.abc import Mapping
 
 from markdown.utils import test_utils
 
 
 class TestRawVersion(test_utils.ScriptTestCase):
-    def run_script(self, content: str, package: str) -> str:  # type: ignore[override]
-        in_file = os.path.join(self.tmpdir(), "in.txt")
-        self.dump_file(in_file, content)
+    def run_script(self, version: Mapping[str, str], info: str) -> str:  # type: ignore[override]
+        args = []
+
+        if version:
+            version_file = os.path.join(self.tmpdir(), "version.json")
+            self.dump_json(version_file, version)
+            args += ["--version_file", version_file]
+
+        if info:
+            info_file = os.path.join(self.tmpdir(), "info.txt")
+            self.dump_file(info_file, info)
+            args += ["--info_file", info_file]
 
         out_file = os.path.join(self.tmpdir(), "out.json")
 
-        super().run_script(
-            args=[
-                in_file,
-                out_file,
-                package,
-            ],
-        )
+        super().run_script(args=[*args, out_file])
 
         return self.load_file(out_file)
 
-    def test_raw_version(self) -> None:
+    def test_version_file(self) -> None:
         self.assertEqual(
             self.run_script(
-                """STABLE_VERSION_A_SOLIDUS_B 10
-STABLE_REPO_A_SOLIDUS_B /foo/.git
-STABLE_VERSION_B 11
-STABLE_REPO_B /bar/.git
-""",
-                "a/b",
-            ),
-            """{
-    "repo": "/foo/.git",
-    "version": "10"
-}""",
-        )
-
-    def test_raw_version_root_package(self) -> None:
-        self.assertEqual(
-            self.run_script(
-                """STABLE_VERSION_ 10
-STABLE_REPO_ /foo/.git
-STABLE_VERSION_B 11
-STABLE_REPO_B /bar/.git
-""",
+                {
+                    "version": "1",
+                    "repo": "a/b",
+                },
                 "",
             ),
             """{
-    "repo": "/foo/.git",
-    "version": "10"
+    "repo": "a/b",
+    "version": "1"
 }""",
         )
 
-    def test_raw_version_fails(self) -> None:
-        # Missing version
-        with self.assertRaises(subprocess.CalledProcessError):
+    def test_info_file_present(self) -> None:
+        self.assertEqual(
             self.run_script(
-                """STABLE_PANDOC_VERSION 1.2.3
-STABLE_REPO_A_SOLIDUS_B /foo/.git
-STABLE_VERSION_B 11
-STABLE_REPO_B /bar/.git
+                {},
+                """
+STABLE_WORKSPACE_PARENT_REPO a/b
+STABLE_WORKSPACE_PARENT_VERSION 1
 """,
-                "a/b",
-            )
+            ),
+            """{
+    "repo": "a/b",
+    "version": "1"
+}""",
+        )
 
-        # Missing repo
+    def test_info_file_missing(self) -> None:
+        self.assertEqual(
+            self.run_script(
+                {},
+                """
+FOO 1
+""",
+            ),
+            """{
+    "repo": "unversioned",
+    "version": "unversioned"
+}""",
+        )
+
+    def test_neither(self) -> None:
+        with self.assertRaises(subprocess.CalledProcessError):
+            self.run_script({}, "")
+
+    def test_both(self) -> None:
         with self.assertRaises(subprocess.CalledProcessError):
             self.run_script(
-                """STABLE_PANDOC_VERSION 1.2.3
-STABLE_VERSION_A_SOLIDUS_B 10
-STABLE_VERSION_B 11
-STABLE_REPO_B /bar/.git
-""",
-                "a/b",
+                {
+                    "version": "1",
+                    "repo": "a/b",
+                },
+                "a",
             )
 
 

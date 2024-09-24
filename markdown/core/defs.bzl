@@ -267,11 +267,17 @@ def _md_file_impl(ctx):
     )
 
     raw_version = ctx.actions.declare_file(ctx.label.name + "_raw_version.json")
+    if ctx.file.version_file:
+        inputs = [ctx.file.version_file]
+        args = ["--version_file", ctx.file.version_file.path]
+    else:
+        inputs = [ctx.info_file]
+        args = ["--info_file", ctx.info_file.path]
     ctx.actions.run(
         outputs = [raw_version],
-        inputs = [ctx.info_file],
+        inputs = inputs,
         executable = ctx.executable._raw_version,
-        arguments = [ctx.info_file.path, raw_version.path, ctx.label.package],
+        arguments = args + [raw_version.path],
         progress_message = "%{label}: computing raw version",
     )
 
@@ -421,6 +427,10 @@ md_file = rule(
         "increment_included_headers": attr.bool(
             default = False,
             doc = "If true, header level in included files is incremented, e.g. level 1 headers become level 2 headers. If false, headers are unchanged.",
+        ),
+        "version_file": attr.label(
+            allow_single_file = [".json"],
+            doc = "File with version info.",
         ),
         "version_override": attr.string(
             default = "",

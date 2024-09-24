@@ -1,5 +1,4 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("//markdown/support/python:defs.bzl", "py_source")
 load("//markdown/support/shell:defs.bzl", "sh_source", "sh_test")
 
 bzl_library(
@@ -30,7 +29,7 @@ sh_test(
     data = ["new_package.sh"],
 )
 
-py_source(
+sh_source(
     name = "workspace_status",
     src = "workspace_status",
     visibility = ["//visibility:public"],
@@ -39,6 +38,12 @@ py_source(
 sh_test(
     name = "workspace_status_test",
     srcs = ["workspace_status_test.sh"],
-    args = ["$(rootpath workspace_status)"],
-    data = ["workspace_status"],
+    args = [
+        "$(rootpath workspace_status)",
+        "$(rootpath //markdown/utils:git_repo_version)",
+    ],
+    data = [
+        "workspace_status",
+        "//markdown/utils:git_repo_version",
+    ],
 )

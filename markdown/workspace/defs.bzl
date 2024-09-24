@@ -28,6 +28,11 @@ def md_workspace(name = None):  # buildifier: disable=unused-variable
                 "700",
             ),
             (
+                "@rules_markdown//markdown/utils:git_repo_version",
+                ".markdown_workspace/git_repo_version",
+                "700",
+            ),
+            (
                 "@rules_markdown//markdown/workspace:bazelversion",
                 ".bazelversion",
                 "600",

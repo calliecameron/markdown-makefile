@@ -1,6 +1,7 @@
 """Public API of the module."""
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@markdown//:versions.bzl", "version_file")
 load(
     "//markdown/collection:defs.bzl",
     _md_collection_src = "md_collection_src",
@@ -115,6 +116,7 @@ def md_file(
         data = data,
         images = images,
         increment_included_headers = increment_included_headers,
+        version_file = version_file(native.package_name()),
         version_override = version_override,
         visibility = ["//visibility:public"],
     )

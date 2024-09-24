@@ -1,6 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@pip//:requirements.bzl", "requirement")
-load("//markdown/support/python:defs.bzl", "py_binary", "py_library", "py_test")
+load("//markdown/support/python:defs.bzl", "py_binary", "py_library", "py_source", "py_test")
 load("//markdown/support/shell:defs.bzl", "sh_binary", "sh_source", "sh_test")
 
 bzl_library(
@@ -115,4 +115,17 @@ sh_test(
     srcs = ["required_files_update_test.sh"],
     args = ["$(rootpath required_files_update.sh)"],
     data = ["required_files_update.sh"],
+)
+
+py_source(
+    name = "git_repo_version",
+    src = "git_repo_version",
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "git_repo_version_test",
+    srcs = ["git_repo_version_test.sh"],
+    args = ["$(rootpath git_repo_version)"],
+    data = ["git_repo_version"],
 )

@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "1bd82da5cdc13bce06978b2784a7cf8d8e0ddc97d00a7e0fde42fddd7b707b76",
+  "moduleFileHash": "d39333c27395a45f67e39b087775bd9107ab80dfb4c768d9366646b445700925",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -14,7 +14,7 @@
   },
   "localOverrideHashes": {
     "bazel_tools": "1ae69322ac3823527337acf02016e8ee95813d8d356f47060255b8956fa642f0",
-    "rules_markdown": "44c99ac9e23780dbd67e9120fee497bfde1afaa6d208ab94ba7266ec56568dad"
+    "rules_markdown": "6a00b44984f49e471b66c4b0200b2e14b7819559e9451c2367d27239f4932ce4"
   },
   "moduleDepGraph": {
     "<root>": {
@@ -24,7 +24,25 @@
       "repoName": "other_workspace",
       "executionPlatformsToRegister": [],
       "toolchainsToRegister": [],
-      "extensionUsages": [],
+      "extensionUsages": [
+        {
+          "extensionBzlFile": "@rules_markdown//markdown/extensions:markdown.bzl",
+          "extensionName": "markdown",
+          "usingModule": "<root>",
+          "location": {
+            "file": "@@//:MODULE.bazel",
+            "line": 17,
+            "column": 25
+          },
+          "imports": {
+            "markdown": "markdown"
+          },
+          "devImports": [],
+          "tags": [],
+          "hasDevUseExtension": false,
+          "hasNonDevUseExtension": true
+        }
+      ],
       "deps": {
         "rules_markdown": "rules_markdown@_",
         "bazel_tools": "bazel_tools@_",
@@ -153,16 +171,16 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@rules_markdown//markdown/external:shfmt.bzl",
-          "extensionName": "shfmt",
+          "extensionBzlFile": "@rules_markdown//markdown/extensions:markdown.bzl",
+          "extensionName": "markdown",
           "usingModule": "rules_markdown@_",
           "location": {
             "file": "@@rules_markdown~//:MODULE.bazel",
-            "line": 56,
-            "column": 22
+            "line": 59,
+            "column": 25
           },
           "imports": {
-            "shfmt": "shfmt"
+            "markdown": "markdown"
           },
           "devImports": [],
           "tags": [],
@@ -3234,6 +3252,36 @@
             "rules_java~~toolchains~remote_java_tools"
           ]
         ]
+      }
+    },
+    "@@rules_markdown~//markdown/extensions:markdown.bzl%markdown": {
+      "general": {
+        "bzlTransitiveDigest": "Eq1tmdbaLuPcMkuyZ70f8Ls/ajYTrDOtVWDB3QTHqhg=",
+        "recordedFileInputs": {
+          "@@//WORKSPACE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "@@rules_markdown~//markdown/extensions/find_git_repos": "4caf6e3f5d47a3f13f74daac363264389337f5a163628bdfdb02556d7db02b1e"
+        },
+        "recordedDirentsInputs": {
+          "@@//test3/.markdown_summary": "23964a9bf04c1645deb3cffa8b2b8408858ad949d6b01595c150c5c31e7d2373",
+          "@@//.markdown_summary": "23964a9bf04c1645deb3cffa8b2b8408858ad949d6b01595c150c5c31e7d2373",
+          "@@//": "27b1d4cbbc8a60d4e7e49ac45e3e390f083e8cb1a2a634bc37c95cb9810d7f53",
+          "@@//test4": "a7c53c4cf69a36bf124b51c1e1b52290c57b48228b83e8d1c0bf102f7584a4e1",
+          "@@//test3": "de981c20f39e6d16e44e9676685071f694c61f86dbf898ae80e78dd77a753332",
+          "@@//test2": "2b3a376e8c7573359259f75d0e6da53d33ddea639835b19cd39a70cbde0aad0e",
+          "@@//.markdown_workspace": "bc84a5f6476a661e3aeb50a28aa946523be792aa38027e7f124b424c4a41fdfc"
+        },
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "markdown": {
+            "bzlFile": "@@rules_markdown~//markdown/extensions:main_repo.bzl",
+            "ruleClassName": "main_repo",
+            "attributes": {
+              "package_repos": {},
+              "repos": []
+            }
+          }
+        },
+        "recordedRepoMappingEntries": []
       }
     },
     "@@rules_markdown~//markdown/external:calibre.bzl%calibre": {

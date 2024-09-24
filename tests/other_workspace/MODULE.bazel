@@ -13,3 +13,6 @@ local_path_override(
     module_name = "rules_markdown",
     path = "../..",
 )
+
+markdown = use_extension("@rules_markdown//markdown/extensions:markdown.bzl", "markdown")
+use_repo(markdown, "markdown")

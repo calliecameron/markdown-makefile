@@ -6,7 +6,7 @@ load("//markdown/utils:defs.bzl", "script_py_test")
 bzl_library(
     name = "defs_bzl",
     srcs = ["defs.bzl"],
-    visibility = ["//markdown:__pkg__"],
+    visibility = ["//markdown/private:__pkg__"],
     deps = ["//markdown/core:defs_bzl"],
 )
 

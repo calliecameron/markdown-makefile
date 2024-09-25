@@ -22,7 +22,7 @@ bzl_library(
     name = "defs_bzl",
     srcs = ["defs.bzl"],
     visibility = [
-        "//markdown:__pkg__",
+        "//markdown/private:__pkg__",
         "//tests:__pkg__",
     ],
     deps = [

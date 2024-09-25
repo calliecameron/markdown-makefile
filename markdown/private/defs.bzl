@@ -1,7 +1,6 @@
 """Public API of the module."""
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-load("@markdown//:versions.bzl", "version_file")
 load(
     "//markdown/collection:defs.bzl",
     _md_collection_src = "md_collection_src",
@@ -80,6 +79,7 @@ def md_file(
         data = None,
         images = None,
         increment_included_headers = False,
+        version_file = None,
         version_override = "",
         repo_override = ""):
     """md_file represents a markdown source file.
@@ -94,6 +94,7 @@ def md_file(
         increment_included_headers: if true, header level in included files is
             incremented, e.g. level 1 headers become level 2 headers. If false,
             headers are unchanged.
+        version_file: file with version info.
         version_override: set the document version to this value, rather than
            the computed value. Should only be used for testing.
         repo_override: set the document repo to this value, rather than
@@ -119,7 +120,7 @@ def md_file(
         data = data,
         images = images,
         increment_included_headers = increment_included_headers,
-        version_file = version_file(native.package_name()),
+        version_file = version_file,
         version_override = version_override,
         repo_override = repo_override,
         visibility = ["//visibility:public"],
@@ -140,6 +141,7 @@ def md_document(
         increment_included_headers = False,
         extra_pandoc_flags = None,
         extra_latex_flags = None,
+        version_file = None,
         version_override = None,
         repo_override = None,
         timestamp_override = None,
@@ -160,6 +162,7 @@ def md_document(
         extra_pandoc_flags: extra flags to pass to pandoc.
         extra_latex_flags: extra flags to pass to pandoc for latex-based
             formats.
+        version_file: file with version info.
         version_override: set the document version to this value, rather than
             the computed value. Should only be used for testing.
         repo_override: set the document repo to this value, rather than
@@ -184,6 +187,7 @@ def md_document(
             data = data,
             images = images,
             increment_included_headers = increment_included_headers,
+            version_file = version_file,
             version_override = version_override,
             repo_override = repo_override,
         )
@@ -350,6 +354,7 @@ def md_collection(
         deps,
         date = None,
         extra_metadata = None,
+        version_file = None,
         version_override = None,
         repo_override = None,
         timestamp_override = None,
@@ -363,6 +368,7 @@ def md_collection(
         date: the date of the collection.
         deps: md_file targets to include in the collection.
         extra_metadata: a metadata file to include.
+        version_file: file with version info.
         version_override: set the document version to this value, rather than
             the computed value. Should only be used for testing.
         repo_override: set the document repo to this value, rather than
@@ -398,6 +404,7 @@ def md_collection(
             "--include-in-header=$(rootpath @rules_markdown//markdown/collection:collection_header.tex)",
             "--include-before-body=$(rootpath @rules_markdown//markdown/collection:collection_before.tex)",
         ],
+        version_file = version_file,
         version_override = version_override,
         repo_override = repo_override,
         timestamp_override = timestamp_override,

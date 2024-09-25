@@ -8,7 +8,7 @@ bzl_library(
     name = "defs_bzl",
     srcs = ["defs.bzl"],
     visibility = [
-        "//markdown:__pkg__",
+        "//markdown/private:__pkg__",
         "//markdown/summary:__pkg__",
     ],
     deps = ["//markdown/core:defs_bzl"],

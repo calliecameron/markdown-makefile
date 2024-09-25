@@ -1,10 +1,9 @@
 """Summary implementation macros."""
 
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@rules_markdown//markdown:defs.bzl", "md_group")
 load("@rules_markdown//markdown/utils:defs.bzl", "required_files")
 
-def md_summary_impl(contents):
+def md_summary_impl(contents, md_group):
     bzl_library(
         name = "contents_bzl",
         srcs = ["contents.bzl"],

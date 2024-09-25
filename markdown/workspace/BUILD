@@ -4,7 +4,7 @@ load("//markdown/support/shell:defs.bzl", "sh_source", "sh_test")
 bzl_library(
     name = "defs_bzl",
     srcs = ["defs.bzl"],
-    visibility = ["//markdown:__pkg__"],
+    visibility = ["//markdown/private:__pkg__"],
     deps = ["//markdown/summary:defs_bzl"],
 )
 

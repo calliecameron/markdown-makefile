@@ -1,4 +1,4 @@
-load("@rules_markdown//markdown:defs.bzl", "md_document", "md_summary")
+load("@markdown//:defs.bzl", "md_document", "md_summary")
 
 md_document(
     name = "test3",

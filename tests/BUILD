@@ -1,5 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("//markdown:defs.bzl", "md_group", "md_summary")
+load("@markdown//:defs.bzl", "md_group", "md_summary")
 load("//markdown/support/shell:defs.bzl", "sh_source")
 
 bzl_library(

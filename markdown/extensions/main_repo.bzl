@@ -1,6 +1,12 @@
 """Repository rule for the main markdown repo."""
 
 def _main_repo_impl(repository_ctx):
+    repository_ctx.file(
+        "defs.bzl",
+        content = repository_ctx.read(repository_ctx.attr._defs_bzl, watch = "no"),
+        executable = False,
+    )
+
     bzl_entries = []
     for package, repo in sorted(repository_ctx.attr.package_repos.items()):
         bzl_entries.append("    \"%s\": \"@markdown//:%s_version.json\"," % (package, repo))
@@ -29,7 +35,10 @@ def version_file(package):
     repository_ctx.file(
         "BUILD",
         content = """exports_files(
-    ["versions.bzl"],
+    [
+        "defs.bzl",
+        "versions.bzl",
+    ],
     visibility = ["//visibility:public"],
 )
 
@@ -43,5 +52,8 @@ main_repo = repository_rule(
     attrs = {
         "package_repos": attr.string_dict(mandatory = True),
         "repos": attr.string_list(mandatory = True),
+        "_defs_bzl": attr.label(
+            default = "//markdown/extensions:main_repo_defs.bzl",
+        ),
     },
 )

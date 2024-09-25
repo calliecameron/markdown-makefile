@@ -1,6 +1,6 @@
 load("@buildifier_prebuilt//:rules.bzl", "buildifier_test")
-load("@markdown//:defs.bzl", "md_git_repo", "md_workspace")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("//markdown/private:defs.bzl", "md_git_repo", "md_workspace")
 
 compile_pip_requirements(
     name = "requirements",

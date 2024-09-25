@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "b6722065e0969db49ecfe4fd80c51121bca26d874f19a566714a0bdc6acca8c3",
+  "moduleFileHash": "f2c3619d5b7562c3e6100056fe074a85f479e829a4fe0a92a79063bfdca0b299",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -168,10 +168,12 @@
           "imports": {
             "markdown": "markdown"
           },
-          "devImports": [],
+          "devImports": [
+            "markdown"
+          ],
           "tags": [],
-          "hasDevUseExtension": false,
-          "hasNonDevUseExtension": true
+          "hasDevUseExtension": true,
+          "hasNonDevUseExtension": false
         }
       ],
       "deps": {

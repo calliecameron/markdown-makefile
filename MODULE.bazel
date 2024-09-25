@@ -56,5 +56,5 @@ use_repo(prosegrinder_pandoc_templates, "prosegrinder_pandoc_templates")
 shfmt = use_extension("//markdown/private/external:shfmt.bzl", "shfmt", dev_dependency = True)
 use_repo(shfmt, "shfmt")
 
-markdown = use_extension("//markdown/extensions:markdown.bzl", "markdown")
+markdown = use_extension("//markdown/extensions:markdown.bzl", "markdown", dev_dependency = True)
 use_repo(markdown, "markdown")

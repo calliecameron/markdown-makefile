@@ -14,7 +14,7 @@
   },
   "localOverrideHashes": {
     "bazel_tools": "1ae69322ac3823527337acf02016e8ee95813d8d356f47060255b8956fa642f0",
-    "rules_markdown": "6a00b44984f49e471b66c4b0200b2e14b7819559e9451c2367d27239f4932ce4"
+    "rules_markdown": "b6722065e0969db49ecfe4fd80c51121bca26d874f19a566714a0bdc6acca8c3"
   },
   "moduleDepGraph": {
     "<root>": {
@@ -120,7 +120,7 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@rules_markdown//markdown/external:calibre.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/private/external:calibre.bzl",
           "extensionName": "calibre",
           "usingModule": "rules_markdown@_",
           "location": {
@@ -137,7 +137,7 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@rules_markdown//markdown/external:pandoc.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/private/external:pandoc.bzl",
           "extensionName": "pandoc",
           "usingModule": "rules_markdown@_",
           "location": {
@@ -154,7 +154,7 @@
           "hasNonDevUseExtension": true
         },
         {
-          "extensionBzlFile": "@rules_markdown//markdown/external:prosegrinder_pandoc_templates.bzl",
+          "extensionBzlFile": "@rules_markdown//markdown/private/external:prosegrinder_pandoc_templates.bzl",
           "extensionName": "prosegrinder_pandoc_templates",
           "usingModule": "rules_markdown@_",
           "location": {
@@ -3256,10 +3256,10 @@
     },
     "@@rules_markdown~//markdown/extensions:markdown.bzl%markdown": {
       "general": {
-        "bzlTransitiveDigest": "mZwjzmtW4I4ZLOAm6cMv7pTRuzQD2HFaXYVmPRwoKFk=",
+        "bzlTransitiveDigest": "alOWo2VCzyvVwDY5b4ny1HqR332PKKclYAygTE89c1w=",
         "recordedFileInputs": {
           "@@//WORKSPACE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-          "@@rules_markdown~//markdown/extensions/find_git_repos": "4caf6e3f5d47a3f13f74daac363264389337f5a163628bdfdb02556d7db02b1e"
+          "@@rules_markdown~//markdown/extensions/private/find_git_repos": "4caf6e3f5d47a3f13f74daac363264389337f5a163628bdfdb02556d7db02b1e"
         },
         "recordedDirentsInputs": {
           "@@//test3/.markdown_summary": "23964a9bf04c1645deb3cffa8b2b8408858ad949d6b01595c150c5c31e7d2373",
@@ -3273,7 +3273,7 @@
         "envVariables": {},
         "generatedRepoSpecs": {
           "markdown": {
-            "bzlFile": "@@rules_markdown~//markdown/extensions:main_repo.bzl",
+            "bzlFile": "@@rules_markdown~//markdown/extensions/private:main_repo.bzl",
             "ruleClassName": "main_repo",
             "attributes": {
               "package_repos": {},
@@ -3284,9 +3284,9 @@
         "recordedRepoMappingEntries": []
       }
     },
-    "@@rules_markdown~//markdown/external:calibre.bzl%calibre": {
+    "@@rules_markdown~//markdown/private/external:calibre.bzl%calibre": {
       "general": {
-        "bzlTransitiveDigest": "mZ6x4VCHA5jxPNa0JJ8QbLBVgBCVGl5VpcCHCw1jXOA=",
+        "bzlTransitiveDigest": "5WDKa6SRMx2k6kmj+NlpPQgvzC9/e3LJlSAFjvslzHU=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -3295,7 +3295,7 @@
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "build_file": "@@rules_markdown~//markdown/external:calibre.build",
+              "build_file": "@@rules_markdown~//markdown/private/external:calibre.build",
               "url": "https://download.calibre-ebook.com/6.15.1/calibre-6.15.1-x86_64.txz",
               "sha256": "1c1b1ae0649395593dadd1b39e2cc6552c99b10f1ca175eb594756bd9284c077"
             }
@@ -3310,9 +3310,9 @@
         ]
       }
     },
-    "@@rules_markdown~//markdown/external:pandoc.bzl%pandoc": {
+    "@@rules_markdown~//markdown/private/external:pandoc.bzl%pandoc": {
       "general": {
-        "bzlTransitiveDigest": "jNFX4RYO7FSfU9mS+bgh0ND7HxmLNacMFySobZBcUo0=",
+        "bzlTransitiveDigest": "NpfQjxZOSW4nmSO6E0Il0LPEXKWyag5l0fd/21omL9c=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -3321,7 +3321,7 @@
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "build_file": "@@rules_markdown~//markdown/external:pandoc.build",
+              "build_file": "@@rules_markdown~//markdown/private/external:pandoc.build",
               "url": "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz",
               "sha256": "4e1c607f7e4e9243fa1e1f5b208cd4f1d3f6fd055d5d8c39ba0cdc38644e1c35",
               "strip_prefix": "pandoc-3.1.2"
@@ -3337,9 +3337,9 @@
         ]
       }
     },
-    "@@rules_markdown~//markdown/external:prosegrinder_pandoc_templates.bzl%prosegrinder_pandoc_templates": {
+    "@@rules_markdown~//markdown/private/external:prosegrinder_pandoc_templates.bzl%prosegrinder_pandoc_templates": {
       "general": {
-        "bzlTransitiveDigest": "j3MXnCjPsj/hZch/O2ioLtzwTvXritMsksAauIKM5sc=",
+        "bzlTransitiveDigest": "rVRLwdZ4M3Zz/PofGgpwyFFCkAz7w5+HAIIu5Pvh4sc=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -3348,12 +3348,12 @@
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "build_file": "@@rules_markdown~//markdown/external:prosegrinder_pandoc_templates.build",
+              "build_file": "@@rules_markdown~//markdown/private/external:prosegrinder_pandoc_templates.build",
               "url": "https://github.com/prosegrinder/pandoc-templates/archive/71d6e9e47ec142a763fff1398b468ba1a008ced0.zip",
               "sha256": "7978b6122ecf7c751c2f1a54f0fcb500f2fa982cc400653a6d77fe88489471f8",
               "strip_prefix": "pandoc-templates-71d6e9e47ec142a763fff1398b468ba1a008ced0",
               "patches": [
-                "@@rules_markdown~//markdown/external:md2short.sh.patch"
+                "@@rules_markdown~//markdown/private/external:md2short.sh.patch"
               ]
             }
           }

@@ -1,0 +1,5 @@
+sh_binary(
+    name = "pandoc",
+    srcs = ["bin/pandoc"],
+    visibility = ["@rules_markdown//markdown/private/external:__pkg__"],
+)

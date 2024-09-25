@@ -1,14 +1,14 @@
 """Main module extension."""
 
-load("//markdown/extensions:git_repo.bzl", "git_repo")
-load("//markdown/extensions:main_repo.bzl", "main_repo")
+load("//markdown/extensions/private:git_repo.bzl", "git_repo")
+load("//markdown/extensions/private:main_repo.bzl", "main_repo")
 
 def _markdown_impl(module_ctx):
     root = module_ctx.path(Label("@@//:WORKSPACE")).dirname
 
     result = module_ctx.execute(
         [
-            str(module_ctx.path(Label("//markdown/extensions:find_git_repos"))),
+            str(module_ctx.path(Label("//markdown/extensions/private:find_git_repos"))),
             str(root),
         ],
     )

@@ -2,16 +2,16 @@
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load(
-    "//markdown/collection:defs.bzl",
+    "//markdown/private/collection:defs.bzl",
     _md_collection_src = "md_collection_src",
 )
 load(
-    "//markdown/core:defs.bzl",
+    "//markdown/private/core:defs.bzl",
     _md_file = "md_file",
     _md_group = "md_group",
 )
 load(
-    "//markdown/formats:defs.bzl",
+    "//markdown/private/formats:defs.bzl",
     "ext_var_dot",
     "ext_var_underscore",
     _md_deps_metadata_json = "md_deps_metadata_json",
@@ -31,20 +31,20 @@ load(
     _md_txt = "md_txt",
 )
 load(
-    "//markdown/git:defs.bzl",
+    "//markdown/private/git:defs.bzl",
     _md_git_repo = "md_git_repo",
 )
 load(
-    "//markdown/group:defs.bzl",
+    "//markdown/private/group:defs.bzl",
     _md_group_publications = "md_group_publications",
     _md_group_summary = "md_group_summary",
 )
 load(
-    "//markdown/summary:defs.bzl",
+    "//markdown/private/summary:defs.bzl",
     _md_summary = "md_summary",
 )
 load(
-    "//markdown/workspace:defs.bzl",
+    "//markdown/private/workspace:defs.bzl",
     _md_workspace = "md_workspace",
 )
 
@@ -312,8 +312,8 @@ def md_document(
     native.genrule(
         name = name + "_save_sh",
         outs = [name + "_save.sh"],
-        cmd = "$(location @rules_markdown//markdown/formats:write_save_script) $@ %s" % native.package_name(),
-        tools = ["@rules_markdown//markdown/formats:write_save_script"],
+        cmd = "$(location @rules_markdown//markdown/private/formats:write_save_script) $@ %s" % native.package_name(),
+        tools = ["@rules_markdown//markdown/private/formats:write_save_script"],
         visibility = ["//visibility:private"],
     )
 
@@ -391,8 +391,8 @@ def md_collection(
         src = name + "_src",
         deps = deps,
         data = [
-            "@rules_markdown//markdown/collection:collection_header.tex",
-            "@rules_markdown//markdown/collection:collection_before.tex",
+            "@rules_markdown//markdown/private/collection:collection_header.tex",
+            "@rules_markdown//markdown/private/collection:collection_before.tex",
         ] + ([extra_metadata] if extra_metadata else []),
         increment_included_headers = True,
         extra_pandoc_flags = [
@@ -401,8 +401,8 @@ def md_collection(
         ] + (["--metadata-file=$(rootpath %s)" % extra_metadata] if extra_metadata else []),
         extra_latex_flags = [
             "--variable=section-page-break",
-            "--include-in-header=$(rootpath @rules_markdown//markdown/collection:collection_header.tex)",
-            "--include-before-body=$(rootpath @rules_markdown//markdown/collection:collection_before.tex)",
+            "--include-in-header=$(rootpath @rules_markdown//markdown/private/collection:collection_header.tex)",
+            "--include-before-body=$(rootpath @rules_markdown//markdown/private/collection:collection_before.tex)",
         ],
         version_file = version_file,
         version_override = version_override,

@@ -1,4 +1,4 @@
-load("//markdown/support/python:defs.bzl", "py_filegroup")
+load("//markdown/private/support/python:defs.bzl", "py_filegroup")
 
 py_filegroup(
     name = "stubs",

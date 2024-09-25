@@ -1,0 +1,112 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@pip//:requirements.bzl", "requirement")
+load("//markdown/private/support/python:defs.bzl", "py_binary")
+load("//markdown/private/utils:defs.bzl", "script_py_test")
+
+bzl_library(
+    name = "defs_bzl",
+    srcs = ["defs.bzl"],
+    visibility = ["//markdown/private:__subpackages__"],
+)
+
+py_binary(
+    name = "preprocess",
+    srcs = ["preprocess.py"],
+    visibility = ["//visibility:public"],
+    deps = ["//markdown/private/utils:bazel_package"],
+)
+
+script_py_test(
+    name = "preprocess_test",
+    src = "preprocess_test.py",
+    script = ":preprocess",
+    deps = [":preprocess"],
+)
+
+py_binary(
+    name = "validate_input_metadata",
+    srcs = ["validate_input_metadata.py"],
+    visibility = ["//visibility:public"],
+    deps = ["//markdown/private/utils:metadata"],
+)
+
+script_py_test(
+    name = "validate_input_metadata_test",
+    src = "validate_input_metadata_test.py",
+    script = ":validate_input_metadata",
+)
+
+py_binary(
+    name = "source_hash",
+    srcs = ["source_hash.py"],
+    visibility = ["//visibility:public"],
+    deps = ["//markdown/private/utils:metadata"],
+)
+
+script_py_test(
+    name = "source_hash_test",
+    src = "source_hash_test.py",
+    script = ":source_hash",
+)
+
+py_binary(
+    name = "raw_version",
+    srcs = ["raw_version.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//markdown/private/utils:bazel_package",
+        "//markdown/private/utils:metadata",
+    ],
+)
+
+script_py_test(
+    name = "raw_version_test",
+    src = "raw_version_test.py",
+    script = ":raw_version",
+)
+
+py_binary(
+    name = "version",
+    srcs = ["version.py"],
+    visibility = ["//visibility:public"],
+    deps = ["//markdown/private/utils:metadata"],
+)
+
+script_py_test(
+    name = "version_test",
+    src = "version_test.py",
+    script = ":version",
+    deps = [":version"],
+)
+
+py_binary(
+    name = "parse_date",
+    srcs = ["parse_date.py"],
+    type_stub_deps = [
+        requirement("types-dateparser"),
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//markdown/private/utils:metadata",
+        requirement("dateparser"),
+    ],
+)
+
+script_py_test(
+    name = "parse_date_test",
+    src = "parse_date_test.py",
+    script = ":parse_date",
+)
+
+py_binary(
+    name = "validate_output_metadata",
+    srcs = ["validate_output_metadata.py"],
+    visibility = ["//visibility:public"],
+    deps = ["//markdown/private/utils:metadata"],
+)
+
+script_py_test(
+    name = "validate_output_metadata_test",
+    src = "validate_output_metadata_test.py",
+    script = ":validate_output_metadata",
+)

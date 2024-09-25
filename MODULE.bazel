@@ -7,27 +7,19 @@ module(
 
 bazel_dep(
     name = "bazel_skylib",
-    version = "1.6.1",
+    version = "1.7.1",
 )
 bazel_dep(
     name = "rules_python",
-    version = "0.32.2",
+    version = "0.36.0",
 )
 bazel_dep(
     name = "buildifier_prebuilt",
-    version = "6.4.0",
-)
-bazel_dep(
-    name = "aspect_rules_lint",
-    version = "0.21.0",
+    version = "7.3.1",
 )
 bazel_dep(
     name = "platforms",
     version = "0.0.10",
-)
-bazel_dep(
-    name = "rules_shellcheck",
-    version = "0.3.3",
 )
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
@@ -55,6 +47,12 @@ use_repo(prosegrinder_pandoc_templates, "prosegrinder_pandoc_templates")
 
 shfmt = use_extension("//markdown/private/external:shfmt.bzl", "shfmt", dev_dependency = True)
 use_repo(shfmt, "shfmt")
+
+shellcheck = use_extension("//markdown/private/external:shellcheck.bzl", "shellcheck", dev_dependency = True)
+use_repo(shellcheck, "shellcheck")
+
+ruff = use_extension("//markdown/private/external:ruff.bzl", "ruff", dev_dependency = True)
+use_repo(ruff, "ruff")
 
 markdown = use_extension("//markdown/extensions:markdown.bzl", "markdown", dev_dependency = True)
 use_repo(markdown, "markdown")

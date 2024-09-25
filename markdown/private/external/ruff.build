@@ -1,0 +1,5 @@
+sh_binary(
+    name = "ruff",
+    srcs = ["ruff-x86_64-unknown-linux-gnu/ruff"],
+    visibility = ["@rules_markdown//markdown/private/external:__pkg__"],
+)

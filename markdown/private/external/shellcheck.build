@@ -1,0 +1,5 @@
+sh_binary(
+    name = "shellcheck",
+    srcs = ["shellcheck-v0.10.0/shellcheck"],
+    visibility = ["@rules_markdown//markdown/private/external:__pkg__"],
+)

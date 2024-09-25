@@ -1,3 +1,0 @@
-load("@aspect_rules_lint//lint:ruff.bzl", "fetch_ruff")
-
-fetch_ruff()

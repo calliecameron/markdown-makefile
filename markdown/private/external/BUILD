@@ -21,13 +21,13 @@ alias(
 
 alias(
     name = "ruff",
-    actual = "@ruff_x86_64-unknown-linux-gnu//:ruff",
+    actual = "@ruff//:ruff",
     visibility = ["//:__subpackages__"],
 )
 
 alias(
     name = "shellcheck",
-    actual = "@rules_shellcheck//:shellcheck",
+    actual = "@shellcheck//:shellcheck",
     visibility = ["//:__subpackages__"],
 )
 

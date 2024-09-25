@@ -144,13 +144,8 @@ def main() -> None:
     with open(args.in_file, encoding="utf-8") as f:
         data = f.read().split("\n")
 
-    deps = {}
-    for dep, file in args.dep:
-        deps[dep] = file
-
-    images = {}
-    for image, file in args.image:
-        images[image] = file
+    deps = dict(args.dep)
+    images = dict(args.image)
 
     problems = preprocess(data, deps, images, args.current_package)
 

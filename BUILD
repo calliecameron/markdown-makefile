@@ -18,7 +18,7 @@ md_git_repo(
 buildifier_test(
     name = "buildifier_test",
     no_sandbox = True,
-    workspace = "//:WORKSPACE.bazel",
+    workspace = "//:WORKSPACE",
 )
 
 exports_files(

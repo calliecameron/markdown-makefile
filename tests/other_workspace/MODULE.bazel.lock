@@ -3256,7 +3256,7 @@
     },
     "@@rules_markdown~//markdown/extensions:markdown.bzl%markdown": {
       "general": {
-        "bzlTransitiveDigest": "alOWo2VCzyvVwDY5b4ny1HqR332PKKclYAygTE89c1w=",
+        "bzlTransitiveDigest": "u2ORH0XZ51aOKdd/BkfCz2Q3ZQqcWp3DZDZ2NSP8p60=",
         "recordedFileInputs": {
           "@@//WORKSPACE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "@@rules_markdown~//markdown/extensions/private/find_git_repos": "4caf6e3f5d47a3f13f74daac363264389337f5a163628bdfdb02556d7db02b1e"

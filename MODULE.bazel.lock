@@ -107,6 +107,7 @@
           "@@//.mypy_cache/3.10/markdown/private/core/lint": "0e544eb945502091a77da864fb5a65086f0563acb1c357e41be820131e67d377",
           "@@//.mypy_cache/3.10/xml": "aadb2291c96dad74e482867b44fde1792c05b76f60e5df2c847e9527b38a47aa",
           "@@//.mypy_cache/3.10/collections": "9d1d2be721ca656a57561e8868742c2d874f1dfb70495d2cea481550e11a9c07",
+          "@@//.mypy_cache/3.10/cryptography/hazmat/decrepit": "3ee03aef9e6bcaa89e47818ec1c4d8f9bd9b7a094dcb76285c9b3d278a3f0ee5",
           "@@//markdown/private/formats/html": "1abc40b982a02c4eb5a375b8795609a472e6ccff0cc13cc4c77a0f40a39ddb86",
           "@@//.mypy_cache/3.10/prompt_toolkit/input": "5ed6f5f078740419a688d2d80d794466244411e1a1d979f4e9f1ead05fe9097c",
           "@@//.mypy_cache/3.10/dateparser/search": "065d2ce4caf199d90591a2f113bf789f0ed41c1f7dda8b4dd6850c9c3c0e8ac9",
@@ -128,7 +129,7 @@
           "@@//markdown/private/group": "2d047c2555913b3107d8c687c1fe5fba86d97f670c21dcccd73666bb8a1bb98f",
           "@@//.mypy_cache/3.10/ctypes": "405c09fb1e7c59e074f2e041ce365a4ecb3d05711459ddf6cfa35c2fc4fd2777",
           "@@//.mypy_cache/3.10/pymarkdown/container_blocks": "c661e430b601f33515d13880d3fd081c5a7728fc3b853ecbc49656628e4e4d5e",
-          "@@//tests/other_workspace": "27b1d4cbbc8a60d4e7e49ac45e3e390f083e8cb1a2a634bc37c95cb9810d7f53",
+          "@@//tests/other_workspace": "d3392110d040b51c03e74934a72719bda536f20160568a65a6e130fae4bc9cbd",
           "@@//.mypy_cache/3.10/prompt_toolkit/widgets": "cedca39d284ee652825c83f0bcec899f22b07be240014f6fd0d752ebbb420184",
           "@@//.mypy_cache/3.10/prompt_toolkit/filters": "64743c4e83dabacd11281fbc842ceb07397fd90091f87d7db5a8b0aead607881",
           "@@//.mypy_cache/3.10/prompt_toolkit/styles": "7a5e3b6a1c7ef31e7bde92919f1ab0478c55c9bde86278fcb215bc4e4cc44c22",
@@ -177,7 +178,7 @@
           "@@//.mypy_cache/3.10/markdown_makefile/utils": "79dca8d64e2be8018f5b5f75ae0e2fccbb3ad60dc6df45f863a1405b7faa2099",
           "@@//.mypy_cache/3.10/src/utils": "be866419f88515f6d390938e00b709c2d8af7ec63cfa7a09c5cad7f451859c9d",
           "@@//.mypy_cache/3.10/markdown/private/core/filters": "e002b5edc7ef68678fa7f02728d34b1d755f4a53a9211003bcc2af3bf1590238",
-          "@@//.mypy_cache/3.10/cryptography/hazmat/primitives": "aacf85f2c46c7a0f834e0da2890028d3e83f60e59871b2883e3c81beea553a0c",
+          "@@//.mypy_cache/3.10/cryptography/hazmat/primitives": "412462bd031ed74a8f248feabde56f6af02a8061877ea50279efc8cfb6d4654e",
           "@@//.mypy_cache/3.10/markdown_makefile/formats/word": "a5e4dd0b0803b6dc1a284dae0ca4e437a07e5b71b07e5e14d847ab79a776bb5e",
           "@@//.mypy_cache/3.10/pymarkdown/links": "2c1281770d8b9e171f27b82176faca8c5b7067175e48d8ac98420254ae95dc1d",
           "@@//.mypy_cache/3.10/cryptography/hazmat/primitives/kdf": "f5c27950af99b26eacd4e43948c777d68c81de227392784e8d110bc1a47b0e33",
@@ -185,7 +186,7 @@
           "@@//.mypy_cache/3.10/pymarkdown/extensions": "9e01c7eb9af866f732a186e52eb433960ce60f3ca8ab78f376b25c685a81ee1b",
           "@@//tests/.markdown_summary": "23964a9bf04c1645deb3cffa8b2b8408858ad949d6b01595c150c5c31e7d2373",
           "@@//.mypy_cache/3.10/pathspec/patterns": "c56b10d81abd0a8c4eeb92f875aa81618f44c26ed0a7a6622f169ad836f3638c",
-          "@@//.mypy_cache/3.10/pdfminer": "bd801b8918d56cade9844d9e0eec417ee8dec5da02afcdf39eea3eabf8fcf070",
+          "@@//.mypy_cache/3.10/pdfminer": "be60e3080326483e21bc80ade9e5f84bf2f0e76ffb5334ac0579ee99d5a1fa8c",
           "@@//.mypy_cache/3.10/pymarkdown": "7f23bba08e19fcd6922a1d4055756c7f3d549727316f011d05b76daa99cbe4b3",
           "@@//.mypy_cache/3.10/asyncio": "1e62e1d0982f1d03c102b96731fb71242c0a406862ac231812223a6a4e46f1ed",
           "@@//.mypy_cache/3.10/asttokens": "74e6387510eec51346fc4c6fae8ace8300d14293bdcf48891afe3234e779d08b",
@@ -238,7 +239,7 @@
           "@@//.mypy_cache/3.10/http": "f272ff6ae874e9b44381bc9f1ee2973ffa68a6269f782be978b18da5db7d1897",
           "@@//.mypy_cache/3.10/email": "378e313dc0c105981e00cce8d6b4aecf30ee4f4abdd3db08ee12e6000a456df4",
           "@@//.mypy_cache/3.10/tornado/platform": "b8f9bba43decc848e1d57cf25265535b9da0bef6b4e454921396a61ca192acd9",
-          "@@//.mypy_cache/3.10/cryptography/hazmat/bindings/_rust/openssl": "6803c4596222bb81ce4da5b0c70687b91de526529f0498e425d760af06e6e50f",
+          "@@//.mypy_cache/3.10/cryptography/hazmat/bindings/_rust/openssl": "48b3349ac3f1756160bea0f5239424b2d25f65180b81ca395b4868fdc8991dc0",
           "@@//.mypy_cache/3.10/markdown/utils": "496b8f2d8eb5110a1681f0e0293da41b3a035919ea5ad196ea2b2dc377852270",
           "@@//tests/test1/saved": "d4d4b112c8c081ea6bc91ba917c5ab0af78040349197c4e04f3b03db0ce91d7b",
           "@@//markdown/private/formats": "d457bb31e382657364ab3fda6eb4747bf8a190019707735310fd6b4e5ec7f052",
@@ -266,7 +267,7 @@
           "@@//.mypy_cache/3.10/pathspec": "1e11afaf79b4d5453c7563fd9af0b3310fb70dd3a4f3a9d05d8da19dd124418a",
           "@@//.mypy_cache/3.10/markdown/private/formats/latex": "0b412c974b2a229a151108e9b5f555b2595940a6efb45b5177cf80385ee7d507",
           "@@//.mypy_cache/3.10/ipykernel/comm": "bc20cbfdfd46cfdb998c93040068539e02215886ebf429a56700b07fe3ac26d0",
-          "@@//.mypy_cache/3.10/cryptography/hazmat": "f72d8e3a8aae7e7e0869bf1c980834172c29d73ebe950aac88dc4934c5a2f5c9",
+          "@@//.mypy_cache/3.10/cryptography/hazmat": "5518909218f0ad8e6ddf4ae581d5a4133b3a5ad60d441be869112312eb035867",
           "@@//.mypy_cache/3.10/xml/parsers/expat": "065d2ce4caf199d90591a2f113bf789f0ed41c1f7dda8b4dd6850c9c3c0e8ac9",
           "@@//markdown/private/formats/ebook": "3066eb3d1fc76eda6b1cb61161f65cdd9df25f8c69f4adb75b034d339be4f1d0",
           "@@//.mypy_cache/3.10/multiprocessing": "460f235db75bed9865905fc5de589c4412001b5981ceb6a0c22c344efd598149",
@@ -287,7 +288,7 @@
           "@@//markdown/private/core": "ee178114c246ca0842821159ca2395c52127f207972715f73f74c634856d7088",
           "@@//tests/test3/saved": "96781b43227709b83d2287680076f86220f51d79dcaab9b01767d419ed999840",
           "@@//.mypy_cache/3.10/stack_data": "9a28827a1850969018cadb36796950122127d4f2a80f4a97c4128bd4452ed419",
-          "@@//.mypy_cache": "f3131174337e6d27dbfbe94f26fc8adb624fb89286ebaa5f06a97a768890d06d",
+          "@@//.mypy_cache": "921fc8be4df32307c8f879d1063de4e15ffadd716ec67d0154adb54ba661129b",
           "@@//tests/test2": "0f16b0a538b2d02c12c3ae7c3687d1d69631dc8735cf07e12eb23981719598cb",
           "@@//tests/test3": "edcf50127148c05824789bef95b2a0e8a5e98f9d4982db2b3590f65eb4569551",
           "@@//.mypy_cache/3.10/IPython/testing": "6f89a1810512c78647cafd6ed4661d9e2e49611d2d41d83e2874b21ca27fce9f",
@@ -320,6 +321,7 @@
           "@@//tests/test5/saved": "873d4483789cb4297403d2b4403c46d0cce9a834844f75ef970592424a3e5937",
           "@@//.mypy_cache/3.10/ipykernel": "d733360382c7c3d3af3f4f522a9da1c087dec7a60c23f49fece29203953ff496",
           "@@//.mypy_cache/3.10/click": "ef49933afa9719c0d9a9bb71203b4209360a7903973d1671431e05e9b366d843",
+          "@@//.mypy_cache/3.10/cryptography/hazmat/decrepit/ciphers": "f752a3d5be6a2b0af9830d31d6c5240586ff43f70e97cadbe2baeb12809b1512",
           "@@//markdown/private/collection": "f3279995287d64d33ae104dfe137e8997578b9d5d87f3910544ea25693ddfbe1",
           "@@//markdown/extensions": "228b2bfd0fdece715142fde0a91310d209ab27a47d4e7129e443d01e4a2a34fb",
           "@@//.mypy_cache/3.10/packaging": "62aacdc4aba6253b5e9943ff2474217327ea8647dfccf69388631c31f1144cb7",
@@ -693,11 +695,43 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "jASrqO0LfrcQzW0e4m+eV834J3leX8ta0bfYDA7GCJY=",
+        "usagesDigest": "3gZZ+XqfOy/ZjEDXO7/iwdxkNco2bMEMBynoVu7sAYc=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
         "generatedRepoSpecs": {
+          "hexdump": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "hexdump",
+              "attribute_path": "hexdump",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "poppler_utils": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "poppler_utils",
+              "attribute_path": "poppler_utils",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
           "ruff": {
             "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
             "ruleClassName": "_nixpkgs_package",
@@ -730,6 +764,22 @@
               "fail_not_supported": true
             }
           },
+          "unzip": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "unzip",
+              "attribute_path": "unzip",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
           "shfmt": {
             "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
             "ruleClassName": "_nixpkgs_package",
@@ -749,9 +799,12 @@
         },
         "moduleExtensionMetadata": {
           "explicitRootModuleDirectDeps": [
+            "hexdump",
+            "poppler_utils",
             "shellcheck",
             "shfmt",
-            "ruff"
+            "ruff",
+            "unzip"
           ],
           "explicitRootModuleDirectDevDeps": [],
           "useAllRepos": "NO",
@@ -774,7 +827,7 @@
     "@@rules_nixpkgs_core~//extensions:repository.bzl%nix_repo": {
       "general": {
         "bzlTransitiveDigest": "0Ht4ap98u2/ZoeBB9bC10VcHVLEy3YCtLhz580evslw=",
-        "usagesDigest": "5EfvG7VtDYlOalaWmUqoVFn4MLWAGayfl+vm3eLd5cQ=",
+        "usagesDigest": "p68LU9CrYdqAtD1o6s0OoqvC+pfR2HDOsBhxJMaACes=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -784,17 +837,15 @@
             "ruleClassName": "_nixpkgs_http_repository",
             "attributes": {
               "unmangled_name": "nixpkgs",
-              "url": "https://github.com/NixOS/nixpkgs/archive/759537f06e6999e141588ff1c9be7f3a5c060106.tar.gz",
-              "strip_prefix": "nixpkgs-759537f06e6999e141588ff1c9be7f3a5c060106",
+              "url": "https://github.com/NixOS/nixpkgs/archive/refs/tags/24.05.tar.gz",
+              "strip_prefix": "nixpkgs-24.05",
               "integrity": "",
-              "sha256": "b08ab2683f93734139e1aa467f9a7e7b8f59100ba3a41dd993867b98038f7a39"
+              "sha256": "911314b81780f26fdaf87e17174210bdbd40c86bac1795212f257cdc236a1e78"
             }
           }
         },
         "moduleExtensionMetadata": {
-          "explicitRootModuleDirectDeps": [
-            "nixpkgs"
-          ],
+          "explicitRootModuleDirectDeps": [],
           "explicitRootModuleDirectDevDeps": [],
           "useAllRepos": "NO",
           "reproducible": false

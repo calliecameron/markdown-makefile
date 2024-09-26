@@ -5,6 +5,12 @@ alias(
 )
 
 alias(
+    name = "hexdump",
+    actual = "@hexdump//:bin/hexdump",
+    visibility = ["//markdown/private/utils:__pkg__"],
+)
+
+alias(
     name = "md2short",
     actual = "@prosegrinder_pandoc_templates//:md2short",
     visibility = ["//markdown/private/formats/word:__pkg__"],
@@ -17,6 +23,12 @@ alias(
         "//markdown/private/core:__subpackages__",
         "//markdown/private/formats:__subpackages__",
     ],
+)
+
+alias(
+    name = "pdfinfo",
+    actual = "@poppler_utils//:bin/pdfinfo",
+    visibility = ["//markdown/private/utils:__pkg__"],
 )
 
 alias(
@@ -34,5 +46,11 @@ alias(
 alias(
     name = "shfmt",
     actual = "@shfmt//:bin/shfmt",
+    visibility = ["//:__subpackages__"],
+)
+
+alias(
+    name = "unzip",
+    actual = "@unzip//:bin/unzip",
     visibility = ["//:__subpackages__"],
 )

@@ -61,6 +61,12 @@ py_test(
 sh_binary(
     name = "bindump",
     srcs = ["bindump.sh"],
+    args = [
+        "$(rootpath //markdown/private/external:hexdump)",
+    ],
+    data = [
+        "//markdown/private/external:hexdump",
+    ],
     visibility = ["//:__subpackages__"],
 )
 
@@ -80,14 +86,26 @@ py_binary(
 sh_binary(
     name = "pdfdump",
     srcs = ["pdfdump.sh"],
-    args = ["$(rootpath pdf2txt)"],
-    data = [":pdf2txt"],
+    args = [
+        "$(rootpath //markdown/private/external:pdfinfo)",
+        "$(rootpath pdf2txt)",
+    ],
+    data = [
+        ":pdf2txt",
+        "//markdown/private/external:pdfinfo",
+    ],
     visibility = ["//:__subpackages__"],
 )
 
 sh_binary(
     name = "zipdump",
     srcs = ["zipdump.sh"],
+    args = [
+        "$(rootpath //markdown/private/external:unzip)",
+    ],
+    data = [
+        "//markdown/private/external:unzip",
+    ],
     visibility = ["//:__subpackages__"],
 )
 

@@ -16,7 +16,7 @@ odt, docx, doc, and docx in
 
     ```shell
     sudo apt-get install -y catdoc git gcc hunspell hunspell-en-gb libegl1 \
-        libopengl0 libxkbcommon0 poppler-utils python3-pip \
+        libopengl0 libxkbcommon0 python3-pip \
         strip-nondeterminism texlive-xetex unoconv
     ```
 

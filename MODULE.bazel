@@ -40,7 +40,7 @@ pip.parse(
 )
 use_repo(pip, "pip")
 
-nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
+nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo", isolate = True)
 nix_repo.github(
     name = "nixpkgs",
     commit = "759537f06e6999e141588ff1c9be7f3a5c060106",  # 24.05 as of 2024/09/26
@@ -50,6 +50,12 @@ use_repo(nix_repo, "nixpkgs")
 
 nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
 nix_pkg.default(
+    attr = "hexdump",
+)
+nix_pkg.default(
+    attr = "poppler_utils",
+)
+nix_pkg.default(
     attr = "shellcheck",
 )
 nix_pkg.default(
@@ -58,11 +64,17 @@ nix_pkg.default(
 nix_pkg.default(
     attr = "ruff",
 )
+nix_pkg.default(
+    attr = "unzip",
+)
 use_repo(
     nix_pkg,
+    "hexdump",
+    "poppler_utils",
     "ruff",
     "shellcheck",
     "shfmt",
+    "unzip",
 )
 
 calibre = use_extension("//markdown/private/external:calibre.bzl", "calibre")

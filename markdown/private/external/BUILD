@@ -21,18 +21,18 @@ alias(
 
 alias(
     name = "ruff",
-    actual = "@ruff//:ruff",
+    actual = "@ruff//:bin/ruff",
     visibility = ["//:__subpackages__"],
 )
 
 alias(
     name = "shellcheck",
-    actual = "@shellcheck//:shellcheck",
+    actual = "@shellcheck//:bin/shellcheck",
     visibility = ["//:__subpackages__"],
 )
 
 alias(
     name = "shfmt",
-    actual = "@shfmt//file",
+    actual = "@shfmt//:bin/shfmt",
     visibility = ["//:__subpackages__"],
 )

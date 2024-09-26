@@ -58,6 +58,8 @@
     "https://bcr.bazel.build/modules/rules_license/0.0.3/MODULE.bazel": "627e9ab0247f7d1e05736b59dbb1b6871373de5ad31c3011880b4133cafd4bd0",
     "https://bcr.bazel.build/modules/rules_license/0.0.7/MODULE.bazel": "088fbeb0b6a419005b89cf93fe62d9517c0a2b8bb56af3244af65ecfe37e7d5d",
     "https://bcr.bazel.build/modules/rules_license/0.0.7/source.json": "355cc5737a0f294e560d52b1b7a6492d4fff2caf0bef1a315df5a298fca2d34a",
+    "https://bcr.bazel.build/modules/rules_nixpkgs_core/0.12.0/MODULE.bazel": "28394dcd0494c82c587df6788fa3e34c3fa05b724993a5ed54b6f4a28d846808",
+    "https://bcr.bazel.build/modules/rules_nixpkgs_core/0.12.0/source.json": "fa61e13b594bad9d9e8baa0e63dc28e9d0a4fcc134e87b819175adbbd6353e70",
     "https://bcr.bazel.build/modules/rules_pkg/0.7.0/MODULE.bazel": "df99f03fc7934a4737122518bb87e667e62d780b610910f0447665a7e2be62dc",
     "https://bcr.bazel.build/modules/rules_pkg/0.7.0/source.json": "c2557066e0c0342223ba592510ad3d812d4963b9024831f7f66fd0584dd8c66c",
     "https://bcr.bazel.build/modules/rules_proto/4.0.0/MODULE.bazel": "a7a7b6ce9bee418c1a760b3d84f83a299ad6952f9903c67f19e4edd964894e06",
@@ -273,7 +275,7 @@
           "@@//.mypy_cache/3.10/distutils": "7c0093a25ed0bcdb07e4d5be11b65b4e0b30da12dcadbd2cf5edd131bf58a75c",
           "@@//.mypy_cache/3.10/importlib/resources": "065d2ce4caf199d90591a2f113bf789f0ed41c1f7dda8b4dd6850c9c3c0e8ac9",
           "@@//.mypy_cache/3.10/markdown/private/formats/metadata": "065d2ce4caf199d90591a2f113bf789f0ed41c1f7dda8b4dd6850c9c3c0e8ac9",
-          "@@//markdown/private/external": "3abe49e2c0f7d66069def962dd5ddc3a98a98aa78e5baf69098cca0ce2729cd8",
+          "@@//markdown/private/external": "aa27d10ecfdf0d1d800043f149f56aff599f4557e5d63f69c810299848cc3eb7",
           "@@//.mypy_cache/3.10/json": "9806e071805963c4ad9d2697adf5ffe4f00a0eed51b81bc2ec1322486a672ff9",
           "@@//markdown/private/support/shell": "bc9c42acf61690142422705cb80ea402cdd14f49fbedb6a414d102ffbf36e705",
           "@@//.mypy_cache/3.10/dateparser/languages": "3bed5f52c5e43aaba248ffc0656e047ba209a1590b3a2c7abdc9a82d06899f96",
@@ -493,87 +495,6 @@
         ]
       }
     },
-    "//markdown/private/external:ruff.bzl%ruff": {
-      "general": {
-        "bzlTransitiveDigest": "YzjXUUaPD/fnA/rUhHu4OdfLhK65pjXHSLUE2mg0qa8=",
-        "usagesDigest": "ShTM397ovREKhrKJbzfgXY0WVtSzOVYPr6BKsTaZgtw=",
-        "recordedFileInputs": {},
-        "recordedDirentsInputs": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "ruff": {
-            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
-            "ruleClassName": "http_archive",
-            "attributes": {
-              "build_file": "@@//markdown/private/external:ruff.build",
-              "url": "https://github.com/astral-sh/ruff/releases/download/0.6.7/ruff-x86_64-unknown-linux-gnu.tar.gz",
-              "sha256": "52ed7e34c15809f313e3f8ed4281fe523e7e5f0667e7bf9958885b7e6f2270a8"
-            }
-          }
-        },
-        "recordedRepoMappingEntries": [
-          [
-            "",
-            "bazel_tools",
-            "bazel_tools"
-          ]
-        ]
-      }
-    },
-    "//markdown/private/external:shellcheck.bzl%shellcheck": {
-      "general": {
-        "bzlTransitiveDigest": "elD4IbA52F+7oTSgi1nHF/8hsw9VYpi3erOZ7UosBaw=",
-        "usagesDigest": "3JHlOHmFJP1Po08I6RjwsA7EMA5di2jYeUfmm9HC9sg=",
-        "recordedFileInputs": {},
-        "recordedDirentsInputs": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "shellcheck": {
-            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
-            "ruleClassName": "http_archive",
-            "attributes": {
-              "build_file": "@@//markdown/private/external:shellcheck.build",
-              "url": "https://github.com/koalaman/shellcheck/releases/download/v0.10.0/shellcheck-v0.10.0.linux.x86_64.tar.xz",
-              "sha256": "6c881ab0698e4e6ea235245f22832860544f17ba386442fe7e9d629f8cbedf87"
-            }
-          }
-        },
-        "recordedRepoMappingEntries": [
-          [
-            "",
-            "bazel_tools",
-            "bazel_tools"
-          ]
-        ]
-      }
-    },
-    "//markdown/private/external:shfmt.bzl%shfmt": {
-      "general": {
-        "bzlTransitiveDigest": "tvi3RK2LiOS0ea5nsfEw/rWPR6aAkUo2xd300vR1Nz8=",
-        "usagesDigest": "0vyu7uRX2b+4KBa+ywszpIRacyvHwgX2GqdY6jXRmlM=",
-        "recordedFileInputs": {},
-        "recordedDirentsInputs": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "shfmt": {
-            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
-            "ruleClassName": "http_file",
-            "attributes": {
-              "url": "https://github.com/mvdan/sh/releases/download/v3.9.0/shfmt_v3.9.0_linux_amd64",
-              "sha256": "d99b06506aee2ac9113daec3049922e70dc8cffb84658e3ae512c6a6cbe101b6",
-              "executable": true
-            }
-          }
-        },
-        "recordedRepoMappingEntries": [
-          [
-            "",
-            "bazel_tools",
-            "bazel_tools"
-          ]
-        ]
-      }
-    },
     "@@apple_support~//crosstool:setup.bzl%apple_cc_configure_extension": {
       "general": {
         "bzlTransitiveDigest": "PjIds3feoYE8SGbbIq2SFTZy3zmxeO2tQevJZNDo7iY=",
@@ -767,6 +688,129 @@
           }
         },
         "recordedRepoMappingEntries": []
+      }
+    },
+    "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg": {
+      "general": {
+        "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
+        "usagesDigest": "jASrqO0LfrcQzW0e4m+eV834J3leX8ta0bfYDA7GCJY=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "ruff": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "ruff",
+              "attribute_path": "ruff",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "shellcheck": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "shellcheck",
+              "attribute_path": "shellcheck",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "shfmt": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "shfmt",
+              "attribute_path": "shfmt",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          }
+        },
+        "moduleExtensionMetadata": {
+          "explicitRootModuleDirectDeps": [
+            "shellcheck",
+            "shfmt",
+            "ruff"
+          ],
+          "explicitRootModuleDirectDevDeps": [],
+          "useAllRepos": "NO",
+          "reproducible": false
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_nixpkgs_core~",
+            "bazel_skylib",
+            "bazel_skylib~"
+          ],
+          [
+            "rules_nixpkgs_core~",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
+    "@@rules_nixpkgs_core~//extensions:repository.bzl%nix_repo": {
+      "general": {
+        "bzlTransitiveDigest": "0Ht4ap98u2/ZoeBB9bC10VcHVLEy3YCtLhz580evslw=",
+        "usagesDigest": "5EfvG7VtDYlOalaWmUqoVFn4MLWAGayfl+vm3eLd5cQ=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "nixpkgs": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_http_repository",
+            "attributes": {
+              "unmangled_name": "nixpkgs",
+              "url": "https://github.com/NixOS/nixpkgs/archive/759537f06e6999e141588ff1c9be7f3a5c060106.tar.gz",
+              "strip_prefix": "nixpkgs-759537f06e6999e141588ff1c9be7f3a5c060106",
+              "integrity": "",
+              "sha256": "b08ab2683f93734139e1aa467f9a7e7b8f59100ba3a41dd993867b98038f7a39"
+            }
+          }
+        },
+        "moduleExtensionMetadata": {
+          "explicitRootModuleDirectDeps": [
+            "nixpkgs"
+          ],
+          "explicitRootModuleDirectDevDeps": [],
+          "useAllRepos": "NO",
+          "reproducible": false
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_nixpkgs_core~",
+            "bazel_skylib",
+            "bazel_skylib~"
+          ],
+          [
+            "rules_nixpkgs_core~",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
       }
     }
   }

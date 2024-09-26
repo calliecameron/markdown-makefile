@@ -21,6 +21,10 @@ bazel_dep(
     name = "platforms",
     version = "0.0.10",
 )
+bazel_dep(
+    name = "rules_nixpkgs_core",
+    version = "0.12.0",
+)
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
@@ -36,6 +40,31 @@ pip.parse(
 )
 use_repo(pip, "pip")
 
+nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
+nix_repo.github(
+    name = "nixpkgs",
+    commit = "759537f06e6999e141588ff1c9be7f3a5c060106",  # 24.05 as of 2024/09/26
+    sha256 = "b08ab2683f93734139e1aa467f9a7e7b8f59100ba3a41dd993867b98038f7a39",
+)
+use_repo(nix_repo, "nixpkgs")
+
+nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
+nix_pkg.default(
+    attr = "shellcheck",
+)
+nix_pkg.default(
+    attr = "shfmt",
+)
+nix_pkg.default(
+    attr = "ruff",
+)
+use_repo(
+    nix_pkg,
+    "ruff",
+    "shellcheck",
+    "shfmt",
+)
+
 calibre = use_extension("//markdown/private/external:calibre.bzl", "calibre")
 use_repo(calibre, "calibre")
 
@@ -44,15 +73,6 @@ use_repo(pandoc, "pandoc")
 
 prosegrinder_pandoc_templates = use_extension("//markdown/private/external:prosegrinder_pandoc_templates.bzl", "prosegrinder_pandoc_templates")
 use_repo(prosegrinder_pandoc_templates, "prosegrinder_pandoc_templates")
-
-shfmt = use_extension("//markdown/private/external:shfmt.bzl", "shfmt", dev_dependency = True)
-use_repo(shfmt, "shfmt")
-
-shellcheck = use_extension("//markdown/private/external:shellcheck.bzl", "shellcheck", dev_dependency = True)
-use_repo(shellcheck, "shellcheck")
-
-ruff = use_extension("//markdown/private/external:ruff.bzl", "ruff", dev_dependency = True)
-use_repo(ruff, "ruff")
 
 markdown = use_extension("//markdown/extensions:markdown.bzl", "markdown", dev_dependency = True)
 use_repo(markdown, "markdown")

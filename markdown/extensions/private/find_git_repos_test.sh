@@ -12,6 +12,11 @@ SCRIPT="${PWD}/${1}"
 
 cd "${TEST_TMPDIR}"
 
+export GIT_AUTHOR_NAME='test'
+export GIT_COMMITTER_NAME='test'
+export GIT_AUTHOR_EMAIL='test@example.com'
+export GIT_COMMITTER_EMAIL='test@example.com'
+
 # Not a git repo, root package
 touch BUILD
 

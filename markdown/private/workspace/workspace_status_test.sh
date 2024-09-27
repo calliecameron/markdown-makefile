@@ -15,6 +15,11 @@ VERSION_SCRIPT="${PWD}/${2}"
 
 cd "${TEST_TMPDIR}"
 
+export GIT_AUTHOR_NAME='test'
+export GIT_COMMITTER_NAME='test'
+export GIT_AUTHOR_EMAIL='test@example.com'
+export GIT_COMMITTER_EMAIL='test@example.com'
+
 mkdir -p a/b
 touch a/b/foo
 cd a

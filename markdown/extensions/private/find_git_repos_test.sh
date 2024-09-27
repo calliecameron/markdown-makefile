@@ -23,6 +23,8 @@ touch BUILD
 # Not a git repo
 mkdir a
 touch a/BUILD
+# Ignored dir
+mkdir a/.mypy_cache
 
 # Git repo with no commits
 mkdir b

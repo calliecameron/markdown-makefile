@@ -9,6 +9,13 @@ import string
 import unicodedata
 from typing import Any
 
+IGNORED = frozenset(
+    [
+        ".mypy_cache",
+        ".vscode",
+    ],
+)
+
 
 def normalised_char_name(char: str) -> str:
     if len(char) != 1:
@@ -45,7 +52,7 @@ def walk(root: str) -> dict[str, Any]:
                     package = os.path.relpath(path, root)
                 elif entry.name == ".git" and entry.is_dir(follow_symlinks=False):
                     repo = os.path.relpath(path, root) if path != root else ""
-                elif entry.is_dir(follow_symlinks=False):
+                elif entry.is_dir(follow_symlinks=False) and entry.name not in IGNORED:
                     subdirs.append(entry.path)
 
         if package and repo is not None:

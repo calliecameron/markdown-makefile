@@ -285,7 +285,7 @@
         "usagesDigest": "AQ0FcmN6Tz8P2kewrHCCueXeBHQaIFdoxa7fukcJrlA=",
         "recordedFileInputs": {
           "@@//WORKSPACE": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-          "@@rules_markdown~//markdown/extensions/private/find_git_repos": "4caf6e3f5d47a3f13f74daac363264389337f5a163628bdfdb02556d7db02b1e"
+          "@@rules_markdown~//markdown/extensions/private/find_git_repos": "eacddf32f68702d1a7a764610caf428b731a66d7a83e4d106589991ba6787152"
         },
         "recordedDirentsInputs": {
           "@@//test3/.markdown_summary": "23964a9bf04c1645deb3cffa8b2b8408858ad949d6b01595c150c5c31e7d2373",

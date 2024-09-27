@@ -18,6 +18,12 @@ sh_source(
 )
 
 sh_source(
+    name = "dump_test",
+    src = "dump_test.sh",
+    visibility = ["__subpackages__"],
+)
+
+sh_source(
     name = "extra_precommit",
     src = "extra_precommit.sh",
     visibility = ["//:__pkg__"],

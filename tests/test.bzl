@@ -1,21 +1,36 @@
 """Test utils."""
 
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load(
     "//markdown/private/formats:defs.bzl",
     "ext_var_dot",
     "ext_var_underscore",
 )
 
-def _build_test(target, extension, variant):
-    build_test(
-        name = "%s_%s_build_test" % (target, ext_var_underscore(extension, variant)),
-        targets = [
-            "output/%s.%s" % (target, ext_var_dot(extension, variant)),
-        ],
+def _dump_test(target, extension, variant, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
+    native.sh_test(
+        name = "%s_%s_dump_test" % (target, ext_var_underscore(extension, variant)),
+        srcs = ["//tests:dump_test.sh"],
+        data = [
+                   "output/%s.%s" % (target, ext_var_dot(extension, variant)),
+               ] + ([tool_target] if tool_target else []) +
+               (tool_helper_targets if tool_helper_targets else []),
+        args = [
+            "$(rootpath output/%s.%s)" % (target, ext_var_dot(extension, variant)),
+            tool,
+        ] + (tool_helper_args if tool_helper_args else []),
     )
 
 def _diff_test(target, extension, variant, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
+    _dump_test(
+        target,
+        extension,
+        variant,
+        tool,
+        tool_target,
+        tool_helper_targets,
+        tool_helper_args,
+    )
+
     native.sh_test(
         name = "%s_%s_diff_test" % (target, ext_var_underscore(extension, variant)),
         srcs = ["//tests:diff_test.sh"],
@@ -62,6 +77,26 @@ def _pdf_diff_test(target, extension, variant):
         ],
     )
 
+def _bin_dump_test(target, extension, variant):
+    _dump_test(
+        target,
+        extension,
+        variant,
+        "$(rootpath //markdown/private/utils:bindump)",
+        "//markdown/private/utils:bindump",
+        ["//markdown/private/external:hexdump"],
+        ["$(rootpath //markdown/private/external:hexdump)"],
+    )
+
+def _doc_dump_test(target, extension, variant):
+    _dump_test(
+        target,
+        extension,
+        variant,
+        "$(rootpath //markdown/private/utils:docdump)",
+        "//markdown/private/utils:docdump",
+    )
+
 def diff_test(target, name = None):  # buildifier: disable=unused-variable
     """Diff tests for target's output.
 
@@ -78,11 +113,11 @@ def diff_test(target, name = None):  # buildifier: disable=unused-variable
     _pdf_diff_test(target, "pdf", None)
 
     _zip_diff_test(target, "epub", None)
-    _build_test(target, "mobi", None)  # Mobi is nondeterministic, so we only test it builds
+    _bin_dump_test(target, "mobi", None)  # Mobi is nondeterministic, so we can't test the diff
 
     _zip_diff_test(target, "odt", None)
     _zip_diff_test(target, "docx", None)
-    _build_test(target, "doc", None)  # Doc is nondeterministic, so we only test it builds
+    _doc_dump_test(target, "doc", None)  # Doc is nondeterministic, so we can't test the diff
 
     _zip_diff_test(target, "docx", "shunnmodern")
 

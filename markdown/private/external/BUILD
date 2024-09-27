@@ -7,7 +7,10 @@ alias(
 alias(
     name = "hexdump",
     actual = "@hexdump//:bin/hexdump",
-    visibility = ["//markdown/private/utils:__pkg__"],
+    visibility = [
+        "//markdown/private/utils:__pkg__",
+        "//tests:__subpackages__",
+    ],
 )
 
 alias(

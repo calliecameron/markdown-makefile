@@ -33,6 +33,8 @@ def _markdown_impl(module_ctx):
         repos = data["repos"].keys(),
     )
 
+    return module_ctx.extension_metadata(reproducible = True)
+
 markdown = module_extension(
     implementation = _markdown_impl,
 )

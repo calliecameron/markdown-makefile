@@ -3,7 +3,7 @@
 set -eu
 
 function usage() {
-    echo "Usage: $(basename "${0}") file1 file2 tool"
+    echo "Usage: $(basename "${0}") file1 file2 tool [tool_helpers...]"
     exit 1
 }
 
@@ -20,7 +20,7 @@ if cmp "${FILE1}" "${FILE2}" &>/dev/null; then
     exit 0
 fi
 
-"${TOOL}" "$(readlink -f "${FILE1}")" >"${TEST_TMPDIR}/file1"
-"${TOOL}" "$(readlink -f "${FILE2}")" >"${TEST_TMPDIR}/file2"
+"${TOOL}" "${@:4}" "$(readlink -f "${FILE1}")" >"${TEST_TMPDIR}/file1"
+"${TOOL}" "${@:4}" "$(readlink -f "${FILE2}")" >"${TEST_TMPDIR}/file2"
 
 diff -a "${TEST_TMPDIR}/file1" "${TEST_TMPDIR}/file2"

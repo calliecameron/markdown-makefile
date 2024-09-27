@@ -28,7 +28,10 @@ alias(
 alias(
     name = "pdfinfo",
     actual = "@poppler_utils//:bin/pdfinfo",
-    visibility = ["//markdown/private/utils:__pkg__"],
+    visibility = [
+        "//markdown/private/utils:__pkg__",
+        "//tests:__subpackages__",
+    ],
 )
 
 alias(
@@ -52,5 +55,8 @@ alias(
 alias(
     name = "unzip",
     actual = "@unzip//:bin/unzip",
-    visibility = ["//:__subpackages__"],
+    visibility = [
+        "//markdown/private/utils:__pkg__",
+        "//tests:__subpackages__",
+    ],
 )

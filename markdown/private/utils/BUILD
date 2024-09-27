@@ -79,7 +79,7 @@ sh_binary(
 py_binary(
     name = "pdf2txt",
     srcs = ["pdf2txt.py"],
-    visibility = ["//visibility:private"],
+    visibility = ["//tests:__subpackages__"],
     deps = [requirement("pdfminer.six")],
 )
 

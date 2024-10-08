@@ -50,6 +50,9 @@ use_repo(nix_repo, "nixpkgs")
 
 nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
 nix_pkg.default(
+    attr = "calibre",
+)
+nix_pkg.default(
     attr = "hexdump",
 )
 nix_pkg.default(
@@ -78,6 +81,7 @@ nix_pkg.default(
 )
 use_repo(
     nix_pkg,
+    "calibre",
     "hexdump",
     "perl538Packages.strip-nondeterminism",
     "poppler_utils",
@@ -88,9 +92,6 @@ use_repo(
     "unzip",
     "zip",
 )
-
-calibre = use_extension("//markdown/private/external:calibre.bzl", "calibre")
-use_repo(calibre, "calibre")
 
 pandoc = use_extension("//markdown/private/external:pandoc.bzl", "pandoc")
 use_repo(pandoc, "pandoc")

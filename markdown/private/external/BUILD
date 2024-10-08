@@ -1,8 +1,8 @@
 load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
 
-alias(
+native_binary(
     name = "ebook_convert",
-    actual = "@calibre//:ebook_convert",
+    src = "@calibre//:bin/ebook-convert",
     visibility = ["//markdown/private/formats/ebook:__pkg__"],
 )
 

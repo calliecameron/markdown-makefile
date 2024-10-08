@@ -84,33 +84,6 @@
   },
   "selectedYankedVersions": {},
   "moduleExtensions": {
-    "//markdown/private/external:calibre.bzl%calibre": {
-      "general": {
-        "bzlTransitiveDigest": "eXCWXZFN9VRGVElkFjGamGPjzpG+fSpO4AKex9mjhRM=",
-        "usagesDigest": "Z3fk8ohCK4+NX24GR7cBIZsml53FJFkElTXS8jEm94Q=",
-        "recordedFileInputs": {},
-        "recordedDirentsInputs": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "calibre": {
-            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
-            "ruleClassName": "http_archive",
-            "attributes": {
-              "build_file": "@@//markdown/private/external:calibre.build",
-              "url": "https://download.calibre-ebook.com/6.15.1/calibre-6.15.1-x86_64.txz",
-              "sha256": "1c1b1ae0649395593dadd1b39e2cc6552c99b10f1ca175eb594756bd9284c077"
-            }
-          }
-        },
-        "recordedRepoMappingEntries": [
-          [
-            "",
-            "bazel_tools",
-            "bazel_tools"
-          ]
-        ]
-      }
-    },
     "//markdown/private/external:pandoc.bzl%pandoc": {
       "general": {
         "bzlTransitiveDigest": "tk8F7c6BQ3hRvQvhvpn1YTnYDziPL+R2DkZleMdDEtI=",
@@ -368,7 +341,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "yHNY3QEh9uJDarMUzsTmbiLcb7kI2YCCCLpMgjgEplI=",
+        "usagesDigest": "/dPr7QgP2E9b0P1bEHoRu5EE9Xc7Hkl6XjqOm1vJB1U=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -469,6 +442,22 @@
               "fail_not_supported": true
             }
           },
+          "calibre": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "calibre",
+              "attribute_path": "calibre",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
           "shellcheck": {
             "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
             "ruleClassName": "_nixpkgs_package",
@@ -520,6 +509,7 @@
         },
         "moduleExtensionMetadata": {
           "explicitRootModuleDirectDeps": [
+            "calibre",
             "hexdump",
             "poppler_utils",
             "shellcheck",

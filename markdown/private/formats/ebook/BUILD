@@ -21,5 +21,7 @@ exports_files(
 sh_binary(
     name = "ebook_convert",
     srcs = ["ebook_convert.sh"],
+    args = ["$(rootpath //markdown/private/external:ebook_convert)"],
+    data = ["//markdown/private/external:ebook_convert"],
     visibility = ["//visibility:public"],
 )

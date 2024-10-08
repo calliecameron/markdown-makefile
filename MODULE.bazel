@@ -59,6 +59,13 @@ nix_pkg.attr(
     attr = "hunspell",
 )
 nix_pkg.attr(
+    attr = "glibcLocales",
+    build_file_content = """exports_files(
+    ["lib/locale/locale-archive"],
+    visibility = ["//visibility:public"],
+)""",
+)
+nix_pkg.attr(
     attr = "poppler_utils",
 )
 nix_pkg.attr(
@@ -85,6 +92,7 @@ nix_pkg.attr(
 use_repo(
     nix_pkg,
     "calibre",
+    "glibcLocales",
     "hexdump",
     "hunspell",
     "perl538Packages.strip-nondeterminism",

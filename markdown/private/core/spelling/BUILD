@@ -33,12 +33,13 @@ script_py_test(
     src = "spellcheck_test.py",
     args = [
         "$(rootpath //markdown/private/external:hunspell)",
-        "/usr/lib/locale/locale-archive",
+        "$(rootpath //markdown/private/external:locale_archive)",
         "$(rootpaths //markdown/private/external:hunspell_dicts)",
     ],
     data = [
         "//markdown/private/external:hunspell",
         "//markdown/private/external:hunspell_dicts",
+        "//markdown/private/external:locale_archive",
     ],
     script = ":spellcheck",
 )

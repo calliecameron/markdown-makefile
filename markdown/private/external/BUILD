@@ -34,6 +34,15 @@ alias(
 )
 
 alias(
+    name = "locale_archive",
+    actual = "@glibcLocales//:lib/locale/locale-archive",
+    visibility = [
+        "//markdown/private/core:__pkg__",
+        "//markdown/private/core/spelling:__pkg__",
+    ],
+)
+
+alias(
     name = "md2short",
     actual = "@prosegrinder_pandoc_templates//:md2short",
     visibility = ["//markdown/private/formats/word:__pkg__"],

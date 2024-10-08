@@ -338,10 +338,10 @@
         "recordedRepoMappingEntries": []
       }
     },
-    "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg": {
+    "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg%<root>~nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "/dPr7QgP2E9b0P1bEHoRu5EE9Xc7Hkl6XjqOm1vJB1U=",
+        "usagesDigest": "xu3YYiYErDpwcxA9Kp132Lqr4YCjxtwpkS7J/6OS9D0=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},

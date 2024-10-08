@@ -48,35 +48,35 @@ nix_repo.github(
 )
 use_repo(nix_repo, "nixpkgs")
 
-nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
-nix_pkg.default(
+nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg", isolate = True)
+nix_pkg.attr(
     attr = "calibre",
 )
-nix_pkg.default(
+nix_pkg.attr(
     attr = "hexdump",
 )
-nix_pkg.default(
+nix_pkg.attr(
     attr = "poppler_utils",
 )
-nix_pkg.default(
+nix_pkg.attr(
     attr = "shellcheck",
 )
-nix_pkg.default(
+nix_pkg.attr(
     attr = "shfmt",
 )
-nix_pkg.default(
+nix_pkg.attr(
     attr = "perl538Packages.strip-nondeterminism",
 )
-nix_pkg.default(
+nix_pkg.attr(
     attr = "ruff",
 )
-nix_pkg.default(
+nix_pkg.attr(
     attr = "unoconv",
 )
-nix_pkg.default(
+nix_pkg.attr(
     attr = "unzip",
 )
-nix_pkg.default(
+nix_pkg.attr(
     attr = "zip",
 )
 use_repo(

@@ -62,6 +62,9 @@ nix_pkg.default(
     attr = "shfmt",
 )
 nix_pkg.default(
+    attr = "perl538Packages.strip-nondeterminism",
+)
+nix_pkg.default(
     attr = "ruff",
 )
 nix_pkg.default(
@@ -70,6 +73,7 @@ nix_pkg.default(
 use_repo(
     nix_pkg,
     "hexdump",
+    "perl538Packages.strip-nondeterminism",
     "poppler_utils",
     "ruff",
     "shellcheck",

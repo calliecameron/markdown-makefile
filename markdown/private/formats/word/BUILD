@@ -52,6 +52,7 @@ sh_test(
     srcs = ["shunn_docx_filter_test.sh"],
     args = [
         "$(rootpath //markdown/private/external:pandoc)",
+        "$(rootpath //markdown/private/external:strip_nondeterminism)",
         "$(rootpath shunn_docx_filter.lua)",
         "$(rootpath reference.docx)",
     ],
@@ -59,5 +60,6 @@ sh_test(
         "reference.docx",
         "shunn_docx_filter.lua",
         "//markdown/private/external:pandoc",
+        "//markdown/private/external:strip_nondeterminism",
     ],
 )

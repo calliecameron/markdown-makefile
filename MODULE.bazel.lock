@@ -368,7 +368,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "3gZZ+XqfOy/ZjEDXO7/iwdxkNco2bMEMBynoVu7sAYc=",
+        "usagesDigest": "/jRZNgccncJOTvJsc+0GLIjyjTdxeKGGAjOWwABOozE=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -395,6 +395,22 @@
             "attributes": {
               "unmangled_name": "poppler_utils",
               "attribute_path": "poppler_utils",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "perl538Packages.strip-nondeterminism": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "perl538Packages.strip-nondeterminism",
+              "attribute_path": "perl538Packages.strip-nondeterminism",
               "nix_file_deps": {},
               "nix_file_content": "",
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
@@ -476,6 +492,7 @@
             "poppler_utils",
             "shellcheck",
             "shfmt",
+            "perl538Packages.strip-nondeterminism",
             "ruff",
             "unzip"
           ],

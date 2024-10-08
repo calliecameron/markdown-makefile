@@ -236,6 +236,7 @@ def _md_shunnmodern_docx_impl(ctx):
             filters.add_subject.file(ctx),
             filters.cleanup_metadata.file(ctx),
             ctx.file._filter,
+            ctx.executable._strip_nondeterminism,
             tools.pandoc.wrapped_executable(ctx),
         ],
         executable = ctx.executable._md2short,
@@ -247,6 +248,7 @@ def _md_shunnmodern_docx_impl(ctx):
             "--output",
             intermediate_docx.path,
             "--metadata-file=" + metadata.path,
+            "--metadata=strip-nondeterminism:" + ctx.executable._strip_nondeterminism.path,
             filters.add_subject.arg(ctx),
             filters.cleanup_metadata.arg(ctx),
             "--lua-filter=" + ctx.file._filter.path,
@@ -297,6 +299,11 @@ md_shunnmodern_docx = rule(
                 "_filter": attr.label(
                     allow_single_file = True,
                     default = "//markdown/private/formats/word:shunn_docx_filter.lua",
+                ),
+                "_strip_nondeterminism": attr.label(
+                    default = "//markdown/private/external:strip_nondeterminism",
+                    executable = True,
+                    cfg = "exec",
                 ),
             } |
             tools.pandoc.attr |

@@ -1,5 +1,5 @@
 load("@markdown//:defs.bzl", "md_document", "md_file")
-load("//tests:test.bzl", "diff_test")
+load("//tests:test.bzl", "output_test")
 
 md_file(
     name = "include1",
@@ -29,7 +29,7 @@ md_document(
     deps = [":include1"],
 )
 
-diff_test(
+output_test(
     target = "test3",
 )
 
@@ -45,6 +45,6 @@ md_document(
     timestamp_override = "1618243321",
 )
 
-diff_test(
+output_test(
     target = "test3a",
 )

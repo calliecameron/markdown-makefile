@@ -1,12 +1,14 @@
+load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
+
 alias(
     name = "ebook_convert",
     actual = "@calibre//:ebook_convert",
     visibility = ["//markdown/private/formats/ebook:__pkg__"],
 )
 
-alias(
+native_binary(
     name = "hexdump",
-    actual = "@hexdump//:bin/hexdump",
+    src = "@hexdump//:bin/hexdump",
     visibility = [
         "//markdown/private/utils:__pkg__",
         "//tests:__subpackages__",
@@ -28,36 +30,44 @@ alias(
     ],
 )
 
-alias(
+native_binary(
     name = "pdfinfo",
-    actual = "@poppler_utils//:bin/pdfinfo",
+    src = "@poppler_utils//:bin/pdfinfo",
     visibility = [
         "//markdown/private/utils:__pkg__",
         "//tests:__subpackages__",
     ],
 )
 
-alias(
+native_binary(
     name = "ruff",
-    actual = "@ruff//:bin/ruff",
+    src = "@ruff//:bin/ruff",
     visibility = ["//:__subpackages__"],
 )
 
-alias(
+native_binary(
     name = "shellcheck",
-    actual = "@shellcheck//:bin/shellcheck",
+    src = "@shellcheck//:bin/shellcheck",
     visibility = ["//:__subpackages__"],
 )
 
-alias(
+native_binary(
     name = "shfmt",
-    actual = "@shfmt//:bin/shfmt",
+    src = "@shfmt//:bin/shfmt",
     visibility = ["//:__subpackages__"],
 )
 
-alias(
+native_binary(
+    name = "strip_nondeterminism",
+    src = "@perl538Packages.strip-nondeterminism//:bin/strip-nondeterminism",
+    visibility = [
+        "//markdown/private/formats:__subpackages__",
+    ],
+)
+
+native_binary(
     name = "unzip",
-    actual = "@unzip//:bin/unzip",
+    src = "@unzip//:bin/unzip",
     visibility = [
         "//markdown/private/utils:__pkg__",
         "//tests:__subpackages__",

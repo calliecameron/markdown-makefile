@@ -1,5 +1,5 @@
 load("@markdown//:defs.bzl", "md_collection", "md_file")
-load("//tests:test.bzl", "diff_test")
+load("//tests:test.bzl", "output_test")
 
 md_collection(
     name = "test4",
@@ -19,7 +19,7 @@ md_collection(
     ],
 )
 
-diff_test(
+output_test(
     target = "test4",
 )
 

@@ -1,5 +1,5 @@
 load("@markdown//:defs.bzl", "md_document")
-load("//tests:test.bzl", "diff_test")
+load("//tests:test.bzl", "output_test")
 
 md_document(
     name = "test5",
@@ -8,6 +8,6 @@ md_document(
     version_override = "reproducible",
 )
 
-diff_test(
+output_test(
     target = "test5",
 )

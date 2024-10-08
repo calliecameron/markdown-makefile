@@ -105,13 +105,15 @@ def required_files(name, copy = None, create = None, extra_check = None, extra_u
         extra_check = extra_check,
     )
 
-def script_py_test(name, src, script, deps = None):
+def script_py_test(name, src, script, deps = None, data = None, args = None):
     deps = deps or []
+    data = data or []
+    args = args or []
     py_test(
         name = name,
         srcs = [src],
-        args = ["$(rootpath %s)" % script],
-        data = [script],
+        args = args + ["$(rootpath %s)" % script],
+        data = [script] + data,
         deps = ["//markdown/private/utils:test_utils"] + deps,
     )
 

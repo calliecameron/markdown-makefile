@@ -21,16 +21,6 @@ def _dump_test(target, extension, variant, tool, tool_target = None, tool_helper
     )
 
 def _diff_test(target, extension, variant, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
-    _dump_test(
-        target,
-        extension,
-        variant,
-        tool,
-        tool_target,
-        tool_helper_targets,
-        tool_helper_args,
-    )
-
     native.sh_test(
         name = "%s_%s_diff_test" % (target, ext_var_underscore(extension, variant)),
         srcs = ["//tests:diff_test.sh"],
@@ -46,11 +36,48 @@ def _diff_test(target, extension, variant, tool, tool_target = None, tool_helper
         ] + (tool_helper_args if tool_helper_args else []),
     )
 
-def _cat_diff_test(target, extension, variant):
-    _diff_test(target, extension, variant, "cat")
+def _zip_cleaned_test(target, extension, variant):
+    native.sh_test(
+        name = "%s_%s_zip_cleaned_test" % (target, ext_var_underscore(extension, variant)),
+        srcs = ["//tests:zip_cleaned_test.sh"],
+        data = [
+            "output/%s.%s" % (target, ext_var_dot(extension, variant)),
+        ],
+        args = [
+            "$(rootpath output/%s.%s)" % (target, ext_var_dot(extension, variant)),
+        ],
+    )
 
-def _zip_diff_test(target, extension, variant):
+def _dump_and_diff_tests(target, extension, variant, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
+    _dump_test(
+        target,
+        extension,
+        variant,
+        tool,
+        tool_target,
+        tool_helper_targets,
+        tool_helper_args,
+    )
     _diff_test(
+        target,
+        extension,
+        variant,
+        tool,
+        tool_target,
+        tool_helper_targets,
+        tool_helper_args,
+    )
+
+def _cat_tests(target, extension, variant):
+    _dump_and_diff_tests(
+        target,
+        extension,
+        variant,
+        "cat",
+    )
+
+def _zip_tests(target, extension, variant):
+    _dump_and_diff_tests(
         target,
         extension,
         variant,
@@ -59,9 +86,14 @@ def _zip_diff_test(target, extension, variant):
         ["//markdown/private/external:unzip"],
         ["$(rootpath //markdown/private/external:unzip)"],
     )
+    _zip_cleaned_test(
+        target,
+        extension,
+        variant,
+    )
 
-def _pdf_diff_test(target, extension, variant):
-    _diff_test(
+def _pdf_tests(target, extension, variant):
+    _dump_and_diff_tests(
         target,
         extension,
         variant,
@@ -77,7 +109,8 @@ def _pdf_diff_test(target, extension, variant):
         ],
     )
 
-def _bin_dump_test(target, extension, variant):
+def _bin_tests(target, extension, variant):
+    # Nondeterministic output, so we can't diff
     _dump_test(
         target,
         extension,
@@ -88,7 +121,8 @@ def _bin_dump_test(target, extension, variant):
         ["$(rootpath //markdown/private/external:hexdump)"],
     )
 
-def _doc_dump_test(target, extension, variant):
+def _doc_tests(target, extension, variant):
+    # Nondeterministic output, so we can't diff
     _dump_test(
         target,
         extension,
@@ -97,29 +131,29 @@ def _doc_dump_test(target, extension, variant):
         "//markdown/private/utils:docdump",
     )
 
-def diff_test(target, name = None):  # buildifier: disable=unused-variable
-    """Diff tests for target's output.
+def output_test(target, name = None):  # buildifier: disable=unused-variable
+    """Test the target's outputs.
 
     Args:
         target: name of the output.
         name: unused.
     """
-    _cat_diff_test(target, "md", None)
-    _cat_diff_test(target, "md", "tumblr")
-    _cat_diff_test(target, "txt", None)
-    _cat_diff_test(target, "html", None)
+    _cat_tests(target, "md", None)
+    _cat_tests(target, "md", "tumblr")
+    _cat_tests(target, "txt", None)
+    _cat_tests(target, "html", None)
 
-    _cat_diff_test(target, "tex", None)
-    _pdf_diff_test(target, "pdf", None)
+    _cat_tests(target, "tex", None)
+    _pdf_tests(target, "pdf", None)
 
-    _zip_diff_test(target, "epub", None)
-    _bin_dump_test(target, "mobi", None)  # Mobi is nondeterministic, so we can't test the diff
+    _zip_tests(target, "epub", None)
+    _bin_tests(target, "mobi", None)
 
-    _zip_diff_test(target, "odt", None)
-    _zip_diff_test(target, "docx", None)
-    _doc_dump_test(target, "doc", None)  # Doc is nondeterministic, so we can't test the diff
+    _zip_tests(target, "odt", None)
+    _zip_tests(target, "docx", None)
+    _doc_tests(target, "doc", None)
 
-    _zip_diff_test(target, "docx", "shunnmodern")
+    _zip_tests(target, "docx", "shunnmodern")
 
-    _cat_diff_test(target, "json", "metadata")
-    _cat_diff_test(target, "json", "deps_metadata")
+    _cat_tests(target, "json", "metadata")
+    _cat_tests(target, "json", "deps_metadata")

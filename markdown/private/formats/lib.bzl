@@ -32,6 +32,11 @@ tools = struct(
     ),
     zip_cleaner = struct(
         attr = {
+            "_strip_nondeterminism": attr.label(
+                default = "//markdown/private/external:strip_nondeterminism",
+                executable = True,
+                cfg = "exec",
+            ),
             "_zip_cleaner": attr.label(
                 default = "//markdown/private/formats:zip_cleaner",
                 executable = True,
@@ -39,6 +44,7 @@ tools = struct(
             ),
         },
         executable = lambda ctx: ctx.executable._zip_cleaner,
+        strip_nondeterminism = lambda ctx: ctx.executable._strip_nondeterminism,
     ),
 )
 
@@ -162,9 +168,13 @@ def write_open_script(ctx, extension, variant, file_to_open):
 def clean_zip(ctx, in_file, out_file):
     ctx.actions.run(
         outputs = [out_file],
-        inputs = [in_file],
+        inputs = [
+            tools.zip_cleaner.strip_nondeterminism(ctx),
+            in_file,
+        ],
         executable = tools.zip_cleaner.executable(ctx),
         arguments = [
+            tools.zip_cleaner.strip_nondeterminism(ctx).path,
             in_file.path,
             out_file.path,
         ],

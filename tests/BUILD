@@ -24,6 +24,12 @@ sh_source(
 )
 
 sh_source(
+    name = "zip_cleaned_test",
+    src = "zip_cleaned_test.sh",
+    visibility = ["__subpackages__"],
+)
+
+sh_source(
     name = "extra_precommit",
     src = "extra_precommit.sh",
     visibility = ["//:__pkg__"],

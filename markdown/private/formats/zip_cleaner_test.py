@@ -1,8 +1,11 @@
 import os
 import os.path
 import subprocess
+import sys
 
 from markdown.private.utils import test_utils
+
+STRIP_NONDETERMINISM = ""
 
 
 class TestZipCleaner(test_utils.ScriptTestCase):
@@ -37,6 +40,7 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
         self.run_script(
             args=[
+                STRIP_NONDETERMINISM,
                 in_file,
                 out_file,
             ],
@@ -56,4 +60,6 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
 
 if __name__ == "__main__":
+    STRIP_NONDETERMINISM = sys.argv[1]
+    del sys.argv[1]
     test_utils.ScriptTestCase.main()

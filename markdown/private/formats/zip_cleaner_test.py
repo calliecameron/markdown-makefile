@@ -1,17 +1,16 @@
 import os
 import os.path
 import subprocess
-import sys
 
 from markdown.private.utils import test_utils
-
-STRIP_NONDETERMINISM = ""
-ZIPINFO = ""
-ZIP = ""
 
 
 class TestZipCleaner(test_utils.ScriptTestCase):
     def test_zip_cleaner(self) -> None:
+        strip_nondeterminism = self.test_args()[0]
+        zipinfo = self.test_args()[1]
+        zip_command = self.test_args()[2]
+
         txt_file = os.path.join(self.tmpdir(), "in.txt")
         self.dump_file(txt_file, "foo\n")
 
@@ -19,7 +18,7 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
         subprocess.run(
             [
-                ZIP,
+                zip_command,
                 in_file,
                 txt_file,
             ],
@@ -28,7 +27,7 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
         output = subprocess.run(
             [
-                ZIPINFO,
+                zipinfo,
                 "-T",
                 in_file,
             ],
@@ -42,7 +41,7 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
         self.run_script(
             args=[
-                STRIP_NONDETERMINISM,
+                strip_nondeterminism,
                 in_file,
                 out_file,
             ],
@@ -50,7 +49,7 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
         output = subprocess.run(
             [
-                ZIPINFO,
+                zipinfo,
                 "-T",
                 out_file,
             ],
@@ -62,10 +61,4 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
 
 if __name__ == "__main__":
-    STRIP_NONDETERMINISM = sys.argv[1]
-    del sys.argv[1]
-    ZIPINFO = sys.argv[1]
-    del sys.argv[1]
-    ZIP = sys.argv[1]
-    del sys.argv[1]
     test_utils.ScriptTestCase.main()

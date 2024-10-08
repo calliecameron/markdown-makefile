@@ -112,7 +112,7 @@ def script_py_test(name, src, script, deps = None, data = None, args = None):
     py_test(
         name = name,
         srcs = [src],
-        args = args + ["$(rootpath %s)" % script],
+        args = ["$(rootpath %s)" % script] + args,
         data = [script] + data,
         deps = ["//markdown/private/utils:test_utils"] + deps,
     )

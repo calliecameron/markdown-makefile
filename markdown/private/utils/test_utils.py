@@ -121,6 +121,8 @@ class TestCase(unittest.TestCase):
 class RunnerTestCase(TestCase, Generic[T]):
     _runner_constructor: Callable[..., T]
     _runner_instance: T | None = None
+    _runner_args: tuple[str, ...] = ()
+    _test_args: tuple[str, ...] = ()
 
     @classmethod
     def _runner_args_needed(cls) -> int:
@@ -131,7 +133,7 @@ class RunnerTestCase(TestCase, Generic[T]):
         if cls._runner_instance:
             return
 
-        cls._runner_instance = cls._runner_constructor(*sys.argv[1 : cls._runner_args_needed() + 1])
+        cls._runner_instance = cls._runner_constructor(*cls._runner_args)
 
     @classmethod
     def _runner(cls) -> T:
@@ -140,11 +142,18 @@ class RunnerTestCase(TestCase, Generic[T]):
         return cast(T, cls._runner_instance)
 
     @classmethod
+    def test_args(cls) -> tuple[str, ...]:
+        return cls._test_args
+
+    @classmethod
     def main(cls) -> None:
         if len(sys.argv) < cls._runner_args_needed() + 1:
             raise ValueError("Not enough args")
 
-        unittest.main(argv=[sys.argv[0]] + sys.argv[cls._runner_args_needed() + 1 :])
+        cls._runner_args = tuple(sys.argv[1 : cls._runner_args_needed() + 1])
+        cls._test_args = tuple(sys.argv[cls._runner_args_needed() + 1 :])
+
+        unittest.main(argv=[sys.argv[0]])
 
 
 class ScriptTestCase(RunnerTestCase[Script]):

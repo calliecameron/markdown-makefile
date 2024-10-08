@@ -1,6 +1,16 @@
 #!/bin/bash
 # Unoconv can't run multiple instances in parallel, so we need a global lock.
 
+set -u
+
+function usage() {
+    echo "Usage: $(basename "${0}") unoconv args..."
+    exit 1
+}
+
+test -z "${1:-}" && usage
+UNOCONV="${1}"
+
 LOCK="/tmp/markdown-makefile-unoconv.lock"
 
 function unlock() {
@@ -14,7 +24,7 @@ done
 
 trap unlock EXIT
 
-unoconv "${@}"
+"${UNOCONV}" "${@:2}"
 EXIT_CODE="$?"
 
 exit "${EXIT_CODE}"

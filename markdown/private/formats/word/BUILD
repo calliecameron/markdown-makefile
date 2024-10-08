@@ -25,6 +25,8 @@ exports_files(
 sh_binary(
     name = "unoconv",
     srcs = ["unoconv.sh"],
+    args = ["$(rootpath //markdown/private/external:unoconv)"],
+    data = ["//markdown/private/external:unoconv"],
     visibility = ["//visibility:public"],
 )
 

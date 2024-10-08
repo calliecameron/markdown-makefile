@@ -68,6 +68,9 @@ nix_pkg.default(
     attr = "ruff",
 )
 nix_pkg.default(
+    attr = "unoconv",
+)
+nix_pkg.default(
     attr = "unzip",
 )
 nix_pkg.default(
@@ -81,6 +84,7 @@ use_repo(
     "ruff",
     "shellcheck",
     "shfmt",
+    "unoconv",
     "unzip",
     "zip",
 )

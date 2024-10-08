@@ -368,7 +368,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "TD8OcAXHJB33o7NnWyTcgr0ER2QEzLQG6eqexh8LJMY=",
+        "usagesDigest": "yHNY3QEh9uJDarMUzsTmbiLcb7kI2YCCCLpMgjgEplI=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -379,6 +379,22 @@
             "attributes": {
               "unmangled_name": "zip",
               "attribute_path": "zip",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "unoconv": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "unoconv",
+              "attribute_path": "unoconv",
               "nix_file_deps": {},
               "nix_file_content": "",
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
@@ -510,6 +526,7 @@
             "shfmt",
             "perl538Packages.strip-nondeterminism",
             "ruff",
+            "unoconv",
             "unzip",
             "zip"
           ],

@@ -166,9 +166,13 @@ def _md_doc_impl(ctx):
     output = ctx.outputs.out
     ctx.actions.run(
         outputs = [output],
-        inputs = [ctx.attr.docx[MdDocxInfo].output],
+        inputs = [
+            ctx.attr.docx[MdDocxInfo].output,
+            ctx.executable._unoconv_bin,
+        ],
         executable = ctx.executable._unoconv,
         arguments = [
+            ctx.executable._unoconv_bin.path,
             "--format",
             "doc",
             "--output",
@@ -202,6 +206,11 @@ md_doc = rule(
                 "out": attr.output(),
                 "_unoconv": attr.label(
                     default = "//markdown/private/formats/word:unoconv",
+                    executable = True,
+                    cfg = "exec",
+                ),
+                "_unoconv_bin": attr.label(
+                    default = "//markdown/private/external:unoconv",
                     executable = True,
                     cfg = "exec",
                 ),

@@ -66,6 +66,14 @@ native_binary(
 )
 
 native_binary(
+    name = "unoconv",
+    src = "@unoconv//:bin/unoconv",
+    visibility = [
+        "//markdown/private/formats/word:__pkg__",
+    ],
+)
+
+native_binary(
     name = "unzip",
     src = "@unzip//:bin/unzip",
     visibility = [

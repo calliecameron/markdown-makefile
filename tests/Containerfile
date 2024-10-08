@@ -1,0 +1,61 @@
+FROM ubuntu:22.04
+
+ENV TZ UTC
+
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
+    catdoc \
+    gcc \
+    git \
+    python3 \
+    texlive-full \
+    wget \
+    unzip \
+    xz-utils && \
+    rm -rf /var/lib/apt/lists/*
+
+ARG uid
+ARG gid
+
+RUN addgroup --gid ${gid} markdown && \
+    adduser --uid ${uid} --gid ${gid} markdown
+
+RUN mkdir /nix && \
+    chown ${uid}:${gid} /nix
+
+USER ${uid}:${gid}
+ENV USER markdown
+WORKDIR /home/markdown
+
+RUN wget https://releases.nixos.org/nix/nix-2.24.4/install && \
+    chmod a+x install && \
+    ./install --yes --no-daemon && \
+    rm install && \
+    mkdir -p .config/nix && \
+    echo 'experimental-features = nix-command flakes' > .config/nix/nix.conf
+
+# Should match the hash used in MODULE.bazel
+RUN bash -l -c "nix profile install nixpkgs/759537f06e6999e141588ff1c9be7f3a5c060106#bazelisk"
+
+COPY --chown=${uid}:${gid} . /home/markdown/markdown-makefile
+
+RUN export GIT_AUTHOR_NAME='test' && \
+    export GIT_COMMITTER_NAME='test' &&\
+    export GIT_AUTHOR_EMAIL='test@example.com' && \
+    export GIT_COMMITTER_EMAIL='test@example.com' && \
+    cd markdown-makefile && \
+    git -c init.defaultBranch=main init . && \
+    git add --all && \
+    git commit --quiet -m 'Test' && \
+    cd && \
+    cp -a markdown-makefile/tests/other_workspace other-workspace && \
+    cd other-workspace && \
+    rm .gitignore && \
+    sed -i 's|path = "../.."|path = "../markdown-makefile"|g' MODULE.bazel
+
+RUN cd markdown-makefile && \
+    bash -l -c "bazelisk run :git_update" && \
+    bash -l -c "bazelisk clean" && \
+    rm -rf ~/.cache/bazel ~/.cache/bazelisk
+
+ENTRYPOINT ["bash", "-l"]

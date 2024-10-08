@@ -1,0 +1,10 @@
+/.dir-locals.el
+/.env
+/.git/
+/.mypy_cache/
+/.vscode/
+/.dockerignore
+/bazel-*
+/tests/Dockerfile
+/tests/other_workspace/bazel-*
+**/*~

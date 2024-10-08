@@ -65,8 +65,16 @@ sh_binary(
 script_py_test(
     name = "zip_cleaner_test",
     src = "zip_cleaner_test.py",
-    args = ["$(rootpath //markdown/private/external:strip_nondeterminism)"],
-    data = ["//markdown/private/external:strip_nondeterminism"],
+    args = [
+        "$(rootpath //markdown/private/external:strip_nondeterminism)",
+        "$(rootpath //markdown/private/external:zipinfo)",
+        "$(rootpath //markdown/private/external:zip)",
+    ],
+    data = [
+        "//markdown/private/external:strip_nondeterminism",
+        "//markdown/private/external:zip",
+        "//markdown/private/external:zipinfo",
+    ],
     script = ":zip_cleaner",
 )
 

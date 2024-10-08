@@ -73,3 +73,20 @@ native_binary(
         "//tests:__subpackages__",
     ],
 )
+
+native_binary(
+    name = "zip",
+    src = "@zip//:bin/zip",
+    visibility = [
+        "//markdown/private/formats:__pkg__",
+    ],
+)
+
+native_binary(
+    name = "zipinfo",
+    src = "@unzip//:bin/zipinfo",
+    visibility = [
+        "//markdown/private/formats:__subpackages__",
+        "//tests:__subpackages__",
+    ],
+)

@@ -3,22 +3,24 @@
 set -eux
 
 function usage() {
-    echo "Usage: $(basename "${0}") pandoc strip_nondeterminism filter reference_docx"
+    echo "Usage: $(basename "${0}") pandoc strip_nondeterminism zipinfo filter reference_docx"
     exit 1
 }
 
 test -z "${1:-}" && usage
 PANDOC="${1}"
 test -z "${2:-}" && usage
-STRIP_NONDETERMINISM="${PWD}/${2}"
+STRIP_NONDETERMINISM="${2}"
 test -z "${3:-}" && usage
-FILTER="${3}"
+ZIPINFO="${3}"
 test -z "${4:-}" && usage
-REFERENCE_DOCX="${4}"
+FILTER="${4}"
+test -z "${5:-}" && usage
+REFERENCE_DOCX="${5}"
 
 cp "${REFERENCE_DOCX}" "${TEST_TMPDIR}/reference.docx"
 
-zipinfo -T "${TEST_TMPDIR}/reference.docx" | grep '19800101' >/dev/null && exit 1
+"${ZIPINFO}" -T "${TEST_TMPDIR}/reference.docx" | grep '19800101' >/dev/null && exit 1
 
 echo 'hello' | PANDOC_DATA_DIR="${TEST_TMPDIR}" "${PANDOC}" \
     --from=markdown \
@@ -27,4 +29,4 @@ echo 'hello' | PANDOC_DATA_DIR="${TEST_TMPDIR}" "${PANDOC}" \
     "--metadata=strip-nondeterminism:${STRIP_NONDETERMINISM}" \
     "--lua-filter=${FILTER}" >/dev/null
 
-zipinfo -T "${TEST_TMPDIR}/reference.docx" | grep '19800101' >/dev/null
+"${ZIPINFO}" -T "${TEST_TMPDIR}/reference.docx" | grep '19800101' >/dev/null

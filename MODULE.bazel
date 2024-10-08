@@ -70,6 +70,9 @@ nix_pkg.default(
 nix_pkg.default(
     attr = "unzip",
 )
+nix_pkg.default(
+    attr = "zip",
+)
 use_repo(
     nix_pkg,
     "hexdump",
@@ -79,6 +82,7 @@ use_repo(
     "shellcheck",
     "shfmt",
     "unzip",
+    "zip",
 )
 
 calibre = use_extension("//markdown/private/external:calibre.bzl", "calibre")

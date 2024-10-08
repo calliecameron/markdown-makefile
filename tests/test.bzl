@@ -42,9 +42,11 @@ def _zip_cleaned_test(target, extension, variant):
         srcs = ["//tests:zip_cleaned_test.sh"],
         data = [
             "output/%s.%s" % (target, ext_var_dot(extension, variant)),
+            "//markdown/private/external:zipinfo",
         ],
         args = [
             "$(rootpath output/%s.%s)" % (target, ext_var_dot(extension, variant)),
+            "$(rootpath //markdown/private/external:zipinfo)",
         ],
     )
 

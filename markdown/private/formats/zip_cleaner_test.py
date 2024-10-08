@@ -6,6 +6,8 @@ import sys
 from markdown.private.utils import test_utils
 
 STRIP_NONDETERMINISM = ""
+ZIPINFO = ""
+ZIP = ""
 
 
 class TestZipCleaner(test_utils.ScriptTestCase):
@@ -17,7 +19,7 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
         subprocess.run(
             [
-                "zip",
+                ZIP,
                 in_file,
                 txt_file,
             ],
@@ -26,7 +28,7 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
         output = subprocess.run(
             [
-                "zipinfo",
+                ZIPINFO,
                 "-T",
                 in_file,
             ],
@@ -48,7 +50,7 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
         output = subprocess.run(
             [
-                "zipinfo",
+                ZIPINFO,
                 "-T",
                 out_file,
             ],
@@ -61,5 +63,9 @@ class TestZipCleaner(test_utils.ScriptTestCase):
 
 if __name__ == "__main__":
     STRIP_NONDETERMINISM = sys.argv[1]
+    del sys.argv[1]
+    ZIPINFO = sys.argv[1]
+    del sys.argv[1]
+    ZIP = sys.argv[1]
     del sys.argv[1]
     test_utils.ScriptTestCase.main()

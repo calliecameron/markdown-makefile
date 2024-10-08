@@ -279,6 +279,34 @@
         "recordedRepoMappingEntries": []
       }
     },
+    "@@rules_markdown~//markdown/private/external:hunspell_dicts.bzl%hunspell_dicts": {
+      "general": {
+        "bzlTransitiveDigest": "alrKFXxOuC24ufLtrW5/E+I6KTGOSlvoHAKYRUUMzeI=",
+        "usagesDigest": "ue/ehV6IBjuFL0su4kQrkfaOgTv6qRNf5ecXEXxOaCI=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "hunspell_dicts": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "build_file": "@@rules_markdown~//markdown/private/external:hunspell_dicts.build",
+              "url": "https://github.com/LibreOffice/dictionaries/archive/refs/tags/libreoffice-24.8.2.1.tar.gz",
+              "sha256": "9beee5de1c87d130fdeedee201772dbd2846a7f3065c5eb52d5dbcdce559ce9b",
+              "strip_prefix": "dictionaries-libreoffice-24.8.2.1"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_markdown~",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
     "@@rules_markdown~//markdown/private/external:pandoc.bzl%pandoc": {
       "general": {
         "bzlTransitiveDigest": "tk8F7c6BQ3hRvQvhvpn1YTnYDziPL+R2DkZleMdDEtI=",
@@ -341,7 +369,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg%rules_markdown@_~nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "VkI9fb2cp7vM78H2u5wSSopUSD9ezCn0G7Y9+gQla08=",
+        "usagesDigest": "JTa9RhkMhBBL1FIzYI0yTsmo3R4nAdDNFwdEjoCrMJE=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -400,6 +428,22 @@
             "attributes": {
               "unmangled_name": "poppler_utils",
               "attribute_path": "poppler_utils",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "hunspell": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "hunspell",
+              "attribute_path": "hunspell",
               "nix_file_deps": {},
               "nix_file_content": "",
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",

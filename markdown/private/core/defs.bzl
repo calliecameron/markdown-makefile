@@ -117,7 +117,7 @@ def _custom_lint(ctx):
     return custom_lint_ok
 
 def _spellcheck(ctx):
-    dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
+    custom_dictionary = ctx.actions.declare_file(ctx.label.name + "_dictionary.dic")
     if ctx.attr.dictionaries:
         dict_inputs = []
         dict_args = []
@@ -125,16 +125,16 @@ def _spellcheck(ctx):
             dict_inputs += d.files.to_list()
             dict_args += [f.path for f in d.files.to_list()]
         ctx.actions.run(
-            outputs = [dictionary],
+            outputs = [custom_dictionary],
             inputs = dict_inputs,
             executable = ctx.executable._gen_dictionary,
-            arguments = [dictionary.path] +
+            arguments = [custom_dictionary.path] +
                         dict_args,
             progress_message = "%{label}: generating dictionary",
         )
     else:
         ctx.actions.write(
-            output = dictionary,
+            output = custom_dictionary,
             content = "",
         )
 
@@ -163,10 +163,17 @@ def _spellcheck(ctx):
     spellcheck_ok = ctx.actions.declare_file(ctx.label.name + "_spellcheck_ok.txt")
     ctx.actions.run(
         outputs = [spellcheck_ok],
-        inputs = [dictionary, spellcheck_input],
+        inputs = [
+            ctx.executable._hunspell,
+            custom_dictionary,
+            spellcheck_input,
+        ] + ctx.files._hunspell_dicts,
         executable = ctx.executable._spellcheck,
         arguments = [
-            dictionary.path,
+            ctx.executable._hunspell.path,
+            ctx.files._hunspell_dicts[0].dirname,
+            ctx.attr._locale_archive,
+            custom_dictionary.path,
             spellcheck_input.path,
             spellcheck_ok.path,
             "en_GB",
@@ -478,6 +485,17 @@ md_file = rule(
         "_spellcheck_filter": attr.label(
             allow_single_file = True,
             default = "//markdown/private/core/spelling:spellcheck_filter.lua",
+        ),
+        "_hunspell": attr.label(
+            default = "//markdown/private/external:hunspell",
+            executable = True,
+            cfg = "exec",
+        ),
+        "_hunspell_dicts": attr.label(
+            default = "//markdown/private/external:hunspell_dicts",
+        ),
+        "_locale_archive": attr.string(
+            default = "/usr/lib/locale/locale-archive",
         ),
         "_spellcheck": attr.label(
             default = "//markdown/private/core/spelling:spellcheck",

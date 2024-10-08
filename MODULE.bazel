@@ -56,6 +56,9 @@ nix_pkg.attr(
     attr = "hexdump",
 )
 nix_pkg.attr(
+    attr = "hunspell",
+)
+nix_pkg.attr(
     attr = "poppler_utils",
 )
 nix_pkg.attr(
@@ -83,6 +86,7 @@ use_repo(
     nix_pkg,
     "calibre",
     "hexdump",
+    "hunspell",
     "perl538Packages.strip-nondeterminism",
     "poppler_utils",
     "ruff",
@@ -92,6 +96,9 @@ use_repo(
     "unzip",
     "zip",
 )
+
+hunspell_dicts = use_extension("//markdown/private/external:hunspell_dicts.bzl", "hunspell_dicts")
+use_repo(hunspell_dicts, "hunspell_dicts")
 
 pandoc = use_extension("//markdown/private/external:pandoc.bzl", "pandoc")
 use_repo(pandoc, "pandoc")

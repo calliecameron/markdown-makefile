@@ -15,6 +15,24 @@ native_binary(
     ],
 )
 
+native_binary(
+    name = "hunspell",
+    src = "@hunspell//:bin/hunspell",
+    visibility = [
+        "//markdown/private/core:__pkg__",
+        "//markdown/private/core/spelling:__pkg__",
+    ],
+)
+
+alias(
+    name = "hunspell_dicts",
+    actual = "@hunspell_dicts//:dicts",
+    visibility = [
+        "//markdown/private/core:__pkg__",
+        "//markdown/private/core/spelling:__pkg__",
+    ],
+)
+
 alias(
     name = "md2short",
     actual = "@prosegrinder_pandoc_templates//:md2short",

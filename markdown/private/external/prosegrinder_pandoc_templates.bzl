@@ -2,7 +2,7 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-def _prosegrinder_pandoc_templates_impl(_ctx):
+def _prosegrinder_pandoc_templates_impl(module_ctx):
     http_archive(
         name = "prosegrinder_pandoc_templates",
         build_file = "//markdown/private/external:prosegrinder_pandoc_templates.build",
@@ -11,6 +11,8 @@ def _prosegrinder_pandoc_templates_impl(_ctx):
         strip_prefix = "pandoc-templates-71d6e9e47ec142a763fff1398b468ba1a008ced0",
         patches = ["//markdown/private/external:md2short.sh.patch"],
     )
+
+    return module_ctx.extension_metadata(reproducible = True)
 
 prosegrinder_pandoc_templates = module_extension(
     implementation = _prosegrinder_pandoc_templates_impl,

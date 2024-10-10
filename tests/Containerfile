@@ -9,8 +9,8 @@ RUN apt-get update && \
     git \
     python3 \
     texlive-full \
-    wget \
     unzip \
+    wget \
     xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
@@ -34,8 +34,9 @@ RUN wget https://releases.nixos.org/nix/nix-2.24.4/install && \
     mkdir -p .config/nix && \
     echo 'experimental-features = nix-command flakes' > .config/nix/nix.conf
 
-# Should match the hash used in MODULE.bazel
-RUN bash -l -c "nix profile install nixpkgs/759537f06e6999e141588ff1c9be7f3a5c060106#bazelisk"
+ARG nixpkgs_commit
+
+RUN bash -l -c "nix profile install nixpkgs/${nixpkgs_commit}#bazelisk"
 
 COPY --chown=${uid}:${gid} . /home/markdown/markdown-makefile
 
@@ -48,8 +49,8 @@ RUN export GIT_AUTHOR_NAME='test' && \
     git add --all && \
     git commit --quiet -m 'Test' && \
     cd && \
-    cp -a markdown-makefile/tests/other_workspace other-workspace && \
-    cd other-workspace && \
+    cp -a markdown-makefile/tests/other_workspace other-workspace-unversioned && \
+    cd other-workspace-unversioned && \
     rm .gitignore && \
     sed -i 's|path = "../.."|path = "../markdown-makefile"|g' MODULE.bazel
 

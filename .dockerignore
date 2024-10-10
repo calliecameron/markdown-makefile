@@ -1,4 +1,3 @@
-/.dir-locals.el
 /.env
 /.git/
 /.mypy_cache/

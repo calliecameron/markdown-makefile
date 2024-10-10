@@ -10,8 +10,8 @@ bzl_library(
 
 exports_files(
     [
-        "bazelversion",
-        "bazelrc",
+        "default_bazeliskrc",
+        "default_bazelrc",
     ],
     visibility = ["//visibility:public"],
 )

@@ -28,6 +28,7 @@ def extend_file(name, src, prepend_lines = None, append_lines = None):
         srcs = [src],
         outs = [name + ".txt"],
         cmd = "( " + " && ".join(cmd) + " ) > '$@'",
+        visibility = ["//visibility:private"],
     )
 
 def _required_files_update(name, copy, create, extra_update):

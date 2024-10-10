@@ -9,7 +9,12 @@ compile_pip_requirements(
     tags = ["requires-network"],
 )
 
-md_workspace()
+md_workspace(
+    extra_bazelrc_lines = [
+        "build --deleted_packages=tests/other_workspace,tests/other_workspace/.markdown_summary,tests/other_workspace/test2,tests/other_workspace/test3,tests/other_workspace/test3/.markdown_summary,tests/other_workspace/test4",
+        "query --deleted_packages=tests/other_workspace,tests/other_workspace/.markdown_summary,tests/other_workspace/test2,tests/other_workspace/test3,tests/other_workspace/test3/.markdown_summary,tests/other_workspace/test4",
+    ],
+)
 
 md_git_repo(
     extra_gitignore_lines = [

@@ -12,6 +12,11 @@ compile_pip_requirements(
 md_workspace()
 
 md_git_repo(
+    extra_gitignore_lines = [
+        "/.env",
+        "/.mypy_cache/",
+        "/.vscode/",
+    ],
     extra_precommit = "//tests:extra_precommit.sh",
 )
 

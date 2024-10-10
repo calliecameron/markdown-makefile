@@ -1,7 +1,34 @@
 """Utils macros."""
 
+load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@pip//:requirements.bzl", "requirement")
 load("//markdown/private/support/python:defs.bzl", "py_test")
+
+def extend_file(name, src, prepend_lines = None, append_lines = None):
+    """A file with lines prepended and appended.
+
+    Args:
+        name: name of the generated file
+        src: existing file
+        prepend_lines: lines to prepend to src
+        append_lines: lines to append to src
+    """
+    cmd = []
+
+    for line in prepend_lines or []:
+        cmd.append("echo %s" % shell.quote(line))
+
+    cmd.append("cat '$<'")
+
+    for line in append_lines or []:
+        cmd.append("echo %s" % shell.quote(line))
+
+    native.genrule(
+        name = name,
+        srcs = [src],
+        outs = [name + ".txt"],
+        cmd = "( " + " && ".join(cmd) + " ) > '$@'",
+    )
 
 def _required_files_update(name, copy, create, extra_update):
     # without the inner quotes, sh_binary will discard this instead of passing

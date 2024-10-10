@@ -1,3 +1,4 @@
+# Auto-generated; do not edit.
 *.doc diff=doc
 *.docx diff=zip
 *.epub diff=zip

@@ -1,12 +1,13 @@
 """Git repo macros."""
 
-load("//markdown/private/utils:defs.bzl", "required_files")
+load("//markdown/private/utils:defs.bzl", "extend_file", "required_files")
 
-def md_git_repo(name = None, extra_precommit = None):  # buildifier: disable=unused-variable
+def md_git_repo(name = None, extra_gitignore_lines = None, extra_precommit = None):  # buildifier: disable=unused-variable
     """Git repo setup.
 
     Args:
         name: unused
+        extra_gitignore_lines: extra lines to add to the generated gitignore
         extra_precommit: an extra script to run at precommit
     """
     native.sh_binary(
@@ -16,19 +17,38 @@ def md_git_repo(name = None, extra_precommit = None):  # buildifier: disable=unu
         visibility = ["//visibility:private"],
     )
 
+    extend_file(
+        name = "gitattributes",
+        src = "@rules_markdown//markdown/private/git:default_gitattributes",
+        prepend_lines = ["# Auto-generated; do not edit."],
+    )
+
+    extend_file(
+        name = "gitconfig",
+        src = "@rules_markdown//markdown/private/git:default_gitconfig",
+        prepend_lines = ["# Auto-generated; do not edit."],
+    )
+
+    extend_file(
+        name = "gitignore",
+        src = "@rules_markdown//markdown/private/git:default_gitignore",
+        prepend_lines = ["# Auto-generated; edit extra_gitignore_lines in md_git_repo."],
+        append_lines = extra_gitignore_lines,
+    )
+
     copy = [
         (
-            "@rules_markdown//markdown/private/git:default_gitattributes",
+            ":gitattributes",
             ".gitattributes",
             "600",
         ),
         (
-            "@rules_markdown//markdown/private/git:default_gitconfig",
+            ":gitconfig",
             ".gitconfig",
             "600",
         ),
         (
-            "@rules_markdown//markdown/private/git:default_gitignore",
+            ":gitignore",
             ".gitignore",
             "600",
         ),

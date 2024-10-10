@@ -1,7 +1,6 @@
-.dir-locals.el
-.env
-.mypy_cache/
-.vscode/
-/.bazelrc.user
+# Auto-generated; edit extra_gitignore_lines in md_git_repo.
 /bazel-*
 *~
+/.env
+/.mypy_cache/
+/.vscode/

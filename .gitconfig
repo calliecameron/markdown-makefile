@@ -1,3 +1,4 @@
+# Auto-generated; do not edit.
 [diff "binary"]
 textconv = bash -c 'bazel run --ui_event_filters=-info,-stdout,-stderr --noshow_progress @rules_markdown//markdown/private/utils:bindump -- "${0}"'
 cachetextconv = true

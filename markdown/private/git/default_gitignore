@@ -1,7 +1,2 @@
-.dir-locals.el
-.env
-.mypy_cache/
-.vscode/
-/.bazelrc.user
 /bazel-*
 *~

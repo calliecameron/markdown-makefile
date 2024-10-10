@@ -1,24 +1,18 @@
-load("@pip//:requirements.bzl", "requirement")
 load("//markdown/private/support/python:defs.bzl", "py_binary")
+load("//markdown/private/support/shell:defs.bzl", "sh_binary")
 load("//markdown/private/utils:defs.bzl", "script_py_test")
 
-py_binary(
-    name = "gen_standard_lint_input",
-    srcs = ["gen_standard_lint_input.py"],
+exports_files(
+    [
+        "default_markdownlintrc",
+    ],
     visibility = ["//visibility:public"],
 )
 
-script_py_test(
-    name = "gen_standard_lint_input_test",
-    src = "gen_standard_lint_input_test.py",
-    script = ":gen_standard_lint_input",
-)
-
-py_binary(
+sh_binary(
     name = "standard_lint",
-    srcs = ["standard_lint.py"],
+    srcs = ["standard_lint.sh"],
     visibility = ["//visibility:public"],
-    deps = [requirement("pymarkdownlnt")],
 )
 
 py_binary(

@@ -56,6 +56,18 @@ def md_workspace(name = None, extra_bazelrc_lines = None):  # buildifier: disabl
                 ".bazelrc",
                 "600",
             ),
+            # We need both markdownlint configs to ensure both vscode and the CLI in subfolders find
+            # the config.
+            (
+                "@rules_markdown//markdown/private/core/lint:default_markdownlintrc",
+                ".markdownlintrc",
+                "600",
+            ),
+            (
+                "@rules_markdown//markdown/private/core/lint:default_markdownlintrc",
+                ".markdownlint.json",
+                "600",
+            ),
         ],
     )
 

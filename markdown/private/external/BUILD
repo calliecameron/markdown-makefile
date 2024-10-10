@@ -42,6 +42,12 @@ alias(
     ],
 )
 
+native_binary(
+    name = "markdownlint",
+    src = "@markdownlint-cli//:bin/markdownlint",
+    visibility = ["//markdown/private/core:__pkg__"],
+)
+
 alias(
     name = "md2short",
     actual = "@prosegrinder_pandoc_templates//:md2short",

@@ -66,6 +66,12 @@ nix_pkg.attr(
 )""",
 )
 nix_pkg.attr(
+    attr = "markdownlint-cli",
+)
+nix_pkg.attr(
+    attr = "perl538Packages.strip-nondeterminism",
+)
+nix_pkg.attr(
     attr = "poppler_utils",
 )
 nix_pkg.attr(
@@ -73,9 +79,6 @@ nix_pkg.attr(
 )
 nix_pkg.attr(
     attr = "shfmt",
-)
-nix_pkg.attr(
-    attr = "perl538Packages.strip-nondeterminism",
 )
 nix_pkg.attr(
     attr = "ruff",
@@ -95,6 +98,7 @@ use_repo(
     "glibcLocales",
     "hexdump",
     "hunspell",
+    "markdownlint-cli",
     "perl538Packages.strip-nondeterminism",
     "poppler_utils",
     "ruff",

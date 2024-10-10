@@ -43,11 +43,13 @@ def _required_files_update(name, copy, create, extra_update):
 
     for src, dst, dst_mode in copy:
         args += ["--copy", "$(rootpath %s)" % src, dst, dst_mode]
-        data.append(src)
+        if src not in data:
+            data.append(src)
 
     for src, dst, dst_mode in create:
         args += ["--create", "$(rootpath %s)" % src, dst, dst_mode]
-        data.append(src)
+        if src not in data:
+            data.append(src)
 
     native.sh_binary(
         name = name + "_update",
@@ -71,7 +73,9 @@ def _required_files_test(name, check, check_mode_only, extra_check):
             fail("found multiple files matching", dst)
         else:
             args += ["--check", "$(rootpath %s)" % src, "$(rootpath %s)" % dst, dst_mode]
-            data += [src, dst]
+            if src not in data:
+                data.append(src)
+            data.append(dst)
 
     for _, dst, dst_mode in check_mode_only:
         dsts = native.glob([dst])

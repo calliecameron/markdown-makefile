@@ -64,35 +64,20 @@ md_group = rule(
 )
 
 def _standard_lint(ctx):
-    standard_lint_input = ctx.actions.declare_file(ctx.label.name + "_standard_lint_input.md")
-    ctx.actions.run(
-        outputs = [standard_lint_input],
-        inputs = [
-            ctx.file.src,
-        ],
-        executable = ctx.executable._gen_standard_lint_input,
-        arguments = [
-            ctx.file.src.path,
-            standard_lint_input.path,
-        ],
-        progress_message = "%{label}: generating input for standard linter",
-    )
-
     standard_lint_ok = ctx.actions.declare_file(ctx.label.name + "_standard_lint_ok.txt")
     ctx.actions.run(
         outputs = [standard_lint_ok],
         inputs = [
-            standard_lint_input,
-            ctx.file._pymarkdown_config,
+            ctx.file.src,
+            ctx.executable._markdownlint,
+            ctx.file._markdownlint_config,
         ],
         executable = ctx.executable._standard_lint,
         arguments = [
+            ctx.executable._markdownlint.path,
+            ctx.file._markdownlint_config.path,
+            ctx.file.src.path,
             standard_lint_ok.path,
-            "--strict-config",
-            "--config",
-            ctx.file._pymarkdown_config.path,
-            "scan",
-            standard_lint_input.path,
         ],
         progress_message = "%{label}: linting markdown with standard linter",
     )
@@ -455,19 +440,19 @@ md_file = rule(
             executable = True,
             cfg = "exec",
         ),
-        "_gen_standard_lint_input": attr.label(
-            default = "//markdown/private/core/lint:gen_standard_lint_input",
+        "_markdownlint": attr.label(
+            default = "//markdown/private/external:markdownlint",
             executable = True,
             cfg = "exec",
+        ),
+        "_markdownlint_config": attr.label(
+            allow_single_file = True,
+            default = "//markdown/private/core/lint:default_markdownlintrc",
         ),
         "_standard_lint": attr.label(
             default = "//markdown/private/core/lint:standard_lint",
             executable = True,
             cfg = "exec",
-        ),
-        "_pymarkdown_config": attr.label(
-            allow_single_file = True,
-            default = "//:pymarkdown.json",
         ),
         "_custom_lint": attr.label(
             default = "//markdown/private/core/lint:custom_lint",

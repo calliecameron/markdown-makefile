@@ -1,5 +1,5 @@
 load("@markdown//:defs.bzl", "md_document")
-load("//markdown/testing:defs.bzl", "output_test")
+load("//markdown/testing:defs.bzl", "output_test", "versioned_test")
 
 md_document(
     name = "test6",
@@ -7,5 +7,9 @@ md_document(
 
 output_test(
     reproducible = False,
+    target = "test6",
+)
+
+versioned_test(
     target = "test6",
 )

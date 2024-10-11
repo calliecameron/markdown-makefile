@@ -1,5 +1,6 @@
 """Test utils."""
 
+load("@bazel_skylib//lib:shell.bzl", "shell")
 load(
     "//markdown/private/formats:defs.bzl",
     "ext_var_dot",
@@ -47,6 +48,19 @@ def _zip_cleaned_test(target, extension, variant):
         args = [
             "$(rootpath output/%s.%s)" % (target, ext_var_dot(extension, variant)),
             "$(rootpath @rules_markdown//markdown/private/external:zipinfo)",
+        ],
+    )
+
+def _version_test(target, version_regex):
+    native.sh_test(
+        name = "%s_version_test" % target,
+        srcs = ["@rules_markdown//markdown/testing:version_test.sh"],
+        data = [
+            "output/%s.%s" % (target, ext_var_dot("json", "metadata")),
+        ],
+        args = [
+            "$(rootpath output/%s.%s)" % (target, ext_var_dot("json", "metadata")),
+            shell.quote(version_regex),
         ],
     )
 
@@ -164,3 +178,9 @@ def output_test(target, reproducible, name = None):  # buildifier: disable=unuse
 
     _cat_tests(target, "json", "metadata", reproducible)
     _cat_tests(target, "json", "deps_metadata", reproducible)
+
+def versioned_test(target, name = None):  # buildifier: disable=unused-variable
+    _version_test(target, "[0-9a-f]+(-dirty)?, [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\\+00:00")
+
+def unversioned_test(target, name = None):  # buildifier: disable=unused-variable
+    _version_test(target, "unversioned")

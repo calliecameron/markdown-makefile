@@ -27,3 +27,9 @@ sh_source(
     src = "zip_cleaned_test.sh",
     visibility = ["//visibility:public"],
 )
+
+sh_source(
+    name = "version_test",
+    src = "version_test.sh",
+    visibility = ["//visibility:public"],
+)

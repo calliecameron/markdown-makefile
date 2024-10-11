@@ -115,7 +115,7 @@ function run-tests() {
     echo -e "\e[34mRunning tests in ${line}\e[0m"
     (
         cd "${TEST_ROOT}"
-        bazel test --build_tests_only ...:all
+        bazel test --build_tests_only //:buildifier_test ...:all
     )
 }
 

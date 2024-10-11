@@ -1,4 +1,3 @@
-load("@buildifier_prebuilt//:rules.bzl", "buildifier_test")
 load("@markdown//:defs.bzl", "md_git_repo", "md_workspace")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 
@@ -23,12 +22,6 @@ md_git_repo(
         "/.vscode/",
     ],
     extra_precommit = "//tests:extra_precommit.sh",
-)
-
-buildifier_test(
-    name = "buildifier_test",
-    no_sandbox = True,
-    workspace = "//:WORKSPACE",
 )
 
 exports_files(

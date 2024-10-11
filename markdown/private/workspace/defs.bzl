@@ -1,5 +1,6 @@
 """Workspace macros."""
 
+load("@buildifier_prebuilt//:rules.bzl", "buildifier_test")
 load("//markdown/private/summary:defs.bzl", "md_summary")
 load("//markdown/private/utils:defs.bzl", "extend_file", "required_files")
 
@@ -13,6 +14,12 @@ def md_workspace(name = None, extra_bazelrc_lines = None):  # buildifier: disabl
 
     if native.package_name():
         fail("md_workspace may only be used in the workspace root")
+
+    buildifier_test(
+        name = "buildifier_test",
+        no_sandbox = True,
+        workspace = "//:WORKSPACE",
+    )
 
     native.sh_binary(
         name = "new",

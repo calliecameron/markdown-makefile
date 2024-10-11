@@ -180,7 +180,7 @@ def output_test(target, reproducible, name = None):  # buildifier: disable=unuse
     _cat_tests(target, "json", "deps_metadata", reproducible)
 
 def versioned_test(target, name = None):  # buildifier: disable=unused-variable
-    _version_test(target, "[0-9a-f]+(-dirty)?, [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\\+00:00")
+    _version_test(target, "[0-9a-f]+(-dirty)?, [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\\+00:00(, dirty deps)?")
 
 def unversioned_test(target, name = None):  # buildifier: disable=unused-variable
     _version_test(target, "unversioned")

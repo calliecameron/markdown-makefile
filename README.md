@@ -10,86 +10,84 @@ format](https://github.com/prosegrinder/pandoc-templates).
 
 ## Setup
 
-1.  Install system dependencies (assuming Ubuntu 20.04):
+Install system dependencies (assuming Ubuntu 20.04):
 
-    TODO: update dependencies for Ubuntu 22.04
+``` shell
+sudo apt-get install -y catdoc git gcc hunspell hunspell-en-gb libegl1 \
+    libopengl0 libxkbcommon0 python3-pip \
+    strip-nondeterminism texlive-xetex unoconv
+```
 
-    ``` shell
-    sudo apt-get install -y catdoc git gcc hunspell hunspell-en-gb libegl1 \
-        libopengl0 libxkbcommon0 python3-pip \
-        strip-nondeterminism texlive-xetex unoconv
-    ```
+Set up the files in your workspace:
 
-2.  Set up the files in your workspace:
+`.bazelrc`:
 
-    `.bazelrc`:
+``` text
+build "--workspace_status_command=/bin/bash -c 'if [ -x ./.bin/workspace_status ]; then ./.bin/workspace_status; fi'"
+build --sandbox_default_allow_network=false
+test --build_tests_only
+try-import %workspace%/.bazelrc.user
+```
 
-    ``` text
-    build "--workspace_status_command=/bin/bash -c 'if [ -x ./.bin/workspace_status ]; then ./.bin/workspace_status; fi'"
-    build --sandbox_default_allow_network=false
-    test --build_tests_only
-    try-import %workspace%/.bazelrc.user
-    ```
+`.bazelversion`:
 
-    `.bazelversion`:
+``` text
+7.0.0
+```
 
-    ``` text
-    7.0.0
-    ```
+`WORKSPACE`:
 
-    `WORKSPACE`:
+``` text
+# Empty file
+```
 
-    ``` text
-    # Empty file
-    ```
+`MODULE.bazel`:
 
-    `MODULE.bazel`:
+``` text
+module(
+    name = "my_module",
+    version = "0.0.0",
+)
 
-    ``` text
-    module(
-        name = "my_module",
-        version = "0.0.0",
-    )
+bazel_dep(
+    name = "rules_markdown",
+    # Set this to the latest tag on github
+    version = ...,
+)
 
-    bazel_dep(
-        name = "rules_markdown",
-        # Set this to the latest tag on github
-        version = ...,
-    )
+archive_override(
+    module_name = "rules_markdown",
+    # Set these from the latest tag on github
+    urls = ...
+    integrity = ...
+    strip_prefix = ...
+)
+```
 
-    archive_override(
-        module_name = "rules_markdown",
-        # Set these from the latest tag on github
-        urls = ...
-        integrity = ...
-        strip_prefix = ...
-    )
-    ```
+`BUILD`:
 
-    `BUILD`:
+``` text
+load("@rules_markdown//markdown:defs.bzl", "md_workspace")
 
-    ``` text
-    load("@rules_markdown//markdown:defs.bzl", "md_workspace")
+md_workspace()
+```
 
-    md_workspace()
-    ```
+If your workspace is also the root of a git repo, add `md_git_repo()` to the
+BUILD file.
 
-    If your workspace is also the root of a git repo, add `md_git_repo()` to the
-    BUILD file.
+Initialise:
 
-3.  Initialise:
+``` shell
+bazel run :workspace_update
+bazel test :workspace_test
+```
 
-    ``` shell
-    bazel run :workspace_update
-    bazel test :workspace_test
-    ```
+If you added `md_git_repo` to the BUILD file in the previous step, also run:
 
-    If you added `md_git_repo` to the BUILD file in the previous step, also run:
-
-    ``` shell
-    bazel run :git_update
-    bazel test :git_test
-    ```
+``` shell
+bazel run :git_update
+bazel test :git_test
+```
 
 ## Usage
 

@@ -2,7 +2,7 @@
 author:
 - An Author
 lang: en-GB
-source-hash: fd343bad17949ebeb3106e0d71ca560b
+source-hash: 72af687631737750e85ffac90f246dcf
 title: The Title
 version: reproducible
 ---
@@ -44,7 +44,7 @@ This is a new paragraph after the stars. This text is [Small Caps]{.smallcaps}. 
 
 # This is a second section {#__h1_2}
 
-![foo](tests/test2/image.png "bar"){.quux width="50%"}
+![foo](tests/test2/image.jpg "bar"){.quux width="50%"}
 
 There is an image here.
 

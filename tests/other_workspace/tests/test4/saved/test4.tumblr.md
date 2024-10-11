@@ -3,7 +3,7 @@ author:
 - The Author
 date: 1 January 2022
 lang: en-GB
-source-hash: e39b4b5abc3ebb895c799e1e6f5711ab
+source-hash: aa02a9248dd9bf54a9a5cc4556edc7a9
 title: Test 4
 version: reproducible
 ---
@@ -109,7 +109,7 @@ This is a new paragraph after the stars. This text is [Small Caps]{.smallcaps}. 
 
 ## This is a second section {#__h2_3}
 
-![foo](tests/test2/image.png "bar"){.quux width="50%"}
+![foo](tests/test2/image.jpg "bar"){.quux width="50%"}
 
 There is an image here.
 

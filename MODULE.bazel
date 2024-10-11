@@ -75,13 +75,16 @@ nix_pkg.attr(
     attr = "poppler_utils",
 )
 nix_pkg.attr(
+    attr = "ruff",
+)
+nix_pkg.attr(
     attr = "shellcheck",
 )
 nix_pkg.attr(
     attr = "shfmt",
 )
 nix_pkg.attr(
-    attr = "ruff",
+    attr = "texliveFull",
 )
 nix_pkg.attr(
     attr = "unoconv",
@@ -104,6 +107,7 @@ use_repo(
     "ruff",
     "shellcheck",
     "shfmt",
+    "texliveFull",
     "unoconv",
     "unzip",
     "zip",

@@ -147,6 +147,7 @@ def md_document(
         version_override = None,
         repo_override = None,
         timestamp_override = None,
+        cache_dir = None,
         existing_file = None,
         main_document = True,
         output_visibility = None):
@@ -172,6 +173,7 @@ def md_document(
             the computed value. Should only be used for testing.
         timestamp_override: set the build timestamp to this value, rather than
             the current value. Should only be used for testing.
+        cache_dir: dir for caching between runs.
         existing_file: use an existing md_file rather than creating one; if
             set, most other args must not be set.
         main_document: whether this is the main document in the package; creates
@@ -256,6 +258,7 @@ def md_document(
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
         out = _output(name, "pdf", None),
         timestamp_override = timestamp_override,
+        cache_dir = cache_dir,
         visibility = output_visibility,
     )
     _md_epub(
@@ -370,6 +373,7 @@ def md_collection(
         version_override = None,
         repo_override = None,
         timestamp_override = None,
+        cache_dir = None,
         main_document = True,
         output_visibility = None):
     """md_collection collects multiple documents into a single document.
@@ -388,6 +392,7 @@ def md_collection(
             the computed value. Should only be used for testing.
         timestamp_override: set the build timestamp to this value, rather than
             the current value. Should only be used for testing.
+        cache_dir: dir for caching between runs.
         main_document: whether this is the main document in the package; creates
             some convenience aliases.
         output_visibility: visibilty of the generated outputs.
@@ -422,6 +427,7 @@ def md_collection(
         version_override = version_override,
         repo_override = repo_override,
         timestamp_override = timestamp_override,
+        cache_dir = cache_dir,
         main_document = main_document,
         output_visibility = output_visibility,
     )

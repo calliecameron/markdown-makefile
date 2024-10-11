@@ -8,10 +8,11 @@ RUN apt-get update && \
     gcc \
     git \
     python3 \
-    texlive-full \
+    tzdata \
     unzip \
     wget \
-    xz-utils && \
+    xz-utils \
+    zip && \
     rm -rf /var/lib/apt/lists/*
 
 ARG uid
@@ -26,6 +27,9 @@ RUN mkdir /nix && \
 USER ${uid}:${gid}
 ENV USER markdown
 WORKDIR /home/markdown
+
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
 
 RUN wget https://releases.nixos.org/nix/nix-2.24.4/install && \
     chmod a+x install && \

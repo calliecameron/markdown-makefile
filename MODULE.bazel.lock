@@ -282,7 +282,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg%<root>~nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "/DEdBRitE4AK5nHLZSuylh/q2mCGfGwuZHBSE3I1yeo=",
+        "usagesDigest": "FjaVavmhaxU2yPy2qhYwgg05O9rXSDF45QH3mAO1Xtg=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -373,6 +373,22 @@
             "attributes": {
               "unmangled_name": "shellcheck",
               "attribute_path": "shellcheck",
+              "nix_file_deps": {},
+              "nix_file_content": "",
+              "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
+              "repositories": {},
+              "build_file_content": "",
+              "nixopts": [],
+              "quiet": false,
+              "fail_not_supported": true
+            }
+          },
+          "texliveFull": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_package",
+            "attributes": {
+              "unmangled_name": "texliveFull",
+              "attribute_path": "texliveFull",
               "nix_file_deps": {},
               "nix_file_content": "",
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
@@ -505,9 +521,10 @@
             "markdownlint-cli",
             "perl538Packages.strip-nondeterminism",
             "poppler_utils",
+            "ruff",
             "shellcheck",
             "shfmt",
-            "ruff",
+            "texliveFull",
             "unoconv",
             "unzip",
             "zip"

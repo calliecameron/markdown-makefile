@@ -83,7 +83,11 @@ md_tex_intermediate = rule(
             tools.pandoc.attr,
 )
 
-def _tex_output_impl(ctx, extension, to, extra_args):
+def _tex_output_impl(ctx, extension, to, extra_inputs = None, extra_args = None, env = None, sandbox = True):
+    extra_inputs = extra_inputs or []
+    extra_args = extra_args or []
+    env = env or {}
+
     return simple_pandoc_output_impl(
         ctx = ctx,
         extension = extension,
@@ -97,7 +101,7 @@ def _tex_output_impl(ctx, extension, to, extra_args):
             filters.cleanup_metadata.file(ctx),
             filters.remove_collection_separators_before_headers.file(ctx),
             ctx.file._latex_filter,
-        ],
+        ] + extra_inputs,
         args = [
             "--include-in-header=" + ctx.attr.intermediate[MdTexIntermediateInfo].header.path,
             "--include-before-body=" + ctx.attr.intermediate[MdTexIntermediateInfo].before.path,
@@ -107,11 +111,12 @@ def _tex_output_impl(ctx, extension, to, extra_args):
             filters.remove_collection_separators_before_headers.arg(ctx),
             "--lua-filter=" + ctx.file._latex_filter.path,
         ] + extra_args + _LATEX_VARS + expand_locations(ctx, ctx.attr.intermediate, ctx.attr.extra_pandoc_flags),
-        env = timestamp_override.env(ctx),
+        env = timestamp_override.env(ctx) | env,
         file = ctx.attr.intermediate,
+        sandbox = sandbox,
     )
 
-def _tex_output_rule(impl, extension):
+def _tex_output_rule(impl, extension, extra_attrs = {}):
     return rule(
         implementation = impl,
         executable = True,
@@ -134,6 +139,7 @@ def _tex_output_rule(impl, extension):
                         default = "//markdown/private/formats/latex:latex_filter.lua",
                     ),
                 } |
+                extra_attrs |
                 tools.pandoc.attr |
                 tools.write_open_script.attr |
                 filters.add_subject.attr |
@@ -144,20 +150,39 @@ def _tex_output_rule(impl, extension):
 
 def _md_tex_impl(ctx):
     return _tex_output_impl(
-        ctx,
-        "tex",
-        "latex",
-        ["--standalone"],
+        ctx = ctx,
+        extension = "tex",
+        to = "latex",
+        extra_args = ["--standalone"],
     )
 
-md_tex = _tex_output_rule(_md_tex_impl, "tex")
+md_tex = _tex_output_rule(
+    impl = _md_tex_impl,
+    extension = "tex",
+)
 
 def _md_pdf_impl(ctx):
     return _tex_output_impl(
-        ctx,
-        "pdf",
-        "pdf",
-        ["--pdf-engine=/usr/bin/xelatex"],
+        ctx = ctx,
+        extension = "pdf",
+        to = "pdf",
+        extra_inputs = [ctx.executable._xelatex],
+        extra_args = ["--pdf-engine=" + ctx.executable._xelatex.path],
+        env = {"XDG_CACHE_HOME": ctx.attr.cache_dir},
+        sandbox = False,
     )
 
-md_pdf = _tex_output_rule(_md_pdf_impl, "pdf")
+md_pdf = _tex_output_rule(
+    impl = _md_pdf_impl,
+    extension = "pdf",
+    extra_attrs = {
+        "cache_dir": attr.string(
+            doc = "Dir for fontconfig cache.",
+        ),
+        "_xelatex": attr.label(
+            default = "//markdown/private/formats/latex:xelatex",
+            executable = True,
+            cfg = "exec",
+        ),
+    },
+)

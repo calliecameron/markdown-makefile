@@ -107,6 +107,12 @@ native_binary(
 )
 
 native_binary(
+    name = "xelatex",
+    src = "@texliveFull//:bin/xelatex",
+    visibility = ["//markdown/private/formats/latex:__pkg__"],
+)
+
+native_binary(
     name = "zip",
     src = "@zip//:bin/zip",
     visibility = [

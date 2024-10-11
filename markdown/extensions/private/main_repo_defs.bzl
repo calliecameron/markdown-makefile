@@ -11,6 +11,10 @@ load(
     _md_workspace = "md_workspace",
 )
 load(
+    "//:cache.bzl",
+    "cache_dir",
+)
+load(
     "//:versions.bzl",
     "version_file",
 )
@@ -30,6 +34,7 @@ def md_document(
     _md_document(
         name = name,
         version_file = version_file(native.package_name()),
+        cache_dir = cache_dir(),
         **kwargs
     )
 
@@ -39,6 +44,7 @@ def md_collection(
     _md_collection(
         name = name,
         version_file = version_file(native.package_name()),
+        cache_dir = cache_dir(),
         **kwargs
     )
 

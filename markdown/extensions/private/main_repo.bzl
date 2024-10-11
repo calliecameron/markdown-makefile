@@ -1,12 +1,13 @@
 """Repository rule for the main markdown repo."""
 
-def _main_repo_impl(repository_ctx):
+def _defs(repository_ctx):
     repository_ctx.file(
         "defs.bzl",
         content = repository_ctx.read(repository_ctx.attr._defs_bzl, watch = "no"),
         executable = False,
     )
 
+def _versions(repository_ctx):
     bzl_entries = []
     for package, repo in sorted(repository_ctx.attr.package_repos.items()):
         bzl_entries.append("    \"%s\": \"@markdown//:%s_version.json\"," % (package, repo))
@@ -32,12 +33,41 @@ def version_file(package):
     visibility = ["//visibility:public"],
 )""" % (repo, repo))
 
+    return build_entries
+
+def _cache(repository_ctx):
+    result = repository_ctx.execute(
+        ["mkdir", "-p", "cache"],
+    )
+
+    if result.return_code != 0:
+        fail("Failed to create cache dir: %s" % result.stderr)
+
+    result = repository_ctx.execute(
+        ["readlink", "-f", "cache"],
+    )
+
+    if result.return_code != 0:
+        fail("Failed to get path of cache dir: %s" % result.stderr)
+
+    cache_dir = result.stdout.strip("\n")
+
+    repository_ctx.file(
+        "cache.bzl",
+        content = """def cache_dir():
+    return \"%s\"
+""" % cache_dir,
+        executable = False,
+    )
+
+def _build(repository_ctx, build_entries):
     repository_ctx.file(
         "BUILD",
         content = """exports_files(
     [
         "defs.bzl",
         "versions.bzl",
+        "cache.bzl",
     ],
     visibility = ["//visibility:public"],
 )
@@ -45,6 +75,12 @@ def version_file(package):
 """ + "\n\n".join(build_entries) + "\n",
         executable = False,
     )
+
+def _main_repo_impl(repository_ctx):
+    _defs(repository_ctx)
+    build_entries = _versions(repository_ctx)
+    _cache(repository_ctx)
+    _build(repository_ctx, build_entries)
 
 main_repo = repository_rule(
     implementation = _main_repo_impl,

@@ -181,7 +181,7 @@ def clean_zip(ctx, in_file, out_file):
         progress_message = "%{label}: cleaining zip file",
     )
 
-def pandoc(ctx, extension, variant, to_format, inputs, args, env, file, output, progress_message = None):
+def pandoc(ctx, extension, variant, to_format, inputs, args, env, file, output, progress_message = None, sandbox = True):
     """Run pandoc.
 
     Args:
@@ -195,6 +195,7 @@ def pandoc(ctx, extension, variant, to_format, inputs, args, env, file, output, 
         file: something that provides MdFileInfo.
         output: the output file.
         progress_message: message to display when running the action.
+        sandbox: whether to run sandboxed.
     """
     if not progress_message:
         progress_message = _progress_message_without_label(extension, variant)
@@ -221,9 +222,10 @@ def pandoc(ctx, extension, variant, to_format, inputs, args, env, file, output, 
         ],
         env = env,
         progress_message = progress_message,
+        execution_requirements = {"local": "1"} if not sandbox else {},
     )
 
-def simple_pandoc_output_impl(ctx, extension, variant, to_format, inputs, args, env, file):
+def simple_pandoc_output_impl(ctx, extension, variant, to_format, inputs, args, env, file, sandbox = True):
     output = ctx.outputs.out
     pandoc(
         ctx = ctx,
@@ -235,6 +237,7 @@ def simple_pandoc_output_impl(ctx, extension, variant, to_format, inputs, args, 
         env = env,
         file = file,
         output = output,
+        sandbox = sandbox,
     )
     script = write_open_script(
         ctx = ctx,

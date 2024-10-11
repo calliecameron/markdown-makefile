@@ -5,26 +5,26 @@ markdown to many output formats. Formatting is intended for short stories and
 poems.
 
 Supported output formats: markdown, plain text, html, latex, pdf, epub, mobi,
-odt, docx, doc, and docx in [Shunn manuscript
-format](https://github.com/prosegrinder/pandoc-templates).
+odt, docx, doc, and docx in
+[Shunn manuscript format](https://github.com/prosegrinder/pandoc-templates).
 
 ## Setup
 
-1.  Install system dependencies (assuming Ubuntu 20.04):
+1. Install system dependencies (assuming Ubuntu 20.04):
 
     TODO: update dependencies for Ubuntu 22.04
 
-    ``` shell
+    ```shell
     sudo apt-get install -y catdoc git gcc hunspell hunspell-en-gb libegl1 \
         libopengl0 libxkbcommon0 python3-pip \
         strip-nondeterminism texlive-xetex unoconv
     ```
 
-2.  Set up the files in your workspace:
+2. Set up the files in your workspace:
 
     `.bazelrc`:
 
-    ``` text
+    ```text
     build "--workspace_status_command=/bin/bash -c 'if [ -x ./.bin/workspace_status ]; then ./.bin/workspace_status; fi'"
     build --sandbox_default_allow_network=false
     test --build_tests_only
@@ -33,19 +33,19 @@ format](https://github.com/prosegrinder/pandoc-templates).
 
     `.bazelversion`:
 
-    ``` text
+    ```text
     7.0.0
     ```
 
     `WORKSPACE`:
 
-    ``` text
+    ```text
     # Empty file
     ```
 
     `MODULE.bazel`:
 
-    ``` text
+    ```text
     module(
         name = "my_module",
         version = "0.0.0",
@@ -68,7 +68,7 @@ format](https://github.com/prosegrinder/pandoc-templates).
 
     `BUILD`:
 
-    ``` text
+    ```text
     load("@rules_markdown//markdown:defs.bzl", "md_workspace")
 
     md_workspace()
@@ -77,16 +77,16 @@ format](https://github.com/prosegrinder/pandoc-templates).
     If your workspace is also the root of a git repo, add `md_git_repo()` to the
     BUILD file.
 
-3.  Initialise:
+3. Initialise:
 
-    ``` shell
+    ```shell
     bazel run :workspace_update
     bazel test :workspace_test
     ```
 
     If you added `md_git_repo` to the BUILD file in the previous step, also run:
 
-    ``` shell
+    ```shell
     bazel run :git_update
     bazel test :git_test
     ```
@@ -95,7 +95,7 @@ format](https://github.com/prosegrinder/pandoc-templates).
 
 Example BUILD file:
 
-``` text
+```text
 load("@rules_markdown//markdown:defs.bzl", "md_document")
 
 md_document(
@@ -116,9 +116,9 @@ in that directory.
 
 Include a file with:
 
-``` markdown
-!include $LABEL
+```markdown
+\!include $LABEL
 ```
 
-in markdown, where ‘$LABEL’ is the label of an md_file or md_document target in
-this target’s ‘deps’.
+in markdown, where '$LABEL' is the label of an md_file or md_document target
+in this target's 'deps'.

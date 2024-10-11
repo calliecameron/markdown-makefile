@@ -24,18 +24,11 @@ Set up the files in your workspace:
 
 `.bazelrc`:
 
-```text
-build "--workspace_status_command=/bin/bash -c 'if [ -x ./.bin/workspace_status ]; then ./.bin/workspace_status; fi'"
-build --sandbox_default_allow_network=false
-test --build_tests_only
-try-import %workspace%/.bazelrc.user
-```
+!include //readme:bazelrc
 
-`.bazelversion`:
+`.bazeliskrc`:
 
-```text
-7.0.0
-```
+!include //readme:bazeliskrc
 
 `WORKSPACE`:
 

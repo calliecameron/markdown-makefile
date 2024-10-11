@@ -23,16 +23,16 @@ Set up the files in your workspace:
 `.bazelrc`:
 
 ``` text
-build "--workspace_status_command=/bin/bash -c 'if [ -x ./.bin/workspace_status ]; then ./.bin/workspace_status; fi'"
-build --sandbox_default_allow_network=false
-test --build_tests_only
-try-import %workspace%/.bazelrc.user
+common --experimental_isolated_extension_usages
+build "--workspace_status_command=/bin/bash -c 'if [ -x ./.markdown_workspace/workspace_status ] && [ -x ./.markdown_workspace/git_repo_version ]; then ./.markdown_workspace/workspace_status ./.markdown_workspace/git_repo_version; fi'"
+build --nobuild_runfile_links --sandbox_default_allow_network=false
+test --nobuild_runfile_links --build_tests_only
 ```
 
-`.bazelversion`:
+`.bazeliskrc`:
 
 ``` text
-7.0.0
+USE_BAZEL_VERSION=7.3.1
 ```
 
 `WORKSPACE`:

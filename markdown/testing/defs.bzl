@@ -9,7 +9,7 @@ load(
 def _dump_test(target, extension, variant, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
     native.sh_test(
         name = "%s_%s_dump_test" % (target, ext_var_underscore(extension, variant)),
-        srcs = ["//tests:dump_test.sh"],
+        srcs = ["@rules_markdown//markdown/testing:dump_test.sh"],
         data = [
                    "output/%s.%s" % (target, ext_var_dot(extension, variant)),
                ] + ([tool_target] if tool_target else []) +
@@ -23,7 +23,7 @@ def _dump_test(target, extension, variant, tool, tool_target = None, tool_helper
 def _diff_test(target, extension, variant, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
     native.sh_test(
         name = "%s_%s_diff_test" % (target, ext_var_underscore(extension, variant)),
-        srcs = ["//tests:diff_test.sh"],
+        srcs = ["@rules_markdown//markdown/testing:diff_test.sh"],
         data = [
                    "output/%s.%s" % (target, ext_var_dot(extension, variant)),
                    "saved/%s.%s" % (target, ext_var_dot(extension, variant)),
@@ -39,18 +39,18 @@ def _diff_test(target, extension, variant, tool, tool_target = None, tool_helper
 def _zip_cleaned_test(target, extension, variant):
     native.sh_test(
         name = "%s_%s_zip_cleaned_test" % (target, ext_var_underscore(extension, variant)),
-        srcs = ["//tests:zip_cleaned_test.sh"],
+        srcs = ["@rules_markdown//markdown/testing:zip_cleaned_test.sh"],
         data = [
             "output/%s.%s" % (target, ext_var_dot(extension, variant)),
-            "//markdown/private/external:zipinfo",
+            "@rules_markdown//markdown/private/external:zipinfo",
         ],
         args = [
             "$(rootpath output/%s.%s)" % (target, ext_var_dot(extension, variant)),
-            "$(rootpath //markdown/private/external:zipinfo)",
+            "$(rootpath @rules_markdown//markdown/private/external:zipinfo)",
         ],
     )
 
-def _dump_and_diff_tests(target, extension, variant, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
+def _dump_and_diff_tests(target, extension, variant, reproducible, tool, tool_target = None, tool_helper_targets = None, tool_helper_args = None):
     _dump_test(
         target,
         extension,
@@ -60,33 +60,36 @@ def _dump_and_diff_tests(target, extension, variant, tool, tool_target = None, t
         tool_helper_targets,
         tool_helper_args,
     )
-    _diff_test(
-        target,
-        extension,
-        variant,
-        tool,
-        tool_target,
-        tool_helper_targets,
-        tool_helper_args,
-    )
+    if reproducible:
+        _diff_test(
+            target,
+            extension,
+            variant,
+            tool,
+            tool_target,
+            tool_helper_targets,
+            tool_helper_args,
+        )
 
-def _cat_tests(target, extension, variant):
+def _cat_tests(target, extension, variant, reproducible):
     _dump_and_diff_tests(
         target,
         extension,
         variant,
+        reproducible,
         "cat",
     )
 
-def _zip_tests(target, extension, variant):
+def _zip_tests(target, extension, variant, reproducible):
     _dump_and_diff_tests(
         target,
         extension,
         variant,
-        "$(rootpath //markdown/private/utils:zipdump)",
-        "//markdown/private/utils:zipdump",
-        ["//markdown/private/external:unzip"],
-        ["$(rootpath //markdown/private/external:unzip)"],
+        reproducible,
+        "$(rootpath @rules_markdown//markdown/private/utils:zipdump)",
+        "@rules_markdown//markdown/private/utils:zipdump",
+        ["@rules_markdown//markdown/private/external:unzip"],
+        ["$(rootpath @rules_markdown//markdown/private/external:unzip)"],
     )
     _zip_cleaned_test(
         target,
@@ -94,68 +97,70 @@ def _zip_tests(target, extension, variant):
         variant,
     )
 
-def _pdf_tests(target, extension, variant):
+def _pdf_tests(target, extension, variant, reproducible):
     _dump_and_diff_tests(
         target,
         extension,
         variant,
-        "$(rootpath //markdown/private/utils:pdfdump)",
-        "//markdown/private/utils:pdfdump",
+        reproducible,
+        "$(rootpath @rules_markdown//markdown/private/utils:pdfdump)",
+        "@rules_markdown//markdown/private/utils:pdfdump",
         [
-            "//markdown/private/external:pdfinfo",
-            "//markdown/private/utils:pdf2txt",
+            "@rules_markdown//markdown/private/external:pdfinfo",
+            "@rules_markdown//markdown/private/utils:pdf2txt",
         ],
         [
-            "$(rootpath //markdown/private/external:pdfinfo)",
-            "$(rootpath //markdown/private/utils:pdf2txt)",
+            "$(rootpath @rules_markdown//markdown/private/external:pdfinfo)",
+            "$(rootpath @rules_markdown//markdown/private/utils:pdf2txt)",
         ],
     )
 
 def _bin_tests(target, extension, variant):
-    # Nondeterministic output, so we can't diff
+    # Always nondeterministic
     _dump_test(
         target,
         extension,
         variant,
-        "$(rootpath //markdown/private/utils:bindump)",
-        "//markdown/private/utils:bindump",
-        ["//markdown/private/external:hexdump"],
-        ["$(rootpath //markdown/private/external:hexdump)"],
+        "$(rootpath @rules_markdown//markdown/private/utils:bindump)",
+        "@rules_markdown//markdown/private/utils:bindump",
+        ["@rules_markdown//markdown/private/external:hexdump"],
+        ["$(rootpath @rules_markdown//markdown/private/external:hexdump)"],
     )
 
 def _doc_tests(target, extension, variant):
-    # Nondeterministic output, so we can't diff
+    # Always nondeterministic
     _dump_test(
         target,
         extension,
         variant,
-        "$(rootpath //markdown/private/utils:docdump)",
-        "//markdown/private/utils:docdump",
+        "$(rootpath @rules_markdown//markdown/private/utils:docdump)",
+        "@rules_markdown//markdown/private/utils:docdump",
     )
 
-def output_test(target, name = None):  # buildifier: disable=unused-variable
+def output_test(target, reproducible, name = None):  # buildifier: disable=unused-variable
     """Test the target's outputs.
 
     Args:
         target: name of the output.
+        reproducible: whether target has reproducible output, and can use golden tests.
         name: unused.
     """
-    _cat_tests(target, "md", None)
-    _cat_tests(target, "md", "tumblr")
-    _cat_tests(target, "txt", None)
-    _cat_tests(target, "html", None)
+    _cat_tests(target, "md", None, reproducible)
+    _cat_tests(target, "md", "tumblr", reproducible)
+    _cat_tests(target, "txt", None, reproducible)
+    _cat_tests(target, "html", None, reproducible)
 
-    _cat_tests(target, "tex", None)
-    _pdf_tests(target, "pdf", None)
+    _cat_tests(target, "tex", None, reproducible)
+    _pdf_tests(target, "pdf", None, reproducible)
 
-    _zip_tests(target, "epub", None)
+    _zip_tests(target, "epub", None, reproducible)
     _bin_tests(target, "mobi", None)
 
-    _zip_tests(target, "odt", None)
-    _zip_tests(target, "docx", None)
+    _zip_tests(target, "odt", None, reproducible)
+    _zip_tests(target, "docx", None, reproducible)
     _doc_tests(target, "doc", None)
 
-    _zip_tests(target, "docx", "shunnmodern")
+    _zip_tests(target, "docx", "shunnmodern", reproducible)
 
-    _cat_tests(target, "json", "metadata")
-    _cat_tests(target, "json", "deps_metadata")
+    _cat_tests(target, "json", "metadata", reproducible)
+    _cat_tests(target, "json", "deps_metadata", reproducible)

@@ -9,10 +9,7 @@ native_binary(
 native_binary(
     name = "hexdump",
     src = "@hexdump//:bin/hexdump",
-    visibility = [
-        "//markdown/private/utils:__pkg__",
-        "//tests:__subpackages__",
-    ],
+    visibility = ["//visibility:public"],
 )
 
 native_binary(
@@ -66,10 +63,7 @@ alias(
 native_binary(
     name = "pdfinfo",
     src = "@poppler_utils//:bin/pdfinfo",
-    visibility = [
-        "//markdown/private/utils:__pkg__",
-        "//tests:__subpackages__",
-    ],
+    visibility = ["//visibility:public"],
 )
 
 native_binary(
@@ -109,10 +103,7 @@ native_binary(
 native_binary(
     name = "unzip",
     src = "@unzip//:bin/unzip",
-    visibility = [
-        "//markdown/private/utils:__pkg__",
-        "//tests:__subpackages__",
-    ],
+    visibility = ["//visibility:public"],
 )
 
 native_binary(
@@ -126,8 +117,5 @@ native_binary(
 native_binary(
     name = "zipinfo",
     src = "@unzip//:bin/zipinfo",
-    visibility = [
-        "//markdown/private/formats:__subpackages__",
-        "//tests:__subpackages__",
-    ],
+    visibility = ["//visibility:public"],
 )

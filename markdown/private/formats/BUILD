@@ -23,7 +23,7 @@ bzl_library(
     srcs = ["defs.bzl"],
     visibility = [
         "//markdown/private:__pkg__",
-        "//tests:__pkg__",
+        "//markdown/testing:__pkg__",
     ],
     deps = [
         ":lib_bzl",

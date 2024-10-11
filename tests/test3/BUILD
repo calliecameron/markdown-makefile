@@ -1,5 +1,5 @@
 load("@markdown//:defs.bzl", "md_document", "md_file")
-load("//tests:test.bzl", "output_test")
+load("//markdown/testing:defs.bzl", "output_test")
 
 md_file(
     name = "include1",
@@ -30,6 +30,7 @@ md_document(
 )
 
 output_test(
+    reproducible = True,
     target = "test3",
 )
 
@@ -46,5 +47,6 @@ md_document(
 )
 
 output_test(
+    reproducible = True,
     target = "test3a",
 )

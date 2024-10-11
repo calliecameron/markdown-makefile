@@ -1,38 +1,10 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@markdown//:defs.bzl", "md_group", "md_summary")
 load("//markdown/private/support/shell:defs.bzl", "sh_source")
-
-bzl_library(
-    name = "test_bzl",
-    srcs = ["test.bzl"],
-    visibility = ["//visibility:private"],
-    deps = [
-        "//markdown/private/formats:defs_bzl",
-    ],
-)
 
 sh_source(
     name = "container_test",
     src = "container_test.sh",
     visibility = ["//visibility:private"],
-)
-
-sh_source(
-    name = "diff_test",
-    src = "diff_test.sh",
-    visibility = ["__subpackages__"],
-)
-
-sh_source(
-    name = "dump_test",
-    src = "dump_test.sh",
-    visibility = ["__subpackages__"],
-)
-
-sh_source(
-    name = "zip_cleaned_test",
-    src = "zip_cleaned_test.sh",
-    visibility = ["__subpackages__"],
 )
 
 sh_source(
@@ -49,6 +21,7 @@ md_group(
         "//tests/test3",
         "//tests/test4",
         "//tests/test5",
+        "//tests/test6",
     ],
 )
 

@@ -23,6 +23,7 @@ load(
 load(
     "//markdown/private/formats/text:defs.bzl",
     _md_md = "md_md",
+    _md_plain_md = "md_plain_md",
     _md_tumblr_md = "md_tumblr_md",
     _md_txt = "md_txt",
 )
@@ -40,6 +41,7 @@ load(
 )
 
 md_md = _md_md
+md_plain_md = _md_plain_md
 md_tumblr_md = _md_tumblr_md
 md_txt = _md_txt
 md_html = _md_html

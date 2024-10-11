@@ -24,6 +24,7 @@ load(
     _md_mobi = "md_mobi",
     _md_odt = "md_odt",
     _md_pdf = "md_pdf",
+    _md_plain_md = "md_plain_md",
     _md_shunnmodern_docx = "md_shunnmodern_docx",
     _md_tex = "md_tex",
     _md_tex_intermediate = "md_tex_intermediate",
@@ -50,6 +51,7 @@ load(
 
 _FORMATS = [
     ("md", None),
+    ("md", "plain"),
     ("md", "tumblr"),
     ("txt", None),
     ("html", None),
@@ -204,6 +206,13 @@ def md_document(
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "md", None),
+        visibility = output_visibility,
+    )
+    _md_plain_md(
+        name = _name(name, "md", "plain"),
+        file = file,
+        extra_pandoc_flags = extra_pandoc_flags,
+        out = _output(name, "md", "plain"),
         visibility = output_visibility,
     )
     _md_tumblr_md(

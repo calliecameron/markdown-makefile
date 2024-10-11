@@ -160,6 +160,7 @@ def output_test(target, reproducible, name = None):  # buildifier: disable=unuse
         name: unused.
     """
     _cat_tests(target, "md", None, reproducible)
+    _cat_tests(target, "md", "plain", reproducible)
     _cat_tests(target, "md", "tumblr", reproducible)
     _cat_tests(target, "txt", None, reproducible)
     _cat_tests(target, "html", None, reproducible)

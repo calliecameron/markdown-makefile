@@ -11,6 +11,17 @@ load(
     "filter",
 )
 
+_md_plain_filter = filter(
+    attr = {
+        "_plain_markdown_filter": attr.label(
+            allow_single_file = True,
+            default = "//markdown/private/formats/text:plain_markdown_filter.lua",
+        ),
+    },
+    file = lambda ctx: ctx.file._plain_markdown_filter,
+    arg = lambda ctx: "--lua-filter=" + ctx.file._plain_markdown_filter.path,
+)
+
 _md_tumblr_filter = filter(
     attr = {
         "_tumblr_markdown_filter": attr.label(
@@ -22,7 +33,7 @@ _md_tumblr_filter = filter(
     arg = lambda ctx: "--lua-filter=" + ctx.file._tumblr_markdown_filter.path,
 )
 
-def _md_output_impl(ctx, variant, extra_filters):
+def _md_output_impl(ctx, variant, extra_args, extra_filters):
     return simple_pandoc_output_impl(
         ctx = ctx,
         extension = "md",
@@ -33,9 +44,7 @@ def _md_output_impl(ctx, variant, extra_filters):
             filters.remove_paragraph_annotations.file(ctx),
             filters.remove_collection_separators.file(ctx),
         ] + [f.file(ctx) for f in extra_filters],
-        args = [
-            "--standalone",
-            "--wrap=none",
+        args = extra_args + [
             filters.cleanup_metadata.arg(ctx),
             filters.remove_paragraph_annotations.arg(ctx),
             filters.remove_collection_separators.arg(ctx),
@@ -60,6 +69,7 @@ def _md_md_impl(ctx):
     return _md_output_impl(
         ctx = ctx,
         variant = None,
+        extra_args = ["--standalone", "--wrap=none"],
         extra_filters = [],
     )
 
@@ -69,10 +79,25 @@ md_md = _md_output_rule(
     extra_filters = [],
 )
 
+def _md_plain_md_impl(ctx):
+    return _md_output_impl(
+        ctx = ctx,
+        variant = "plain",
+        extra_args = ["--wrap=auto", "--columns=80"],
+        extra_filters = [_md_plain_filter],
+    )
+
+md_plain_md = _md_output_rule(
+    impl = _md_plain_md_impl,
+    variant = "plain",
+    extra_filters = [_md_plain_filter],
+)
+
 def _md_tumblr_md_impl(ctx):
     return _md_output_impl(
         ctx = ctx,
         variant = "tumblr",
+        extra_args = ["--standalone", "--wrap=none"],
         extra_filters = [_md_tumblr_filter],
     )
 

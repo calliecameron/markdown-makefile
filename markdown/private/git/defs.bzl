@@ -53,6 +53,11 @@ def md_git_repo(name = None, extra_gitignore_lines = None, extra_precommit = Non
             "600",
         ),
         (
+            "@rules_markdown//markdown/private/git:run_tests",
+            ".git/hooks/markdown_run_tests",
+            "700",
+        ),
+        (
             "@rules_markdown//markdown/private/git:precommit",
             ".git/hooks/pre-commit",
             "700",

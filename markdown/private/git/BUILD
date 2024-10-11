@@ -23,6 +23,12 @@ sh_source(
     visibility = ["//visibility:public"],
 )
 
+sh_source(
+    name = "run_tests",
+    src = "run_tests",
+    visibility = ["//visibility:public"],
+)
+
 sh_binary(
     name = "git_update_extra",
     srcs = ["git_update_extra.sh"],

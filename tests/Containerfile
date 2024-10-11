@@ -36,7 +36,10 @@ RUN wget https://releases.nixos.org/nix/nix-2.24.4/install && \
 
 ARG nixpkgs_commit
 
-RUN bash -l -c "nix profile install nixpkgs/${nixpkgs_commit}#bazelisk"
+RUN bash -l -c "nix profile install nixpkgs/${nixpkgs_commit}#bazelisk" && \
+    mkdir bin && \
+    ln -s ~/.nix-profile/bin/bazelisk bin/bazel && \
+    echo 'export PATH="${HOME}/bin:${PATH}"' >> .profile
 
 COPY --chown=${uid}:${gid} . /home/markdown/markdown-makefile
 
@@ -44,19 +47,20 @@ RUN export GIT_AUTHOR_NAME='test' && \
     export GIT_COMMITTER_NAME='test' &&\
     export GIT_AUTHOR_EMAIL='test@example.com' && \
     export GIT_COMMITTER_EMAIL='test@example.com' && \
+    ( \
     cd markdown-makefile && \
     git -c init.defaultBranch=main init . && \
     git add --all && \
-    git commit --quiet -m 'Test' && \
-    cd && \
+    git commit --quiet -m 'Test' \
+    ) && \
     cp -a markdown-makefile/tests/other_workspace other-workspace-unversioned && \
-    cd other-workspace-unversioned && \
-    rm .gitignore && \
-    sed -i 's|path = "../.."|path = "../markdown-makefile"|g' MODULE.bazel
+    rm other-workspace-unversioned/.gitignore && \
+    sed -i 's|path = "../.."|path = "../markdown-makefile"|g' other-workspace-unversioned/MODULE.bazel && \
+    cp markdown-makefile/markdown/private/git/run_tests .
 
 RUN cd markdown-makefile && \
-    bash -l -c "bazelisk run :git_update" && \
-    bash -l -c "bazelisk clean" && \
+    bash -l -c "bazel run :git_update" && \
+    bash -l -c "bazel clean" && \
     rm -rf ~/.cache/bazel ~/.cache/bazelisk
 
 ENTRYPOINT ["bash", "-l"]

@@ -9,6 +9,7 @@ _CONTENTS = [
     "//tests/test4:test4",
     "//tests/test4:test4a",
     "//tests/test5:test5",
+    "//tests/test6:test6",
 ]
 
 def contents():

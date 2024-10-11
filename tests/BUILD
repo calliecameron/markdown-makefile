@@ -12,6 +12,12 @@ bzl_library(
 )
 
 sh_source(
+    name = "container_test",
+    src = "container_test.sh",
+    visibility = ["//visibility:private"],
+)
+
+sh_source(
     name = "diff_test",
     src = "diff_test.sh",
     visibility = ["__subpackages__"],

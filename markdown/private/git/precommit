@@ -2,10 +2,16 @@
 
 set -eu
 
-bazel test --build_tests_only ...:all
-
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RUN_TESTS="${THIS_DIR}/markdown_run_tests"
 EXTRA_PRECOMMIT="${THIS_DIR}/markdown_extra_precommit"
+
+if [ ! -x "${RUN_TESTS}" ]; then
+    echo "Can't find test runner; 'bazel run :git_update' to fix"
+    exit 1
+fi
+
+"${RUN_TESTS}" .
 
 if [ -x "${EXTRA_PRECOMMIT}" ]; then
     "${EXTRA_PRECOMMIT}"

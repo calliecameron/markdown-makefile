@@ -146,7 +146,8 @@ def md_document(
         repo_override = None,
         timestamp_override = None,
         existing_file = None,
-        main_document = True):
+        main_document = True,
+        output_visibility = None):
     """md_document compiles a markdown source file into many formats.
 
     Args:
@@ -173,6 +174,7 @@ def md_document(
             set, most other args must not be set.
         main_document: whether this is the main document in the package; creates
             some convenience aliases.
+        output_visibility: visibilty of the generated outputs.
     """
     if existing_file:
         if src or deps or extra_dictionaries or data or images or increment_included_headers or version_override or repo_override:
@@ -193,6 +195,7 @@ def md_document(
         )
         file = name
 
+    output_visibility = output_visibility or ["//visibility:private"]
     extra_pandoc_flags = extra_pandoc_flags or []
     extra_latex_flags = extra_latex_flags or []
 
@@ -201,28 +204,28 @@ def md_document(
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "md", None),
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_tumblr_md(
         name = _name(name, "md", "tumblr"),
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "md", "tumblr"),
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_txt(
         name = _name(name, "txt", None),
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "txt", None),
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_html(
         name = _name(name, "html", None),
         file = file,
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "html", None),
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_tex_intermediate(
         name = _name(name, "tex_intermediate", None),
@@ -236,7 +239,7 @@ def md_document(
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
         out = _output(name, "tex", None),
         timestamp_override = timestamp_override,
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_pdf(
         name = _name(name, "pdf", None),
@@ -244,7 +247,7 @@ def md_document(
         extra_pandoc_flags = extra_pandoc_flags + extra_latex_flags,
         out = _output(name, "pdf", None),
         timestamp_override = timestamp_override,
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_epub(
         name = _name(name, "epub", None),
@@ -252,13 +255,13 @@ def md_document(
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "epub", None),
         timestamp_override = timestamp_override,
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_mobi(
         name = _name(name, "mobi", None),
         epub = _name(name, "epub", None),
         out = _output(name, "mobi", None),
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_odt(
         name = _name(name, "odt", None),
@@ -266,7 +269,7 @@ def md_document(
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "odt", None),
         timestamp_override = timestamp_override,
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_docx(
         name = _name(name, "docx", None),
@@ -274,32 +277,32 @@ def md_document(
         extra_pandoc_flags = extra_pandoc_flags,
         out = _output(name, "docx", None),
         timestamp_override = timestamp_override,
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_doc(
         name = _name(name, "doc", None),
         docx = _name(name, "docx", None),
         out = _output(name, "doc", None),
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_shunnmodern_docx(
         name = _name(name, "docx", "shunnmodern"),
         file = file,
         out = _output(name, "docx", "shunnmodern"),
         timestamp_override = timestamp_override,
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_metadata_json(
         name = _name(name, "json", "metadata"),
         file = file,
         out = _output(name, "json", "metadata"),
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
     _md_deps_metadata_json(
         name = _name(name, "json", "deps_metadata"),
         group = file + "_deps",
         out = _output(name, "json", "deps_metadata"),
-        visibility = ["//visibility:private"],
+        visibility = output_visibility,
     )
 
     native.filegroup(
@@ -358,7 +361,8 @@ def md_collection(
         version_override = None,
         repo_override = None,
         timestamp_override = None,
-        main_document = True):
+        main_document = True,
+        output_visibility = None):
     """md_collection collects multiple documents into a single document.
 
     Args:
@@ -377,6 +381,7 @@ def md_collection(
             the current value. Should only be used for testing.
         main_document: whether this is the main document in the package; creates
             some convenience aliases.
+        output_visibility: visibilty of the generated outputs.
     """
     _md_collection_src(
         name = name + "_src",
@@ -409,6 +414,7 @@ def md_collection(
         repo_override = repo_override,
         timestamp_override = timestamp_override,
         main_document = main_document,
+        output_visibility = output_visibility,
     )
 
 def md_group(name, deps):

@@ -56,6 +56,7 @@ RUN export GIT_AUTHOR_NAME='test' && \
     cp -a markdown-makefile/tests/other_workspace other-workspace-unversioned && \
     rm other-workspace-unversioned/.gitignore && \
     sed -i 's|path = "../.."|path = "../markdown-makefile"|g' other-workspace-unversioned/MODULE.bazel && \
+    sed -i 's|versioned_test|unversioned_test|g' other-workspace-unversioned/tests/test6/BUILD && \
     cp markdown-makefile/markdown/private/git/run_tests .
 
 RUN cd markdown-makefile && \

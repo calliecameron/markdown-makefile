@@ -67,19 +67,19 @@ sh_binary(
     data = [
         "//markdown/private/external:hexdump",
     ],
-    visibility = ["//:__subpackages__"],
+    visibility = ["//visibility:public"],
 )
 
 sh_binary(
     name = "docdump",
     srcs = ["docdump.sh"],
-    visibility = ["//:__subpackages__"],
+    visibility = ["//visibility:public"],
 )
 
 py_binary(
     name = "pdf2txt",
     srcs = ["pdf2txt.py"],
-    visibility = ["//tests:__subpackages__"],
+    visibility = ["//visibility:public"],
     deps = [requirement("pdfminer.six")],
 )
 
@@ -94,7 +94,7 @@ sh_binary(
         ":pdf2txt",
         "//markdown/private/external:pdfinfo",
     ],
-    visibility = ["//:__subpackages__"],
+    visibility = ["//visibility:public"],
 )
 
 sh_binary(
@@ -106,7 +106,7 @@ sh_binary(
     data = [
         "//markdown/private/external:unzip",
     ],
-    visibility = ["//:__subpackages__"],
+    visibility = ["//visibility:public"],
 )
 
 sh_source(

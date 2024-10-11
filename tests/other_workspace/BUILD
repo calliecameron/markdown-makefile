@@ -1,7 +1,15 @@
-load("@markdown//:defs.bzl", "md_document", "md_workspace")
+load("@markdown//:defs.bzl", "md_group", "md_workspace")
 
 md_workspace()
 
-md_document(
-    name = "test1",
+md_group(
+    name = "tests",
+    deps = [
+        "//tests/test1",
+        "//tests/test2",
+        "//tests/test3",
+        "//tests/test4",
+        "//tests/test5",
+        "//tests/test6",
+    ],
 )

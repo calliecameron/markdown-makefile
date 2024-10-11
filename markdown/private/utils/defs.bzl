@@ -4,16 +4,18 @@ load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@pip//:requirements.bzl", "requirement")
 load("//markdown/private/support/python:defs.bzl", "py_test")
 
-def extend_file(name, src, prepend_lines = None, append_lines = None):
+def extend_file(name, src, out = None, prepend_lines = None, append_lines = None):
     """A file with lines prepended and appended.
 
     Args:
         name: name of the generated file
         src: existing file
+        out: output filename
         prepend_lines: lines to prepend to src
         append_lines: lines to append to src
     """
     cmd = []
+    out = out or name + ".txt"
 
     for line in prepend_lines or []:
         cmd.append("echo %s" % shell.quote(line))
@@ -26,7 +28,7 @@ def extend_file(name, src, prepend_lines = None, append_lines = None):
     native.genrule(
         name = name,
         srcs = [src],
-        outs = [name + ".txt"],
+        outs = [out],
         cmd = "( " + " && ".join(cmd) + " ) > '$@'",
         visibility = ["//visibility:private"],
     )

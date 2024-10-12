@@ -168,6 +168,8 @@ def _md_pdf_impl(ctx):
         to = "pdf",
         extra_inputs = [ctx.executable._xelatex],
         extra_args = ["--pdf-engine=" + ctx.executable._xelatex.path],
+        # Xelatex is slow if it has to generate the font cache every time, so we
+        # give it a persistent writable cache dir
         env = {"XDG_CACHE_HOME": ctx.attr.cache_dir},
         sandbox = False,
     )

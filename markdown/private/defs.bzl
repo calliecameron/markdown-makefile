@@ -173,7 +173,7 @@ def md_document(
             the computed value. Should only be used for testing.
         timestamp_override: set the build timestamp to this value, rather than
             the current value. Should only be used for testing.
-        cache_dir: dir for caching between runs.
+        cache_dir: persistent writable cache dir.
         existing_file: use an existing md_file rather than creating one; if
             set, most other args must not be set.
         main_document: whether this is the main document in the package; creates
@@ -392,7 +392,7 @@ def md_collection(
             the computed value. Should only be used for testing.
         timestamp_override: set the build timestamp to this value, rather than
             the current value. Should only be used for testing.
-        cache_dir: dir for caching between runs.
+        cache_dir: persistent writable cache dir.
         main_document: whether this is the main document in the package; creates
             some convenience aliases.
         output_visibility: visibilty of the generated outputs.

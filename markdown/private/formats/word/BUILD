@@ -43,6 +43,24 @@ script_py_test(
     script = ":shunn_metadata",
 )
 
+sh_binary(
+    name = "md2short",
+    srcs = ["md2short.sh"],
+    args = [
+        "$(rootpath //markdown/private/external:md2short)",
+        "$(rootpath //markdown/private/external:pandoc)",
+        "$(rootpath //markdown/private/external:zip)",
+        "$(rootpath //markdown/private/external:unzip)",
+    ],
+    data = [
+        "//markdown/private/external:md2short",
+        "//markdown/private/external:pandoc",
+        "//markdown/private/external:unzip",
+        "//markdown/private/external:zip",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 pandoc_filter_py_test(
     name = "docx_filter_test",
     src = "docx_filter_test.py",

@@ -9,10 +9,8 @@ RUN apt-get update && \
     git \
     python3 \
     tzdata \
-    unzip \
     wget \
-    xz-utils \
-    zip && \
+    xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
 ARG uid

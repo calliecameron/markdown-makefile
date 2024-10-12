@@ -117,6 +117,7 @@ native_binary(
     src = "@zip//:bin/zip",
     visibility = [
         "//markdown/private/formats:__pkg__",
+        "//markdown/private/formats/word:__pkg__",
     ],
 )
 

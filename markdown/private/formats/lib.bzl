@@ -30,6 +30,26 @@ tools = struct(
         },
         executable = lambda ctx: ctx.executable._write_open_script,
     ),
+    zip = struct(
+        attr = {
+            "_zip": attr.label(
+                default = "//markdown/private/external:zip",
+                executable = True,
+                cfg = "exec",
+            ),
+        },
+        executable = lambda ctx: ctx.executable._zip,
+    ),
+    unzip = struct(
+        attr = {
+            "_unzip": attr.label(
+                default = "//markdown/private/external:unzip",
+                executable = True,
+                cfg = "exec",
+            ),
+        },
+        executable = lambda ctx: ctx.executable._unzip,
+    ),
     zip_cleaner = struct(
         attr = {
             "_strip_nondeterminism": attr.label(

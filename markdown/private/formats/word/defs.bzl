@@ -233,7 +233,6 @@ def _md_shunnmodern_docx_impl(ctx):
 
     intermediate_docx = ctx.actions.declare_file(ctx.label.name + "_shunnmodern_intermediate.docx")
     env = timestamp_override.env(ctx)
-    env["PANDOC"] = tools.pandoc.wrapped_executable(ctx).path
     data_inputs = []
     for target in ctx.attr.file[MdFileInfo].data.to_list():
         data_inputs += target.files.to_list()
@@ -245,11 +244,18 @@ def _md_shunnmodern_docx_impl(ctx):
             filters.add_subject.file(ctx),
             filters.cleanup_metadata.file(ctx),
             ctx.file._filter,
+            ctx.executable._md2short_bin,
+            tools.zip.executable(ctx),
+            tools.unzip.executable(ctx),
             ctx.executable._strip_nondeterminism,
             tools.pandoc.wrapped_executable(ctx),
         ],
         executable = ctx.executable._md2short,
         arguments = [
+            ctx.executable._md2short_bin.path,
+            tools.pandoc.wrapped_executable(ctx).path,
+            tools.zip.executable(ctx).path,
+            tools.unzip.executable(ctx).path,
             "--overwrite",
             "--modern",
             "--from",
@@ -301,6 +307,11 @@ md_shunnmodern_docx = rule(
                     cfg = "exec",
                 ),
                 "_md2short": attr.label(
+                    default = "//markdown/private/formats/word:md2short",
+                    executable = True,
+                    cfg = "exec",
+                ),
+                "_md2short_bin": attr.label(
                     default = "//markdown/private/external:md2short",
                     executable = True,
                     cfg = "exec",
@@ -317,6 +328,8 @@ md_shunnmodern_docx = rule(
             } |
             tools.pandoc.attr |
             tools.write_open_script.attr |
+            tools.zip.attr |
+            tools.unzip.attr |
             tools.zip_cleaner.attr |
             filters.add_subject.attr |
             filters.cleanup_metadata.attr |

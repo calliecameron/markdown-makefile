@@ -83,8 +83,10 @@ nix_pkg.attr(
 nix_pkg.attr(
     attr = "shfmt",
 )
-nix_pkg.attr(
-    attr = "texliveFull",
+nix_pkg.expr(
+    name = "texlive",
+    attr = "",
+    expr = "with import <nixpkgs> {}; texliveMedium.withPackages (ps: with ps; [ bold-extra footmisc titlesec xurl ])",
 )
 nix_pkg.attr(
     attr = "unoconv",
@@ -107,7 +109,7 @@ use_repo(
     "ruff",
     "shellcheck",
     "shfmt",
-    "texliveFull",
+    "texlive",
     "unoconv",
     "unzip",
     "zip",

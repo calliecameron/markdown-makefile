@@ -108,7 +108,7 @@ native_binary(
 
 native_binary(
     name = "xelatex",
-    src = "@texliveFull//:bin/xelatex",
+    src = "@texlive//:bin/xelatex",
     visibility = ["//markdown/private/formats/latex:__pkg__"],
 )
 

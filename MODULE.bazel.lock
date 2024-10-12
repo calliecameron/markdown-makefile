@@ -282,7 +282,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg%<root>~nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "FjaVavmhaxU2yPy2qhYwgg05O9rXSDF45QH3mAO1Xtg=",
+        "usagesDigest": "+wc1gccTW0rup3dSQXsYBN46i+9muAgCw61ffi2aBXE=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -383,14 +383,14 @@
               "fail_not_supported": true
             }
           },
-          "texliveFull": {
+          "texlive": {
             "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
             "ruleClassName": "_nixpkgs_package",
             "attributes": {
-              "unmangled_name": "texliveFull",
-              "attribute_path": "texliveFull",
+              "unmangled_name": "texlive",
+              "attribute_path": "",
               "nix_file_deps": {},
-              "nix_file_content": "",
+              "nix_file_content": "with import <nixpkgs> {}; texliveMedium.withPackages (ps: with ps; [ bold-extra footmisc titlesec xurl ])",
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
               "repositories": {},
               "build_file_content": "",
@@ -524,10 +524,10 @@
             "ruff",
             "shellcheck",
             "shfmt",
-            "texliveFull",
             "unoconv",
             "unzip",
-            "zip"
+            "zip",
+            "texlive"
           ],
           "explicitRootModuleDirectDevDeps": [],
           "useAllRepos": "NO",

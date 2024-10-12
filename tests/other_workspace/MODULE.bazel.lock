@@ -282,7 +282,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg%rules_markdown@_~nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "jZnM2g7jpdjN1VBu4BgzlpLcTsIGspDt0z/X46bPSGQ=",
+        "usagesDigest": "yGDpYP9FMaZJt0GjkS0hVWB6zO8vmk6EUOds27nNhQo=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -383,14 +383,14 @@
               "fail_not_supported": true
             }
           },
-          "texliveFull": {
+          "texlive": {
             "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
             "ruleClassName": "_nixpkgs_package",
             "attributes": {
-              "unmangled_name": "texliveFull",
-              "attribute_path": "texliveFull",
+              "unmangled_name": "texlive",
+              "attribute_path": "",
               "nix_file_deps": {},
-              "nix_file_content": "",
+              "nix_file_content": "with import <nixpkgs> {}; texliveMedium.withPackages (ps: with ps; [ bold-extra footmisc titlesec xurl ])",
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
               "repositories": {},
               "build_file_content": "",
@@ -549,6 +549,46 @@
               "strip_prefix": "nixpkgs-24.05",
               "integrity": "",
               "sha256": "911314b81780f26fdaf87e17174210bdbd40c86bac1795212f257cdc236a1e78"
+            }
+          }
+        },
+        "moduleExtensionMetadata": {
+          "explicitRootModuleDirectDeps": [],
+          "explicitRootModuleDirectDevDeps": [],
+          "useAllRepos": "NO",
+          "reproducible": false
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_nixpkgs_core~",
+            "bazel_skylib",
+            "bazel_skylib~"
+          ],
+          [
+            "rules_nixpkgs_core~",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
+    "@@rules_nixpkgs_core~//extensions:repository.bzl%nix_repo%rules_markdown@_~nix_repo": {
+      "general": {
+        "bzlTransitiveDigest": "0Ht4ap98u2/ZoeBB9bC10VcHVLEy3YCtLhz580evslw=",
+        "usagesDigest": "8sBF1u5jW8UkpeiNOHRrxkVzyT2g2SuxnZeF6WFRqRQ=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "nixpkgs": {
+            "bzlFile": "@@rules_nixpkgs_core~//:nixpkgs.bzl",
+            "ruleClassName": "_nixpkgs_http_repository",
+            "attributes": {
+              "unmangled_name": "nixpkgs",
+              "url": "https://github.com/NixOS/nixpkgs/archive/759537f06e6999e141588ff1c9be7f3a5c060106.tar.gz",
+              "strip_prefix": "nixpkgs-759537f06e6999e141588ff1c9be7f3a5c060106",
+              "integrity": "",
+              "sha256": "b08ab2683f93734139e1aa467f9a7e7b8f59100ba3a41dd993867b98038f7a39"
             }
           }
         },

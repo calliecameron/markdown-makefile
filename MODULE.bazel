@@ -43,8 +43,8 @@ use_repo(pip, "pip")
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo", isolate = True)
 nix_repo.github(
     name = "nixpkgs",
-    commit = "759537f06e6999e141588ff1c9be7f3a5c060106",  # 24.05 as of 2024/09/26
-    sha256 = "b08ab2683f93734139e1aa467f9a7e7b8f59100ba3a41dd993867b98038f7a39",
+    commit = "138474277cc4b56b5e1ca7fad0e113aff93e8780",  # 24.05 as of 2024/10/12
+    sha256 = "aa9cb576b2ccfc2a8e9dfe632352aca8caec9acc69ec56f338f8588a846e73e0",
 )
 use_repo(nix_repo, "nixpkgs")
 

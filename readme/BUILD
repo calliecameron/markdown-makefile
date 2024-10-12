@@ -1,6 +1,6 @@
 load("@markdown//:defs.bzl", "md_document", "md_file")
 load("//markdown/private/utils:defs.bzl", "extend_file")
-load("//markdown/testing:defs.bzl", "output_test", "versioned_test")
+load("//markdown/testing:defs.bzl", "output_test")
 
 extend_file(
     name = "bazeliskrc_md",
@@ -13,6 +13,8 @@ extend_file(
 md_file(
     name = "bazeliskrc",
     src = ":bazeliskrc_md",
+    repo_override = "reproducible",
+    version_override = "reproducible",
 )
 
 extend_file(
@@ -26,10 +28,15 @@ extend_file(
 md_file(
     name = "bazelrc",
     src = ":bazelrc_md",
+    repo_override = "reproducible",
+    version_override = "reproducible",
 )
 
 md_document(
     name = "readme",
+    repo_override = "reproducible",
+    timestamp_override = "1618243321",
+    version_override = "reproducible",
     deps = [
         ":bazeliskrc",
         ":bazelrc",
@@ -45,10 +52,8 @@ genrule(
 )
 
 output_test(
+    # It is reproducible, but we don't need diff tests since we use
+    # requried_files elsewhere.
     reproducible = False,
-    target = "readme",
-)
-
-versioned_test(
     target = "readme",
 )

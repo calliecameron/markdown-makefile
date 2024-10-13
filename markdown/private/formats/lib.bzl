@@ -6,19 +6,13 @@ load(":types.bzl", "filter")
 tools = struct(
     pandoc = struct(
         attr = {
-            "_pandoc_wrapped": attr.label(
-                default = "//markdown/private/external:pandoc",
-                executable = True,
-                cfg = "exec",
-            ),
             "_pandoc": attr.label(
-                default = "//markdown/private/formats:pandoc",
+                default = "//markdown/private/external:pandoc",
                 executable = True,
                 cfg = "exec",
             ),
         },
         executable = lambda ctx: ctx.executable._pandoc,
-        wrapped_executable = lambda ctx: ctx.executable._pandoc_wrapped,
     ),
     write_open_script = struct(
         attr = {
@@ -228,11 +222,9 @@ def pandoc(ctx, extension, variant, to_format, inputs, args, env, file, output, 
         outputs = [output],
         inputs = [
             file[MdFileInfo].output,
-            tools.pandoc.wrapped_executable(ctx),
         ] + data_inputs + inputs,
         executable = tools.pandoc.executable(ctx),
         arguments = [
-            tools.pandoc.wrapped_executable(ctx).path,
             "--from=json",
             "--to=" + to_format,
             "--fail-if-warnings",

@@ -51,9 +51,9 @@ alias(
     visibility = ["//markdown/private/formats/word:__pkg__"],
 )
 
-alias(
+native_binary(
     name = "pandoc",
-    actual = "@pandoc//:pandoc",
+    src = "@pandoc//:bin/pandoc",
     visibility = [
         "//markdown/private/core:__subpackages__",
         "//markdown/private/formats:__subpackages__",

@@ -69,6 +69,9 @@ nix_pkg.attr(
     attr = "markdownlint-cli",
 )
 nix_pkg.attr(
+    attr = "pandoc",
+)
+nix_pkg.attr(
     attr = "perl538Packages.strip-nondeterminism",
 )
 nix_pkg.attr(
@@ -104,6 +107,7 @@ use_repo(
     "hexdump",
     "hunspell",
     "markdownlint-cli",
+    "pandoc",
     "perl538Packages.strip-nondeterminism",
     "poppler_utils",
     "ruff",
@@ -117,9 +121,6 @@ use_repo(
 
 hunspell_dicts = use_extension("//markdown/private/external:hunspell_dicts.bzl", "hunspell_dicts")
 use_repo(hunspell_dicts, "hunspell_dicts")
-
-pandoc = use_extension("//markdown/private/external:pandoc.bzl", "pandoc")
-use_repo(pandoc, "pandoc")
 
 prosegrinder_pandoc_templates = use_extension("//markdown/private/external:prosegrinder_pandoc_templates.bzl", "prosegrinder_pandoc_templates")
 use_repo(prosegrinder_pandoc_templates, "prosegrinder_pandoc_templates")

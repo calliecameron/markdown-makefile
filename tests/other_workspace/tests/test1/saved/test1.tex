@@ -1,4 +1,4 @@
-% Based on the template from Pandoc 3.1.2. Custom sections are marked 'CUSTOM'.
+% Based on the template from Pandoc 3.1.11.1. Custom sections are marked 'CUSTOM'.
 % Customisations go in included files where possible, but this isn't always
 % possible.
 % Options for packages loaded elsewhere
@@ -53,7 +53,7 @@
 \babelprovide[main,import]{british}
 \ifPDFTeX
 \else
-\babelfont[british]{rm}[]{TeX Gyre Termes}
+\babelfont{rm}[]{TeX Gyre Termes}
 \fi
 % get rid of language-specific shorthands (see #6817):
 \let\LanguageShortHands\languageshorthands
@@ -70,7 +70,7 @@
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \VerbatimFootnotes % allow verbatim text in footnotes
@@ -95,7 +95,6 @@
 
 \frenchspacing
 
-
 \makeatletter
 \@afterindentfalse
 \@afterheading
@@ -103,8 +102,7 @@
 
 This is some text before a section. It shouldn't be indented.
 
-\hypertarget{__h1_1}{%
-\section{This is a section}\label{__h1_1}}
+\section{This is a section}\label{__h1_1}
 
 \makeatletter
 \@afterindentfalse
@@ -163,8 +161,7 @@ And then there should be some text \textsuperscript{in~superscript} and
 footnote\footnote{Another footnote.} with a dagger, and this should be
 \texttt{monospace}.
 
-\hypertarget{__h2_1}{%
-\subsection{Subsection}\label{__h2_1}}
+\subsection{Subsection}\label{__h2_1}
 
 \makeatletter
 \@afterindentfalse

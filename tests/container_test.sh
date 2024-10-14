@@ -4,22 +4,13 @@
 set -eu
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "${THIS_DIR}"
 
-NIXPKGS_COMMIT="$(tr '\n' '\t' <../MODULE.bazel |
-    grep -o -P 'nix_repo\.github\(.*?\)' |
-    tr '\t' '\n' |
-    grep commit |
-    grep -o '".*"' |
-    sed 's/"//g')"
+"${THIS_DIR}/container_build.sh"
 
-BAZEL_VERSION="$(grep USE_BAZEL_VERSION ../.bazeliskrc | sed 's/^.*=//g')"
-
-podman build \
-    -f Containerfile \
-    --build-arg "uid=$(id -u)" \
-    --build-arg "gid=$(id -g)" \
-    --build-arg "nixpkgs_commit=${NIXPKGS_COMMIT}" \
-    --build-arg "bazel_version=${BAZEL_VERSION}" \
-    -t rules-markdown-container-test \
-    ../
+podman run \
+    --rm \
+    -it \
+    --user "$(id -u):$(id -g)" \
+    -e "TERM=${TERM}" \
+    rules-markdown-container-test \
+    -c './run_tests markdown-makefile && ./run_tests other-workspace-unversioned && ./run_tests other-workspace-versioned'

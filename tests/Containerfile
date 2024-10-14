@@ -39,7 +39,7 @@ RUN wget https://releases.nixos.org/nix/nix-2.24.4/install && \
 ARG nixpkgs_commit
 ARG bazel_version
 
-RUN bash -l -c "nix profile install nixpkgs/${nixpkgs_commit}#bazelisk" && \
+RUN bash -l -c "nix profile install nixpkgs/${nixpkgs_commit}#bazelisk nixpkgs/${nixpkgs_commit}#bazel-buildtools" && \
     mkdir bin && \
     ln -s ~/.nix-profile/bin/bazelisk bin/bazel && \
     echo 'export PATH="${HOME}/bin:${PATH}"' >> .profile && \
@@ -61,11 +61,35 @@ RUN export GIT_AUTHOR_NAME='test' && \
     rm other-workspace-unversioned/.gitignore && \
     sed -i 's|path = "../.."|path = "../markdown-makefile"|g' other-workspace-unversioned/MODULE.bazel && \
     sed -i 's|versioned_test|unversioned_test|g' other-workspace-unversioned/tests/test6/BUILD && \
+    cp -a markdown-makefile/tests/other_workspace other-workspace-versioned && \
+    rm other-workspace-versioned/.gitignore && \
+    sed -i 's|path = "../.."|path = "../markdown-makefile"|g' other-workspace-versioned/MODULE.bazel && \
+    ( \
+    cd other-workspace-versioned && \
+    bash -l -c 'buildozer "new_load @markdown//:defs.bzl md_git_repo" "//:all"' && \
+    printf '\nmd_git_repo()\n' >> BUILD && \
+    git -c init.defaultBranch=main init . && \
+    git add --all && \
+    git commit --quiet -m 'Test' \
+    ) && \
     cp markdown-makefile/markdown/private/git/run_tests .
 
-RUN cd markdown-makefile && \
+RUN ( \
+    cd markdown-makefile && \
+    bash -l -c "bazel run :git_update" && \
+    bash -l -c "bazel clean" \
+    ) && \
+    ( \
+    cd other-workspace-versioned && \
     bash -l -c "bazel run :git_update" && \
     bash -l -c "bazel clean" && \
+    git add --all && \
+    export GIT_AUTHOR_NAME='test' && \
+    export GIT_COMMITTER_NAME='test' &&\
+    export GIT_AUTHOR_EMAIL='test@example.com' && \
+    export GIT_COMMITTER_EMAIL='test@example.com' && \
+    git commit --no-verify --quiet -m 'Test' \
+    ) && \
     rm -rf ~/.cache/bazel
 
 ENTRYPOINT ["bash", "-l"]

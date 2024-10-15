@@ -282,7 +282,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg%rules_markdown@_~nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "K87FhBm7T7e9aZjGNfXrXMXsS5kPumNL4YyTGq5nSiw=",
+        "usagesDigest": "5Y6DJV3K+E71kSmF+R13PklK8fG0LdWvoxxm162DEos=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},

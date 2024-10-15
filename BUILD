@@ -32,6 +32,13 @@ exports_files(
     visibility = ["//:__subpackages__"],
 )
 
+exports_files(
+    [
+        "MODULE.bazel",
+    ],
+    visibility = ["//readme:__pkg__"],
+)
+
 required_files(
     name = "readme",
     copy = [

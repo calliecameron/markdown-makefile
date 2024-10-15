@@ -6,118 +6,101 @@ identifier:
 
 # rules_markdown
 
-Opinionated bazel rules for markdown. Uses pandoc and other tools to convert
-markdown to many output formats. Formatting is intended for short stories and
-poems.
+Bazel rules for markdown. Wraps pandoc and other tools for validation and conversion to other formats.
 
-Supported output formats: markdown, plain text, html, latex, pdf, epub, mobi,
-odt, docx, doc, and docx in
-[Shunn manuscript format](https://github.com/prosegrinder/pandoc-templates).
+Output formats include:
+
+* `pdf`
+* `epub`, `mobi`
+* `docx`, `odt`, `doc`
+* `docx` in [Shunn standard manuscript format](https://www.shunn.net/format/story/)
+
+## Prerequisites
+
+* System packages:
+
+  ```shell
+  # Ubuntu 22.04
+  sudo apt-get install catdoc gcc git
+  ```
+
+* [Nix](https://nixos.org/)
+* Bazel via [Bazelisk](https://github.com/bazelbuild/bazelisk)
 
 ## Setup
 
-Install system dependencies (assuming Ubuntu 20.04):
-
-<!-- TODO: update dependencies for Ubuntu 22.04 -->
-
-```shell
-sudo apt-get install -y catdoc git gcc hunspell hunspell-en-gb libegl1 \
-    libopengl0 libxkbcommon0 python3-pip \
-    strip-nondeterminism texlive-xetex unoconv
-```
-
-Set up the files in your workspace:
-
-`.bazelrc`:
-
-!include //readme:bazelrc
+Create the following files in your workspace:
 
 `.bazeliskrc`:
 
 !include //readme:bazeliskrc
 
-`WORKSPACE`:
+`.bazelrc`:
 
-```text
-# Empty file
-```
+!include //readme:bazelrc
+
+`WORKSPACE`: empty file
 
 `MODULE.bazel`:
 
-```text
-module(
-    name = "my_module",
-    version = "0.0.0",
-)
-
-bazel_dep(
-    name = "rules_markdown",
-    # Set this to the latest tag on github
-    version = ...,
-)
-
-archive_override(
-    module_name = "rules_markdown",
-    # Set these from the latest tag on github
-    urls = ...
-    integrity = ...
-    strip_prefix = ...
-)
-```
+!include //readme:module_bazel
 
 `BUILD`:
 
-```text
-load("@rules_markdown//markdown:defs.bzl", "md_workspace")
+!include //readme:root_build
 
-md_workspace()
-```
-
-If your workspace is also the root of a git repo, add `md_git_repo()` to the
-BUILD file.
-
-Initialise:
+Initialise with:
 
 ```shell
 bazel run :workspace_update
-bazel test :workspace_test
+bazel run :contents_update
+# Only if using md_git_repo
+bazel run :git_update
 ```
 
-If you added `md_git_repo` to the BUILD file in the previous step, also run:
+And verify with:
 
 ```shell
-bazel run :git_update
-bazel test :git_test
+bazel test :all
 ```
 
 ## Usage
 
-Example BUILD file:
+!include //readme:basic_build
 
-```text
-load("@rules_markdown//markdown:defs.bzl", "md_document")
+To initialise a subdirectory with a default BUILD file, run `bazel run //:new` in that directory.
 
-md_document(
-    name = "foo",
-)
-```
+Markdown files use [pandoc markdown](https://pandoc.org/MANUAL.html#pandocs-markdown), and can have the standard pandoc metadata -- title, author, date -- in a yaml front matter block.
 
-By default this looks for source file `foo.md`, and dictionary `foo.dic` for
-spellchecking, if it exists. See the loaded bzl file for docs.
+See files under 'tests' for full examples.
 
-Compile to different formats by running e.g. `bazel build :pdf` or
-`bazel build :epub`. View the results with e.g. `bazel run :pdf`.
+### Spellchecking
 
-To initialise a subdirectory with a default BUILD file, run `bazel run //:new`
-in that directory.
+!include //readme:spelling_build
 
-## Includes
+A custom dictionary is a file with one word per line, containing words that should be considered correct.
 
-Include a file with:
+### Includes
+
+Include a file in another with:
 
 ```markdown
 \!include $LABEL
 ```
 
-in markdown, where '$LABEL' is the label of an md_file or md_document target
-in this target's 'deps'.
+in markdown, where '$LABEL' is the label of an md_file or md_document, which
+must be in this target's `deps`:
+
+!include //readme:include_build
+
+### Collections
+
+!include //readme:collection_build
+
+## Current limitations
+
+* Spellchecking language is hardcoded to en_GB.
+* Lint settings can't be customised.
+* Templates for pdf, epub etc. can't be customised.
+* All files must be in the same workspace -- no cross-workspace dependencies.
+* Catdoc must be installed as a system package, because the version in nixpkgs doesn't work.

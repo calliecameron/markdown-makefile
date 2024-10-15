@@ -1,0 +1,8 @@
+load("@markdown//:defs.bzl", "md_document")
+
+# Uses custom dictionary foo.dic based on 'name', if it exists.
+md_document(
+    name = "foo",
+    # Other custom dictionaries can be added with `extra_dictionaries`
+    extra_dictionaries = ["extra.dic"],
+)

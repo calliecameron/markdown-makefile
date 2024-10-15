@@ -1,9 +1,10 @@
 bazel
-bzl
-deps
+bazelisk
+catdoc
 epub
+etc
 md
-mobi
+nixpkgs
 pandoc
 Shunn
-TODO
+yaml

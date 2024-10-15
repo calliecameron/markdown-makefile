@@ -1,0 +1,23 @@
+load("@markdown//:defs.bzl", "md_collection", "md_file")
+
+md_file(
+    name = "foo",
+)
+
+md_file(
+    name = "bar",
+)
+
+# md_collection generates a nicely-formatted document including all 'deps'
+# under their own headings. The order of 'deps' is the order the dependencies
+# appear in the document, hence 'do not sort'.
+md_collection(
+    name = "baz",
+    author = "The Author",
+    title = "The Title",
+    deps = [
+        # do not sort
+        ":foo",
+        ":bar",
+    ],
+)

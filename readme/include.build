@@ -1,0 +1,10 @@
+load("@markdown//:defs.bzl", "md_document", "md_file")
+
+md_file(
+    name = "foo",
+)
+
+md_document(
+    name = "bar",
+    deps = [":foo"],
+)

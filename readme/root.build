@@ -1,0 +1,6 @@
+load("@markdown//:defs.bzl", "md_git_repo", "md_workspace")
+
+md_workspace()
+
+# Only if the workspace is at the root of a git repo.
+md_git_repo()

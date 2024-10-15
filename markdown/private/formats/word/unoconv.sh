@@ -11,7 +11,7 @@ function usage() {
 test -z "${1:-}" && usage
 UNOCONV="${1}"
 
-LOCK="/tmp/markdown-makefile-unoconv.lock"
+LOCK="/tmp/rules-markdown-unoconv.lock"
 
 function unlock() {
     # shellcheck disable=SC2317

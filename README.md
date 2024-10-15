@@ -60,13 +60,12 @@ bazel_dep(
     name = "rules_markdown",
     version = "0.18.0",
 )
-
 archive_override(
     module_name = "rules_markdown",
     # Set these from the corresponding tag on github
-    urls = "<from github>",
     integrity = "<from github>",
     strip_prefix = "<from github>",
+    urls = "<from github>",
 )
 
 markdown = use_extension("@rules_markdown//markdown/extensions:markdown.bzl", "markdown")

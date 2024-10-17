@@ -1,0 +1,11 @@
+[package]
+name = "markdown_private_utils"
+edition.workspace = true
+rust-version.workspace = true
+
+[lib]
+path = "metadata.rs"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true

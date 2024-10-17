@@ -1,5 +1,5 @@
 use clap::{Args, Parser};
-use metadata::{Version, Write};
+use markdown_private_utils::{Version, Write};
 use std::error::Error;
 use std::fs::read_to_string;
 use std::io;

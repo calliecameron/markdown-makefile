@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = [
+    "markdown/private/core",
+    "markdown/private/utils"
+]
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.81.0"
+
+[workspace.dependencies]
+clap = { version = "4.5.20", features = ["derive"] }
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.128"

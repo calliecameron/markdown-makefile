@@ -1,4 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@crates//:defs.bzl", "all_crate_deps")
 load("@pip//:requirements.bzl", "requirement")
 load("@rules_rust//rust:defs.bzl", "rust_binary")
 load("//markdown/private/support/python:defs.bzl", "py_binary")
@@ -55,10 +56,9 @@ rust_binary(
     srcs = ["raw_version.rs"],
     deps = [
         "//markdown/private/utils:metadata_rs",
-        "@crates//:clap",
-        "@crates//:serde",
-        "@crates//:serde_json",
-    ],
+    ] + all_crate_deps(
+        normal = True,
+    ),
 )
 
 script_py_test(

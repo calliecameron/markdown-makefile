@@ -1,0 +1,13 @@
+[package]
+name = "markdown_private_core"
+edition.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "raw_version"
+path = "raw_version.rs"
+
+[dependencies]
+clap.workspace = true
+serde_json.workspace = true
+markdown_private_utils = { path = "../utils" }

@@ -25,7 +25,7 @@ md_git_repo(
         "/.env",
         "/.mypy_cache/",
         "/.vscode/",
-        "/rust-project.json",
+        "/target/",
     ],
     extra_precommit = "//tests:extra_precommit.sh",
 )

@@ -57,21 +57,15 @@ crate = use_extension(
     "@rules_rust//crate_universe:extension.bzl",
     "crate",
 )
-crate.spec(
-    features = ["derive"],
-    package = "clap",
-    version = "4.5.20",
+crate.from_cargo(
+    name = "crates",
+    cargo_lockfile = "//:Cargo.lock",
+    manifests = [
+        "//:Cargo.toml",
+        "//markdown/private/core:Cargo.toml",
+        "//markdown/private/utils:Cargo.toml",
+    ],
 )
-crate.spec(
-    features = ["derive"],
-    package = "serde",
-    version = "1.0.210",
-)
-crate.spec(
-    package = "serde_json",
-    version = "1.0.128",
-)
-crate.from_specs()
 use_repo(crate, "crates")
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo", isolate = True)

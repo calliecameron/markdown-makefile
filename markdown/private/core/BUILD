@@ -1,5 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@pip//:requirements.bzl", "requirement")
+load("@rules_rust//rust:defs.bzl", "rust_binary")
 load("//markdown/private/support/python:defs.bzl", "py_binary")
 load("//markdown/private/utils:defs.bzl", "script_py_test")
 
@@ -49,13 +50,14 @@ script_py_test(
     script = ":source_hash",
 )
 
-py_binary(
+rust_binary(
     name = "raw_version",
-    srcs = ["raw_version.py"],
-    visibility = ["//visibility:public"],
+    srcs = ["raw_version.rs"],
     deps = [
-        "//markdown/private/utils:bazel_package",
-        "//markdown/private/utils:metadata",
+        "//markdown/private/utils:metadata_rs",
+        "@crates//:clap",
+        "@crates//:serde",
+        "@crates//:serde_json",
     ],
 )
 

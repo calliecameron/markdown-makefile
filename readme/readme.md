@@ -21,7 +21,7 @@ Output formats include:
 
   ```shell
   # Ubuntu 22.04
-  sudo apt-get install catdoc gcc git
+  sudo apt-get install catdoc g++ gcc git
   ```
 
 * [Nix](https://nixos.org/)

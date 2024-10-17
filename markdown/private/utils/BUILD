@@ -1,5 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@pip//:requirements.bzl", "requirement")
+load("@rules_rust//rust:defs.bzl", "rust_library")
 load("//markdown/private/support/python:defs.bzl", "py_binary", "py_library", "py_source", "py_test")
 load("//markdown/private/support/shell:defs.bzl", "sh_binary", "sh_source", "sh_test")
 
@@ -36,6 +37,17 @@ py_library(
     deps = [
         requirement("pydantic"),
         ":publications",
+    ],
+)
+
+rust_library(
+    name = "metadata_rs",
+    srcs = ["metadata.rs"],
+    crate_name = "metadata",
+    visibility = ["//markdown/private:__subpackages__"],
+    deps = [
+        "@crates//:serde",
+        "@crates//:serde_json",
     ],
 )
 

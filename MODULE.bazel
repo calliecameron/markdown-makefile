@@ -14,6 +14,10 @@ bazel_dep(
     version = "0.36.0",
 )
 bazel_dep(
+    name = "rules_rust",
+    version = "0.52.2",
+)
+bazel_dep(
     name = "buildifier_prebuilt",
     version = "7.3.1",
 )
@@ -39,6 +43,36 @@ pip.parse(
     requirements_lock = "//:requirements_lock.txt",
 )
 use_repo(pip, "pip")
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.81.0"],
+)
+use_repo(rust, "rust_toolchains")
+
+register_toolchains("@rust_toolchains//:all")
+
+crate = use_extension(
+    "@rules_rust//crate_universe:extension.bzl",
+    "crate",
+)
+crate.spec(
+    features = ["derive"],
+    package = "clap",
+    version = "4.5.20",
+)
+crate.spec(
+    features = ["derive"],
+    package = "serde",
+    version = "1.0.210",
+)
+crate.spec(
+    package = "serde_json",
+    version = "1.0.128",
+)
+crate.from_specs()
+use_repo(crate, "crates")
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo", isolate = True)
 nix_repo.github(

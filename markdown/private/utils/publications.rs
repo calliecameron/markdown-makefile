@@ -279,6 +279,7 @@ impl Json for Publication {}
 pub struct Publications {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     #[validate(length(min = 1))]
+    #[validate(nested)]
     publications: Vec<Publication>,
 }
 
@@ -1148,6 +1149,12 @@ mod publications_test {
     #[test]
     fn test_deserialization_bad() {
         let ps: Result<Publications, _> = from_str("[]");
+        assert!(ps.is_err());
+    }
+
+    #[test]
+    fn test_deserialization_bad_nested() {
+        let ps: Result<Publications, _> = from_str(r#"[{"venue": "foo"}]"#);
         assert!(ps.is_err());
     }
 }

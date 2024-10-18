@@ -1,6 +1,6 @@
 use clap::{Args, Parser};
+use markdown::json::Json;
 use markdown::metadata::Version;
-use markdown::pretty_json::Write;
 use std::error::Error;
 use std::fs::read_to_string;
 use std::io;

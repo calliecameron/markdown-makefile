@@ -1,4 +1,4 @@
-use crate::pretty_json::Write;
+use crate::json::Json;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -17,4 +17,4 @@ impl Version {
     }
 }
 
-impl Write for Version {}
+impl Json for Version {}

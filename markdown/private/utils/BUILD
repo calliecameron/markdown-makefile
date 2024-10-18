@@ -1,7 +1,7 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@crates//:defs.bzl", "aliases", "all_crate_deps")
 load("@pip//:requirements.bzl", "requirement")
-load("@rules_rust//rust:defs.bzl", "rust_library")
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test")
 load("//markdown/private/support/python:defs.bzl", "py_binary", "py_library", "py_source", "py_test")
 load("//markdown/private/support/shell:defs.bzl", "sh_binary", "sh_source", "sh_test")
 
@@ -44,8 +44,9 @@ py_library(
 rust_library(
     name = "utils",
     srcs = [
+        "json.rs",
         "metadata.rs",
-        "pretty_json.rs",
+        "publications.rs",
         "utils.rs",
     ],
     aliases = aliases(),
@@ -57,6 +58,11 @@ rust_library(
     deps = all_crate_deps(
         normal = True,
     ),
+)
+
+rust_test(
+    name = "utils_test",
+    crate = ":utils",
 )
 
 py_test(

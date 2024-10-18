@@ -269,6 +269,43 @@ impl InputMetadata {
 
 impl Json for InputMetadata {}
 
+fn deserialize_int_str<'de, D>(deserializer: D) -> Result<u32, D::Error>
+where
+    D: de::Deserializer<'de>,
+{
+    struct IntStrVisitor;
+
+    impl<'de> de::Visitor<'de> for IntStrVisitor {
+        type Value = u32;
+
+        fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+            formatter.write_str("an int or a string containing an int")
+        }
+
+        fn visit_u64<E>(self, val: u64) -> Result<Self::Value, E>
+        where
+            E: de::Error,
+        {
+            match val.try_into() {
+                Ok(val) => Ok(val),
+                Err(_) => Err(E::custom("invalid int value")),
+            }
+        }
+
+        fn visit_str<E>(self, val: &str) -> Result<Self::Value, E>
+        where
+            E: de::Error,
+        {
+            match val.parse() {
+                Ok(val) => self.visit_u64(val),
+                Err(_) => Err(E::custom("must contin an int")),
+            }
+        }
+    }
+
+    deserializer.deserialize_any(IntStrVisitor)
+}
+
 #[derive(Serialize, Deserialize, Validate)]
 #[serde(deny_unknown_fields)]
 #[serde(rename_all = "kebab-case")]
@@ -304,11 +341,11 @@ pub struct OutputMetadata {
     #[validate(nested)]
     identifier: Vec<Identifier>,
 
-    #[validate(range(min = 0))]
-    wordcount: i32,
+    #[serde(deserialize_with = "deserialize_int_str")]
+    wordcount: u32,
 
-    #[validate(range(min = 0))]
-    poetry_lines: i32,
+    #[serde(deserialize_with = "deserialize_int_str")]
+    poetry_lines: u32,
 
     lang: String,
     version: String,
@@ -329,8 +366,8 @@ impl OutputMetadata {
         finished: bool,
         publications: Publications,
         identifiers: Vec<Identifier>,
-        wordcount: i32,
-        poetry_lines: i32,
+        wordcount: u32,
+        poetry_lines: u32,
         lang: &str,
         version: &str,
         repo: &str,
@@ -385,11 +422,11 @@ impl OutputMetadata {
         &self.identifier
     }
 
-    pub fn wordcount(&self) -> i32 {
+    pub fn wordcount(&self) -> u32 {
         self.wordcount
     }
 
-    pub fn poetry_lines(&self) -> i32 {
+    pub fn poetry_lines(&self) -> u32 {
         self.poetry_lines
     }
 
@@ -982,6 +1019,37 @@ mod output_metadata_test {
     "source-hash": "blah4",
     "version": "blah2",
     "wordcount": 10
+}"#,
+        )
+        .unwrap();
+        assert!(m.title().is_none());
+        assert_eq!(*m.authors(), vec![String::from("foo")]);
+        assert!(m.date().is_none());
+        assert!(m.notes().is_none());
+        assert!(!m.finished());
+        assert!(m.publications().is_empty());
+        assert!(m.identifiers().is_empty());
+        assert_eq!(m.wordcount(), 10);
+        assert_eq!(m.poetry_lines(), 5);
+        assert_eq!(m.lang(), "blah1");
+        assert_eq!(m.version(), "blah2");
+        assert_eq!(m.repo(), "blah3");
+        assert_eq!(m.source_hash(), "blah4");
+        assert!(m.parsed_dates().dates().is_empty());
+    }
+
+    #[test]
+    fn test_deserialization_str_numbers() {
+        let m: OutputMetadata = from_str(
+            r#"{
+    "author": "foo",
+    "lang": "blah1",
+    "parsed-dates": [],
+    "poetry-lines": "5",
+    "repo": "blah3",
+    "source-hash": "blah4",
+    "version": "blah2",
+    "wordcount": "10"
 }"#,
         )
         .unwrap();

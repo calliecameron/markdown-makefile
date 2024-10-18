@@ -62,5 +62,5 @@ fn main() -> Result<(), Box<dyn Error>> {
         return Err("Neither version file specified".into());
     };
 
-    version.write(&args.out_file)
+    version.write(args.out_file)
 }

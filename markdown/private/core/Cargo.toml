@@ -7,6 +7,14 @@ rust-version.workspace = true
 name = "raw_version"
 path = "raw_version.rs"
 
+[[bin]]
+name = "validate_input_metadata"
+path = "validate_input_metadata.rs"
+
+[[bin]]
+name = "validate_output_metadata"
+path = "validate_output_metadata.rs"
+
 [dependencies]
 clap.workspace = true
 markdown.workspace = true

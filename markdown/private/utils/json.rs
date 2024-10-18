@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize, Serializer};
+use serde_json_fmt::JsonFormat;
 use std::error::Error;
 use std::fs::write;
+use std::path::Path;
 use validator::Validate;
 
 fn sort_alphabetically<T: Serialize, S: Serializer>(
@@ -19,16 +21,14 @@ pub trait Json {
     where
         Self: Serialize,
     {
-        let mut buf = Vec::new();
-        let formatter = serde_json::ser::PrettyFormatter::with_indent(b"    ");
-        let mut ser = serde_json::Serializer::with_formatter(&mut buf, formatter);
-        SortAlphabetically(self).serialize(&mut ser)?;
-        let out = String::from_utf8(buf)?;
+        let s = JsonFormat::pretty().indent_width(Some(4)).ascii(true);
+        let out = s.format_to_string(&SortAlphabetically(self))?;
         Ok(out)
     }
 
-    fn write(&self, path: &str) -> Result<(), Box<dyn Error>>
+    fn write<P>(&self, path: P) -> Result<(), Box<dyn Error>>
     where
+        P: AsRef<Path>,
         Self: Serialize,
     {
         let out = self.to_json()?;

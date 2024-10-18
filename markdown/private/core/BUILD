@@ -25,11 +25,14 @@ script_py_test(
     deps = [":preprocess"],
 )
 
-py_binary(
+rust_binary(
     name = "validate_input_metadata",
-    srcs = ["validate_input_metadata.py"],
-    visibility = ["//visibility:public"],
-    deps = ["//markdown/private/utils:metadata"],
+    srcs = ["validate_input_metadata.rs"],
+    deps = [
+        "//markdown/private/utils",
+    ] + all_crate_deps(
+        normal = True,
+    ),
 )
 
 script_py_test(
@@ -100,11 +103,14 @@ script_py_test(
     script = ":parse_date",
 )
 
-py_binary(
+rust_binary(
     name = "validate_output_metadata",
-    srcs = ["validate_output_metadata.py"],
-    visibility = ["//visibility:public"],
-    deps = ["//markdown/private/utils:metadata"],
+    srcs = ["validate_output_metadata.rs"],
+    deps = [
+        "//markdown/private/utils",
+    ] + all_crate_deps(
+        normal = True,
+    ),
 )
 
 script_py_test(

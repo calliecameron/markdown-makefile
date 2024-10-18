@@ -44,6 +44,7 @@ py_library(
 rust_library(
     name = "utils",
     srcs = [
+        "bazel.rs",
         "json.rs",
         "metadata.rs",
         "publications.rs",

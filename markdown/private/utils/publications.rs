@@ -273,12 +273,11 @@ impl Publication {
 
 impl Json for Publication {}
 
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Serialize, Deserialize, Default, Validate)]
 #[serde(deny_unknown_fields)]
 #[serde(transparent)]
 pub struct Publications {
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    #[validate(length(min = 1))]
     #[validate(nested)]
     publications: Vec<Publication>,
 }
@@ -292,6 +291,10 @@ impl Publications {
 
     pub fn publications(&self) -> &Vec<Publication> {
         &self.publications
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.publications.is_empty()
     }
 
     pub fn active(&self) -> bool {
@@ -1006,15 +1009,8 @@ mod publications_test {
     }
 
     #[test]
-    fn test_bad() {
-        assert!(Publications::build(Vec::new()).is_err());
-    }
-
-    #[test]
     fn test_empty() {
-        let ps = Publications {
-            publications: Vec::new(),
-        };
+        let ps = Publications::build(Vec::new()).unwrap();
         assert!(ps.publications().is_empty());
         assert!(!ps.active());
         assert!(ps.highest_active_state().is_none());
@@ -1144,12 +1140,6 @@ mod publications_test {
         assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
         assert_eq!(*p.notes(), Some(String::from("baz2")));
         assert_eq!(*p.paid(), Some(String::from("quux2")));
-    }
-
-    #[test]
-    fn test_deserialization_bad() {
-        let ps: Result<Publications, _> = from_str("[]");
-        assert!(ps.is_err());
     }
 
     #[test]

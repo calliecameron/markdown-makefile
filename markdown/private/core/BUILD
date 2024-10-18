@@ -55,7 +55,7 @@ rust_binary(
     name = "raw_version",
     srcs = ["raw_version.rs"],
     deps = [
-        "//markdown/private/utils:metadata_rs",
+        "//markdown/private/utils",
     ] + all_crate_deps(
         normal = True,
     ),

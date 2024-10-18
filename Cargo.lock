@@ -116,19 +116,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
 
 [[package]]
-name = "markdown_private_core"
+name = "markdown"
 version = "0.0.0"
 dependencies = [
- "clap",
- "markdown_private_utils",
+ "serde",
  "serde_json",
 ]
 
 [[package]]
-name = "markdown_private_utils"
+name = "markdown_private_core"
 version = "0.0.0"
 dependencies = [
- "serde",
+ "clap",
+ "markdown",
  "serde_json",
 ]
 

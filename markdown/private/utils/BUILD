@@ -42,10 +42,14 @@ py_library(
 )
 
 rust_library(
-    name = "metadata_rs",
-    srcs = ["metadata.rs"],
+    name = "utils",
+    srcs = [
+        "metadata.rs",
+        "pretty_json.rs",
+        "utils.rs",
+    ],
     aliases = aliases(),
-    crate_name = "markdown_private_utils",
+    crate_name = "markdown",
     proc_macro_deps = all_crate_deps(
         proc_macro = True,
     ),

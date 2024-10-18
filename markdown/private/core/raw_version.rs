@@ -1,5 +1,5 @@
 use clap::{Args, Parser};
-use markdown::json::Json;
+use markdown::json::{from_str, Json};
 use markdown::metadata::Version;
 use std::error::Error;
 use std::fs::read_to_string;
@@ -25,9 +25,9 @@ struct InFile {
     info_file: Option<String>,
 }
 
-fn from_version_file(path: &str) -> io::Result<Version> {
+fn from_version_file(path: &str) -> Result<Version, Box<dyn Error>> {
     let data = read_to_string(path)?;
-    let version: Version = serde_json::from_str(&data)?;
+    let version: Version = from_str(&data)?;
     Ok(version)
 }
 

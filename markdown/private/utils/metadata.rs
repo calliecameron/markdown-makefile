@@ -217,19 +217,19 @@ pub struct InputMetadata {
 
 impl InputMetadata {
     pub fn build(
-        title: Option<String>,
+        title: Option<&str>,
         authors: Vec<String>,
-        date: Option<String>,
-        notes: Option<String>,
+        date: Option<&str>,
+        notes: Option<&str>,
         finished: bool,
         publications: Publications,
         identifiers: Vec<Identifier>,
     ) -> Result<InputMetadata, ValidationErrors> {
         let m = InputMetadata {
-            title,
+            title: title.map(str::to_string),
             author: authors,
-            date,
-            notes,
+            date: date.map(str::to_string),
+            notes: notes.map(str::to_string),
             finished,
             publications,
             identifier: identifiers,
@@ -238,20 +238,20 @@ impl InputMetadata {
         Ok(m)
     }
 
-    pub fn title(&self) -> &Option<String> {
-        &self.title
+    pub fn title(&self) -> Option<&String> {
+        self.title.as_ref()
     }
 
     pub fn authors(&self) -> &Vec<String> {
         &self.author
     }
 
-    pub fn date(&self) -> &Option<String> {
-        &self.date
+    pub fn date(&self) -> Option<&String> {
+        self.date.as_ref()
     }
 
-    pub fn notes(&self) -> &Option<String> {
-        &self.notes
+    pub fn notes(&self) -> Option<&String> {
+        self.notes.as_ref()
     }
 
     pub fn finished(&self) -> bool {
@@ -322,10 +322,10 @@ pub struct OutputMetadata {
 impl OutputMetadata {
     #[allow(clippy::too_many_arguments)]
     pub fn build(
-        title: Option<String>,
+        title: Option<&str>,
         authors: Vec<String>,
-        date: Option<String>,
-        notes: Option<String>,
+        date: Option<&str>,
+        notes: Option<&str>,
         finished: bool,
         publications: Publications,
         identifiers: Vec<Identifier>,
@@ -338,10 +338,10 @@ impl OutputMetadata {
         parsed_dates: ParsedDateSet,
     ) -> Result<OutputMetadata, ValidationErrors> {
         let m = OutputMetadata {
-            title,
+            title: title.map(str::to_string),
             author: authors,
-            date,
-            notes,
+            date: date.map(str::to_string),
+            notes: notes.map(str::to_string),
             finished,
             publications,
             identifier: identifiers,
@@ -357,20 +357,20 @@ impl OutputMetadata {
         Ok(m)
     }
 
-    pub fn title(&self) -> &Option<String> {
-        &self.title
+    pub fn title(&self) -> Option<&String> {
+        self.title.as_ref()
     }
 
     pub fn authors(&self) -> &Vec<String> {
         &self.author
     }
 
-    pub fn date(&self) -> &Option<String> {
-        &self.date
+    pub fn date(&self) -> Option<&String> {
+        self.date.as_ref()
     }
 
-    pub fn notes(&self) -> &Option<String> {
-        &self.notes
+    pub fn notes(&self) -> Option<&String> {
+        self.notes.as_ref()
     }
 
     pub fn finished(&self) -> bool {
@@ -646,17 +646,17 @@ mod input_metadata_test {
     fn test_serialization_full() {
         assert_eq!(
             InputMetadata::build(
-                Some(String::from("foo")),
+                Some("foo"),
                 vec![String::from("bar"), String::from("baz")],
-                Some(String::from("quux")),
-                Some(String::from("blah")),
+                Some("quux"),
+                Some("blah"),
                 true,
                 Publications::build(vec![
                     Publication::build(
-                        String::from("Book"),
+                        "Book",
                         vec![String::from("foo"), String::from("bar")],
-                        Some(String::from("baz")),
-                        Some(String::from("quux")),
+                        Some("baz"),
+                        Some("quux"),
                         ymd(2023, 5, 16),
                         ymd(2023, 5, 17),
                         None,
@@ -667,10 +667,10 @@ mod input_metadata_test {
                     )
                     .unwrap(),
                     Publication::build(
-                        String::from("Book2"),
+                        "Book2",
                         vec![String::from("foo2"), String::from("bar2")],
-                        Some(String::from("baz2")),
-                        Some(String::from("quux2")),
+                        Some("baz2"),
+                        Some("quux2"),
                         ymd(2023, 5, 19),
                         ymd(2023, 5, 20),
                         None,
@@ -810,10 +810,10 @@ mod input_metadata_test {
         )
         .unwrap();
 
-        assert_eq!(*m.title(), Some(String::from("foo")));
+        assert_eq!(m.title().unwrap(), "foo");
         assert_eq!(*m.authors(), vec![String::from("bar"), String::from("baz")]);
-        assert_eq!(*m.date(), Some(String::from("quux")));
-        assert_eq!(*m.notes(), Some(String::from("blah")));
+        assert_eq!(m.date().unwrap(), "quux");
+        assert_eq!(m.notes().unwrap(), "blah");
         assert!(m.finished());
 
         let ps = m.publications();
@@ -822,30 +822,30 @@ mod input_metadata_test {
         assert_eq!(ps.highest_active_state(), Some(State::Published));
 
         let p = &ps.publications()[0];
-        assert_eq!(p.venue(), String::from("Book"));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 17));
+        assert_eq!(p.venue(), "Book");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 17));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
-        assert_eq!(*p.published(), ymd(2023, 5, 18));
+        assert_eq!(p.published().copied(), ymd(2023, 5, 18));
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
 
         let p = &ps.publications()[1];
-        assert_eq!(p.venue(), String::from("Book2"));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 19));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 20));
+        assert_eq!(p.venue(), "Book2");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 19));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 20));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
         assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
-        assert_eq!(*p.notes(), Some(String::from("baz2")));
-        assert_eq!(*p.paid(), Some(String::from("quux2")));
+        assert_eq!(p.notes().unwrap(), "baz2");
+        assert_eq!(p.paid().unwrap(), "quux2");
 
         assert_eq!(
             *m.identifiers(),
@@ -864,17 +864,17 @@ mod output_metadata_test {
     fn test_serialization_full() {
         assert_eq!(
             OutputMetadata::build(
-                Some(String::from("foo")),
+                Some("foo"),
                 vec![String::from("bar"), String::from("baz")],
-                Some(String::from("quux")),
-                Some(String::from("blah")),
+                Some("quux"),
+                Some("blah"),
                 true,
                 Publications::build(vec![
                     Publication::build(
-                        String::from("Book"),
+                        "Book",
                         vec![String::from("foo"), String::from("bar")],
-                        Some(String::from("baz")),
-                        Some(String::from("quux")),
+                        Some("baz"),
+                        Some("quux"),
                         ymd(2023, 5, 16),
                         ymd(2023, 5, 17),
                         None,
@@ -885,10 +885,10 @@ mod output_metadata_test {
                     )
                     .unwrap(),
                     Publication::build(
-                        String::from("Book2"),
+                        "Book2",
                         vec![String::from("foo2"), String::from("bar2")],
-                        Some(String::from("baz2")),
-                        Some(String::from("quux2")),
+                        Some("baz2"),
+                        Some("quux2"),
                         ymd(2023, 5, 19),
                         ymd(2023, 5, 20),
                         None,
@@ -1062,10 +1062,10 @@ mod output_metadata_test {
         )
         .unwrap();
 
-        assert_eq!(*m.title(), Some(String::from("foo")));
+        assert_eq!(m.title().unwrap(), "foo");
         assert_eq!(*m.authors(), vec![String::from("bar"), String::from("baz")]);
-        assert_eq!(*m.date(), Some(String::from("quux")));
-        assert_eq!(*m.notes(), Some(String::from("blah")));
+        assert_eq!(m.date().unwrap(), "quux");
+        assert_eq!(m.notes().unwrap(), "blah");
         assert!(m.finished());
 
         let ps = m.publications();
@@ -1074,30 +1074,30 @@ mod output_metadata_test {
         assert_eq!(ps.highest_active_state(), Some(State::Published));
 
         let p = &ps.publications()[0];
-        assert_eq!(p.venue(), String::from("Book"));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 17));
+        assert_eq!(p.venue(), "Book");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 17));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
-        assert_eq!(*p.published(), ymd(2023, 5, 18));
+        assert_eq!(p.published().copied(), ymd(2023, 5, 18));
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
 
         let p = &ps.publications()[1];
-        assert_eq!(p.venue(), String::from("Book2"));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 19));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 20));
+        assert_eq!(p.venue(), "Book2");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 19));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 20));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
         assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
-        assert_eq!(*p.notes(), Some(String::from("baz2")));
-        assert_eq!(*p.paid(), Some(String::from("quux2")));
+        assert_eq!(p.notes().unwrap(), "baz2");
+        assert_eq!(p.paid().unwrap(), "quux2");
 
         assert_eq!(
             *m.identifiers(),

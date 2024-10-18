@@ -74,10 +74,10 @@ pub struct Publication {
 impl Publication {
     #[allow(clippy::too_many_arguments)]
     pub fn build(
-        venue: String,
+        venue: &str,
         urls: Vec<String>,
-        notes: Option<String>,
-        paid: Option<String>,
+        notes: Option<&str>,
+        paid: Option<&str>,
         submitted: Option<NaiveDate>,
         accepted: Option<NaiveDate>,
         abandoned: Option<NaiveDate>,
@@ -87,10 +87,10 @@ impl Publication {
         published: Option<NaiveDate>,
     ) -> Result<Publication, ValidationErrors> {
         let p = Publication {
-            venue,
+            venue: String::from(venue),
             urls,
-            notes,
-            paid,
+            notes: notes.map(str::to_string),
+            paid: paid.map(str::to_string),
             submitted,
             accepted,
             abandoned,
@@ -111,48 +111,44 @@ impl Publication {
         &self.urls
     }
 
-    pub fn notes(&self) -> &Option<String> {
-        &self.notes
+    pub fn notes(&self) -> Option<&String> {
+        self.notes.as_ref()
     }
 
-    pub fn paid(&self) -> &Option<String> {
-        &self.paid
+    pub fn paid(&self) -> Option<&String> {
+        self.paid.as_ref()
     }
 
-    pub fn submitted(&self) -> &Option<NaiveDate> {
-        &self.submitted
+    pub fn submitted(&self) -> Option<&NaiveDate> {
+        self.submitted.as_ref()
     }
 
-    pub fn accepted(&self) -> &Option<NaiveDate> {
-        &self.accepted
+    pub fn accepted(&self) -> Option<&NaiveDate> {
+        self.accepted.as_ref()
     }
 
-    pub fn abandoned(&self) -> &Option<NaiveDate> {
-        &self.abandoned
+    pub fn abandoned(&self) -> Option<&NaiveDate> {
+        self.abandoned.as_ref()
     }
 
-    pub fn withdrawn(&self) -> &Option<NaiveDate> {
-        &self.withdrawn
+    pub fn withdrawn(&self) -> Option<&NaiveDate> {
+        self.withdrawn.as_ref()
     }
 
-    pub fn rejected(&self) -> &Option<NaiveDate> {
-        &self.rejected
+    pub fn rejected(&self) -> Option<&NaiveDate> {
+        self.rejected.as_ref()
     }
 
-    pub fn self_published(&self) -> &Option<NaiveDate> {
-        &self.self_published
+    pub fn self_published(&self) -> Option<&NaiveDate> {
+        self.self_published.as_ref()
     }
 
-    pub fn published(&self) -> &Option<NaiveDate> {
-        &self.published
+    pub fn published(&self) -> Option<&NaiveDate> {
+        self.published.as_ref()
     }
 
     pub fn dates(&self) -> Vec<Date> {
-        self.all_dates()
-            .iter_mut()
-            .flatten()
-            .map(move |i| *i)
-            .collect()
+        self.all_dates().into_iter().flatten().collect()
     }
 
     pub fn latest(&self) -> Date {
@@ -168,16 +164,16 @@ impl Publication {
 
     fn bad_end_dates(&self) -> Vec<Option<Date>> {
         Self::filter_dates(vec![
-            (State::Abandoned, &self.abandoned),
-            (State::Withdrawn, &self.withdrawn),
-            (State::Rejected, &self.rejected),
+            (State::Abandoned, self.abandoned()),
+            (State::Withdrawn, self.withdrawn()),
+            (State::Rejected, self.rejected()),
         ])
     }
 
     fn good_end_dates(&self) -> Vec<Option<Date>> {
         Self::filter_dates(vec![
-            (State::SelfPublished, &self.self_published),
-            (State::Published, &self.published),
+            (State::SelfPublished, self.self_published()),
+            (State::Published, self.published()),
         ])
     }
 
@@ -189,8 +185,8 @@ impl Publication {
 
     fn intermediate_dates(&self) -> Vec<Option<Date>> {
         Self::filter_dates(vec![
-            (State::Submitted, &self.submitted),
-            (State::Accepted, &self.accepted),
+            (State::Submitted, self.submitted()),
+            (State::Accepted, self.accepted()),
         ])
     }
 
@@ -200,14 +196,11 @@ impl Publication {
         out
     }
 
-    fn filter_dates(dates: Vec<(State, &Option<NaiveDate>)>) -> Vec<Option<Date>> {
+    fn filter_dates(dates: Vec<(State, Option<&NaiveDate>)>) -> Vec<Option<Date>> {
         let mut out = Vec::new();
-        for (s, d) in dates.iter() {
+        for (s, d) in dates.into_iter() {
             if let Some(d) = d {
-                out.push(Some(Date {
-                    state: *s,
-                    date: *d,
-                }));
+                out.push(Some(Date { state: s, date: *d }));
             } else {
                 out.push(None);
             }
@@ -239,8 +232,8 @@ impl Publication {
         if self.published.is_some()
             && self
                 .intermediate_dates()
-                .iter()
-                .filter(|i| i.is_none())
+                .into_iter()
+                .filter(Option::is_none)
                 .count()
                 > 0
         {
@@ -302,12 +295,12 @@ impl Publications {
     }
 
     pub fn highest_active_state(&self) -> Option<State> {
-        let mut states = Vec::new();
-        for p in self.publications.iter() {
-            if p.active() {
-                states.push(p.latest().state);
-            }
-        }
+        let mut states: Vec<State> = self
+            .publications
+            .iter()
+            .filter(|p| p.active())
+            .map(|p| p.latest().state)
+            .collect();
         states.sort();
         if let Some(s) = states.last() {
             return Some(*s);
@@ -346,7 +339,7 @@ mod publication_test {
     #[test]
     fn test_good_minimal() {
         let p = Publication::build(
-            String::from("foo"),
+            "foo",
             Vec::new(),
             None,
             None,
@@ -359,11 +352,11 @@ mod publication_test {
             None,
         )
         .unwrap();
-        assert_eq!(p.venue(), String::from("foo"));
+        assert_eq!(p.venue(), "foo");
         assert!(p.urls().is_empty());
         assert!(p.notes().is_none());
         assert!(p.paid().is_none());
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
         assert!(p.accepted().is_none());
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
@@ -378,10 +371,10 @@ mod publication_test {
     #[test]
     fn test_good_submitted() {
         let p = Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             ymd(2023, 5, 16),
             None,
             None,
@@ -391,11 +384,11 @@ mod publication_test {
             None,
         )
         .unwrap();
-        assert_eq!(p.venue(), String::from("foo"));
+        assert_eq!(p.venue(), "foo");
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
         assert!(p.accepted().is_none());
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
@@ -410,10 +403,10 @@ mod publication_test {
     #[test]
     fn test_good_accepted() {
         let p = Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             ymd(2023, 5, 16),
             ymd(2023, 5, 17),
             None,
@@ -423,12 +416,12 @@ mod publication_test {
             None,
         )
         .unwrap();
-        assert_eq!(p.venue(), String::from("foo"));
+        assert_eq!(p.venue(), "foo");
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 17));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 17));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
@@ -448,10 +441,10 @@ mod publication_test {
     #[test]
     fn test_good_rejected() {
         let p = Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             ymd(2023, 5, 16),
             None,
             None,
@@ -461,13 +454,13 @@ mod publication_test {
             None,
         )
         .unwrap();
-        assert_eq!(p.venue(), String::from("foo"));
+        assert_eq!(p.venue(), "foo");
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
         assert!(p.accepted().is_none());
-        assert_eq!(*p.rejected(), ymd(2023, 5, 17));
+        assert_eq!(p.rejected().copied(), ymd(2023, 5, 17));
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
@@ -486,10 +479,10 @@ mod publication_test {
     #[test]
     fn test_good_withdrawn() {
         let p = Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             ymd(2023, 5, 16),
             None,
             None,
@@ -499,14 +492,14 @@ mod publication_test {
             None,
         )
         .unwrap();
-        assert_eq!(p.venue(), String::from("foo"));
+        assert_eq!(p.venue(), "foo");
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
         assert!(p.accepted().is_none());
         assert!(p.rejected().is_none());
-        assert_eq!(*p.withdrawn(), ymd(2023, 5, 17));
+        assert_eq!(p.withdrawn().copied(), ymd(2023, 5, 17));
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
@@ -524,10 +517,10 @@ mod publication_test {
     #[test]
     fn test_good_abandoned() {
         let p = Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             ymd(2023, 5, 16),
             None,
             ymd(2023, 5, 17),
@@ -537,15 +530,15 @@ mod publication_test {
             None,
         )
         .unwrap();
-        assert_eq!(p.venue(), String::from("foo"));
+        assert_eq!(p.venue(), "foo");
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
         assert!(p.accepted().is_none());
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
-        assert_eq!(*p.abandoned(), ymd(2023, 5, 17));
+        assert_eq!(p.abandoned().copied(), ymd(2023, 5, 17));
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
         assert_eq!(
@@ -562,10 +555,10 @@ mod publication_test {
     #[test]
     fn test_good_self_published() {
         let p = Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             None,
             None,
             None,
@@ -575,16 +568,16 @@ mod publication_test {
             None,
         )
         .unwrap();
-        assert_eq!(p.venue(), String::from("foo"));
+        assert_eq!(p.venue(), "foo");
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
         assert!(p.submitted().is_none());
         assert!(p.accepted().is_none());
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
-        assert_eq!(*p.self_published(), ymd(2023, 5, 16));
+        assert_eq!(p.self_published().copied(), ymd(2023, 5, 16));
         assert!(p.published().is_none());
         assert_eq!(p.dates(), vec![date(State::SelfPublished, (2023, 5, 16)),]);
         assert_eq!(p.latest(), date(State::SelfPublished, (2023, 5, 16)));
@@ -594,10 +587,10 @@ mod publication_test {
     #[test]
     fn test_good_published() {
         let p = Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             ymd(2023, 5, 16),
             ymd(2023, 5, 17),
             None,
@@ -607,17 +600,17 @@ mod publication_test {
             ymd(2023, 5, 18),
         )
         .unwrap();
-        assert_eq!(p.venue(), String::from("foo"));
+        assert_eq!(p.venue(), "foo");
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 17));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 17));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
-        assert_eq!(*p.published(), ymd(2023, 5, 18));
+        assert_eq!(p.published().copied(), ymd(2023, 5, 18));
         assert_eq!(
             p.dates(),
             vec![
@@ -633,10 +626,10 @@ mod publication_test {
     #[test]
     fn test_bad_no_dates() {
         assert!(Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             None,
             None,
             None,
@@ -651,10 +644,10 @@ mod publication_test {
     #[test]
     fn test_bad_too_many_end_dates() {
         assert!(Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             None,
             None,
             None,
@@ -669,10 +662,10 @@ mod publication_test {
     #[test]
     fn test_bad_self_published_intermediate() {
         assert!(Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             ymd(2023, 5, 16),
             None,
             None,
@@ -687,10 +680,10 @@ mod publication_test {
     #[test]
     fn test_bad_accepted_bad_end_dates() {
         assert!(Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             None,
             ymd(2023, 5, 16),
             None,
@@ -705,10 +698,10 @@ mod publication_test {
     #[test]
     fn test_bad_published_missing_intermediate() {
         assert!(Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             ymd(2023, 5, 16),
             None,
             None,
@@ -723,10 +716,10 @@ mod publication_test {
     #[test]
     fn test_bad_bad_missing_submitted() {
         assert!(Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             None,
             None,
             None,
@@ -741,10 +734,10 @@ mod publication_test {
     #[test]
     fn test_bad_wrong_order() {
         assert!(Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("foo"), String::from("bar")],
-            Some(String::from("baz")),
-            Some(String::from("quux")),
+            Some("baz"),
+            Some("quux"),
             ymd(2023, 5, 16),
             ymd(2023, 5, 16),
             None,
@@ -759,7 +752,7 @@ mod publication_test {
     #[test]
     fn test_serialization_minimal() {
         let p = Publication::build(
-            String::from("foo"),
+            "foo",
             Vec::new(),
             None,
             None,
@@ -784,10 +777,10 @@ mod publication_test {
     #[test]
     fn test_serialization_full() {
         let p = Publication::build(
-            String::from("foo"),
+            "foo",
             vec![String::from("bar"), String::from("baz")],
-            Some(String::from("quux")),
-            Some(String::from("blah")),
+            Some("quux"),
+            Some("blah"),
             ymd(2023, 5, 16),
             ymd(2023, 5, 17),
             None,
@@ -831,17 +824,17 @@ mod publication_test {
 }"#,
         )
         .unwrap();
-        assert_eq!(p.venue(), String::from("foo"));
+        assert_eq!(p.venue(), "foo");
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 17));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 17));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
-        assert_eq!(*p.published(), ymd(2023, 5, 18));
+        assert_eq!(p.published().copied(), ymd(2023, 5, 18));
         assert_eq!(
             p.dates(),
             vec![
@@ -882,10 +875,10 @@ mod publications_test {
     fn test_good_active() {
         let ps = Publications::build(vec![
             Publication::build(
-                String::from("Book"),
+                "Book",
                 vec![String::from("foo"), String::from("bar")],
-                Some(String::from("baz")),
-                Some(String::from("quux")),
+                Some("baz"),
+                Some("quux"),
                 ymd(2023, 5, 16),
                 ymd(2023, 5, 17),
                 None,
@@ -896,10 +889,10 @@ mod publications_test {
             )
             .unwrap(),
             Publication::build(
-                String::from("Book2"),
+                "Book2",
                 vec![String::from("foo2"), String::from("bar2")],
-                Some(String::from("baz2")),
-                Some(String::from("quux2")),
+                Some("baz2"),
+                Some("quux2"),
                 ymd(2023, 5, 19),
                 ymd(2023, 5, 20),
                 None,
@@ -917,40 +910,40 @@ mod publications_test {
         assert_eq!(ps.highest_active_state(), Some(State::Published));
 
         let p = &ps.publications()[0];
-        assert_eq!(p.venue(), String::from("Book"));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 17));
+        assert_eq!(p.venue(), "Book");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 17));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
-        assert_eq!(*p.published(), ymd(2023, 5, 18));
+        assert_eq!(p.published().copied(), ymd(2023, 5, 18));
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
 
         let p = &ps.publications()[1];
-        assert_eq!(p.venue(), String::from("Book2"));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 19));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 20));
+        assert_eq!(p.venue(), "Book2");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 19));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 20));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
         assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
-        assert_eq!(*p.notes(), Some(String::from("baz2")));
-        assert_eq!(*p.paid(), Some(String::from("quux2")));
+        assert_eq!(p.notes().unwrap(), "baz2");
+        assert_eq!(p.paid().unwrap(), "quux2");
     }
 
     #[test]
     fn test_good_inactive() {
         let ps = Publications::build(vec![
             Publication::build(
-                String::from("Book"),
+                "Book",
                 vec![String::from("foo"), String::from("bar")],
-                Some(String::from("baz")),
-                Some(String::from("quux")),
+                Some("baz"),
+                Some("quux"),
                 ymd(2023, 5, 16),
                 None,
                 None,
@@ -961,10 +954,10 @@ mod publications_test {
             )
             .unwrap(),
             Publication::build(
-                String::from("Book2"),
+                "Book2",
                 vec![String::from("foo2"), String::from("bar2")],
-                Some(String::from("baz2")),
-                Some(String::from("quux2")),
+                Some("baz2"),
+                Some("quux2"),
                 ymd(2023, 5, 19),
                 None,
                 None,
@@ -982,30 +975,30 @@ mod publications_test {
         assert_eq!(ps.highest_active_state(), None);
 
         let p = &ps.publications()[0];
-        assert_eq!(p.venue(), String::from("Book"));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
+        assert_eq!(p.venue(), "Book");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
         assert!(p.accepted().is_none());
-        assert_eq!(*p.rejected(), ymd(2023, 5, 17));
+        assert_eq!(p.rejected().copied(), ymd(2023, 5, 17));
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
 
         let p = &ps.publications()[1];
-        assert_eq!(p.venue(), String::from("Book2"));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 19));
+        assert_eq!(p.venue(), "Book2");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 19));
         assert!(p.accepted().is_none());
         assert!(p.rejected().is_none());
-        assert_eq!(*p.withdrawn(), ymd(2023, 5, 20));
+        assert_eq!(p.withdrawn().copied(), ymd(2023, 5, 20));
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
         assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
-        assert_eq!(*p.notes(), Some(String::from("baz2")));
-        assert_eq!(*p.paid(), Some(String::from("quux2")));
+        assert_eq!(p.notes().unwrap(), "baz2");
+        assert_eq!(p.paid().unwrap(), "quux2");
     }
 
     #[test]
@@ -1020,10 +1013,10 @@ mod publications_test {
     fn test_serialization() {
         let ps = Publications::build(vec![
             Publication::build(
-                String::from("Book"),
+                "Book",
                 vec![String::from("foo"), String::from("bar")],
-                Some(String::from("baz")),
-                Some(String::from("quux")),
+                Some("baz"),
+                Some("quux"),
                 ymd(2023, 5, 16),
                 ymd(2023, 5, 17),
                 None,
@@ -1034,10 +1027,10 @@ mod publications_test {
             )
             .unwrap(),
             Publication::build(
-                String::from("Book2"),
+                "Book2",
                 vec![String::from("foo2"), String::from("bar2")],
-                Some(String::from("baz2")),
-                Some(String::from("quux2")),
+                Some("baz2"),
+                Some("quux2"),
                 ymd(2023, 5, 19),
                 ymd(2023, 5, 20),
                 None,
@@ -1116,30 +1109,30 @@ mod publications_test {
         assert_eq!(ps.highest_active_state(), Some(State::Published));
 
         let p = &ps.publications()[0];
-        assert_eq!(p.venue(), String::from("Book"));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 16));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 17));
+        assert_eq!(p.venue(), "Book");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 16));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 17));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
-        assert_eq!(*p.published(), ymd(2023, 5, 18));
+        assert_eq!(p.published().copied(), ymd(2023, 5, 18));
         assert_eq!(*p.urls(), vec![String::from("foo"), String::from("bar")]);
-        assert_eq!(*p.notes(), Some(String::from("baz")));
-        assert_eq!(*p.paid(), Some(String::from("quux")));
+        assert_eq!(p.notes().unwrap(), "baz");
+        assert_eq!(p.paid().unwrap(), "quux");
 
         let p = &ps.publications()[1];
-        assert_eq!(p.venue(), String::from("Book2"));
-        assert_eq!(*p.submitted(), ymd(2023, 5, 19));
-        assert_eq!(*p.accepted(), ymd(2023, 5, 20));
+        assert_eq!(p.venue(), "Book2");
+        assert_eq!(p.submitted().copied(), ymd(2023, 5, 19));
+        assert_eq!(p.accepted().copied(), ymd(2023, 5, 20));
         assert!(p.rejected().is_none());
         assert!(p.withdrawn().is_none());
         assert!(p.abandoned().is_none());
         assert!(p.self_published().is_none());
         assert!(p.published().is_none());
         assert_eq!(*p.urls(), vec![String::from("foo2"), String::from("bar2")]);
-        assert_eq!(*p.notes(), Some(String::from("baz2")));
-        assert_eq!(*p.paid(), Some(String::from("quux2")));
+        assert_eq!(p.notes().unwrap(), "baz2");
+        assert_eq!(p.paid().unwrap(), "quux2");
     }
 
     #[test]
